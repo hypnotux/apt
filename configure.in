@@ -42,6 +42,7 @@ dnl Check for rpm version
 AH_TEMPLATE(HAVE_RPM, [Define to 1 if RPM is available])
 AH_TEMPLATE(HAVE_RPM4, [Define to 1 if RPM >= 4 is available])
 AH_TEMPLATE(HAVE_RPM41, [Define to 1 if RPM >= 4.1 is available])
+AH_TEMPLATE(HAVE_RPM421, [Define to 1 if RPM >= 4.2.1 is available])
 rpm_version="none"
 AC_CHECK_HEADERS(db1/db.h)
 CPPFLAGS="$CPPFLAGS -I/usr/include/rpm"
@@ -58,7 +59,11 @@ AC_CHECK_HEADER(rpm/rpmlib.h,
       RPMLIBS="-lrpm $RPMDBLIBS -lrpmio -lz -lbz2 -lpopt"
       AC_CHECK_LIB(rpm, rpmtsUpdateDSI,
      	      [AC_DEFINE_UNQUOTED(HAVE_RPM41, 1)
-     	       rpm_version="4.1"],
+     			AC_CHECK_LIB(rpm, rpmtsOp,
+	      			[AC_DEFINE_UNQUOTED(HAVE_RPM421, 1)
+	       			 rpm_version="4.2.1"],
+     	       			[rpm_version="4.1"])
+			],
      	      [rpm_version="4.0.X"],
 	      [$RPMLIBS])
      ],

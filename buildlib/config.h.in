@@ -123,6 +123,9 @@
 /* Define to 1 if RPM >= 4.1 is available */
 #undef HAVE_RPM41
 
+/* Define to 1 if RPM >= 4.2.1 is available */
+#undef HAVE_RPM421
+
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
 

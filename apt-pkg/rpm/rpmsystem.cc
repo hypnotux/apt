@@ -188,7 +188,12 @@ bool rpmSystem::Initialize(Configuration &Cnf)
       "RPM::Erase-Options",
       NULL,
    };
+// Nopromote behavior was only enabled in rpm-4.2.1
+#ifdef HAVE_RPM421
    int NoPromote = 1;
+#else
+   int NoPromote = 0;
+#endif
    const char *Opt = *RPMOptions;
    while (*Opt && NoPromote)
    {
