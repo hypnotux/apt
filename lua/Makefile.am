@@ -13,6 +13,7 @@ lua_lua_SOURCES = lua/lua.c
 luac_luac_SOURCES = luac/luac.c luac/print.c lopcodes.c
 luac_luac_CFLAGS = -DLUA_OPNAMES
 
+liblua_la_CFLAGS = -DUSE_DLOPEN
 liblua_la_SOURCES = \
 		include/lauxlib.h \
 		include/lua.h \

@@ -182,6 +182,7 @@ lua_lua_SOURCES = lua/lua.c
 luac_luac_SOURCES = luac/luac.c luac/print.c lopcodes.c
 luac_luac_CFLAGS = -DLUA_OPNAMES
 
+liblua_la_CFLAGS = -DUSE_DLOPEN
 liblua_la_SOURCES = \
 		include/lauxlib.h \
 		include/lua.h \
@@ -244,12 +245,17 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblua_la_LDFLAGS =
 liblua_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_liblua_la_OBJECTS = lib/lauxlib.lo lib/lbaselib.lo lib/ldblib.lo \
-	lib/liolib.lo lib/lmathlib.lo lib/loadlib.lo lib/lstrlib.lo \
-	lib/ltablib.lo lapi.lo lcode.lo ldebug.lo ldo.lo ldump.lo \
-	lfunc.lo lgc.lo llex.lo lmem.lo lobject.lo lopcodes.lo \
-	lparser.lo lstate.lo lstring.lo ltable.lo ltests.lo ltm.lo \
-	lundump.lo lvm.lo lzio.lo
+am_liblua_la_OBJECTS = lib/liblua_la-lauxlib.lo \
+	lib/liblua_la-lbaselib.lo lib/liblua_la-ldblib.lo \
+	lib/liblua_la-liolib.lo lib/liblua_la-lmathlib.lo \
+	lib/liblua_la-loadlib.lo lib/liblua_la-lstrlib.lo \
+	lib/liblua_la-ltablib.lo liblua_la-lapi.lo liblua_la-lcode.lo \
+	liblua_la-ldebug.lo liblua_la-ldo.lo liblua_la-ldump.lo \
+	liblua_la-lfunc.lo liblua_la-lgc.lo liblua_la-llex.lo \
+	liblua_la-lmem.lo liblua_la-lobject.lo liblua_la-lopcodes.lo \
+	liblua_la-lparser.lo liblua_la-lstate.lo liblua_la-lstring.lo \
+	liblua_la-ltable.lo liblua_la-ltests.lo liblua_la-ltm.lo \
+	liblua_la-lundump.lo liblua_la-lvm.lo liblua_la-lzio.lo
 liblua_la_OBJECTS = $(am_liblua_la_OBJECTS)
 @WITH_LUA_TRUE@noinst_PROGRAMS = lua/lua$(EXEEXT) luac/luac$(EXEEXT)
 @WITH_LUA_FALSE@noinst_PROGRAMS =
@@ -270,22 +276,36 @@ luac_luac_LDFLAGS =
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/buildlib/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/lapi.Plo ./$(DEPDIR)/lcode.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ldebug.Plo ./$(DEPDIR)/ldo.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ldump.Plo ./$(DEPDIR)/lfunc.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/lgc.Plo ./$(DEPDIR)/llex.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/lmem.Plo ./$(DEPDIR)/lobject.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/lopcodes.Plo ./$(DEPDIR)/lparser.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/lstate.Plo ./$(DEPDIR)/lstring.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ltable.Plo ./$(DEPDIR)/ltests.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ltm.Plo \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/liblua_la-lapi.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lcode.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ldebug.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ldo.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ldump.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lfunc.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lgc.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-llex.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lmem.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lobject.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lopcodes.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lparser.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lstate.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lstring.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ltable.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ltests.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-ltm.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lundump.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lvm.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/liblua_la-lzio.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/luac_luac-lopcodes.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/lundump.Plo ./$(DEPDIR)/lvm.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/lzio.Plo lib/$(DEPDIR)/lauxlib.Plo \
-@AMDEP_TRUE@	lib/$(DEPDIR)/lbaselib.Plo lib/$(DEPDIR)/ldblib.Plo \
-@AMDEP_TRUE@	lib/$(DEPDIR)/liolib.Plo lib/$(DEPDIR)/lmathlib.Plo \
-@AMDEP_TRUE@	lib/$(DEPDIR)/loadlib.Plo lib/$(DEPDIR)/lstrlib.Plo \
-@AMDEP_TRUE@	lib/$(DEPDIR)/ltablib.Plo lua/$(DEPDIR)/lua.Po \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-lauxlib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-lbaselib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-ldblib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-liolib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-lmathlib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-loadlib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-lstrlib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-ltablib.Plo \
+@AMDEP_TRUE@	lua/$(DEPDIR)/lua.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-luac.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-print.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -324,14 +344,22 @@ lib/$(am__dirstamp):
 lib/$(DEPDIR)/$(am__dirstamp):
 	@$(mkinstalldirs) lib/$(DEPDIR)
 	@: > lib/$(DEPDIR)/$(am__dirstamp)
-lib/lauxlib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/lbaselib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/ldblib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/liolib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/lmathlib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/loadlib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/lstrlib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
-lib/ltablib.lo: lib/$(am__dirstamp) lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-lauxlib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-lbaselib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-ldblib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-liolib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-lmathlib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-loadlib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-lstrlib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
+lib/liblua_la-ltablib.lo: lib/$(am__dirstamp) \
+	lib/$(DEPDIR)/$(am__dirstamp)
 liblua.la: $(liblua_la_OBJECTS) $(liblua_la_DEPENDENCIES) 
 	$(LINK)  $(liblua_la_LDFLAGS) $(liblua_la_OBJECTS) $(liblua_la_LIBADD) $(LIBS)
 
@@ -367,22 +395,22 @@ luac/luac$(EXEEXT): $(luac_luac_OBJECTS) $(luac_luac_DEPENDENCIES) luac/$(am__di
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
-	-rm -f lib/lauxlib.$(OBJEXT)
-	-rm -f lib/lauxlib.lo
-	-rm -f lib/lbaselib.$(OBJEXT)
-	-rm -f lib/lbaselib.lo
-	-rm -f lib/ldblib.$(OBJEXT)
-	-rm -f lib/ldblib.lo
-	-rm -f lib/liolib.$(OBJEXT)
-	-rm -f lib/liolib.lo
-	-rm -f lib/lmathlib.$(OBJEXT)
-	-rm -f lib/lmathlib.lo
-	-rm -f lib/loadlib.$(OBJEXT)
-	-rm -f lib/loadlib.lo
-	-rm -f lib/lstrlib.$(OBJEXT)
-	-rm -f lib/lstrlib.lo
-	-rm -f lib/ltablib.$(OBJEXT)
-	-rm -f lib/ltablib.lo
+	-rm -f lib/liblua_la-lauxlib.$(OBJEXT)
+	-rm -f lib/liblua_la-lauxlib.lo
+	-rm -f lib/liblua_la-lbaselib.$(OBJEXT)
+	-rm -f lib/liblua_la-lbaselib.lo
+	-rm -f lib/liblua_la-ldblib.$(OBJEXT)
+	-rm -f lib/liblua_la-ldblib.lo
+	-rm -f lib/liblua_la-liolib.$(OBJEXT)
+	-rm -f lib/liblua_la-liolib.lo
+	-rm -f lib/liblua_la-lmathlib.$(OBJEXT)
+	-rm -f lib/liblua_la-lmathlib.lo
+	-rm -f lib/liblua_la-loadlib.$(OBJEXT)
+	-rm -f lib/liblua_la-loadlib.lo
+	-rm -f lib/liblua_la-lstrlib.$(OBJEXT)
+	-rm -f lib/liblua_la-lstrlib.lo
+	-rm -f lib/liblua_la-ltablib.$(OBJEXT)
+	-rm -f lib/liblua_la-ltablib.lo
 	-rm -f lua/lua.$(OBJEXT)
 	-rm -f luac/luac_luac-luac.$(OBJEXT)
 	-rm -f luac/luac_luac-print.$(OBJEXT)
@@ -390,35 +418,35 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lapi.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lcode.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldebug.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldump.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lfunc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lgc.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/llex.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lmem.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lobject.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lopcodes.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lparser.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lstate.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lstring.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ltable.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ltests.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ltm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lapi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lcode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ldebug.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ldo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ldump.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lfunc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lgc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-llex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lmem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lobject.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lopcodes.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lparser.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lstate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lstring.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ltable.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ltests.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-ltm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lundump.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lvm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblua_la-lzio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luac_luac-lopcodes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lundump.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lvm.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lzio.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lauxlib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lbaselib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/ldblib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liolib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lmathlib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/loadlib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lstrlib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/ltablib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-lauxlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-lbaselib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-ldblib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-liolib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-lmathlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-loadlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-lstrlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-ltablib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lua/$(DEPDIR)/lua.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@luac/$(DEPDIR)/luac_luac-luac.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@luac/$(DEPDIR)/luac_luac-print.Po@am__quote@
@@ -456,269 +484,929 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
 
-lib/lauxlib.o: lib/lauxlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lauxlib.o -MD -MP -MF "lib/$(DEPDIR)/lauxlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lauxlib.o `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lauxlib.Tpo" "lib/$(DEPDIR)/lauxlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lauxlib.Tpo"; exit 1; \
+lib/liblua_la-lauxlib.o: lib/lauxlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lauxlib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lauxlib.o `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" "lib/$(DEPDIR)/liblua_la-lauxlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/lauxlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lauxlib.Po' tmpdepfile='lib/$(DEPDIR)/lauxlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/liblua_la-lauxlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lauxlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lauxlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lauxlib.o `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lauxlib.o `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c
 
-lib/lauxlib.obj: lib/lauxlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lauxlib.obj -MD -MP -MF "lib/$(DEPDIR)/lauxlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lauxlib.obj `if test -f 'lib/lauxlib.c'; then $(CYGPATH_W) 'lib/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lauxlib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lauxlib.Tpo" "lib/$(DEPDIR)/lauxlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lauxlib.Tpo"; exit 1; \
+lib/liblua_la-lauxlib.obj: lib/lauxlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lauxlib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lauxlib.obj `if test -f 'lib/lauxlib.c'; then $(CYGPATH_W) 'lib/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lauxlib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" "lib/$(DEPDIR)/liblua_la-lauxlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/lauxlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lauxlib.Po' tmpdepfile='lib/$(DEPDIR)/lauxlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/liblua_la-lauxlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lauxlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lauxlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lauxlib.obj `if test -f 'lib/lauxlib.c'; then $(CYGPATH_W) 'lib/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lauxlib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lauxlib.obj `if test -f 'lib/lauxlib.c'; then $(CYGPATH_W) 'lib/lauxlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lauxlib.c'; fi`
 
-lib/lauxlib.lo: lib/lauxlib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lauxlib.lo -MD -MP -MF "lib/$(DEPDIR)/lauxlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lauxlib.lo `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lauxlib.Tpo" "lib/$(DEPDIR)/lauxlib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lauxlib.Tpo"; exit 1; \
+lib/liblua_la-lauxlib.lo: lib/lauxlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lauxlib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lauxlib.lo `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" "lib/$(DEPDIR)/liblua_la-lauxlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/lauxlib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lauxlib.Plo' tmpdepfile='lib/$(DEPDIR)/lauxlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lauxlib.c' object='lib/liblua_la-lauxlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lauxlib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-lauxlib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lauxlib.lo `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lauxlib.lo `test -f 'lib/lauxlib.c' || echo '$(srcdir)/'`lib/lauxlib.c
 
-lib/lbaselib.o: lib/lbaselib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lbaselib.o -MD -MP -MF "lib/$(DEPDIR)/lbaselib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lbaselib.o `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lbaselib.Tpo" "lib/$(DEPDIR)/lbaselib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lbaselib.Tpo"; exit 1; \
+lib/liblua_la-lbaselib.o: lib/lbaselib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lbaselib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lbaselib.o `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" "lib/$(DEPDIR)/liblua_la-lbaselib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/lbaselib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lbaselib.Po' tmpdepfile='lib/$(DEPDIR)/lbaselib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/liblua_la-lbaselib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lbaselib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lbaselib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lbaselib.o `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lbaselib.o `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c
 
-lib/lbaselib.obj: lib/lbaselib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lbaselib.obj -MD -MP -MF "lib/$(DEPDIR)/lbaselib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lbaselib.obj `if test -f 'lib/lbaselib.c'; then $(CYGPATH_W) 'lib/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lbaselib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lbaselib.Tpo" "lib/$(DEPDIR)/lbaselib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lbaselib.Tpo"; exit 1; \
+lib/liblua_la-lbaselib.obj: lib/lbaselib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lbaselib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lbaselib.obj `if test -f 'lib/lbaselib.c'; then $(CYGPATH_W) 'lib/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lbaselib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" "lib/$(DEPDIR)/liblua_la-lbaselib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/lbaselib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lbaselib.Po' tmpdepfile='lib/$(DEPDIR)/lbaselib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/liblua_la-lbaselib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lbaselib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lbaselib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lbaselib.obj `if test -f 'lib/lbaselib.c'; then $(CYGPATH_W) 'lib/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lbaselib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lbaselib.obj `if test -f 'lib/lbaselib.c'; then $(CYGPATH_W) 'lib/lbaselib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lbaselib.c'; fi`
 
-lib/lbaselib.lo: lib/lbaselib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lbaselib.lo -MD -MP -MF "lib/$(DEPDIR)/lbaselib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lbaselib.lo `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lbaselib.Tpo" "lib/$(DEPDIR)/lbaselib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lbaselib.Tpo"; exit 1; \
+lib/liblua_la-lbaselib.lo: lib/lbaselib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lbaselib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lbaselib.lo `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo" "lib/$(DEPDIR)/liblua_la-lbaselib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lbaselib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/lbaselib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lbaselib.Plo' tmpdepfile='lib/$(DEPDIR)/lbaselib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lbaselib.c' object='lib/liblua_la-lbaselib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lbaselib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-lbaselib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lbaselib.lo `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lbaselib.lo `test -f 'lib/lbaselib.c' || echo '$(srcdir)/'`lib/lbaselib.c
 
-lib/ldblib.o: lib/ldblib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ldblib.o -MD -MP -MF "lib/$(DEPDIR)/ldblib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ldblib.o `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ldblib.Tpo" "lib/$(DEPDIR)/ldblib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ldblib.Tpo"; exit 1; \
+lib/liblua_la-ldblib.o: lib/ldblib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ldblib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ldblib.o `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" "lib/$(DEPDIR)/liblua_la-ldblib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/ldblib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ldblib.Po' tmpdepfile='lib/$(DEPDIR)/ldblib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/liblua_la-ldblib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ldblib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-ldblib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ldblib.o `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ldblib.o `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c
 
-lib/ldblib.obj: lib/ldblib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ldblib.obj -MD -MP -MF "lib/$(DEPDIR)/ldblib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ldblib.obj `if test -f 'lib/ldblib.c'; then $(CYGPATH_W) 'lib/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ldblib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ldblib.Tpo" "lib/$(DEPDIR)/ldblib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ldblib.Tpo"; exit 1; \
+lib/liblua_la-ldblib.obj: lib/ldblib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ldblib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ldblib.obj `if test -f 'lib/ldblib.c'; then $(CYGPATH_W) 'lib/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ldblib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" "lib/$(DEPDIR)/liblua_la-ldblib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/ldblib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ldblib.Po' tmpdepfile='lib/$(DEPDIR)/ldblib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/liblua_la-ldblib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ldblib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-ldblib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ldblib.obj `if test -f 'lib/ldblib.c'; then $(CYGPATH_W) 'lib/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ldblib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ldblib.obj `if test -f 'lib/ldblib.c'; then $(CYGPATH_W) 'lib/ldblib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ldblib.c'; fi`
 
-lib/ldblib.lo: lib/ldblib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ldblib.lo -MD -MP -MF "lib/$(DEPDIR)/ldblib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ldblib.lo `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ldblib.Tpo" "lib/$(DEPDIR)/ldblib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ldblib.Tpo"; exit 1; \
+lib/liblua_la-ldblib.lo: lib/ldblib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ldblib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ldblib.lo `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo" "lib/$(DEPDIR)/liblua_la-ldblib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ldblib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/ldblib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ldblib.Plo' tmpdepfile='lib/$(DEPDIR)/ldblib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ldblib.c' object='lib/liblua_la-ldblib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ldblib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-ldblib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ldblib.lo `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ldblib.lo `test -f 'lib/ldblib.c' || echo '$(srcdir)/'`lib/ldblib.c
 
-lib/liolib.o: lib/liolib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/liolib.o -MD -MP -MF "lib/$(DEPDIR)/liolib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/liolib.o `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liolib.Tpo" "lib/$(DEPDIR)/liolib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liolib.Tpo"; exit 1; \
+lib/liblua_la-liolib.o: lib/liolib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-liolib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-liolib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-liolib.o `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo" "lib/$(DEPDIR)/liblua_la-liolib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liolib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liolib.Po' tmpdepfile='lib/$(DEPDIR)/liolib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liblua_la-liolib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-liolib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-liolib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/liolib.o `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-liolib.o `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c
 
-lib/liolib.obj: lib/liolib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/liolib.obj -MD -MP -MF "lib/$(DEPDIR)/liolib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/liolib.obj `if test -f 'lib/liolib.c'; then $(CYGPATH_W) 'lib/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lib/liolib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liolib.Tpo" "lib/$(DEPDIR)/liolib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liolib.Tpo"; exit 1; \
+lib/liblua_la-liolib.obj: lib/liolib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-liolib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-liolib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-liolib.obj `if test -f 'lib/liolib.c'; then $(CYGPATH_W) 'lib/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lib/liolib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo" "lib/$(DEPDIR)/liblua_la-liolib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liolib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liolib.Po' tmpdepfile='lib/$(DEPDIR)/liolib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liblua_la-liolib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-liolib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-liolib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/liolib.obj `if test -f 'lib/liolib.c'; then $(CYGPATH_W) 'lib/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lib/liolib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-liolib.obj `if test -f 'lib/liolib.c'; then $(CYGPATH_W) 'lib/liolib.c'; else $(CYGPATH_W) '$(srcdir)/lib/liolib.c'; fi`
 
-lib/liolib.lo: lib/liolib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/liolib.lo -MD -MP -MF "lib/$(DEPDIR)/liolib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/liolib.lo `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liolib.Tpo" "lib/$(DEPDIR)/liolib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liolib.Tpo"; exit 1; \
+lib/liblua_la-liolib.lo: lib/liolib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-liolib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-liolib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-liolib.lo `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo" "lib/$(DEPDIR)/liblua_la-liolib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-liolib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liolib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liolib.Plo' tmpdepfile='lib/$(DEPDIR)/liolib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/liolib.c' object='lib/liblua_la-liolib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-liolib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-liolib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/liolib.lo `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-liolib.lo `test -f 'lib/liolib.c' || echo '$(srcdir)/'`lib/liolib.c
 
-lib/lmathlib.o: lib/lmathlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lmathlib.o -MD -MP -MF "lib/$(DEPDIR)/lmathlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lmathlib.o `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lmathlib.Tpo" "lib/$(DEPDIR)/lmathlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lmathlib.Tpo"; exit 1; \
+lib/liblua_la-lmathlib.o: lib/lmathlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lmathlib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lmathlib.o `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" "lib/$(DEPDIR)/liblua_la-lmathlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/lmathlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lmathlib.Po' tmpdepfile='lib/$(DEPDIR)/lmathlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/liblua_la-lmathlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lmathlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lmathlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lmathlib.o `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lmathlib.o `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c
 
-lib/lmathlib.obj: lib/lmathlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lmathlib.obj -MD -MP -MF "lib/$(DEPDIR)/lmathlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lmathlib.obj `if test -f 'lib/lmathlib.c'; then $(CYGPATH_W) 'lib/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lmathlib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lmathlib.Tpo" "lib/$(DEPDIR)/lmathlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lmathlib.Tpo"; exit 1; \
+lib/liblua_la-lmathlib.obj: lib/lmathlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lmathlib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lmathlib.obj `if test -f 'lib/lmathlib.c'; then $(CYGPATH_W) 'lib/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lmathlib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" "lib/$(DEPDIR)/liblua_la-lmathlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/lmathlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lmathlib.Po' tmpdepfile='lib/$(DEPDIR)/lmathlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/liblua_la-lmathlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lmathlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lmathlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lmathlib.obj `if test -f 'lib/lmathlib.c'; then $(CYGPATH_W) 'lib/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lmathlib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lmathlib.obj `if test -f 'lib/lmathlib.c'; then $(CYGPATH_W) 'lib/lmathlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lmathlib.c'; fi`
 
-lib/lmathlib.lo: lib/lmathlib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lmathlib.lo -MD -MP -MF "lib/$(DEPDIR)/lmathlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lmathlib.lo `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lmathlib.Tpo" "lib/$(DEPDIR)/lmathlib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lmathlib.Tpo"; exit 1; \
+lib/liblua_la-lmathlib.lo: lib/lmathlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lmathlib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lmathlib.lo `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo" "lib/$(DEPDIR)/liblua_la-lmathlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lmathlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/lmathlib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lmathlib.Plo' tmpdepfile='lib/$(DEPDIR)/lmathlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lmathlib.c' object='lib/liblua_la-lmathlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lmathlib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-lmathlib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lmathlib.lo `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lmathlib.lo `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c
 
-lib/loadlib.o: lib/loadlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.o -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+lib/liblua_la-loadlib.o: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-loadlib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" "lib/$(DEPDIR)/liblua_la-loadlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Po' tmpdepfile='lib/$(DEPDIR)/loadlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/liblua_la-loadlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-loadlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-loadlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
 
-lib/loadlib.obj: lib/loadlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.obj -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+lib/liblua_la-loadlib.obj: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-loadlib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" "lib/$(DEPDIR)/liblua_la-loadlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Po' tmpdepfile='lib/$(DEPDIR)/loadlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/liblua_la-loadlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-loadlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-loadlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'; fi`
 
-lib/loadlib.lo: lib/loadlib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.lo -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+lib/liblua_la-loadlib.lo: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-loadlib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo" "lib/$(DEPDIR)/liblua_la-loadlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-loadlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Plo' tmpdepfile='lib/$(DEPDIR)/loadlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/liblua_la-loadlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-loadlib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-loadlib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
 
-lib/lstrlib.o: lib/lstrlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lstrlib.o -MD -MP -MF "lib/$(DEPDIR)/lstrlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lstrlib.o `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lstrlib.Tpo" "lib/$(DEPDIR)/lstrlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lstrlib.Tpo"; exit 1; \
+lib/liblua_la-lstrlib.o: lib/lstrlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lstrlib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lstrlib.o `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" "lib/$(DEPDIR)/liblua_la-lstrlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/lstrlib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lstrlib.Po' tmpdepfile='lib/$(DEPDIR)/lstrlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/liblua_la-lstrlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lstrlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lstrlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lstrlib.o `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lstrlib.o `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c
 
-lib/lstrlib.obj: lib/lstrlib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lstrlib.obj -MD -MP -MF "lib/$(DEPDIR)/lstrlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lstrlib.obj `if test -f 'lib/lstrlib.c'; then $(CYGPATH_W) 'lib/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lstrlib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lstrlib.Tpo" "lib/$(DEPDIR)/lstrlib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lstrlib.Tpo"; exit 1; \
+lib/liblua_la-lstrlib.obj: lib/lstrlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lstrlib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lstrlib.obj `if test -f 'lib/lstrlib.c'; then $(CYGPATH_W) 'lib/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lstrlib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" "lib/$(DEPDIR)/liblua_la-lstrlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/lstrlib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lstrlib.Po' tmpdepfile='lib/$(DEPDIR)/lstrlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/liblua_la-lstrlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lstrlib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-lstrlib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lstrlib.obj `if test -f 'lib/lstrlib.c'; then $(CYGPATH_W) 'lib/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lstrlib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lstrlib.obj `if test -f 'lib/lstrlib.c'; then $(CYGPATH_W) 'lib/lstrlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/lstrlib.c'; fi`
 
-lib/lstrlib.lo: lib/lstrlib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lstrlib.lo -MD -MP -MF "lib/$(DEPDIR)/lstrlib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/lstrlib.lo `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/lstrlib.Tpo" "lib/$(DEPDIR)/lstrlib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/lstrlib.Tpo"; exit 1; \
+lib/liblua_la-lstrlib.lo: lib/lstrlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lstrlib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-lstrlib.lo `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo" "lib/$(DEPDIR)/liblua_la-lstrlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-lstrlib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/lstrlib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lstrlib.Plo' tmpdepfile='lib/$(DEPDIR)/lstrlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/lstrlib.c' object='lib/liblua_la-lstrlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-lstrlib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-lstrlib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lstrlib.lo `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-lstrlib.lo `test -f 'lib/lstrlib.c' || echo '$(srcdir)/'`lib/lstrlib.c
 
-lib/ltablib.o: lib/ltablib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ltablib.o -MD -MP -MF "lib/$(DEPDIR)/ltablib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ltablib.o `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ltablib.Tpo" "lib/$(DEPDIR)/ltablib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ltablib.Tpo"; exit 1; \
+lib/liblua_la-ltablib.o: lib/ltablib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ltablib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ltablib.o `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" "lib/$(DEPDIR)/liblua_la-ltablib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/ltablib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ltablib.Po' tmpdepfile='lib/$(DEPDIR)/ltablib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/liblua_la-ltablib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ltablib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-ltablib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ltablib.o `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ltablib.o `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c
 
-lib/ltablib.obj: lib/ltablib.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ltablib.obj -MD -MP -MF "lib/$(DEPDIR)/ltablib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ltablib.obj `if test -f 'lib/ltablib.c'; then $(CYGPATH_W) 'lib/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ltablib.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ltablib.Tpo" "lib/$(DEPDIR)/ltablib.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ltablib.Tpo"; exit 1; \
+lib/liblua_la-ltablib.obj: lib/ltablib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ltablib.obj -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ltablib.obj `if test -f 'lib/ltablib.c'; then $(CYGPATH_W) 'lib/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ltablib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" "lib/$(DEPDIR)/liblua_la-ltablib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/ltablib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ltablib.Po' tmpdepfile='lib/$(DEPDIR)/ltablib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/liblua_la-ltablib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ltablib.Po' tmpdepfile='lib/$(DEPDIR)/liblua_la-ltablib.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ltablib.obj `if test -f 'lib/ltablib.c'; then $(CYGPATH_W) 'lib/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ltablib.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ltablib.obj `if test -f 'lib/ltablib.c'; then $(CYGPATH_W) 'lib/ltablib.c'; else $(CYGPATH_W) '$(srcdir)/lib/ltablib.c'; fi`
 
-lib/ltablib.lo: lib/ltablib.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/ltablib.lo -MD -MP -MF "lib/$(DEPDIR)/ltablib.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lib/ltablib.lo `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c; \
-@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/ltablib.Tpo" "lib/$(DEPDIR)/ltablib.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/ltablib.Tpo"; exit 1; \
+lib/liblua_la-ltablib.lo: lib/ltablib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-ltablib.lo -MD -MP -MF "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/liblua_la-ltablib.lo `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c; \
+@am__fastdepCC_TRUE@	then mv -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo" "lib/$(DEPDIR)/liblua_la-ltablib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/liblua_la-ltablib.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/ltablib.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/ltablib.Plo' tmpdepfile='lib/$(DEPDIR)/ltablib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/ltablib.c' object='lib/liblua_la-ltablib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/liblua_la-ltablib.Plo' tmpdepfile='lib/$(DEPDIR)/liblua_la-ltablib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/ltablib.lo `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o lib/liblua_la-ltablib.lo `test -f 'lib/ltablib.c' || echo '$(srcdir)/'`lib/ltablib.c
+
+liblua_la-lapi.o: lapi.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lapi.o -MD -MP -MF "$(DEPDIR)/liblua_la-lapi.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lapi.o `test -f 'lapi.c' || echo '$(srcdir)/'`lapi.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lapi.Tpo" "$(DEPDIR)/liblua_la-lapi.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lapi.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lapi.c' object='liblua_la-lapi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lapi.Po' tmpdepfile='$(DEPDIR)/liblua_la-lapi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lapi.o `test -f 'lapi.c' || echo '$(srcdir)/'`lapi.c
+
+liblua_la-lapi.obj: lapi.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lapi.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lapi.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lapi.obj `if test -f 'lapi.c'; then $(CYGPATH_W) 'lapi.c'; else $(CYGPATH_W) '$(srcdir)/lapi.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lapi.Tpo" "$(DEPDIR)/liblua_la-lapi.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lapi.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lapi.c' object='liblua_la-lapi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lapi.Po' tmpdepfile='$(DEPDIR)/liblua_la-lapi.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lapi.obj `if test -f 'lapi.c'; then $(CYGPATH_W) 'lapi.c'; else $(CYGPATH_W) '$(srcdir)/lapi.c'; fi`
+
+liblua_la-lapi.lo: lapi.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lapi.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lapi.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lapi.lo `test -f 'lapi.c' || echo '$(srcdir)/'`lapi.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lapi.Tpo" "$(DEPDIR)/liblua_la-lapi.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lapi.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lapi.c' object='liblua_la-lapi.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lapi.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lapi.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lapi.lo `test -f 'lapi.c' || echo '$(srcdir)/'`lapi.c
+
+liblua_la-lcode.o: lcode.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lcode.o -MD -MP -MF "$(DEPDIR)/liblua_la-lcode.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lcode.o `test -f 'lcode.c' || echo '$(srcdir)/'`lcode.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lcode.Tpo" "$(DEPDIR)/liblua_la-lcode.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lcode.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lcode.c' object='liblua_la-lcode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lcode.Po' tmpdepfile='$(DEPDIR)/liblua_la-lcode.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lcode.o `test -f 'lcode.c' || echo '$(srcdir)/'`lcode.c
+
+liblua_la-lcode.obj: lcode.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lcode.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lcode.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lcode.obj `if test -f 'lcode.c'; then $(CYGPATH_W) 'lcode.c'; else $(CYGPATH_W) '$(srcdir)/lcode.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lcode.Tpo" "$(DEPDIR)/liblua_la-lcode.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lcode.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lcode.c' object='liblua_la-lcode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lcode.Po' tmpdepfile='$(DEPDIR)/liblua_la-lcode.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lcode.obj `if test -f 'lcode.c'; then $(CYGPATH_W) 'lcode.c'; else $(CYGPATH_W) '$(srcdir)/lcode.c'; fi`
+
+liblua_la-lcode.lo: lcode.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lcode.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lcode.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lcode.lo `test -f 'lcode.c' || echo '$(srcdir)/'`lcode.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lcode.Tpo" "$(DEPDIR)/liblua_la-lcode.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lcode.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lcode.c' object='liblua_la-lcode.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lcode.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lcode.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lcode.lo `test -f 'lcode.c' || echo '$(srcdir)/'`lcode.c
+
+liblua_la-ldebug.o: ldebug.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldebug.o -MD -MP -MF "$(DEPDIR)/liblua_la-ldebug.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldebug.o `test -f 'ldebug.c' || echo '$(srcdir)/'`ldebug.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldebug.Tpo" "$(DEPDIR)/liblua_la-ldebug.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldebug.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldebug.c' object='liblua_la-ldebug.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldebug.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldebug.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldebug.o `test -f 'ldebug.c' || echo '$(srcdir)/'`ldebug.c
+
+liblua_la-ldebug.obj: ldebug.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldebug.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ldebug.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldebug.obj `if test -f 'ldebug.c'; then $(CYGPATH_W) 'ldebug.c'; else $(CYGPATH_W) '$(srcdir)/ldebug.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldebug.Tpo" "$(DEPDIR)/liblua_la-ldebug.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldebug.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldebug.c' object='liblua_la-ldebug.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldebug.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldebug.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldebug.obj `if test -f 'ldebug.c'; then $(CYGPATH_W) 'ldebug.c'; else $(CYGPATH_W) '$(srcdir)/ldebug.c'; fi`
+
+liblua_la-ldebug.lo: ldebug.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldebug.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ldebug.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldebug.lo `test -f 'ldebug.c' || echo '$(srcdir)/'`ldebug.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldebug.Tpo" "$(DEPDIR)/liblua_la-ldebug.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldebug.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldebug.c' object='liblua_la-ldebug.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldebug.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ldebug.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldebug.lo `test -f 'ldebug.c' || echo '$(srcdir)/'`ldebug.c
+
+liblua_la-ldo.o: ldo.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldo.o -MD -MP -MF "$(DEPDIR)/liblua_la-ldo.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldo.o `test -f 'ldo.c' || echo '$(srcdir)/'`ldo.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldo.Tpo" "$(DEPDIR)/liblua_la-ldo.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldo.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldo.c' object='liblua_la-ldo.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldo.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldo.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldo.o `test -f 'ldo.c' || echo '$(srcdir)/'`ldo.c
+
+liblua_la-ldo.obj: ldo.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldo.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ldo.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldo.obj `if test -f 'ldo.c'; then $(CYGPATH_W) 'ldo.c'; else $(CYGPATH_W) '$(srcdir)/ldo.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldo.Tpo" "$(DEPDIR)/liblua_la-ldo.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldo.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldo.c' object='liblua_la-ldo.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldo.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldo.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldo.obj `if test -f 'ldo.c'; then $(CYGPATH_W) 'ldo.c'; else $(CYGPATH_W) '$(srcdir)/ldo.c'; fi`
+
+liblua_la-ldo.lo: ldo.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldo.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ldo.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldo.lo `test -f 'ldo.c' || echo '$(srcdir)/'`ldo.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldo.Tpo" "$(DEPDIR)/liblua_la-ldo.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldo.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldo.c' object='liblua_la-ldo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldo.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ldo.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldo.lo `test -f 'ldo.c' || echo '$(srcdir)/'`ldo.c
+
+liblua_la-ldump.o: ldump.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldump.o -MD -MP -MF "$(DEPDIR)/liblua_la-ldump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldump.o `test -f 'ldump.c' || echo '$(srcdir)/'`ldump.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldump.Tpo" "$(DEPDIR)/liblua_la-ldump.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldump.c' object='liblua_la-ldump.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldump.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldump.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldump.o `test -f 'ldump.c' || echo '$(srcdir)/'`ldump.c
+
+liblua_la-ldump.obj: ldump.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldump.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ldump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldump.obj `if test -f 'ldump.c'; then $(CYGPATH_W) 'ldump.c'; else $(CYGPATH_W) '$(srcdir)/ldump.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldump.Tpo" "$(DEPDIR)/liblua_la-ldump.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldump.c' object='liblua_la-ldump.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldump.Po' tmpdepfile='$(DEPDIR)/liblua_la-ldump.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldump.obj `if test -f 'ldump.c'; then $(CYGPATH_W) 'ldump.c'; else $(CYGPATH_W) '$(srcdir)/ldump.c'; fi`
+
+liblua_la-ldump.lo: ldump.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ldump.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ldump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ldump.lo `test -f 'ldump.c' || echo '$(srcdir)/'`ldump.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ldump.Tpo" "$(DEPDIR)/liblua_la-ldump.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ldump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldump.c' object='liblua_la-ldump.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ldump.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ldump.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ldump.lo `test -f 'ldump.c' || echo '$(srcdir)/'`ldump.c
+
+liblua_la-lfunc.o: lfunc.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lfunc.o -MD -MP -MF "$(DEPDIR)/liblua_la-lfunc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lfunc.o `test -f 'lfunc.c' || echo '$(srcdir)/'`lfunc.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lfunc.Tpo" "$(DEPDIR)/liblua_la-lfunc.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lfunc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lfunc.c' object='liblua_la-lfunc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lfunc.Po' tmpdepfile='$(DEPDIR)/liblua_la-lfunc.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lfunc.o `test -f 'lfunc.c' || echo '$(srcdir)/'`lfunc.c
+
+liblua_la-lfunc.obj: lfunc.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lfunc.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lfunc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lfunc.obj `if test -f 'lfunc.c'; then $(CYGPATH_W) 'lfunc.c'; else $(CYGPATH_W) '$(srcdir)/lfunc.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lfunc.Tpo" "$(DEPDIR)/liblua_la-lfunc.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lfunc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lfunc.c' object='liblua_la-lfunc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lfunc.Po' tmpdepfile='$(DEPDIR)/liblua_la-lfunc.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lfunc.obj `if test -f 'lfunc.c'; then $(CYGPATH_W) 'lfunc.c'; else $(CYGPATH_W) '$(srcdir)/lfunc.c'; fi`
+
+liblua_la-lfunc.lo: lfunc.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lfunc.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lfunc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lfunc.lo `test -f 'lfunc.c' || echo '$(srcdir)/'`lfunc.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lfunc.Tpo" "$(DEPDIR)/liblua_la-lfunc.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lfunc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lfunc.c' object='liblua_la-lfunc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lfunc.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lfunc.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lfunc.lo `test -f 'lfunc.c' || echo '$(srcdir)/'`lfunc.c
+
+liblua_la-lgc.o: lgc.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lgc.o -MD -MP -MF "$(DEPDIR)/liblua_la-lgc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lgc.o `test -f 'lgc.c' || echo '$(srcdir)/'`lgc.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lgc.Tpo" "$(DEPDIR)/liblua_la-lgc.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lgc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lgc.c' object='liblua_la-lgc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lgc.Po' tmpdepfile='$(DEPDIR)/liblua_la-lgc.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lgc.o `test -f 'lgc.c' || echo '$(srcdir)/'`lgc.c
+
+liblua_la-lgc.obj: lgc.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lgc.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lgc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lgc.obj `if test -f 'lgc.c'; then $(CYGPATH_W) 'lgc.c'; else $(CYGPATH_W) '$(srcdir)/lgc.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lgc.Tpo" "$(DEPDIR)/liblua_la-lgc.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lgc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lgc.c' object='liblua_la-lgc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lgc.Po' tmpdepfile='$(DEPDIR)/liblua_la-lgc.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lgc.obj `if test -f 'lgc.c'; then $(CYGPATH_W) 'lgc.c'; else $(CYGPATH_W) '$(srcdir)/lgc.c'; fi`
+
+liblua_la-lgc.lo: lgc.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lgc.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lgc.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lgc.lo `test -f 'lgc.c' || echo '$(srcdir)/'`lgc.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lgc.Tpo" "$(DEPDIR)/liblua_la-lgc.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lgc.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lgc.c' object='liblua_la-lgc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lgc.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lgc.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lgc.lo `test -f 'lgc.c' || echo '$(srcdir)/'`lgc.c
+
+liblua_la-llex.o: llex.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-llex.o -MD -MP -MF "$(DEPDIR)/liblua_la-llex.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-llex.o `test -f 'llex.c' || echo '$(srcdir)/'`llex.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-llex.Tpo" "$(DEPDIR)/liblua_la-llex.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-llex.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='llex.c' object='liblua_la-llex.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-llex.Po' tmpdepfile='$(DEPDIR)/liblua_la-llex.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-llex.o `test -f 'llex.c' || echo '$(srcdir)/'`llex.c
+
+liblua_la-llex.obj: llex.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-llex.obj -MD -MP -MF "$(DEPDIR)/liblua_la-llex.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-llex.obj `if test -f 'llex.c'; then $(CYGPATH_W) 'llex.c'; else $(CYGPATH_W) '$(srcdir)/llex.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-llex.Tpo" "$(DEPDIR)/liblua_la-llex.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-llex.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='llex.c' object='liblua_la-llex.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-llex.Po' tmpdepfile='$(DEPDIR)/liblua_la-llex.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-llex.obj `if test -f 'llex.c'; then $(CYGPATH_W) 'llex.c'; else $(CYGPATH_W) '$(srcdir)/llex.c'; fi`
+
+liblua_la-llex.lo: llex.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-llex.lo -MD -MP -MF "$(DEPDIR)/liblua_la-llex.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-llex.lo `test -f 'llex.c' || echo '$(srcdir)/'`llex.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-llex.Tpo" "$(DEPDIR)/liblua_la-llex.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-llex.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='llex.c' object='liblua_la-llex.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-llex.Plo' tmpdepfile='$(DEPDIR)/liblua_la-llex.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-llex.lo `test -f 'llex.c' || echo '$(srcdir)/'`llex.c
+
+liblua_la-lmem.o: lmem.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lmem.o -MD -MP -MF "$(DEPDIR)/liblua_la-lmem.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lmem.o `test -f 'lmem.c' || echo '$(srcdir)/'`lmem.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lmem.Tpo" "$(DEPDIR)/liblua_la-lmem.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lmem.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lmem.c' object='liblua_la-lmem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lmem.Po' tmpdepfile='$(DEPDIR)/liblua_la-lmem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lmem.o `test -f 'lmem.c' || echo '$(srcdir)/'`lmem.c
+
+liblua_la-lmem.obj: lmem.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lmem.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lmem.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lmem.obj `if test -f 'lmem.c'; then $(CYGPATH_W) 'lmem.c'; else $(CYGPATH_W) '$(srcdir)/lmem.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lmem.Tpo" "$(DEPDIR)/liblua_la-lmem.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lmem.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lmem.c' object='liblua_la-lmem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lmem.Po' tmpdepfile='$(DEPDIR)/liblua_la-lmem.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lmem.obj `if test -f 'lmem.c'; then $(CYGPATH_W) 'lmem.c'; else $(CYGPATH_W) '$(srcdir)/lmem.c'; fi`
+
+liblua_la-lmem.lo: lmem.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lmem.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lmem.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lmem.lo `test -f 'lmem.c' || echo '$(srcdir)/'`lmem.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lmem.Tpo" "$(DEPDIR)/liblua_la-lmem.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lmem.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lmem.c' object='liblua_la-lmem.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lmem.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lmem.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lmem.lo `test -f 'lmem.c' || echo '$(srcdir)/'`lmem.c
+
+liblua_la-lobject.o: lobject.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lobject.o -MD -MP -MF "$(DEPDIR)/liblua_la-lobject.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lobject.o `test -f 'lobject.c' || echo '$(srcdir)/'`lobject.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lobject.Tpo" "$(DEPDIR)/liblua_la-lobject.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lobject.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lobject.c' object='liblua_la-lobject.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lobject.Po' tmpdepfile='$(DEPDIR)/liblua_la-lobject.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lobject.o `test -f 'lobject.c' || echo '$(srcdir)/'`lobject.c
+
+liblua_la-lobject.obj: lobject.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lobject.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lobject.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lobject.obj `if test -f 'lobject.c'; then $(CYGPATH_W) 'lobject.c'; else $(CYGPATH_W) '$(srcdir)/lobject.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lobject.Tpo" "$(DEPDIR)/liblua_la-lobject.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lobject.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lobject.c' object='liblua_la-lobject.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lobject.Po' tmpdepfile='$(DEPDIR)/liblua_la-lobject.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lobject.obj `if test -f 'lobject.c'; then $(CYGPATH_W) 'lobject.c'; else $(CYGPATH_W) '$(srcdir)/lobject.c'; fi`
+
+liblua_la-lobject.lo: lobject.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lobject.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lobject.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lobject.lo `test -f 'lobject.c' || echo '$(srcdir)/'`lobject.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lobject.Tpo" "$(DEPDIR)/liblua_la-lobject.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lobject.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lobject.c' object='liblua_la-lobject.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lobject.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lobject.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lobject.lo `test -f 'lobject.c' || echo '$(srcdir)/'`lobject.c
+
+liblua_la-lopcodes.o: lopcodes.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lopcodes.o -MD -MP -MF "$(DEPDIR)/liblua_la-lopcodes.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lopcodes.o `test -f 'lopcodes.c' || echo '$(srcdir)/'`lopcodes.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lopcodes.Tpo" "$(DEPDIR)/liblua_la-lopcodes.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lopcodes.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lopcodes.c' object='liblua_la-lopcodes.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lopcodes.Po' tmpdepfile='$(DEPDIR)/liblua_la-lopcodes.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lopcodes.o `test -f 'lopcodes.c' || echo '$(srcdir)/'`lopcodes.c
+
+liblua_la-lopcodes.obj: lopcodes.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lopcodes.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lopcodes.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lopcodes.obj `if test -f 'lopcodes.c'; then $(CYGPATH_W) 'lopcodes.c'; else $(CYGPATH_W) '$(srcdir)/lopcodes.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lopcodes.Tpo" "$(DEPDIR)/liblua_la-lopcodes.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lopcodes.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lopcodes.c' object='liblua_la-lopcodes.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lopcodes.Po' tmpdepfile='$(DEPDIR)/liblua_la-lopcodes.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lopcodes.obj `if test -f 'lopcodes.c'; then $(CYGPATH_W) 'lopcodes.c'; else $(CYGPATH_W) '$(srcdir)/lopcodes.c'; fi`
+
+liblua_la-lopcodes.lo: lopcodes.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lopcodes.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lopcodes.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lopcodes.lo `test -f 'lopcodes.c' || echo '$(srcdir)/'`lopcodes.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lopcodes.Tpo" "$(DEPDIR)/liblua_la-lopcodes.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lopcodes.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lopcodes.c' object='liblua_la-lopcodes.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lopcodes.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lopcodes.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lopcodes.lo `test -f 'lopcodes.c' || echo '$(srcdir)/'`lopcodes.c
+
+liblua_la-lparser.o: lparser.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lparser.o -MD -MP -MF "$(DEPDIR)/liblua_la-lparser.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lparser.o `test -f 'lparser.c' || echo '$(srcdir)/'`lparser.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lparser.Tpo" "$(DEPDIR)/liblua_la-lparser.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lparser.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lparser.c' object='liblua_la-lparser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lparser.Po' tmpdepfile='$(DEPDIR)/liblua_la-lparser.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lparser.o `test -f 'lparser.c' || echo '$(srcdir)/'`lparser.c
+
+liblua_la-lparser.obj: lparser.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lparser.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lparser.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lparser.obj `if test -f 'lparser.c'; then $(CYGPATH_W) 'lparser.c'; else $(CYGPATH_W) '$(srcdir)/lparser.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lparser.Tpo" "$(DEPDIR)/liblua_la-lparser.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lparser.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lparser.c' object='liblua_la-lparser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lparser.Po' tmpdepfile='$(DEPDIR)/liblua_la-lparser.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lparser.obj `if test -f 'lparser.c'; then $(CYGPATH_W) 'lparser.c'; else $(CYGPATH_W) '$(srcdir)/lparser.c'; fi`
+
+liblua_la-lparser.lo: lparser.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lparser.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lparser.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lparser.lo `test -f 'lparser.c' || echo '$(srcdir)/'`lparser.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lparser.Tpo" "$(DEPDIR)/liblua_la-lparser.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lparser.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lparser.c' object='liblua_la-lparser.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lparser.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lparser.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lparser.lo `test -f 'lparser.c' || echo '$(srcdir)/'`lparser.c
+
+liblua_la-lstate.o: lstate.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstate.o -MD -MP -MF "$(DEPDIR)/liblua_la-lstate.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstate.o `test -f 'lstate.c' || echo '$(srcdir)/'`lstate.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstate.Tpo" "$(DEPDIR)/liblua_la-lstate.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstate.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstate.c' object='liblua_la-lstate.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstate.Po' tmpdepfile='$(DEPDIR)/liblua_la-lstate.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstate.o `test -f 'lstate.c' || echo '$(srcdir)/'`lstate.c
+
+liblua_la-lstate.obj: lstate.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstate.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lstate.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstate.obj `if test -f 'lstate.c'; then $(CYGPATH_W) 'lstate.c'; else $(CYGPATH_W) '$(srcdir)/lstate.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstate.Tpo" "$(DEPDIR)/liblua_la-lstate.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstate.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstate.c' object='liblua_la-lstate.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstate.Po' tmpdepfile='$(DEPDIR)/liblua_la-lstate.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstate.obj `if test -f 'lstate.c'; then $(CYGPATH_W) 'lstate.c'; else $(CYGPATH_W) '$(srcdir)/lstate.c'; fi`
+
+liblua_la-lstate.lo: lstate.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstate.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lstate.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstate.lo `test -f 'lstate.c' || echo '$(srcdir)/'`lstate.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstate.Tpo" "$(DEPDIR)/liblua_la-lstate.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstate.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstate.c' object='liblua_la-lstate.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstate.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lstate.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstate.lo `test -f 'lstate.c' || echo '$(srcdir)/'`lstate.c
+
+liblua_la-lstring.o: lstring.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstring.o -MD -MP -MF "$(DEPDIR)/liblua_la-lstring.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstring.o `test -f 'lstring.c' || echo '$(srcdir)/'`lstring.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstring.Tpo" "$(DEPDIR)/liblua_la-lstring.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstring.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstring.c' object='liblua_la-lstring.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstring.Po' tmpdepfile='$(DEPDIR)/liblua_la-lstring.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstring.o `test -f 'lstring.c' || echo '$(srcdir)/'`lstring.c
+
+liblua_la-lstring.obj: lstring.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstring.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lstring.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstring.obj `if test -f 'lstring.c'; then $(CYGPATH_W) 'lstring.c'; else $(CYGPATH_W) '$(srcdir)/lstring.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstring.Tpo" "$(DEPDIR)/liblua_la-lstring.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstring.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstring.c' object='liblua_la-lstring.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstring.Po' tmpdepfile='$(DEPDIR)/liblua_la-lstring.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstring.obj `if test -f 'lstring.c'; then $(CYGPATH_W) 'lstring.c'; else $(CYGPATH_W) '$(srcdir)/lstring.c'; fi`
+
+liblua_la-lstring.lo: lstring.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lstring.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lstring.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lstring.lo `test -f 'lstring.c' || echo '$(srcdir)/'`lstring.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lstring.Tpo" "$(DEPDIR)/liblua_la-lstring.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lstring.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lstring.c' object='liblua_la-lstring.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lstring.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lstring.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lstring.lo `test -f 'lstring.c' || echo '$(srcdir)/'`lstring.c
+
+liblua_la-ltable.o: ltable.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltable.o -MD -MP -MF "$(DEPDIR)/liblua_la-ltable.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltable.o `test -f 'ltable.c' || echo '$(srcdir)/'`ltable.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltable.Tpo" "$(DEPDIR)/liblua_la-ltable.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltable.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltable.c' object='liblua_la-ltable.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltable.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltable.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltable.o `test -f 'ltable.c' || echo '$(srcdir)/'`ltable.c
+
+liblua_la-ltable.obj: ltable.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltable.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ltable.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltable.obj `if test -f 'ltable.c'; then $(CYGPATH_W) 'ltable.c'; else $(CYGPATH_W) '$(srcdir)/ltable.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltable.Tpo" "$(DEPDIR)/liblua_la-ltable.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltable.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltable.c' object='liblua_la-ltable.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltable.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltable.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltable.obj `if test -f 'ltable.c'; then $(CYGPATH_W) 'ltable.c'; else $(CYGPATH_W) '$(srcdir)/ltable.c'; fi`
+
+liblua_la-ltable.lo: ltable.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltable.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ltable.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltable.lo `test -f 'ltable.c' || echo '$(srcdir)/'`ltable.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltable.Tpo" "$(DEPDIR)/liblua_la-ltable.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltable.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltable.c' object='liblua_la-ltable.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltable.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ltable.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltable.lo `test -f 'ltable.c' || echo '$(srcdir)/'`ltable.c
+
+liblua_la-ltests.o: ltests.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltests.o -MD -MP -MF "$(DEPDIR)/liblua_la-ltests.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltests.o `test -f 'ltests.c' || echo '$(srcdir)/'`ltests.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltests.Tpo" "$(DEPDIR)/liblua_la-ltests.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltests.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltests.c' object='liblua_la-ltests.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltests.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltests.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltests.o `test -f 'ltests.c' || echo '$(srcdir)/'`ltests.c
+
+liblua_la-ltests.obj: ltests.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltests.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ltests.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltests.obj `if test -f 'ltests.c'; then $(CYGPATH_W) 'ltests.c'; else $(CYGPATH_W) '$(srcdir)/ltests.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltests.Tpo" "$(DEPDIR)/liblua_la-ltests.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltests.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltests.c' object='liblua_la-ltests.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltests.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltests.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltests.obj `if test -f 'ltests.c'; then $(CYGPATH_W) 'ltests.c'; else $(CYGPATH_W) '$(srcdir)/ltests.c'; fi`
+
+liblua_la-ltests.lo: ltests.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltests.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ltests.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltests.lo `test -f 'ltests.c' || echo '$(srcdir)/'`ltests.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltests.Tpo" "$(DEPDIR)/liblua_la-ltests.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltests.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltests.c' object='liblua_la-ltests.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltests.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ltests.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltests.lo `test -f 'ltests.c' || echo '$(srcdir)/'`ltests.c
+
+liblua_la-ltm.o: ltm.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltm.o -MD -MP -MF "$(DEPDIR)/liblua_la-ltm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltm.o `test -f 'ltm.c' || echo '$(srcdir)/'`ltm.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltm.Tpo" "$(DEPDIR)/liblua_la-ltm.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltm.c' object='liblua_la-ltm.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltm.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltm.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltm.o `test -f 'ltm.c' || echo '$(srcdir)/'`ltm.c
+
+liblua_la-ltm.obj: ltm.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltm.obj -MD -MP -MF "$(DEPDIR)/liblua_la-ltm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltm.obj `if test -f 'ltm.c'; then $(CYGPATH_W) 'ltm.c'; else $(CYGPATH_W) '$(srcdir)/ltm.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltm.Tpo" "$(DEPDIR)/liblua_la-ltm.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltm.c' object='liblua_la-ltm.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltm.Po' tmpdepfile='$(DEPDIR)/liblua_la-ltm.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltm.obj `if test -f 'ltm.c'; then $(CYGPATH_W) 'ltm.c'; else $(CYGPATH_W) '$(srcdir)/ltm.c'; fi`
+
+liblua_la-ltm.lo: ltm.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-ltm.lo -MD -MP -MF "$(DEPDIR)/liblua_la-ltm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-ltm.lo `test -f 'ltm.c' || echo '$(srcdir)/'`ltm.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-ltm.Tpo" "$(DEPDIR)/liblua_la-ltm.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-ltm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ltm.c' object='liblua_la-ltm.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-ltm.Plo' tmpdepfile='$(DEPDIR)/liblua_la-ltm.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-ltm.lo `test -f 'ltm.c' || echo '$(srcdir)/'`ltm.c
+
+liblua_la-lundump.o: lundump.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lundump.o -MD -MP -MF "$(DEPDIR)/liblua_la-lundump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lundump.o `test -f 'lundump.c' || echo '$(srcdir)/'`lundump.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lundump.Tpo" "$(DEPDIR)/liblua_la-lundump.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lundump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lundump.c' object='liblua_la-lundump.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lundump.Po' tmpdepfile='$(DEPDIR)/liblua_la-lundump.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lundump.o `test -f 'lundump.c' || echo '$(srcdir)/'`lundump.c
+
+liblua_la-lundump.obj: lundump.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lundump.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lundump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lundump.obj `if test -f 'lundump.c'; then $(CYGPATH_W) 'lundump.c'; else $(CYGPATH_W) '$(srcdir)/lundump.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lundump.Tpo" "$(DEPDIR)/liblua_la-lundump.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lundump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lundump.c' object='liblua_la-lundump.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lundump.Po' tmpdepfile='$(DEPDIR)/liblua_la-lundump.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lundump.obj `if test -f 'lundump.c'; then $(CYGPATH_W) 'lundump.c'; else $(CYGPATH_W) '$(srcdir)/lundump.c'; fi`
+
+liblua_la-lundump.lo: lundump.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lundump.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lundump.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lundump.lo `test -f 'lundump.c' || echo '$(srcdir)/'`lundump.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lundump.Tpo" "$(DEPDIR)/liblua_la-lundump.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lundump.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lundump.c' object='liblua_la-lundump.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lundump.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lundump.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lundump.lo `test -f 'lundump.c' || echo '$(srcdir)/'`lundump.c
+
+liblua_la-lvm.o: lvm.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lvm.o -MD -MP -MF "$(DEPDIR)/liblua_la-lvm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lvm.o `test -f 'lvm.c' || echo '$(srcdir)/'`lvm.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lvm.Tpo" "$(DEPDIR)/liblua_la-lvm.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lvm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lvm.c' object='liblua_la-lvm.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lvm.Po' tmpdepfile='$(DEPDIR)/liblua_la-lvm.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lvm.o `test -f 'lvm.c' || echo '$(srcdir)/'`lvm.c
+
+liblua_la-lvm.obj: lvm.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lvm.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lvm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lvm.obj `if test -f 'lvm.c'; then $(CYGPATH_W) 'lvm.c'; else $(CYGPATH_W) '$(srcdir)/lvm.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lvm.Tpo" "$(DEPDIR)/liblua_la-lvm.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lvm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lvm.c' object='liblua_la-lvm.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lvm.Po' tmpdepfile='$(DEPDIR)/liblua_la-lvm.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lvm.obj `if test -f 'lvm.c'; then $(CYGPATH_W) 'lvm.c'; else $(CYGPATH_W) '$(srcdir)/lvm.c'; fi`
+
+liblua_la-lvm.lo: lvm.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lvm.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lvm.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lvm.lo `test -f 'lvm.c' || echo '$(srcdir)/'`lvm.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lvm.Tpo" "$(DEPDIR)/liblua_la-lvm.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lvm.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lvm.c' object='liblua_la-lvm.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lvm.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lvm.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lvm.lo `test -f 'lvm.c' || echo '$(srcdir)/'`lvm.c
+
+liblua_la-lzio.o: lzio.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lzio.o -MD -MP -MF "$(DEPDIR)/liblua_la-lzio.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lzio.o `test -f 'lzio.c' || echo '$(srcdir)/'`lzio.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lzio.Tpo" "$(DEPDIR)/liblua_la-lzio.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lzio.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lzio.c' object='liblua_la-lzio.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lzio.Po' tmpdepfile='$(DEPDIR)/liblua_la-lzio.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lzio.o `test -f 'lzio.c' || echo '$(srcdir)/'`lzio.c
+
+liblua_la-lzio.obj: lzio.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lzio.obj -MD -MP -MF "$(DEPDIR)/liblua_la-lzio.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lzio.obj `if test -f 'lzio.c'; then $(CYGPATH_W) 'lzio.c'; else $(CYGPATH_W) '$(srcdir)/lzio.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lzio.Tpo" "$(DEPDIR)/liblua_la-lzio.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lzio.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lzio.c' object='liblua_la-lzio.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lzio.Po' tmpdepfile='$(DEPDIR)/liblua_la-lzio.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lzio.obj `if test -f 'lzio.c'; then $(CYGPATH_W) 'lzio.c'; else $(CYGPATH_W) '$(srcdir)/lzio.c'; fi`
+
+liblua_la-lzio.lo: lzio.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT liblua_la-lzio.lo -MD -MP -MF "$(DEPDIR)/liblua_la-lzio.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o liblua_la-lzio.lo `test -f 'lzio.c' || echo '$(srcdir)/'`lzio.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/liblua_la-lzio.Tpo" "$(DEPDIR)/liblua_la-lzio.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "$(DEPDIR)/liblua_la-lzio.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lzio.c' object='liblua_la-lzio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/liblua_la-lzio.Plo' tmpdepfile='$(DEPDIR)/liblua_la-lzio.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lzio.lo `test -f 'lzio.c' || echo '$(srcdir)/'`lzio.c
 
 lua/lua.o: lua/lua.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lua/lua.o -MD -MP -MF "lua/$(DEPDIR)/lua.Tpo" \
