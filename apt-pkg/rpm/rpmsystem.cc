@@ -261,7 +261,7 @@ bool rpmSystem::AddSourceFiles(vector<pkgIndexFile *> &List)
 	 const string &S = Top->Value;
 	 if (FileExists(S) && flExtension(S) == "rpm")
 	 {
-	    if (S.length() > 8 and string(S, S.length()-8) == ".src.rpm")
+	    if (S.length() > 8 && string(S, S.length()-8) == ".src.rpm")
 	       List.push_back(new rpmSingleSrcIndex(S));
 	    else
 	       List.push_back(new rpmSinglePkgIndex(S));
