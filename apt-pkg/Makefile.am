@@ -130,16 +130,22 @@ REALOBJECTS = $(patsubst %.cc,%.lo,\
 $(REALOBJECTS): $(COPYHEADERS) $(PRIVCOPYHEADERS)
 
 $(top_builddir)/include/apt-pkg/%: %
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 $(top_builddir)/include/apt-pkg/%: contrib/%
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 $(top_builddir)/include/apt-pkg/%: rpm/%
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 $(top_builddir)/include/%: %
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 $(top_builddir)/include/%: contrib/%
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 $(top_builddir)/include/%: rpm/%
+	@$(mkinstalldirs) $(top_builddir)/include/apt-pkg
 	cp -f -p $< $@
 
 clean-local:
