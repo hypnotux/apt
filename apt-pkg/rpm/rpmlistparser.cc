@@ -714,8 +714,8 @@ void rpmListParser::VirtualizePackage(string Name)
       // read the comment above).
       map_ptrloc *ToVerLast = &ToPkgI->VersionList;
       for (pkgCache::VerIterator ToVerLastI = ToPkgI.VersionList();
-	   ToVerLastI.end() == false;
-	   ToVerLast = &ToVerLastI->NextVer, ToVerLast++);
+	   ToVerLastI.end() == false; ToVerLastI++)
+	   ToVerLast = &ToVerLastI->NextVer;
 
       *ToVerLast = FromVerI.Index();
 
