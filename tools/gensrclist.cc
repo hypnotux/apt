@@ -41,6 +41,7 @@ int tags[] =  {
        RPMTAG_SOURCERPM,
        RPMTAG_SIZE,
        RPMTAG_VENDOR,
+       RPMTAG_OS,
        
        RPMTAG_DESCRIPTION, 
        RPMTAG_SUMMARY, 
