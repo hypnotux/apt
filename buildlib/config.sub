@@ -1,9 +1,9 @@
 #! /bin/sh
 # Configuration validation subroutine script.
 #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-#   2000, 2001, 2002 Free Software Foundation, Inc.
+#   2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
-timestamp='2003-07-17'
+timestamp='2003-08-18'
 
 # This file is (in principle) common to ALL GNU software.
 # The presence of a machine in this file suggests that SOME GNU software
@@ -118,7 +118,7 @@ esac
 # Here we must recognize all the valid KERNEL-OS combinations.
 maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
 case $maybe_os in
-  nto-qnx* | linux-gnu* | kfreebsd*-gnu* | netbsd*-gnu* | storm-chaos* | os2-emx* | rtmk-nova*)
+  nto-qnx* | linux-gnu* | linux-dietlibc | kfreebsd*-gnu* | netbsd*-gnu* | storm-chaos* | os2-emx* | rtmk-nova*)
     os=-$maybe_os
     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
     ;;
@@ -246,11 +246,14 @@ case $basic_machine in
 	| mips64vr4300 | mips64vr4300el \
 	| mips64vr5000 | mips64vr5000el \
 	| mipsisa32 | mipsisa32el \
+	| mipsisa32r2 | mipsisa32r2el \
 	| mipsisa64 | mipsisa64el \
+	| mipsisa64r2 | mipsisa64r2el \
 	| mipsisa64sb1 | mipsisa64sb1el \
 	| mipsisa64sr71k | mipsisa64sr71kel \
 	| mipstx39 | mipstx39el \
 	| mn10200 | mn10300 \
+	| msp430 \
 	| ns16k | ns32k \
 	| openrisc | or32 \
 	| pdp10 | pdp11 | pj | pjl \
@@ -316,11 +319,14 @@ case $basic_machine in
 	| mips64vr4300-* | mips64vr4300el-* \
 	| mips64vr5000-* | mips64vr5000el-* \
 	| mipsisa32-* | mipsisa32el-* \
+	| mipsisa32r2-* | mipsisa32r2el-* \
 	| mipsisa64-* | mipsisa64el-* \
+	| mipsisa64r2-* | mipsisa64r2el-* \
 	| mipsisa64sb1-* | mipsisa64sb1el-* \
 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
-	| mipstx39 | mipstx39el \
-	| none-* | np1-* | ns16k-* | ns32k-* \
+	| mipstx39-* | mipstx39el-* \
+	| msp430-* \
+	| none-* | np1-* | nv1-* | ns16k-* | ns32k-* \
 	| orion-* \
 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
@@ -722,6 +728,10 @@ case $basic_machine in
 	np1)
 		basic_machine=np1-gould
 		;;
+	nv1)
+		basic_machine=nv1-cray
+		os=-unicosmp
+		;;
 	nsr-tandem)
 		basic_machine=nsr-tandem
 		;;
@@ -920,10 +930,6 @@ case $basic_machine in
 		basic_machine=i386-sequent
 		os=-dynix
 		;;
-	t3d)
-		basic_machine=alpha-cray
-		os=-unicos
-		;;
 	t3e)
 		basic_machine=alphaev5-cray
 		os=-unicos
@@ -999,10 +1005,6 @@ case $basic_machine in
 	w89k-*)
 		basic_machine=hppa1.1-winbond
 		os=-proelf
-		;;
-	windows32)
-		basic_machine=i386-pc
-		os=-windows32-msvcrt
 		;;
 	xps | xps100)
 		basic_machine=xps100-honeywell
@@ -1136,7 +1138,7 @@ case $os in
 	      | -chorusos* | -chorusrdb* \
 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
 	      | -mingw32* | -linux-gnu* | -uxpv* | -beos* | -mpeix* | -udk* \
-	      | -interix* | -uwin* | -rhapsody* | -darwin* | -opened* \
+	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
@@ -1153,8 +1155,10 @@ case $os in
 			;;
 		esac
 		;;
+	-nto-qnx*)
+		;;
 	-nto*)
-		os=-nto-qnx
+		os=`echo $os | sed -e 's|nto|nto-qnx|'`
 		;;
 	-sim | -es1800* | -hms* | -xray | -os68k* | -none* | -v88r* \
 	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* \
@@ -1162,6 +1166,9 @@ case $os in
 		;;
 	-mac*)
 		os=`echo $os | sed -e 's|mac|macos|'`
+		;;
+	-linux-dietlibc)
+		os=-linux-dietlibc
 		;;
 	-linux*)
 		os=`echo $os | sed -e 's|linux|linux-gnu|'`
