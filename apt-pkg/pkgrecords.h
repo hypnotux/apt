@@ -70,6 +70,9 @@ class pkgRecords::Parser
    
    // The record in binary form
    virtual void GetRec(const char *&Start,const char *&Stop) {Start = Stop = 0;};
+
+   // CNC:2003-11-21
+   virtual bool HasFile(const char *File) {return false;};
    
    virtual ~Parser() {};
 };

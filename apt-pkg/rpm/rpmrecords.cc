@@ -422,6 +422,24 @@ void rpmRecordParser::GetRec(const char *&Start,const char *&Stop)
    Stop = Buffer + BufUsed;
 }
 									/*}}}*/
+
+bool rpmRecordParser::HasFile(const char *File)
+{
+   if (*File == '\0')
+      return false;
+   char **names = NULL;
+   int_32 count = 0;
+   rpmHeaderGetEntry(HeaderP, RPMTAG_OLDFILENAMES,
+		     NULL, (void **) &names, &count);
+   while (count--) 
+   {
+      char *name = names[count];
+      if (strcmp(name, File) == 0)
+	 return true;
+   }
+   return false;
+}
+
 #endif /* HAVE_RPM */
 
 // vim:sts=3:sw=3

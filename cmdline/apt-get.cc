@@ -1734,6 +1734,28 @@ bool DoInstall(CommandLine &CmdL)
 	    VerTag = p;
 	 }
 	 
+	 // CNC:2003-11-21 - Try to handle unknown file items.
+	 if (S[0] == '/')
+	 {
+	    pkgRecords Recs(Cache);
+	    if (_error->PendingError() == true)
+	       return false;
+	    pkgCache::PkgIterator Pkg = (*Cache).PkgBegin();
+	    for (; Pkg.end() == false; Pkg++)
+	    {
+	       // Should we try on all versions?
+	       pkgCache::VerIterator Ver = (*Cache)[Pkg].CandidateVerIter(*Cache);
+	       if (Ver.end() == false)
+	       {
+		  pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
+		  if (Parse.HasFile(S)) {
+		     strcpy(S, Pkg.Name());
+		     break;
+		  }
+	       }
+	    }
+	 }
+
 	 char *Slash = strchr(S,'/');
 	 if (Slash != 0)
 	 {
@@ -2565,6 +2587,24 @@ bool DoBuildDep(CommandLine &CmdL)
 	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
             if (_config->FindB("Debug::BuildDeps",false) == true)
                  cout << "Looking for " << (*D).Package << "...\n";
+
+	    // CNC:2003-11-21 - Try to handle unknown file deps.
+	    if (Pkg.end() == true && (*D).Package[0] == '/')
+	    {
+	       const char *File = (*D).Package.c_str();
+	       Pkg = (*Cache).PkgBegin();
+	       for (; Pkg.end() == false; Pkg++)
+	       {
+		  // Should we try on all versions?
+		  pkgCache::VerIterator Ver = (*Cache)[Pkg].CandidateVerIter(*Cache);
+		  if (Ver.end() == false)
+		  {
+		     pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
+		     if (Parse.HasFile(File))
+			break;
+		  }
+	       }
+	    }
 
 	    if (Pkg.end() == true)
             {

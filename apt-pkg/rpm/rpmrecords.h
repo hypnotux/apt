@@ -65,6 +65,8 @@ class rpmRecordParser : public pkgRecords::Parser
    // The record in raw text, in standard Debian format
    virtual void GetRec(const char *&Start,const char *&Stop);
 
+   virtual bool HasFile(const char *File);
+
    rpmRecordParser(string File,pkgCache &Cache);
    ~rpmRecordParser();
 };
