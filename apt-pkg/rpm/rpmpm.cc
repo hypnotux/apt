@@ -36,6 +36,7 @@
 
 #ifdef HAVE_RPM41
 #include <rpm/rpmdb.h>
+#define packagesTotal rpmcliPackagesTotal 
 #else
 #define rpmpsPrint(a,b) rpmProblemSetPrint(a,b)
 #define rpmpsFree(a) rpmProblemSetFree(a)
@@ -618,6 +619,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       
       return _error->Error(_("Sub-process %s exited unexpectedly"),Args[0]);
    }
+   cout << "Done." << endl;
 
    return true;
 }
@@ -856,6 +858,8 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       Success = true;
       if (rc < 0)
 	 _error->Warning(_("Some errors occurred while running transaction"));
+      else
+	 cout << "Done." << endl;
    }
    rpmpsFree(probs);
 
