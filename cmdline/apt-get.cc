@@ -3024,9 +3024,11 @@ bool ShowHelp(CommandLine &CmdL)
       "   clean - Erase downloaded archive files\n"
       "   autoclean - Erase old downloaded archive files\n"
       "   check - Verify that there are no broken dependencies\n"
-      // CNC:2003-03-16
+// CNC:2003-03-16
       );
+#ifdef WITH_LUA
       _lua->RunScripts("Scripts::AptGet::Help::Command");
+#endif
       cout << _(
       "\n"
       "Options:\n"
