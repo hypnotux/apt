@@ -120,14 +120,14 @@ else
 fi
 AM_CONDITIONAL(WITH_LUA, test "$enable_scripts" != "no")
 
-dnl Before configuring libtool check for --enable-static option
-AC_MSG_CHECKING(for --enable-static)
-AC_ARG_ENABLE(static,
-	      AC_HELP_STRING([--enable-static],
+dnl Before configuring libtool check for --enable-static-progs option
+AC_MSG_CHECKING(for --enable-static-progs)
+AC_ARG_ENABLE(static-progs,
+	      AC_HELP_STRING([--enable-static-progs],
 			     [Build completely static (standalone) binaries.]),
-	      [enable_static="$enableval"],[enable_static="no"])
-AM_CONDITIONAL(COMPILE_STATIC, test "$enable_static" = "yes")
-if test "$enable_static" != "no" ; then
+	      [enable_static_progs="$enableval"],[enable_static_progs="no"])
+AM_CONDITIONAL(COMPILE_STATIC, test "$enable_static_progs" = "yes")
+if test "$enable_static_progs" = "yes" ; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
