@@ -65,6 +65,8 @@ bool pkgInitConfig(Configuration &Cnf)
    // Configuration
    Cnf.Set("Dir::Etc","etc/apt/");
    Cnf.Set("Dir::Etc::sourcelist","sources.list");
+   // CNC:2003-03-03
+   Cnf.Set("Dir::Etc::sourceparts","sources.list.d");
    Cnf.Set("Dir::Etc::vendorlist","vendors.list");
    Cnf.Set("Dir::Etc::vendorparts","vendors.list.d");
    Cnf.Set("Dir::Etc::main","apt.conf");

@@ -94,6 +94,11 @@ class pkgSourceList
    bool ReadMainList();
    bool Read(string File);
    bool ReadVendors();
+
+   // CNC:2003-03-03
+   void Reset();
+   bool ReadAppend(string File);
+   bool ReadSourceDir(string Dir);
    
    // List accessors
    inline const_iterator begin() const {return SrcList.begin();};

@@ -21,6 +21,12 @@
 #include <apti18n.h>
 
 #include <fstream>
+
+// CNC:2003-03-03 - This is needed for ReadDir stuff.
+#include <stdio.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 									/*}}}*/
 
 using namespace std;
@@ -234,22 +240,59 @@ bool pkgSourceList::ReadVendors()
 /* */
 bool pkgSourceList::ReadMainList()
 {
-   return ReadVendors() && Read(_config->FindFile("Dir::Etc::sourcelist"));
+   // CNC:2003-03-03 - Multiple sources list support.
+   bool Res = ReadVendors();
+   if (Res == false)
+      return false;
+   
+   Reset();
+   string Parts = _config->FindDir("Dir::Etc::sourceparts");
+   if (FileExists(Parts) == true)
+      Res &= ReadSourceDir(Parts);
+   
+   string Main = _config->FindFile("Dir::Etc::sourcelist");
+   if (FileExists(Main) == true)
+      Res &= ReadAppend(Main);   
+
+   return Res;
 }
 									/*}}}*/
+// CNC:2003-03-03 - Needed to preserve backwards compatibility.
+// SourceList::Reset - Clear the sourcelist contents			/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+void pkgSourceList::Reset()
+{
+   for (const_iterator I = SrcList.begin(); I != SrcList.end(); I++)
+      delete *I;
+   SrcList.erase(SrcList.begin(),SrcList.end());
+}
+									/*}}}*/
+// CNC:2003-03-03 - Function moved to ReadAppend() and Reset().
 // SourceList::Read - Parse the sourcelist file				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 bool pkgSourceList::Read(string File)
+{
+   Reset();
+   return ReadAppend(File);
+}
+									/*}}}*/
+// SourceList::ReadAppend - Parse a sourcelist file			/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool pkgSourceList::ReadAppend(string File)
 {
    // Open the stream for reading
    ifstream F(File.c_str(),ios::in /*| ios::nocreate*/);
    if (!F != 0)
       return _error->Errno("ifstream::ifstream",_("Opening %s"),File.c_str());
    
+#if 0 // Now Reset() does this.
    for (const_iterator I = SrcList.begin(); I != SrcList.end(); I++)
       delete *I;
    SrcList.erase(SrcList.begin(),SrcList.end());
+#endif
    char Buffer[300];
 
    int CurLine = 0;
@@ -360,3 +403,51 @@ bool pkgSourceList::GetReleases(pkgAcquire *Owner) const
    return true;
 }
 									/*}}}*/
+// CNC:2003-03-03 - By Anton V. Denisov <avd@altlinux.org>.
+// SourceList::ReadSourceDir - Read a directory with sources files
+// Based on ReadConfigDir()						/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool pkgSourceList::ReadSourceDir(string Dir)
+{
+   DIR *D = opendir(Dir.c_str());
+   if (D == 0)
+      return _error->Errno("opendir",_("Unable to read %s"),Dir.c_str());
+
+   vector<string> List;
+   
+   for (struct dirent *Ent = readdir(D); Ent != 0; Ent = readdir(D))
+   {
+      if (Ent->d_name[0] == '.')
+	 continue;
+      
+      // Skip bad file names ala run-parts
+      const char *C = Ent->d_name;
+      for (; *C != 0; C++)
+	 if (isalpha(*C) == 0 && isdigit(*C) == 0
+             && *C != '_' && *C != '-' && *C != '.')
+	    break;
+      if (*C != 0)
+	 continue;
+      
+      // Make sure it is a file and not something else
+      string File = flCombine(Dir,Ent->d_name);
+      struct stat St;
+      if (stat(File.c_str(),&St) != 0 || S_ISREG(St.st_mode) == 0)
+	 continue;
+      
+      List.push_back(File);      
+   }   
+   closedir(D);
+   
+   sort(List.begin(),List.end());
+
+   // Read the files
+   for (vector<string>::const_iterator I = List.begin(); I != List.end(); I++)
+      if (ReadAppend(*I) == false)
+	 return false;
+   return true;
+
+}
+									/*}}}*/
+
