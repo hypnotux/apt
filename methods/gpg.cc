@@ -3,13 +3,13 @@
 #include <apt-pkg/acquire-method.h>
 #include <apt-pkg/strutl.h>
 
-
 #include <sys/stat.h>
 #include <unistd.h>
 #include <utime.h>
 #include <stdio.h>
 #include <sys/wait.h>
 
+#include <apti18n.h>
 
 class GPGMethod : public pkgAcqMethod
 {
@@ -298,14 +298,19 @@ char *getFileSigner(const char *file, const char *sigfile,
 
 bool makeTmpDir(string dir, string &path)
 {
-   char buf[32];
-   
-   snprintf(buf, sizeof(buf)-1, "%i", getpid());
-   
-   path = dir+"/aptgpg."+string(buf);
+   char *buf;
 
-   if (mkdir(path.c_str(), 0700) < 0)
-      return _error->Errno("mkdir", "could not create temporary directory");
+   path = dir+"/apt-gpg.XXXXXX";
+   buf = new char[path.length()+1];
+   if (buf == NULL)
+      return _error->Error(_("Could not allocate memory"));
+   strcpy(buf, path.c_str());
+
+   if (mkdtemp(buf) == NULL)
+      return _error->Errno("mkdtemp", _("Could not create temporary directory"));
+   path = buf;
+
+   delete [] buf;
 
    return true;
 }
@@ -337,14 +342,13 @@ bool GPGMethod::Fetch(FetchItem *Itm)
    URIStart(Res);
    
    string TempDir;
-   string SysTempDir;
+   const char *SysTempDir;
 
    SysTempDir = getenv("TMPDIR");
    if (SysTempDir == NULL) {
       SysTempDir = getenv("TMP");
-         if (SysTempDir == NULL) {
-            SysTempDir = "/tmp";
-         }
+      if (SysTempDir == NULL)
+         SysTempDir = "/tmp";
    }
    if (makeTmpDir(SysTempDir, TempDir) == false)
       return false;
