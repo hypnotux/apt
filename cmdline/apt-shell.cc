@@ -4544,7 +4544,7 @@ int main(int argc,const char *argv[])
 
 // CNC:2003-03-19
 #ifdef WITH_LUA
-      if (HasCmdScripts == true) {
+      if (HasCmdScripts == true && _error->PendingError() == false) {
 	 _lua->SetDepCache(*GCache);
 	 _lua->SetGlobal("command_args", CmdL.FileList);
 	 _lua->SetGlobal("command_consume", 0.0);
