@@ -100,18 +100,17 @@ void RPMFileHandler::Rewind()
 RPMDBHandler::RPMDBHandler(bool WriteLock)
 	: WriteLock(WriteLock)
 {
+   string Dir = _config->Find("RPM::RootDir");
+   rpmReadConfigFiles(NULL, NULL);
+
    // Everytime we open a database for writing, it has its
    // mtime changed, and kills our cache validity. As we never
    // change any information in the database directly, we will
    // restore the mtime and save our cache.
-   if (WriteLock) {
-      struct stat St;
-      stat(DataPath(false).c_str(), &St);
-      DbFileMtime = St.st_mtime;
-   }
+   struct stat St;
+   stat(DataPath(false).c_str(), &St);
+   DbFileMtime = St.st_mtime;
 
-   string Dir = _config->Find("RPM::RootDir");
-   rpmReadConfigFiles(NULL, NULL);
 #ifdef HAVE_RPM4
    RpmIter = NULL;
 #endif
@@ -152,9 +151,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
       iSize++;
    rpmdbFreeIterator(countIt);
 #else
-   struct stat st;
-   stat(DataPath(false).c_str(), &st);
-   iSize = st.st_size;
+   iSize = St.st_size;
 #endif
 }
 
