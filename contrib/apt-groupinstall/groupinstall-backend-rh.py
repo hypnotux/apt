@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # apt-groupinstall v0.1
-# groupinstall helper script for apt
+# groupinstall helper backend for for RHL/RHEL/FC systems 
 # by pmatilai@welho.com
 
 import rhpl.comps, sys, string

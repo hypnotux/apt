@@ -1,12 +1,16 @@
-Lua script to allow installing and viewing package groups as defined in 
-comps.xml found in RHL 8.0, 9 and Fedora Core 1.
+Lua script to allow installing and viewing package groups, determined by 
+a backend script to allow it to work on arbitrary group-metadata formats.
 
 This script must be plugged into the following APT script slots:
 
-    Scripts::AptGet::Command 
-    Scripts::AptCache::Command
-    Scripts::AptGet::Help::Command
-    Scripts::AptCache::Help::Command
+    Scripts::AptGet::Command::
+    Scripts::AptCache::Command::
+    Scripts::AptGet::Help::Command::
+    Scripts::AptCache::Help::Command::
+
+Additionally the backend script name must be specified with the configuration 
+item Scripts::Groupinstall::Backend, the path is relative to the generic
+scripts directory specified by Dir::Bin::scripts.
 
 Usage:
     apt-cache showgroups - show all known groups
@@ -17,4 +21,17 @@ Usage:
 Known to work in RHL 8.0, 9 and Fedora Core 1. Requires python, comps and
 rhpl packages to be installed.
 
-Licensed under the GPL, by pmatilai@welho.com / 2003
+Note that groupinstall can be made to work on any system where package group
+data is available in some parseable format. You'll just need to write your
+own backend for it, providing the following three operations
+
+List all available groups:
+<backend> showgroups
+Show contents of given groups in a human-friendly format:
+<backend> showgroup <group1> [<group2> ...]
+List packages belonging to given groups, one package at a time (this is not
+a user visible operation but is used internally by the script to determine
+what packages to install/remove in groupinstall and groupremove operations)
+<backend> grouppkgs <group1> [<group2> ...]
+
+Licensed under the GPL, by pmatilai@welho.com / 2003-2004

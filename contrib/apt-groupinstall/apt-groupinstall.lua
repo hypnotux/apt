@@ -4,7 +4,7 @@
 -- Scripts::AptGet::Command and Scripts::AptCache::Command
 --
 
-helper = confget("Dir::Bin::scripts/f").."/apt-groupinstall.py"
+helper = confget("Dir::Bin::scripts/f").."/"..confget("Scripts::Groupinstall::Backend")
 
 if script_slot == "Scripts::AptCache::Help::Command" then
 	print(_("   showgroups - Show available groups"))
