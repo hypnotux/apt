@@ -11,6 +11,16 @@
 #ifndef PKGLIB_rpmPM_H
 #define PKGLIB_rpmPM_H
 
+#include <rpm/rpmlib.h>
+#ifdef HAVE_RPM41
+#include <rpm/rpmts.h>
+#endif
+#ifdef HAVE_RPM4
+#include <rpm/rpmcli.h>
+#endif
+									/*}}}*/
+typedef Header rpmHeader; 
+
 #ifdef __GNUG__
 #pragma interface "apt-pkg/rpmpm.h"
 #endif
@@ -46,10 +56,9 @@ class pkgRPMPM : public pkgPackageManager
    virtual bool Configure(PkgIterator Pkg);
    virtual bool Remove(PkgIterator Pkg,bool Purge = false);
     
-   bool ExecRPM(Item::RPMOps op, vector<const char*> &files);
-   bool Process(vector<const char*> &install,
+   virtual bool Process(vector<const char*> &install,
 		vector<const char*> &upgrade,
-		vector<const char*> &uninstall);
+		vector<const char*> &uninstall) {return false;};
    
    virtual bool Go();
    virtual void Reset();
@@ -58,6 +67,40 @@ class pkgRPMPM : public pkgPackageManager
 
    pkgRPMPM(pkgDepCache *Cache);
    virtual ~pkgRPMPM();
+};
+
+class pkgRPMExtPM : public pkgRPMPM
+{
+   protected:
+   bool ExecRPM(Item::RPMOps op, vector<const char*> &files);
+   virtual bool Process(vector<const char*> &install,
+		vector<const char*> &upgrade,
+		vector<const char*> &uninstall);
+
+   public:
+   pkgRPMExtPM(pkgDepCache *Cache);
+   virtual ~pkgRPMExtPM();
+};
+
+class pkgRPMLibPM : public pkgRPMPM
+{
+   protected:
+#ifdef HAVE_RPM41
+   rpmts TS;
+#else
+   rpmTransactionSet TS;
+   rpmdb DB;
+#endif
+
+   bool AddToTransaction(Item::RPMOps op, vector<const char*> &files);
+   virtual bool Process(vector<const char*> &install,
+		vector<const char*> &upgrade,
+		vector<const char*> &uninstall);
+
+   public:
+
+   pkgRPMLibPM(pkgDepCache *Cache);
+   virtual ~pkgRPMLibPM();
 };
 
 #endif

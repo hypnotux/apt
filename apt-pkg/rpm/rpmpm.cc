@@ -34,9 +34,18 @@
 #include <stdio.h>
 #include <iostream>
 
-
-#include <rpm/rpmlib.h>
-									/*}}}*/
+#ifdef HAVE_RPM41
+#include <rpm/rpmdb.h>
+#else
+#define rpmpsPrint(a,b) rpmProblemSetPrint(a,b)
+#define rpmpsFree(a) rpmProblemSetFree(a)
+#define rpmReadPackageFile(a,b,c,d) rpmReadPackageHeader(b,d,0,NULL,NULL)
+#ifndef HAVE_RPM4
+#define rpmtransFlags int
+#define rpmprobFilterFlags int
+#include "rpmshowprogress.h"
+#endif
+#endif
 
 // RPMPM::pkgRPMPM - Constructor					/*{{{*/
 // ---------------------------------------------------------------------
@@ -223,7 +232,157 @@ bool pkgRPMPM::RunScriptsWithPkgs(const char *Cnf)
 
 									/*}}}*/
 
-bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
+
+// RPMPM::Go - Run the sequence						/*{{{*/
+// ---------------------------------------------------------------------
+/* This globs the operations and calls rpm */
+bool pkgRPMPM::Go()
+{
+   if (RunScripts("RPM::Pre-Invoke") == false)
+      return false;
+
+   if (RunScriptsWithPkgs("RPM::Pre-Install-Pkgs") == false)
+      return false;
+   
+   vector<const char*> install_or_upgrade;
+   vector<const char*> install;
+   vector<const char*> upgrade;
+   vector<const char*> uninstall;
+   vector<pkgCache::Package*> pkgs_install;
+   vector<pkgCache::Package*> pkgs_uninstall;
+
+   vector<char*> unalloc;
+   
+   for (vector<Item>::iterator I = List.begin(); I != List.end(); I++)
+   {
+      switch (I->Op)
+      {
+      case Item::Purge:
+      case Item::Remove:
+	 if (strchr(I->Pkg.Name(), '#') != NULL)
+	 {
+	    char *name = strdup(I->Pkg.Name());
+	    char *p = strchr(name, '#');
+	    *(p++) = '-';
+	    const char *epoch = strchr(p, ':');
+	    if (epoch != NULL)
+	       memmove(p, epoch+1, strlen(epoch+1)+1);
+	    unalloc.push_back(name);
+	    uninstall.push_back(name);
+	 }
+	 else
+	    uninstall.push_back(I->Pkg.Name());
+	 pkgs_uninstall.push_back(I->Pkg);
+	 break;
+
+       case Item::Configure:
+	 break;
+
+       case Item::Install:
+	 if (strchr(I->Pkg.Name(), '#') != NULL) {
+	    char *name = strdup(I->Pkg.Name());
+	    char *p = strchr(name, '#');
+	    *p = 0;
+	    PkgIterator Pkg = Cache.FindPkg(name);
+	    free(name);
+	    PrvIterator Prv = Pkg.ProvidesList();
+	    bool Installed = false;
+	    for (; Prv.end() == false; Prv++) {
+	       if (Prv.OwnerPkg().CurrentVer().end() == false) {
+		  Installed = true;
+		  break;
+	       }
+	    }
+	    if (Installed)
+	       install.push_back(I->File.c_str());
+	    else
+	       upgrade.push_back(I->File.c_str());
+	 } else {
+	    upgrade.push_back(I->File.c_str());
+	 }
+	 install_or_upgrade.push_back(I->File.c_str());
+	 pkgs_install.push_back(I->Pkg);
+	 break;
+	  
+       default:
+	 return _error->Error("Unknown pkgRPMPM operation.");
+      }
+   }
+
+   bool Ret = true;
+
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::RPM::Pre") == true) {
+      _lua->SetGlobal("files_install", install_or_upgrade);
+      _lua->SetGlobal("names_remove", uninstall);
+      _lua->SetGlobal("pkgs_install", pkgs_install);
+      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
+      _lua->SetDepCache(&Cache);
+      _lua->RunScripts("Scripts::RPM::Pre", false);
+      _lua->ResetCaches();
+      _lua->ResetGlobals();
+      if (_error->PendingError() == true) {
+	 Ret = false;
+	 goto exit;
+      }
+   }
+#endif
+
+   if (Process(install, upgrade, uninstall) == false)
+      Ret = false;
+
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::RPM::Post") == true) {
+      _lua->SetGlobal("files_install", install_or_upgrade);
+      _lua->SetGlobal("names_remove", uninstall);
+      _lua->SetGlobal("pkgs_install", pkgs_install);
+      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
+      _lua->SetDepCache(&Cache);
+      _lua->RunScripts("Scripts::RPM::Post", false);
+      _lua->ResetCaches();
+      _lua->ResetGlobals();
+      if (_error->PendingError() == true) {
+	 Ret = false;
+	 goto exit;
+      }
+   }
+#endif
+
+   
+   if (Ret == true)
+      Ret = RunScripts("RPM::Post-Invoke");
+
+exit:
+   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
+      free(*I);
+
+   return Ret;
+}
+									/*}}}*/
+// pkgRPMPM::Reset - Dump the contents of the command list		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+void pkgRPMPM::Reset() 
+{
+   List.erase(List.begin(),List.end());
+}
+									/*}}}*/
+// RPMExtPM::pkgRPMExtPM - Constructor					/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+pkgRPMExtPM::pkgRPMExtPM(pkgDepCache *Cache) : pkgRPMPM(Cache)
+{
+}
+									/*}}}*/
+// RPMExtPM::pkgRPMExtPM - Destructor					/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+pkgRPMExtPM::~pkgRPMExtPM()
+{
+}
+									/*}}}*/
+
+bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 {
    const char *Args[10000];      
    const char *operation;
@@ -463,8 +622,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
    return true;
 }
 
-
-bool pkgRPMPM::Process(vector<const char*> &install, 
+bool pkgRPMExtPM::Process(vector<const char*> &install, 
 		       vector<const char*> &upgrade,
 		       vector<const char*> &uninstall)
 {
@@ -477,141 +635,227 @@ bool pkgRPMPM::Process(vector<const char*> &install,
    return true;
 }
 
-
-// RPMPM::Go - Run the sequence					/*{{{*/
-// ---------------------------------------------------------------------
-/* This globs the operations and calls rpm */
-bool pkgRPMPM::Go()
-{
-   if (RunScripts("RPM::Pre-Invoke") == false)
-      return false;
-
-   if (RunScriptsWithPkgs("RPM::Pre-Install-Pkgs") == false)
-      return false;
-   
-   vector<const char*> install_or_upgrade;
-   vector<const char*> install;
-   vector<const char*> upgrade;
-   vector<const char*> uninstall;
-   vector<pkgCache::Package*> pkgs_install;
-   vector<pkgCache::Package*> pkgs_uninstall;
-
-   vector<char*> unalloc;
-   
-   for (vector<Item>::iterator I = List.begin(); I != List.end(); I++)
-   {
-      switch (I->Op)
-      {
-      case Item::Purge:
-      case Item::Remove:
-	 if (strchr(I->Pkg.Name(), '#') != NULL)
-	 {
-	    char *name = strdup(I->Pkg.Name());
-	    char *p = strchr(name, '#');
-	    *(p++) = '-';
-	    const char *epoch = strchr(p, ':');
-	    if (epoch != NULL)
-	       memmove(p, epoch+1, strlen(epoch+1)+1);
-	    unalloc.push_back(name);
-	    uninstall.push_back(name);
-	 }
-	 else
-	    uninstall.push_back(I->Pkg.Name());
-	 pkgs_uninstall.push_back(I->Pkg);
-	 break;
-
-       case Item::Configure:
-	 break;
-
-       case Item::Install:
-	 if (strchr(I->Pkg.Name(), '#') != NULL) {
-	    char *name = strdup(I->Pkg.Name());
-	    char *p = strchr(name, '#');
-	    *p = 0;
-	    PkgIterator Pkg = Cache.FindPkg(name);
-	    free(name);
-	    PrvIterator Prv = Pkg.ProvidesList();
-	    bool Installed = false;
-	    for (; Prv.end() == false; Prv++) {
-	       if (Prv.OwnerPkg().CurrentVer().end() == false) {
-		  Installed = true;
-		  break;
-	       }
-	    }
-	    if (Installed)
-	       install.push_back(I->File.c_str());
-	    else
-	       upgrade.push_back(I->File.c_str());
-	 } else {
-	    upgrade.push_back(I->File.c_str());
-	 }
-	 install_or_upgrade.push_back(I->File.c_str());
-	 pkgs_install.push_back(I->Pkg);
-	 break;
-	  
-       default:
-	 return _error->Error("Unknown pkgRPMPM operation.");
-      }
-   }
-
-   bool Ret = true;
-
-#ifdef WITH_LUA
-   if (_lua->HasScripts("Scripts::RPM::Pre") == true) {
-      _lua->SetGlobal("files_install", install_or_upgrade);
-      _lua->SetGlobal("names_remove", uninstall);
-      _lua->SetGlobal("pkgs_install", pkgs_install);
-      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
-      _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::RPM::Pre", false);
-      _lua->ResetCaches();
-      _lua->ResetGlobals();
-      if (_error->PendingError() == true) {
-	 Ret = false;
-	 goto exit;
-      }
-   }
-#endif
-
-   if (Process(install, upgrade, uninstall) == false)
-      Ret = false;
-
-#ifdef WITH_LUA
-   if (_lua->HasScripts("Scripts::RPM::Post") == true) {
-      _lua->SetGlobal("files_install", install_or_upgrade);
-      _lua->SetGlobal("names_remove", uninstall);
-      _lua->SetGlobal("pkgs_install", pkgs_install);
-      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
-      _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::RPM::Post", false);
-      _lua->ResetCaches();
-      _lua->ResetGlobals();
-      if (_error->PendingError() == true) {
-	 Ret = false;
-	 goto exit;
-      }
-   }
-#endif
-
-   
-   if (Ret == true)
-      Ret = RunScripts("RPM::Post-Invoke");
-
-exit:
-   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
-      free(*I);
-
-   return Ret;
-}
-									/*}}}*/
-// pkgRPMPM::Reset - Dump the contents of the command list		/*{{{*/
+// RPMLibPM::pkgRPMLibPM - Constructor					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-void pkgRPMPM::Reset() 
+pkgRPMLibPM::pkgRPMLibPM(pkgDepCache *Cache) : pkgRPMPM(Cache)
 {
-   List.erase(List.begin(),List.end());
 }
 									/*}}}*/
+// RPMLibPM::pkgRPMLibPM - Destructor					/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+pkgRPMLibPM::~pkgRPMLibPM()
+{
+}
+									/*}}}*/
+
+bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
+{
+   int debug = _config->FindB("Debug::pkgRPMPM", false);
+   int n = 0, rc, xx;
+   FD_t fd;
+   rpmHeader hdr;
+
+   for (vector<const char*>::iterator I = files.begin(); I != files.end(); I++)
+   {
+      int upgrade = 0;
+
+      switch (op)
+      {
+	 case Item::RPMUpgrade:
+	    upgrade = 1;
+	 case Item::RPMInstall:
+	    fd = Fopen(*I, "r.ufdio");
+	    if (fd == NULL)
+	       _error->Error(_("Failed opening %s"), *I);
+#ifdef HAVE_RPM41
+            rc = rpmReadPackageFile(TS, fd, *I, &hdr);
+	    rc = rpmtsAddInstallElement(TS, hdr, *I, upgrade, 0);
+#else
+	    rc = rpmReadPackageHeader(fd, &hdr, 0, NULL, NULL);
+	    rc = rpmtransAddPackage(TS, hdr, NULL, *I, upgrade, 0);
+#endif
+	    if (rc)
+	       _error->Error(_("Failed adding %s to transaction %s"),
+			     *I, "(install)");
+	    headerFree(hdr);
+	    Fclose(fd);
+	    break;
+
+	 case Item::RPMErase:
+#ifdef HAVE_RPM4
+            rpmdbMatchIterator MI;
+#ifdef HAVE_RPM41
+	    MI = rpmtsInitIterator(TS, (rpmTag)RPMDBI_LABEL, *I, 0);
+#else
+	    MI = rpmdbInitIterator(DB, RPMDBI_LABEL, *I, 0);
+#endif
+	    while ((hdr = rpmdbNextIterator(MI)) != NULL) 
+	    {
+	       unsigned int recOffset = rpmdbGetIteratorOffset(MI);
+	       if (recOffset) {
+#ifdef HAVE_RPM41
+		  rc = rpmtsAddEraseElement(TS, hdr, recOffset);
+#else
+		  rc = rpmtransRemovePackage(TS, recOffset);
+#endif
+		  if (rc)
+		     _error->Error(_("Failed adding %s to transaction %s"),
+				   *I, "(erase)");
+	       }
+	    }
+	    MI = rpmdbFreeIterator(MI);
+#else // RPM 3.X
+	    dbiIndexSet matches;
+	    rc = rpmdbFindByLabel(DB, *I, &matches);
+	    if (rc == 0) {
+	       for (int i = 0; i < dbiIndexSetCount(matches); i++) {
+		  unsigned int recOffset = dbiIndexRecordOffset(matches, i);
+		  if (recOffset)
+		     rpmtransRemovePackage(TS, recOffset);
+	       }
+	    }
+#endif
+	    break;
+      }
+   }
+   return true;
+}
+
+bool pkgRPMLibPM::Process(vector<const char*> &install, 
+			  vector<const char*> &upgrade,
+			  vector<const char*> &uninstall)
+{
+   int rc = 0;
+   bool Success = false;
+   int debug = _config->FindB("Debug::pkgRPMPM", false);
+   string Dir = _config->Find("RPM::RootDir");
+   rpmReadConfigFiles(NULL, NULL);
+
+   int probFilter = 0;
+   int notifyFlags = 0;
+
+#ifdef HAVE_RPM41   
+   rpmps probs;
+   TS = rpmtsCreate();
+   // 4.1 needs this always set even if NULL,
+   // otherwise all scriptlets fail
+   rpmtsSetRootDir(TS, Dir.c_str());
+   if (rpmtsOpenDB(TS, O_RDWR) != 0)
+   {
+      _error->Error(_("Could not open RPM database"));
+      goto exit;
+   }
+#else
+   rpmProblemSet probs;
+   const char *RootDir = NULL;
+   if (!Dir.empty())
+      RootDir = Dir.c_str();
+   if (rpmdbOpen(RootDir, &DB, O_RDWR, 0644) != 0)
+   {
+      _error->Error(_("Could not open RPM database"));
+      goto exit;
+   }
+   TS = rpmtransCreateSet(DB, Dir.c_str());
+#endif
+
+#ifdef HAVE_RPM41
+   probFilter = rpmtsFilterFlags(TS);
+#endif
+
+   if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
+      probFilter |= RPMPROB_FILTER_OLDPACKAGE;
+   }
+   if (_config->FindB("APT::Get::ReInstall", false)) {
+      probFilter |= RPMPROB_FILTER_REPLACEPKG;
+      probFilter |= RPMPROB_FILTER_REPLACEOLDFILES;
+      probFilter |= RPMPROB_FILTER_REPLACENEWFILES;
+   }
+
+   if (_config->FindB("RPM::Interactive", true))
+       notifyFlags |= INSTALL_LABEL | INSTALL_HASH;
+   else
+       notifyFlags |= INSTALL_LABEL | INSTALL_PERCENT;
+
+   if (uninstall.empty() == false)
+       AddToTransaction(Item::RPMErase, uninstall);
+   if (install.empty() == false)
+       AddToTransaction(Item::RPMInstall, install);
+   if (upgrade.empty() == false)
+       AddToTransaction(Item::RPMUpgrade, upgrade);
+
+#ifdef HAVE_RPM41
+   if (rpmtsCheck(TS)) {
+      probs = rpmtsProblems(TS);
+      if (probs->numProblems > 0)
+	 rpmpsPrint(NULL, probs);
+      rpmpsFree(probs);
+      _error->Error(_("Transaction set check failed"));
+      goto exit;
+   }
+#else
+#ifndef HAVE_RPM4
+   rpmDependencyConflict *conflicts;
+#else
+   rpmDependencyConflict conflicts;
+#endif
+   int numConflicts;
+   if (rpmdepCheck(TS, &conflicts, &numConflicts)) {
+      _error->Error(_("Transaction set check failed"));
+      if (conflicts) {
+	 printDepProblems(stderr, conflicts, numConflicts);
+	 rpmdepFreeConflicts(conflicts, numConflicts);
+      }
+      goto exit;
+   }
+#endif
+
+#ifdef HAVE_RPM41
+   rpmtsClean(TS);
+   rc = rpmtsOrder(TS);
+#else
+   rc = rpmdepOrder(TS);
+#endif
+
+   if (rc > 0) {
+      _error->Error(_("Ordering failed for %d packages"), rc);
+      goto exit;
+   }
+
+   cout << _("Committing changes...") << endl << flush;
+
+#ifdef HAVE_RPM41
+   rc = rpmtsSetNotifyCallback(TS, rpmShowProgress, (void *)notifyFlags);
+   rc = rpmtsRun(TS, NULL, (rpmprobFilterFlags)probFilter);
+   probs = rpmtsProblems(TS);
+#else
+   rc = rpmRunTransactions(TS, rpmShowProgress, (void *)notifyFlags, NULL,
+                           &probs, (rpmtransFlags)0,
+			   (rpmprobFilterFlags)probFilter);
+#endif
+
+   if (rc > 0) {
+      _error->Error(_("Error while running transaction"));
+      if (probs->numProblems > 0)
+	 rpmpsPrint(stderr, probs);
+   } else {
+      Success = true;
+      if (rc < 0)
+	 _error->Warning(_("Some errors occurred while running transaction"));
+   }
+   rpmpsFree(probs);
+
+exit:
+
+#ifdef HAVE_RPM41
+   rpmtsFree(TS);
+#else
+   rpmdbClose(DB);
+#endif
+
+   return Success;
+}
 
 #endif /* HAVE_RPM */
 
