@@ -38,7 +38,7 @@ def showgroups():
 
 def showgroup(grpname):
 	group = findgroup(grpname)
-	if not group:
+	if not group or not group.packages:
 		print "No such group: %s" % grpname
 		return
 	print "Group: %s" % group.id
@@ -56,9 +56,11 @@ if __name__ == "__main__":
 	elif len(sys.argv) < 3:
 		usage()
 	elif sys.argv[1] == "grouppkgs":
-		grouppkgs(sys.argv[2])
+		for grp in sys.argv[2:]:
+			grouppkgs(grp)
 	elif sys.argv[1] == "showgroup":
-		showgroup(sys.argv[2])
+		for grp in sys.argv[2:]:
+			showgroup(grp)
 	else:
 		usage()
 	
