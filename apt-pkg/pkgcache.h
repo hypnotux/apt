@@ -306,14 +306,13 @@ struct pkgCache::StringItem
 #include <apt-pkg/cacheiterators.h>
 
 // CNC:2003-02-16 - Inlined here.
-#include <system.h>
 #include <ctype.h>
 inline unsigned long pkgCache::sHash(const char *Str) const
 {
    unsigned long Hash = 0;
    for (const char *I = Str; *I != 0; I++)
       Hash = 5*Hash + tolower(*I);
-   return Hash % _count(HeaderP->HashTable);
+   return Hash % (sizeof(HeaderP->HashTable)/sizeof(HeaderP->HashTable/[0]));
 }
 
 inline pkgCache::PkgIterator pkgCache::PkgBegin() 
