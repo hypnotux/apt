@@ -873,8 +873,8 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
    bool Essential = false;
    
    // Show all the various warning indicators
-   // CNC:2002-07-06
-   if (_config->FindB("APT::Get::Show-Upgraded",false) == true)
+   // CNC:2002-03-06 - Change Show-Upgraded default to true, and move upwards.
+   if (_config->FindB("APT::Get::Show-Upgraded",true) == true)
       ShowUpgraded(c1out,Cache);
    ShowDel(c1out,Cache);
    ShowNew(c1out,Cache);
@@ -3571,56 +3571,125 @@ void ReadLineFinish()
    if (History.empty() == false)
       write_history(History.c_str());
 }
+									/*}}}*/
 
-int main(int argc,const char *argv[])
+CommandLine::Args *CommandArgs(const char *Name)
 {
-   CommandLine::Args Args[] = {
+   static CommandLine::Args ChangeCacheArgs[] = {
       {'h',"help","help",0},
-      {'v',"version","version",0},
       {'q',"quiet","quiet",CommandLine::IntLevel},
       {'q',"silent","quiet",CommandLine::IntLevel},
-      {'d',"download-only","APT::Get::Download-Only",0},
-      {'b',"compile","APT::Get::Compile",0},
-      {'b',"build","APT::Get::Compile",0},
+      {'y',"yes","APT::Get::Assume-Yes",0},
+      {'y',"assume-yes","APT::Get::Assume-Yes",0},      
       {'s',"simulate","APT::Get::Simulate",0},
       {'s',"just-print","APT::Get::Simulate",0},
       {'s',"recon","APT::Get::Simulate",0},
       {'s',"dry-run","APT::Get::Simulate",0},
       {'s',"no-act","APT::Get::Simulate",0},
-      {'y',"yes","APT::Get::Assume-Yes",0},
-      {'y',"assume-yes","APT::Get::Assume-Yes",0},      
       {'f',"fix-broken","APT::Get::Fix-Broken",0},
-      {'u',"show-upgraded","APT::Get::Show-Upgraded",0},
-      {'m',"ignore-missing","APT::Get::Fix-Missing",0},
       {'D',"remove-deps","APT::Remove-Depends",0}, // CNC:2002-08-01
       {'t',"target-release","APT::Default-Release",CommandLine::HasArg},
       {'t',"default-release","APT::Default-Release",CommandLine::HasArg},
-      // apt-cache
-      {'a',"all-versions","APT::Cache::AllVersions",0},
-      {'n',"names-only","APT::Cache::NamesOnly",0},
-      {'f',"show-full","APT::Cache::ShowFull",0},
-      {'u',"upgradable","APT::Cache::ShowUpgradable",0},
-      {'i',"installed","APT::Cache::ShowInstalled",0},
-      {'v',"version","APT::Cache::ShowVersion",0},
-      {'s',"summary","APT::Cache::ShowSummary",0},
-      {0,"download","APT::Get::Download",0},
-      {0,"fix-missing","APT::Get::Fix-Missing",0},
-      {0,"ignore-hold","APT::Ignore-Hold",0},      
-      {0,"upgrade","APT::Get::upgrade",0},
-      {0,"force-yes","APT::Get::force-yes",0},
-      {0,"print-uris","APT::Get::Print-URIs",0},
-      {0,"diff-only","APT::Get::Diff-Only",0},
-      {0,"tar-only","APT::Get::tar-Only",0},
-      {0,"purge","APT::Get::Purge",0},
-      {0,"list-cleanup","APT::Get::List-Cleanup",0},
       {0,"reinstall","APT::Get::ReInstall",0},
-      {0,"trivial-only","APT::Get::Trivial-Only",0},
+      {0,"upgrade","APT::Get::upgrade",0},
+      {0,"force-yes","APT::Get::Force-Yes",0},
+      {0,"ignore-hold","APT::Ignore-Hold",0},      
+      {0,"purge","APT::Get::Purge",0},
       {0,"remove","APT::Get::Remove",0},
-      {0,"only-source","APT::Get::Only-Source",0},
       {0,"arch-only","APT::Get::Arch-Only",0},
       {'c',"config-file",0,CommandLine::ConfigFile},
       {'o',"option",0,CommandLine::ArbItem},
       {0,0,0,0}};
+
+   static CommandLine::Args CommitArgs[] = {
+      {'h',"help","help",0},
+      {'q',"quiet","quiet",CommandLine::IntLevel},
+      {'q',"silent","quiet",CommandLine::IntLevel},
+      {'y',"yes","APT::Get::Assume-Yes",0},
+      {'y',"assume-yes","APT::Get::Assume-Yes",0},      
+      {'d',"download-only","APT::Get::Download-Only",0},
+      {'s',"simulate","APT::Get::Simulate",0},
+      {'s',"just-print","APT::Get::Simulate",0},
+      {'s',"recon","APT::Get::Simulate",0},
+      {'s',"dry-run","APT::Get::Simulate",0},
+      {'s',"no-act","APT::Get::Simulate",0},
+      {'m',"ignore-missing","APT::Get::Fix-Missing",0},
+      {0,"trivial-only","APT::Get::Trivial-Only",0},
+      {0,"print-uris","APT::Get::Print-URIs",0},
+      {0,"force-yes","APT::Get::Force-Yes",0},
+      {0,"download","APT::Get::Download",0},
+      {0,"fix-missing","APT::Get::Fix-Missing",0},
+      {'c',"config-file",0,CommandLine::ConfigFile},
+      {'o',"option",0,CommandLine::ArbItem},
+      {0,0,0,0}};
+
+   static CommandLine::Args ShowArgs[] = {
+      {'h',"help","help",0},
+      {'a',"all-versions","APT::Cache::AllVersions",0},
+      {'n',"names-only","APT::Cache::NamesOnly",0},
+      {'f',"show-full","APT::Cache::ShowFull",0},
+      {'c',"config-file",0,CommandLine::ConfigFile},
+      {'o',"option",0,CommandLine::ArbItem},
+      {0,0,0,0}};
+
+   static CommandLine::Args SearchArgs[] = {
+      {'h',"help","help",0},
+      {'n',"names-only","APT::Cache::NamesOnly",0},
+      {'f',"show-full","APT::Cache::ShowFull",0},
+      {'c',"config-file",0,CommandLine::ConfigFile},
+      {'o',"option",0,CommandLine::ArbItem},
+      {0,0,0,0}};
+
+   static CommandLine::Args ListArgs[] = {
+      {'h',"help","help",0},
+      {'u',"upgradable","APT::Cache::ShowUpgradable",0},
+      {'i',"installed","APT::Cache::ShowInstalled",0},
+      {'v',"version","APT::Cache::ShowVersion",0},
+      {'s',"summary","APT::Cache::ShowSummary",0},
+      {'c',"config-file",0,CommandLine::ConfigFile},
+      {'o',"option",0,CommandLine::ArbItem},
+      {0,0,0,0}};
+
+   static CommandLine::Args NoArgs[] = {
+      {'h',"help","help",0},
+      {'v',"version","version",0},
+      {'c',"config-file",0,CommandLine::ConfigFile},
+      {'o',"option",0,CommandLine::ArbItem},
+      {0,0,0,0}};
+
+
+   unsigned long Hash = 0;
+   for (const char *p=Name; *p; p++)
+      Hash = 5*Hash + *p;
+   switch (Hash%1000000) {
+      case 73823: // install
+      case 436466: // remove
+      case 16517: // keep
+      case 259776: // upgrade
+      case 900401: // dist-upgrade
+	 return ChangeCacheArgs;
+
+      case 395741: // commit
+	 return CommitArgs;
+
+      case 209563: // showpkg
+      case 17649: // show
+	 return ShowArgs;
+
+      case 438074: // search
+	 return SearchArgs;
+
+      case 16816: // list
+      case 655: // ls
+	 return ListArgs;
+
+      default:
+	 return NoArgs;
+   }
+}
+									/*}}}*/
+int main(int argc,const char *argv[])
+{
    CommandLine::Dispatch Cmds[] = {{"update",&DoUpdate},
                                    {"upgrade",&DoUpgrade},
                                    {"install",&DoInstall},
@@ -3653,7 +3722,7 @@ int main(int argc,const char *argv[])
    textdomain(PACKAGE);
 
    // Parse the command line and initialize the package library
-   CommandLine CmdL(Args,_config);
+   CommandLine CmdL(CommandArgs(""),_config);
    if (pkgInitConfig(*_config) == false ||
        CmdL.Parse(argc,argv) == false ||
        pkgInitSystem(*_config,_system) == false)
@@ -3665,14 +3734,6 @@ int main(int argc,const char *argv[])
       return 100;
    }
 
-   // See if the help should be shown
-   if (_config->FindB("help") == true ||
-       _config->FindB("version") == true)
-   {
-      ShowHelp(CmdL);
-      return 0;
-   }
-   
    // Deal with stdout not being a tty
    if (ttyname(STDOUT_FILENO) == 0 && _config->FindI("quiet",0) < 1)
       _config->Set("quiet","1");
@@ -3782,7 +3843,7 @@ int main(int argc,const char *argv[])
       _config = new Configuration(GlobalConfig);
 
       // Prepare the command line, and dispatch.
-      CommandLine CmdL(Args,_config);
+      CommandLine CmdL(CommandArgs(largv[1]),_config);
       CmdL.Parse(largc,largv);
       CmdL.DispatchArg(Cmds);
       
