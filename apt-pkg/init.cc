@@ -15,6 +15,10 @@
 #include <apti18n.h>
 #include <config.h>
 #include <sys/stat.h>
+
+// CNC:2003-03-17
+#include <apt-pkg/luaiface.h>
+
 									/*}}}*/
 
 #define Stringfy_(x) # x
@@ -152,7 +156,12 @@ bool pkgInitSystem(Configuration &Cnf,pkgSystem *&Sys)
       if (Sys == 0)
 	 return _error->Error(_("Unable to determine a suitable system type"));
    }
-   
-   return Sys->Initialize(Cnf);
+
+   // CNC:2003-03-15
+   bool Ret = Sys->Initialize(Cnf);
+#ifdef WITH_LUA
+   _lua->RunScripts("Scripts::Init", false);
+#endif
+   return Ret;
 }
 									/*}}}*/

@@ -26,18 +26,18 @@ endif
 copy-headers: $(COPYHEADERS)
 
 copy-apti18n:
-	@$(mkinstalldirs) $(top_srcdir)/include
-	@echo "Copying gettext.h to $(top_srcdir)/include/apti18n.h"
-	@cp -f -p gettext.h $(top_srcdir)/include/apti18n.h
+	@$(mkinstalldirs) $(top_builddir)/include
+	@echo "Copying gettext.h to $(top_builddir)/include/apti18n.h"
+	@cp -f -p gettext.h $(top_builddir)/include/apti18n.h
 	
 copy-inttypes:
-	@echo "Copying inttypes.h to $(top_srcdir)/include/apti18n.h"
-	@cp -f -p inttypes.h.in $(top_srcdir)/include/inttypes.h
+	@echo "Copying inttypes.h to $(top_builddir)/include/apti18n.h"
+	@cp -f -p inttypes.h.in $(top_builddir)/include/inttypes.h
 
 copy-statvfs:
-	@echo "Copying statvfs.h to $(top_srcdir)/include/apti18n.h"
-	@cp -f -p statvfs.h $(top_srcdir)/include/statvfs.h
+	@echo "Copying statvfs.h to $(top_builddir)/include/apti18n.h"
+	@cp -f -p statvfs.h $(top_builddir)/include/statvfs.h
 
 copy-netdb:
-	@echo "Copying netdb.h to $(top_srcdir)/include/netdb.h"
-	@cp -f -p netdb.h $(top_srcdir)/include/netdb.h
+	@echo "Copying netdb.h to $(top_builddir)/include/netdb.h"
+	@cp -f -p netdb.h $(top_builddir)/include/netdb.h

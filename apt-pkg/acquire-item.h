@@ -46,7 +46,7 @@ class pkgAcquire::Item
 
    // State of the item
    /* CNC:2002-11-22
-    * Do not use anonyomus enums, as this breaks swig in some cases */
+    * Do not use anonyomus enums, as this breaks SWIG in some cases */
    enum StatusFlags {StatIdle, StatFetching, StatDone, StatError} Status;
    string ErrorText;
    unsigned long FileSize;

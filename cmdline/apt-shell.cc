@@ -39,10 +39,13 @@
 #include <apt-pkg/cachefile.h>
 #include <apt-pkg/sptr.h>
 #include <apt-pkg/versionmatch.h>
-    
+
 #include <config.h>
 #include <apti18n.h>
 
+// CNC:2003-03-17
+#include <apt-pkg/luaiface.h>
+    
 #include "acqprogress.h"
 
 // CNC:2003-02-14 - apti18n.h includes libintl.h which includes locale.h,
@@ -1495,7 +1498,7 @@ bool DoUpdate(CommandLine &CmdL)
 {
    if (CheckHelp(CmdL, 0) == true)
       return true;
-   
+
    // Get the source list
    pkgSourceList List;
    if (List.ReadMainList() == false)
@@ -1509,6 +1512,13 @@ bool DoUpdate(CommandLine &CmdL)
       if (_error->PendingError() == true)
 	 return _error->Error(_("Unable to lock the list directory"));
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(*GCache);
+   _lua->RunScripts("Scripts::Apt::Update::Pre", false);
+   _lua->ResetCaches();
+#endif
    
    // Create the download object
    AcqTextStatus Stat(ScreenWidth,_config->FindI("quiet",0));
@@ -1571,7 +1581,16 @@ bool DoUpdate(CommandLine &CmdL)
 	 return false;
    }
 
-   AutoReOpenCache CacheGuard(GCache);
+   {
+      AutoReOpenCache CacheGuard(GCache);
+   }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(*GCache);
+   _lua->RunScripts("Scripts::Apt::Update::Post", false);
+   _lua->ResetCaches();
+#endif
    
    if (Failed == true)
       return _error->Error(_("Some index files failed to download, they have been ignored, or old ones used instead."));
@@ -1605,6 +1624,13 @@ bool DoUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return _error->Error(_("Internal Error, AllUpgrade broke stuff"));
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::Upgrade", false);
+   _lua->ResetCaches();
+#endif
 
    ConfirmChanges(Cache, StateGuard);
    
@@ -1755,6 +1781,14 @@ bool DoInstall(CommandLine &CmdL)
       }
    }
 
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->SetDontFix();
+   _lua->RunScripts("Scripts::Apt::Install::PreResolve", false);
+   _lua->ResetCaches();
+#endif
+
    // CNC:2002-08-01
    if (_config->FindB("APT::Remove-Depends",false) == true)
       Fix.RemoveDepends();
@@ -1780,6 +1814,17 @@ bool DoInstall(CommandLine &CmdL)
       if (Fix.Resolve(false) == false)
 	 _error->Discard();
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   if (Cache->BrokenCount() == 0) {
+      _lua->SetDepCache(Cache);
+      _lua->SetProblemResolver(&Fix);
+      _lua->RunScripts("Scripts::Apt::Install::PostResolve", false);
+      _lua->ResetCaches();
+   }
+#endif
+
 
    // Now we check the state of the packages,
    if (Cache->BrokenCount() != 0)
@@ -1836,6 +1881,13 @@ bool DoDistUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return false;
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::DistUpgrade", false);
+   _lua->ResetCaches();
+#endif
    
    c0out << _("Done") << endl;
    
@@ -2201,6 +2253,33 @@ bool DoBuildDep(CommandLine &CmdL)
 
    return true;
 }
+									/*}}}*/
+// * - Scripting stuff.							/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool DoScript(CommandLine &CmdL)
+{
+   if (CheckHelp(CmdL) == true)
+      return true;
+
+   CacheFile &Cache = *GCache;
+   AutoRestore StateGuard(Cache);
+
+   for (const char **I = CmdL.FileList+1; *I != 0; I++)
+      _config->Set("Scripts::Apt::Script::", *I);
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::Script", false);
+   _lua->ResetCaches();
+#endif
+
+   ConfirmChanges(Cache, StateGuard);
+
+   return true;
+}
+
 									/*}}}*/
 
 // --- Unchanged stuff from apt-cache.
@@ -3161,6 +3240,7 @@ bool ShowHelp(CommandLine &CmdL)
       "   showpkg - Show some general information for a single package\n"
       "   list/ls - List packages\n"
       "   search - Search the package list for a regex pattern\n"
+      "   script - Run scripts.\n"
       "   depends - Show raw dependency information for a package\n"
       "   whatdepends - Show raw dependency information on a package\n"
       "   check - Verify that there are no broken dependencies\n"
@@ -3381,6 +3461,18 @@ void CommandHelp(const char *Name)
 	 );
 	 break;
 
+      case 438801: // script
+	 c2out << _(
+	    "Usage: script [options] script1 [script2]\n"
+	    "\n"
+	    "Run the given scripts.\n"
+	    "\n"
+	    "Options:\n"
+	    "  -h  This help text.\n"
+	    "  -o=? Set an arbitary configuration option, eg -o dir::cache=/tmp\n"
+	    "\n"
+	 );
+	 break;
       default:
 	 _error->Error(_("No help for that"), Name);
    }
@@ -3452,7 +3544,8 @@ char *ReadLineCompCommands(const char *Text, int State)
    static char *Commands[] =  {"update", "upgrade", "install", "remove",
 	 "keep", "dist-upgrade", "dselect-upgrade", "build-dep", "clean",
 	 "autoclean", "check", "help", "commit", "exit", "quit", "status",
-	 "showpkg", "unmet", "search", "depends", "whatdepends", "show", 0};
+	 "showpkg", "unmet", "search", "depends", "whatdepends", "show",
+	 "script", 0};
    static int Last;
    static int Len;
    if (State == 0) {
@@ -3743,6 +3836,7 @@ int main(int argc,const char *argv[])
 				   {"quit",&DoQuit},
 				   {"exit",&DoQuit},
 				   {"status",&DoStatus},
+				   {"script",&DoScript},
 				   // apt-cache
 				   {"showpkg",&DumpPackage},
                                    {"unmet",&UnMet},
@@ -3805,6 +3899,14 @@ int main(int argc,const char *argv[])
 
    ReadLineInit();
    c1out << _("Welcome to the APT shell. Type \"help\" for more information.") << endl;
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(*GCache);
+   _lua->RunScripts("Scripts::AptShell::Init", false);
+   _lua->ResetCaches();
+   bool HasCmdScripts = _lua->HasScripts("Scripts::AptShell::Command");
+#endif
 
    int largc;
    const char *largv[1024];
@@ -3879,9 +3981,27 @@ int main(int argc,const char *argv[])
       delete _config;
       _config = new Configuration(GlobalConfig);
 
-      // Prepare the command line, and dispatch.
+      // Prepare the command line
       CommandLine CmdL(CommandArgs(largv[1]),_config);
       CmdL.Parse(largc,largv);
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+      if (HasCmdScripts == true) {
+	 _lua->SetDepCache(*GCache);
+	 _lua->SetGlobal("command_args", &largv[1]);
+	 _lua->SetGlobal("command_consume", 0.0);
+	 _lua->RunScripts("Scripts::AptShell::Command", true);
+	 double Consume = _lua->GetGlobalI("command_consume");
+	 _lua->ResetGlobals();
+	 _lua->ResetCaches();
+	 if (Consume == 1) {
+	    free(line);
+	    continue;
+	 }
+      }
+#endif
+
       CmdL.DispatchArg(Cmds);
       
       free(line);

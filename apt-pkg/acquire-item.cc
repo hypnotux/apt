@@ -26,6 +26,8 @@
 // CNC:2002-07-03
 #include <apt-pkg/repository.h>
 #include <apt-pkg/md5.h>
+#include <config.h>
+#include <apt-pkg/luaiface.h>
 #include <iostream>
 using namespace std;
 
@@ -773,6 +775,33 @@ bool pkgAcqArchive::QueueNext()
    return false;
 }   
 									/*}}}*/
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+// ScriptsAcquireDone - Script trigger.					/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+template<class T>
+static void ScriptsAcquireDone(const char *ConfKey,
+			       string &StoreFilename,
+			       string &ErrorText,
+			       T &Status)
+{
+   if (_lua->HasScripts(ConfKey) == true) {
+      _lua->SetGlobal("acquire_filename", StoreFilename.c_str());
+      _lua->SetGlobal("acquire_error", (const char *)NULL);
+      _lua->RunScripts(ConfKey, true);
+      const char *Error = _lua->GetGlobal("acquire_error");
+      if (Error != NULL && *Error != 0) {
+	 Status = pkgAcquire::Item::StatError;
+	 ErrorText = Error;
+      }
+      _lua->ResetGlobals();
+   }
+}
+									/*}}}*/
+#endif
+
 // AcqArchive::Done - Finished fetching					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -817,6 +846,13 @@ void pkgAcqArchive::Done(string Message,unsigned long Size,string Md5Hash,
    {
       StoreFilename = DestFile = FileName;
       Local = true;
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+      ScriptsAcquireDone("Scripts::Acquire::Archive::Done",
+			 StoreFilename, ErrorText, Status);
+#endif
+
       return;
    }
    
@@ -827,6 +863,13 @@ void pkgAcqArchive::Done(string Message,unsigned long Size,string Md5Hash,
    
    StoreFilename = DestFile = FinalFile;
    Complete = true;
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   ScriptsAcquireDone("Scripts::Acquire::Archive::Done",
+		      StoreFilename, ErrorText, Status);
+#endif
+
 }
 									/*}}}*/
 // AcqArchive::Failed - Failure handler					/*{{{*/

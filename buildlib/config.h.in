@@ -202,6 +202,9 @@
 /* Define to 1 if socket_t is missing */
 #undef NEED_SOCKLEN_T_DEFINE
 
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
 /* Name of package */
 #undef PACKAGE
 
@@ -251,6 +254,9 @@
 
 /* Define to 1 if you want to use the g++ hash_map extension. */
 #undef WITH_GNU_HASH_MAP
+
+/* Define if you want to enable the extension system. */
+#undef WITH_LUA
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

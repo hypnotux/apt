@@ -38,6 +38,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
+@WITH_LUA_TRUE@am__append_1 = $(top_builddir)/lua/liblua.la
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -47,7 +48,6 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
-BASH = @BASH@
 BUILD_INCLUDED_LIBINTL = @BUILD_INCLUDED_LIBINTL@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -75,6 +75,7 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GENCAT = @GENCAT@
 GLIBC21 = @GLIBC21@
+GLIBC_VER = @GLIBC_VER@
 GMSGFMT = @GMSGFMT@
 HAVE_TIMEGM = @HAVE_TIMEGM@
 INSTALL_DATA = @INSTALL_DATA@
@@ -91,6 +92,7 @@ LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
+LIBSTDCPP_VER = @LIBSTDCPP_VER@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBICONV = @LTLIBICONV@
@@ -126,6 +128,8 @@ STRIP = @STRIP@
 USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+WITH_LUA_FALSE = @WITH_LUA_FALSE@
+WITH_LUA_TRUE = @WITH_LUA_TRUE@
 XGETTEXT = @XGETTEXT@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -172,8 +176,10 @@ target_vendor = @target_vendor@
 
 lib_LTLIBRARIES = libapt-pkg.la
 
-libapt_pkg_la_LIBADD = @RPMLIBS@
-libapt_pkg_la_LDFLAGS = -version-info 0:0:0
+libapt_pkg_la_LIBADD = @RPMLIBS@ $(am__append_1)
+libapt_pkg_la_LDFLAGS = -version-info 0:0:0 -release @GLIBC_VER@-@LIBSTDCPP_VER@
+
+INCLUDES = -I$(top_srcdir)/lua/include
 
 libapt_pkg_la_SOURCES = \
 	contrib/cdromutl.cc \
@@ -242,6 +248,8 @@ libapt_pkg_la_SOURCES = \
 	indexfile.h \
 	init.cc \
 	init.h \
+	luaiface.cc \
+	luaiface.h \
 	orderlist.cc \
 	orderlist.h \
 	packagemanager.cc \
@@ -280,7 +288,7 @@ include_HEADERS = $(filter-out \
 # APT system of a a flat apt-pkg/ header directory.
 PRIVREALHEADERS = $(PRIVATEHEADERS)
 PRIVCOPYHEADERS = $(patsubst %.h, \
-		    $(top_srcdir)/include/%.h, \
+		    $(top_builddir)/include/%.h, \
 		    $(notdir $(PRIVREALHEADERS)))
 
 REALHEADERS = $(filter-out \
@@ -288,7 +296,7 @@ REALHEADERS = $(filter-out \
 		$(filter %.h,$(libapt_pkg_la_SOURCES)))
 
 COPYHEADERS = $(patsubst %.h, \
-		$(top_srcdir)/include/apt-pkg/%.h, \
+		$(top_builddir)/include/apt-pkg/%.h, \
 		$(notdir $(REALHEADERS)))
 
 REALOBJECTS = $(patsubst %.cc,%.lo,\
@@ -300,7 +308,9 @@ CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
-libapt_pkg_la_DEPENDENCIES =
+@WITH_LUA_TRUE@libapt_pkg_la_DEPENDENCIES = \
+@WITH_LUA_TRUE@	$(top_builddir)/lua/liblua.la
+@WITH_LUA_FALSE@libapt_pkg_la_DEPENDENCIES =
 am_libapt_pkg_la_OBJECTS = contrib/cdromutl.lo contrib/cmndline.lo \
 	contrib/configuration.lo contrib/crc-16.lo contrib/error.lo \
 	contrib/fileutl.lo contrib/hashes.lo contrib/md5.lo \
@@ -310,10 +320,10 @@ am_libapt_pkg_la_OBJECTS = contrib/cdromutl.lo contrib/cmndline.lo \
 	rpm/rpmrecords.lo rpm/rpmsrcrecords.lo rpm/rpmsystem.lo \
 	rpm/rpmversion.lo acquire.lo acquire-item.lo acquire-method.lo \
 	acquire-worker.lo algorithms.lo cachefile.lo clean.lo \
-	depcache.lo indexfile.lo init.lo orderlist.lo packagemanager.lo \
-	pkgcache.lo pkgcachegen.lo pkgrecords.lo pkgsystem.lo policy.lo \
-	repository.lo sourcelist.lo srcrecords.lo tagfile.lo version.lo \
-	versionmatch.lo
+	depcache.lo indexfile.lo init.lo luaiface.lo orderlist.lo \
+	packagemanager.lo pkgcache.lo pkgcachegen.lo pkgrecords.lo \
+	pkgsystem.lo policy.lo repository.lo sourcelist.lo \
+	srcrecords.lo tagfile.lo version.lo versionmatch.lo
 libapt_pkg_la_OBJECTS = $(am_libapt_pkg_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/include
@@ -325,7 +335,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/acquire.Plo ./$(DEPDIR)/algorithms.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/cachefile.Plo ./$(DEPDIR)/clean.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/depcache.Plo ./$(DEPDIR)/indexfile.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/init.Plo ./$(DEPDIR)/orderlist.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/init.Plo ./$(DEPDIR)/luaiface.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/orderlist.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/packagemanager.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/pkgcache.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/pkgcachegen.Plo \
@@ -528,6 +539,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/depcache.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indexfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/init.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luaiface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/orderlist.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagemanager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkgcache.Plo@am__quote@
@@ -1505,17 +1517,23 @@ uninstall-am: uninstall-includeHEADERS uninstall-info-am \
 	uninstall-libLTLIBRARIES
 
 $(REALOBJECTS): $(COPYHEADERS) $(PRIVCOPYHEADERS)
-$(COPYHEADERS): $(REALHEADERS)
-	@echo "Updating include/apt-pkg/ header directory."
-	@mkdir -p $(top_srcdir)/include/apt-pkg
-	@for file in $?; do cp -f $$file $(top_srcdir)/include/apt-pkg; done
-$(PRIVCOPYHEADERS): $(PRIVREALHEADERS)
-	@echo "Updating include/ header directory."
-	@mkdir -p $(top_srcdir)/include
-	@for file in $?; do cp -f $$file $(top_srcdir)/include; done
+
+$(top_builddir)/include/apt-pkg/%: %
+	cp -f -p $< $@
+$(top_builddir)/include/apt-pkg/%: contrib/%
+	cp -f -p $< $@
+$(top_builddir)/include/apt-pkg/%: rpm/%
+	cp -f -p $< $@
+$(top_builddir)/include/%: %
+	cp -f -p $< $@
+$(top_builddir)/include/%: contrib/%
+	cp -f -p $< $@
+$(top_builddir)/include/%: rpm/%
+	cp -f -p $< $@
+
 clean-local:
 	rm -f $(PRIVCOPYHEADERS)
-	rm -rf $(top_srcdir)/include/apt-pkg
+	rm -rf $(top_builddir)/include/apt-pkg
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

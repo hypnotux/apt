@@ -19,6 +19,7 @@
 #include <apt-pkg/rpmpm.h>
 #include <apt-pkg/error.h>
 #include <apt-pkg/configuration.h>
+#include <apt-pkg/luaiface.h>
 
 #include <apti18n.h>
 
@@ -447,9 +448,12 @@ bool pkgRPMPM::Go()
    if (RunScriptsWithPkgs("RPM::Pre-Install-Pkgs") == false)
       return false;
    
+   vector<const char*> install_or_upgrade;
    vector<const char*> install;
    vector<const char*> upgrade;
    vector<const char*> uninstall;
+   vector<pkgCache::Package*> pkgs_install;
+   vector<pkgCache::Package*> pkgs_uninstall;
 
    vector<char*> unalloc;
    
@@ -472,6 +476,7 @@ bool pkgRPMPM::Go()
 	 }
 	 else
 	    uninstall.push_back(I->Pkg.Name());
+	 pkgs_uninstall.push_back(I->Pkg);
 	 break;
 
        case Item::Configure:
@@ -482,18 +487,48 @@ bool pkgRPMPM::Go()
 	    install.push_back(I->File.c_str());
 	 else
 	    upgrade.push_back(I->File.c_str());
+	 install_or_upgrade.push_back(I->File.c_str());
+	 pkgs_install.push_back(I->Pkg);
 	 break;
 	  
        default:
 	 return _error->Error("Unknown pkgRPMPM operation.");
       }
    }
-   
+
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::RPM::Pre") == true) {
+      _lua->SetGlobal("files_install", install_or_upgrade);
+      _lua->SetGlobal("names_remove", uninstall);
+      _lua->SetGlobal("pkgs_install", pkgs_install);
+      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
+      if (List.empty() == false)
+	 _lua->SetCache(List[0].Pkg.Cache());
+      _lua->RunScripts("Scripts::RPM::Pre", false);
+      _lua->ResetCaches();
+      _lua->ResetGlobals();
+   }
+#endif
+
    bool Ret = true;
    
    if (Process(install, upgrade, uninstall) == false)
       Ret = false;
-   
+
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::RPM::Post") == true) {
+      _lua->SetGlobal("files_install", install_or_upgrade);
+      _lua->SetGlobal("names_remove", uninstall);
+      _lua->SetGlobal("pkgs_install", pkgs_install);
+      _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
+      if (List.empty() == false)
+	 _lua->SetCache(List[0].Pkg.Cache());
+      _lua->RunScripts("Scripts::RPM::Post", false);
+      _lua->ResetCaches();
+      _lua->ResetGlobals();
+   }
+#endif
+
    for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
       free(*I);
    

@@ -59,6 +59,10 @@
 #include <errno.h>
 #include <regex.h>
 #include <sys/wait.h>
+
+// CNC:2003-03-18
+#include <apt-pkg/luaiface.h>
+    
 									/*}}}*/
 
 using namespace std;
@@ -701,9 +705,12 @@ bool CacheFile::CheckDeps(bool AllowBroken)
    if (_error->PendingError() == true)
       return false;
 
+// CNC:2003-03-19 - Might be changed by some extension.
+#if 0
    // Check that the system is OK
    if (DCache->DelCount() != 0 || DCache->InstCount() != 0)
       return _error->Error("Internal Error, non-zero counts");
+#endif
    
    // Apply corrections for half-installed packages
    if (pkgApplyStatus(*DCache) == false)
@@ -1340,7 +1347,7 @@ bool DoUpdate(CommandLine &CmdL)
 {
    if (CmdL.FileSize() != 1)
       return _error->Error(_("The update command takes no arguments"));
-   
+
    // Get the source list
    pkgSourceList List;
    if (List.ReadMainList() == false)
@@ -1354,6 +1361,18 @@ bool DoUpdate(CommandLine &CmdL)
       if (_error->PendingError() == true)
 	 return _error->Error(_("Unable to lock the list directory"));
    }
+   
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::Apt::Update::Pre")) {
+      CacheFile Cache;
+      if (Cache.Open() == true) {
+	 _lua->SetDepCache(Cache);
+	 _lua->RunScripts("Scripts::Apt::Update::Pre", false);
+	 _lua->ResetCaches();
+      }
+   }
+#endif
    
    // Create the download object
    AcqTextStatus Stat(ScreenWidth,_config->FindI("quiet",0));
@@ -1416,10 +1435,24 @@ bool DoUpdate(CommandLine &CmdL)
 	 return false;
    }
    
+// CNC:2003-03-19
+#if 0
    // Prepare the cache.   
    CacheFile Cache;
    if (Cache.BuildCaches() == false)
       return false;
+#else
+   // Prepare the cache.   
+   CacheFile Cache;
+   if (Cache.Open() == false)
+      return false;
+
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::Update::Post", false);
+   _lua->ResetCaches();
+#endif
+#endif
    
    if (Failed == true)
       return _error->Error(_("Some index files failed to download, they have been ignored, or old ones used instead."));
@@ -1443,6 +1476,13 @@ bool DoUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return _error->Error(_("Internal Error, AllUpgrade broke stuff"));
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::Upgrade", false);
+   _lua->ResetCaches();
+#endif
 
    // CNC:2003-03-06
    if (CheckOnly(Cache) == true)
@@ -1583,6 +1623,14 @@ bool DoInstall(CommandLine &CmdL)
       }      
    }
 
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->SetDontFix();
+   _lua->RunScripts("Scripts::Apt::Install::PreResolve", false);
+   _lua->ResetCaches();
+#endif
+
    // CNC:2002-08-01
    if (_config->FindB("APT::Remove-Depends",false) == true)
       Fix.RemoveDepends();
@@ -1602,6 +1650,16 @@ bool DoInstall(CommandLine &CmdL)
    Fix.InstallProtect();
    if (Fix.Resolve(true) == false)
       _error->Discard();
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   if (Cache->BrokenCount() == 0) {
+      _lua->SetDepCache(Cache);
+      _lua->SetProblemResolver(&Fix);
+      _lua->RunScripts("Scripts::Apt::Install::PostResolve", false);
+      _lua->ResetCaches();
+   }
+#endif
 
    // Now we check the state of the packages,
    if (Cache->BrokenCount() != 0)
@@ -1676,6 +1734,13 @@ bool DoDistUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return false;
    }
+
+// CNC:2003-03-19
+#ifdef WITH_LUA
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::DistUpgrade", false);
+   _lua->ResetCaches();
+#endif
    
    // CNC:2003-03-06
    if (CheckOnly(Cache) == true)
@@ -2283,6 +2348,74 @@ bool DoMoo(CommandLine &CmdL)
    return true;
 }
 									/*}}}*/
+
+// * - Scripting stuff.							/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+#if 0
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+}
+
+static int AptLua_commit(lua_State *L)
+{
+   int Ask = luaL_optint(L, 1, 1);
+   bool Ok = false;
+   CacheFile *Cache = (CacheFile*)_lua->GetGlobalP("_apt_cachefile");
+   if (Cache == NULL) {
+      lua_pushstring(L, "cache lost!?");
+      lua_error(L);
+      return 0;
+   }
+   if ((*Cache)->BrokenCount() != 0) {
+      ShowBroken(c1out,*Cache,false);
+   } else {
+      delete Cache;
+      Cache = new CacheFile;
+      if (Cache->OpenForInstall() == false || Cache->CheckDeps() == false) {
+	 lua_pushstring(L, "cache in inconsistent state after commit()");
+	 lua_error(L);
+	 return 0;
+      }
+      _lua->SetGlobal("_apt_cachefile", (void*)Cache);
+      _lua->SetCache(*Cache);
+   }
+   if (Ok == true)
+      lua_pushnumber(L, 1);
+   else
+      lua_pushnil(L);
+   return 1;
+}
+#endif
+
+#ifdef WITH_LUA
+bool DoScript(CommandLine &CmdL)
+{
+   CacheFile Cache;
+   if (Cache.OpenForInstall() == false || Cache.CheckDeps() == false)
+      return false;
+
+   for (const char **I = CmdL.FileList+1; *I != 0; I++)
+      _config->Set("Scripts::Apt::Script::", *I);
+
+   _lua->SetGlobal("commit_ask", 1);
+   _lua->SetDepCache(Cache);
+   _lua->RunScripts("Scripts::Apt::Script", false);
+   double Ask = _lua->GetGlobalI("commit_ask");
+   _lua->ResetCaches();
+   _lua->ResetGlobals();
+
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
+   
+   return InstallPackages(Cache, false, Ask);
+}
+#endif
+
+									/*}}}*/
+
 // ShowHelp - Show a help screen					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -2463,6 +2596,10 @@ int main(int argc,const char *argv[])
 				   {"source",&DoSource},
 				   {"moo",&DoMoo},
 				   {"help",&ShowHelp},
+// CNC:2003-03-19
+#ifdef WITH_LUA
+				   {"script",&DoScript},
+#endif
                                    {0,0}};
 
    // Set up gettext support

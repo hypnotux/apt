@@ -4404,6 +4404,46 @@ fi
 AC_MSG_RESULT([$SED])
 ])
 
+# serial 2
+
+# AM_PROG_CC_C_O
+# --------------
+# Like AC_PROG_CC_C_O, but changed for automake.
+
+# Copyright 1999, 2000, 2001 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+AC_DEFUN([AM_PROG_CC_C_O],
+[AC_REQUIRE([AC_PROG_CC_C_O])dnl
+AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+# FIXME: we rely on the cache variable name because
+# there is no other way.
+set dummy $CC
+ac_cc=`echo $[2] | sed ['s/[^a-zA-Z0-9_]/_/g;s/^[0-9]/_/']`
+if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" != yes"; then
+   # Losing compiler, so override with the script.
+   # FIXME: It is wrong to rewrite CC.
+   # But if we don't then we get into trouble of one sort or another.
+   # A longer-term fix would be to have automake use am__CC in this case,
+   # and then we could set am__CC="\$(top_srcdir)/compile \$(CC)"
+   CC="$am_aux_dir/compile $CC"
+fi
+])
+
 # isc-posix.m4 serial 2 (gettext-0.11.2)
 dnl Copyright (C) 1995-2002 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
@@ -6319,5 +6359,165 @@ AC_DEFUN([AM_LC_MESSAGES],
     AC_DEFINE(HAVE_LC_MESSAGES, 1,
       [Define if your <locale.h> file defines LC_MESSAGES.])
   fi
+])
+
+AC_DEFUN(ah_HAVE_GETCONF,
+	[AC_ARG_WITH(getconf,
+		[  --with-getconf          Enable automagical buildtime configuration],
+		[if test "$withval" = "yes"; then
+			AC_PATH_PROG(GETCONF, getconf)
+		elif test ! "$withval" = "no";then 
+			AC_MSG_CHECKING([getconf])
+			AC_MSG_RESULT([$withval])
+			GETCONF=$withval
+		fi],
+		[AC_PATH_PROG(GETCONF, getconf)]
+	)
+	AC_SUBST(GETCONF)
+])
+
+dnl ah_GET_CONF(variable, value ..., [default])
+AC_DEFUN(ah_GET_GETCONF,
+	[AC_REQUIRE([ah_HAVE_GETCONF])
+	if test ! -z "$GETCONF";then
+		old_args="[$]@"
+		set -- $2
+		while eval test -z \"\$$1\" -a ! -z \"[$]1\";do
+			eval $1=`$GETCONF "[$]1" 2>/dev/null`
+			shift
+		done
+	fi
+	if eval test -z \"\$$1\" -o \"\$$1\" = "-1";then
+		eval $1="$3"
+	fi
+])
+AC_DEFUN(ah_NUM_CPUS,
+	[AC_MSG_CHECKING([number of cpus])
+	AC_ARG_WITH(cpus,
+		[  --with-cpus             The number of cpus to be used for building(see --with-procs, default 1)],
+		[
+		if test "$withval" = "yes"; then
+			ah_GET_GETCONF(NUM_CPUS, SC_NPROCESSORS_ONLN _NPROCESSORS_ONLN, 1)
+		elif test ! "$withval" = "no";then
+			NUM_CPUS=$withval
+		elif test "$withval" = "no";then
+			NUM_CPUS=1
+		fi],
+		[ah_GET_GETCONF(NUM_CPUS, SC_NPROCESSORS_ONLN _NPROCESSORS_ONLN, 1)]
+	)
+	ah_NUM_CPUS_msg="$NUM_CPUS"
+	if test "$NUM_CPUS" = "0"; then
+		# broken getconf, time to bitch.
+		ah_NUM_CPUS_msg="found 0 cpus.  Has someone done a lobotomy?"
+		NUM_CPUS=1
+	fi
+	if test $NUM_CPUS = 1 ;then
+		default_PROC_MULTIPLY=1
+	else
+		default_PROC_MULTIPLY=2
+	fi
+	AC_MSG_RESULT([$ah_NUM_CPUS_msg])
+	AC_SUBST(NUM_CPUS)
+])
+AC_DEFUN(ah_PROC_MULTIPLY,
+	[AC_REQUIRE([ah_NUM_CPUS])
+	AC_MSG_CHECKING([processor multiplier])
+	AC_ARG_WITH(proc-multiply,
+		[  --with-proc-multiply    Multiply this * number of cpus for parallel making(default 2).],
+		[if test "$withval" = "yes"; then
+			PROC_MULTIPLY=$default_PROC_MULTIPLY
+		elif test ! "$withval" = "no";then
+			PROC_MULTIPLY=$withval
+		fi],
+		[PROC_MULTIPLY=$default_PROC_MULTIPLY]
+	)
+	AC_MSG_RESULT([$PROC_MULTIPLY])
+	AC_SUBST(PROC_MULTIPLY)
+])
+
+AC_DEFUN(ah_NUM_PROCS,
+	[AC_REQUIRE([ah_PROC_MULTIPLY])
+	AC_REQUIRE([ah_NUM_CPUS])
+	AC_MSG_CHECKING([number of processes to run during make])
+	AC_ARG_WITH(procs,
+		[  --with-procs            The number of processes to run in parallel during make(num_cpus * multiplier).],
+		[if test "$withval" = "yes"; then
+			NUM_PROCS=`expr $NUM_CPUS \* $PROC_MULTIPLY`
+		elif test ! "$withval" = "no";then
+			NUM_PROCS=$withval
+		fi],
+		[NUM_PROCS=`expr $NUM_CPUS \* $PROC_MULTIPLY`]
+	)
+	AC_MSG_RESULT([$NUM_PROCS])
+	AC_SUBST(NUM_PROCS)
+])
+
+AC_DEFUN(rc_GLIBC_VER,
+	[AC_MSG_CHECKING([glibc version])
+	dummy=if$$
+	cat <<_GLIBC_>$dummy.c
+#include <features.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char **argv) { printf("libc6.%d",__GLIBC_MINOR__); exit(0); }
+_GLIBC_
+	${CC-cc} $dummy.c -o $dummy > /dev/null 2>&1
+	if test "$?" = 0; then
+		GLIBC_VER=`./$dummy`
+		AC_MSG_RESULT([$GLIBC_VER])
+		dnl CNC:2003-03-25
+		GLIBC_VER="$GLIBC_VER"
+	else
+		AC_MSG_WARN([cannot determine GNU C library minor version number])
+	fi
+	rm -f $dummy $dummy.c
+	AC_SUBST(GLIBC_VER)
+])
+
+AC_DEFUN(rc_LIBSTDCPP_VER,
+	[AC_MSG_CHECKING([libstdc++ version])
+	dummy=if$$
+	cat <<_LIBSTDCPP_>$dummy.cc
+#include <features.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char **argv) { exit(0); }
+_LIBSTDCPP_
+	${CXX-c++} $dummy.cc -o $dummy > /dev/null 2>&1
+
+	if test "$?" = 0; then
+		soname=`objdump -p ./$dummy |grep NEEDED|grep libstd`
+                LIBSTDCPP_VER=`echo $soname | sed -e 's/.*NEEDED.*libstdc++\(-libc.*\(-.*\)\)\?.so.\(.*\)/\3\2/'`
+	fi
+	rm -f $dummy $dummy.cc
+
+	if test -z "$LIBSTDCPP_VER"; then
+		AC_MSG_WARN([cannot determine standard C++ library version number])
+	else
+		AC_MSG_RESULT([$LIBSTDCPP_VER])
+		dnl CNC:2003-03-25
+		LIBSTDCPP_VER="$LIBSTDCPP_VER"
+	fi
+	AC_SUBST(LIBSTDCPP_VER)
+])
+
+AC_DEFUN(ah_GCC3DEP,[
+	AC_MSG_CHECKING(if $CXX -MD works)
+	touch gcc3dep.cc
+	${CXX-c++} -MD -o gcc3dep_test.o -c gcc3dep.cc
+	rm -f gcc3dep.cc gcc3dep_test.o
+	if test -e gcc3dep.d; then
+		rm -f gcc3dep.d
+		GCC_MD=input
+		GCC3DEP=
+	elif test -e gcc3dep_test.d; then
+		rm -f gcc3dep_test.d
+		GCC_MD=output
+		GCC3DEP=yes
+	else
+		AC_MSG_ERROR(no)
+	fi
+	AC_MSG_RESULT([yes, for $GCC_MD])
+	AC_SUBST(GCC3DEP)
 ])
 

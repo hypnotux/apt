@@ -19,6 +19,10 @@
 
 // CNC:2002-07-05
 #include <apt-pkg/pkgsystem.h>
+
+// CNC:2003-03-17
+#include <config.h>
+#include <apt-pkg/luaiface.h>
     
 #include <apti18n.h>    
 									/*}}}*/
@@ -94,6 +98,13 @@ bool pkgDepCache::Init(OpProgress *Prog)
    }
    
    Update(Prog);
+
+// CNC:2003-03-17
+#ifdef WITH_LUA
+   _lua->SetDepCache(this);
+   _lua->RunScripts("Scripts::Cache::Init", true);
+   _lua->ResetCaches();
+#endif
    
    return true;
 } 

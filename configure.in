@@ -1,11 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 
+AC_PREREQ(2.54)
 AC_INIT([apt],[0.5.5cnc4.1])
 dnl Check the archs, we want the target type.
 AC_CONFIG_AUX_DIR([buildlib])
 AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE([foreign subdir-objects dist-bzip2])
+AM_INIT_AUTOMAKE([foreign subdir-objects dist-bzip2 1.7])
 
 AC_CONFIG_HEADER([include/config.h:buildlib/config.h.in])
 
@@ -14,6 +15,7 @@ AC_PROG_LIBTOOL
 dnl Check our C compiler
 AC_CHECK_TOOL_PREFIX
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_ISC_POSIX
 
 dnl Check for other programs
@@ -57,7 +59,8 @@ AC_CHECK_HEADER(rpm/rpmlib.h,
       AC_CHECK_LIB(rpm, rpmtsUpdateDSI,
      	      [AC_DEFINE_UNQUOTED(HAVE_RPM41, 1)
      	       rpm_version="4.1"],
-     	      [rpm_version="4.0.X"])
+     	      [rpm_version="4.0.X"],
+	      [$RPMLIBS])
      ],
      [AC_CHECK_LIB(rpm,rpmdbFirstRecNum,
               [AC_DEFINE_UNQUOTED(HAVE_RPM, 1) 
@@ -88,6 +91,20 @@ using namespace __gnu_cxx;
 ],[AC_DEFINE_UNQUOTED(WITH_GNU_HASH_MAP, 1) AC_MSG_RESULT(yes)
 ],[AC_MSG_RESULT(no)])
 AC_LANG_POP([C++])
+
+dnl CNC:2003-03-20
+AC_MSG_CHECKING(for --disable-scripts)
+AC_ARG_ENABLE([scripts],
+	      AC_HELP_STRING(--disable-scripts, disable the extension system),
+	      [enable_scripts="$enableval"],[enable_scripts="yes"])
+if test "$enable_scripts" != "no"; then
+  AC_MSG_RESULT(no)
+  AC_DEFINE(WITH_LUA, 1, 
+	    [Define if you want to enable the extension system.]) 
+else
+  AC_MSG_RESULT(yes)
+fi
+AM_CONDITIONAL(WITH_LUA, test "$enable_scripts" != "no")
 
 dnl Check for apt-shell dependencies
 AC_CHECK_LIB(ncurses,tputs,
@@ -202,18 +219,31 @@ dnl AC_PATH_PROG(DEBIANDOC_TEXT,debiandoc2text)
 
 dnl Check for the SGML tools needed to build man pages
 AC_PATH_PROG(DOCBOOK2MAN,docbook2man)
+AC_MSG_CHECKING([for --disable-docs])
 AC_ARG_ENABLE([docs],
 	      AC_HELP_STRING([--disable-docs],
 			     [do not compile documentation]),
 	      [enable_docs="$enableval"], [enable_docs="yes"])
+if test "$enable_docs" != "no"; then
+	AC_MSG_RESULT(no)
+else
+	AC_MSG_RESULT(yes)
+fi
 AM_CONDITIONAL(COMPILE_MANPAGES, test -n "$DOCBOOK2MAN" -a "$enable_docs" != "no")
 
+AM_GNU_GETTEXT_VERSION([0.11.4])
 AM_GNU_GETTEXT
+
+dnl ah_NUM_PROCS
+rc_GLIBC_VER
+rc_LIBSTDCPP_VER
+dnl ah_GCC3DEP
 
 AC_OUTPUT([
 	  Makefile
 	  buildlib/Makefile
 	  intl/Makefile 
+	  lua/Makefile
 	  apt-pkg/Makefile
 	  methods/Makefile
 	  cmdline/Makefile

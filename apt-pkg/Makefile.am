@@ -2,7 +2,13 @@
 lib_LTLIBRARIES = libapt-pkg.la
 
 libapt_pkg_la_LIBADD = @RPMLIBS@
-libapt_pkg_la_LDFLAGS = -version-info 0:0:0
+libapt_pkg_la_LDFLAGS = -version-info 0:0:0 -release @GLIBC_VER@-@LIBSTDCPP_VER@
+
+INCLUDES = -I$(top_srcdir)/lua/include
+
+if WITH_LUA
+libapt_pkg_la_LIBADD += $(top_builddir)/lua/liblua.la
+endif
 
 libapt_pkg_la_SOURCES = \
 	contrib/cdromutl.cc \
@@ -71,6 +77,8 @@ libapt_pkg_la_SOURCES = \
 	indexfile.h \
 	init.cc \
 	init.h \
+	luaiface.cc \
+	luaiface.h \
 	orderlist.cc \
 	orderlist.h \
 	packagemanager.cc \
@@ -109,26 +117,32 @@ include_HEADERS = $(filter-out \
 # APT system of a a flat apt-pkg/ header directory.
 PRIVREALHEADERS = $(PRIVATEHEADERS)
 PRIVCOPYHEADERS = $(patsubst %.h, \
-		    $(top_srcdir)/include/%.h, \
+		    $(top_builddir)/include/%.h, \
 		    $(notdir $(PRIVREALHEADERS)))
 REALHEADERS = $(filter-out \
 		$(PRIVREALHEADERS), \
 		$(filter %.h,$(libapt_pkg_la_SOURCES)))
 COPYHEADERS = $(patsubst %.h, \
-		$(top_srcdir)/include/apt-pkg/%.h, \
+		$(top_builddir)/include/apt-pkg/%.h, \
 		$(notdir $(REALHEADERS)))
 REALOBJECTS = $(patsubst %.cc,%.lo,\
 	      	$(filter %.cc,$(libapt_pkg_la_SOURCES)))
 $(REALOBJECTS): $(COPYHEADERS) $(PRIVCOPYHEADERS)
-$(COPYHEADERS): $(REALHEADERS)
-	@echo "Updating include/apt-pkg/ header directory."
-	@mkdir -p $(top_srcdir)/include/apt-pkg
-	@for file in $?; do cp -f $$file $(top_srcdir)/include/apt-pkg; done
-$(PRIVCOPYHEADERS): $(PRIVREALHEADERS)
-	@echo "Updating include/ header directory."
-	@mkdir -p $(top_srcdir)/include
-	@for file in $?; do cp -f $$file $(top_srcdir)/include; done
+
+$(top_builddir)/include/apt-pkg/%: %
+	cp -f -p $< $@
+$(top_builddir)/include/apt-pkg/%: contrib/%
+	cp -f -p $< $@
+$(top_builddir)/include/apt-pkg/%: rpm/%
+	cp -f -p $< $@
+$(top_builddir)/include/%: %
+	cp -f -p $< $@
+$(top_builddir)/include/%: contrib/%
+	cp -f -p $< $@
+$(top_builddir)/include/%: rpm/%
+	cp -f -p $< $@
+
 clean-local:
 	rm -f $(PRIVCOPYHEADERS)
-	rm -rf $(top_srcdir)/include/apt-pkg
+	rm -rf $(top_builddir)/include/apt-pkg
 
