@@ -542,7 +542,6 @@ bool pkgPackageManager::SmartUnPack(PkgIterator Pkg)
 	 }
       }
    }
-#endif
 
    // Check for reverse conflicts.
    if (CheckRConflicts(Pkg,Pkg.RevDependsList(),
@@ -552,6 +551,7 @@ bool pkgPackageManager::SmartUnPack(PkgIterator Pkg)
    for (PrvIterator P = Cache[Pkg].InstVerIter(Cache).ProvidesList(); 
 	P.end() == false; P++)
       CheckRConflicts(Pkg,P.ParentPkg().RevDependsList(),P.ProvideVersion());
+#endif
    
    if (Install(Pkg,FileNames[Pkg->ID]) == false)
       return false;
