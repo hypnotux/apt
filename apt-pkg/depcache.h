@@ -118,7 +118,7 @@ class pkgDepCache : protected pkgCache::Namespace
       virtual bool IsImportantDep(DepIterator Dep);
       // CNC:2003-03-05 - We need access to the priority in pkgDistUpgrade
       //		  while checking for obsoleting packages.
-      virtual signed short GetPriority(pkgCache::PkgIterator const &Pkg)
+      virtual signed short GetPkgPriority(pkgCache::PkgIterator const &Pkg)
 	 { return 0; };
       
       virtual ~Policy() {};
@@ -186,7 +186,7 @@ class pkgDepCache : protected pkgCache::Namespace
    inline bool IsImportantDep(DepIterator Dep) {return LocalPolicy->IsImportantDep(Dep);};
    inline Policy &GetPolicy() {return *LocalPolicy;};
    // CNC:2003-03-05 - See above.
-   inline signed short GetPriority(pkgCache::PkgIterator const &Pkg) {return LocalPolicy->GetPriority(Pkg);};
+   inline signed short GetPkgPriority(pkgCache::PkgIterator const &Pkg) {return LocalPolicy->GetPkgPriority(Pkg);};
    
    // Accessors
    inline StateCache &operator [](PkgIterator const &I) {return PkgState[I->ID];};

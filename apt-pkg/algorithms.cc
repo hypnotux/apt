@@ -351,7 +351,7 @@ bool pkgDistUpgrade(pkgDepCache &Cache)
 		Cache[D.ParentPkg()].CandidateVerIter(Cache).Downloadable() == true &&
 	        (pkgCache::Version*)D.ParentVer() == Cache[D.ParentPkg()].CandidateVer &&
 	        Cache.VS().CheckDep(I.CurrentVer().VerStr(), D) == true &&
-		Cache.GetPriority(D.ParentPkg()) >= Cache.GetPriority(I))
+		Cache.GetPkgPriority(D.ParentPkg()) >= Cache.GetPkgPriority(I))
 	    {
 	       Cache.MarkInstall(D.ParentPkg(),true);
 	       Obsoleted = true;
@@ -385,7 +385,7 @@ bool pkgDistUpgrade(pkgDepCache &Cache)
 		Cache[D.ParentPkg()].CandidateVerIter(Cache).Downloadable() == true &&
 	        (pkgCache::Version*)D.ParentVer() == Cache[D.ParentPkg()].CandidateVer &&
 	        Cache.VS().CheckDep(I.CurrentVer().VerStr(), D) == true &&
-		Cache.GetPriority(D.ParentPkg()) >= Cache.GetPriority(I))
+		Cache.GetPkgPriority(D.ParentPkg()) >= Cache.GetPkgPriority(I))
 	    {
 	       Cache.MarkInstall(D.ParentPkg(),false);
 	       Obsoleted = true;

@@ -241,6 +241,49 @@ signed short pkgPolicy::GetPriority(pkgCache::PkgIterator const &Pkg)
    return 0;
 }
 									/*}}}*/
+// CNC:2003-03-06
+// Policy::GetPkgPriority - Return a package priority			/*{{{*/
+// ---------------------------------------------------------------------
+/* Evaluate the package pins and the default list to deteremine what the
+   best package is. This is a hacked version of GetCandidateVer(). */
+signed short pkgPolicy::GetPkgPriority(const pkgCache::PkgIterator &Pkg)
+{
+   // Look for a package pin and evaluate it.
+   signed Max = GetPriority(Pkg);
+
+   /* Falling through to the default version.. Setting Max to zero
+      effectively excludes everything <= 0 which are the non-automatic
+      priorities.. The status file is given a prio of 100 which will exclude
+      not-automatic sources, except in a single shot not-installed mode.
+      The second pseduo-status file is at prio 1000, above which will permit
+      the user to force-downgrade things.
+      
+      The user pin is subject to the same priority rules as default 
+      selections. Thus there are two ways to create a pin - a pin that
+      tracks the default when the default is taken away, and a permanent
+      pin that stays at that setting.
+    */
+   for (pkgCache::VerIterator Ver = Pkg.VersionList(); Ver.end() == false; Ver++)
+   {
+      for (pkgCache::VerFileIterator VF = Ver.FileList(); VF.end() == false; VF++)
+      {
+	 /* If this is the status file, and the current version is not the
+	    version in the status file (ie it is not installed, or somesuch)
+	    then it is not a candidate for installation, ever. This weeds
+	    out bogus entries that may be due to config-file states, or
+	    other. */
+	 if ((VF.File()->Flags & pkgCache::Flag::NotSource) == pkgCache::Flag::NotSource &&
+	     Pkg.CurrentVer() != Ver)
+	    continue;
+	 	 	 
+	 signed Prio = PFPriority[VF.File()->ID];
+	 if (Prio > Max)
+	    Max = Prio;
+      }      
+   }
+   return Max;
+}
+									/*}}}*/
 
 // ReadPinFile - Load the pin file into a Policy			/*{{{*/
 // ---------------------------------------------------------------------

@@ -77,6 +77,9 @@ class pkgPolicy : public pkgDepCache::Policy
    signed short GetPriority(pkgCache::PkgIterator const &Pkg);
    pkgCache::VerIterator GetMatch(pkgCache::PkgIterator Pkg);
 
+   // CNC:2003-03-06
+   virtual signed short GetPkgPriority(const pkgCache::PkgIterator &Pkg);
+
    // Things for the cache interface.
    virtual pkgCache::VerIterator GetCandidateVer(pkgCache::PkgIterator Pkg);
    // CNC:2002-03-17 - Every place that uses this function seems to
