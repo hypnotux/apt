@@ -1,5 +1,5 @@
 /*
-** $Id: lobject.c,v 1.94 2002/12/04 17:38:31 roberto Exp $
+** $Id: lobject.c,v 1.97 2003/04/03 13:35:34 roberto Exp $
 ** Some generic functions over Lua objects
 ** See Copyright Notice in lua.h
 */
@@ -28,6 +28,20 @@
 
 
 const TObject luaO_nilobject = {LUA_TNIL, {NULL}};
+
+
+/*
+** converts an integer to a "floating point byte", represented as
+** (mmmmmxxx), where the real value is (xxx) * 2^(mmmmm)
+*/
+int luaO_int2fb (unsigned int x) {
+  int m = 0;  /* mantissa */
+  while (x >= (1<<3)) {
+    x = (x+1) >> 1;
+    m++;
+  }
+  return (m << 3) | cast(int, x);
+}
 
 
 int luaO_log2 (unsigned int x) {
@@ -59,19 +73,19 @@ int luaO_log2 (unsigned int x) {
 
 int luaO_rawequalObj (const TObject *t1, const TObject *t2) {
   if (ttype(t1) != ttype(t2)) return 0;
-  if (iscollectable(t1)) return gcvalue(t1) == gcvalue(t2);
   else switch (ttype(t1)) {
     case LUA_TNIL:
       return 1;
+    case LUA_TNUMBER:
+      return nvalue(t1) == nvalue(t2);
     case LUA_TBOOLEAN:
       return bvalue(t1) == bvalue(t2);  /* boolean true must be 1 !! */
     case LUA_TLIGHTUSERDATA:
       return pvalue(t1) == pvalue(t2);
-    case LUA_TNUMBER:
-      return nvalue(t1) == nvalue(t2);
+    default:
+      lua_assert(iscollectable(t1));
+      return gcvalue(t1) == gcvalue(t2);
   }
-  lua_assert(0);
-  return 0;  /* to avoid warnings */
 }
 
 
@@ -114,11 +128,11 @@ const char *luaO_pushvfstring (lua_State *L, const char *fmt, va_list argp) {
         break;
       }
       case 'd':
-        setnvalue(L->top, va_arg(argp, int));
+        setnvalue(L->top, cast(lua_Number, va_arg(argp, int)));
         incr_top(L);
         break;
       case 'f':
-        setnvalue(L->top, va_arg(argp, l_uacNumber));
+        setnvalue(L->top, cast(lua_Number, va_arg(argp, l_uacNumber)));
         incr_top(L);
         break;
       case '%':

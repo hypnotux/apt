@@ -1,5 +1,5 @@
 /*
-** $Id: lua.c,v 1.113 2002/12/04 17:38:31 roberto Exp $
+** $Id: lua.c,v 1.122 2003/04/03 13:34:42 roberto Exp $
 ** Lua stand-alone interpreter
 ** See Copyright Notice in lua.h
 */
@@ -26,10 +26,14 @@
 #endif
 
 
-#ifdef _POSIX_SOURCE
+/*
+** definition of `isatty'
+*/
+#ifdef _POSIX_C_SOURCE
 #include <unistd.h>
+#define stdin_is_tty()	isatty(0)
 #else
-static int isatty (int x) { return x==0; }  /* assume stdin is a tty */
+#define stdin_is_tty()	1  /* assume stdin is a tty */
 #endif
 
 
@@ -43,6 +47,9 @@ static int isatty (int x) { return x==0; }  /* assume stdin is a tty */
 #define PROMPT2		">> "
 #endif
 
+#ifndef PROGNAME
+#define PROGNAME	"lua"
+#endif
 
 #ifndef lua_userinit
 #define lua_userinit(L)		openstdlibs(L)
@@ -56,17 +63,18 @@ static int isatty (int x) { return x==0; }  /* assume stdin is a tty */
 
 static lua_State *L = NULL;
 
-static const char *progname;
+static const char *progname = PROGNAME;
 
 
 
 static const luaL_reg lualibs[] = {
-  {"baselib", lua_baselibopen},
-  {"tablib", lua_tablibopen},
-  {"iolib", lua_iolibopen},
-  {"strlib", lua_strlibopen},
-  {"mathlib", lua_mathlibopen},
-  {"dblib", lua_dblibopen},
+  {"base", luaopen_base},
+  {"table", luaopen_table},
+  {"io", luaopen_io},
+  {"string", luaopen_string},
+  {"math", luaopen_math},
+  {"debug", luaopen_debug},
+  {"loadlib", luaopen_loadlib},
   /* add your libraries here */
   LUA_EXTRALIBS
   {NULL, NULL}
@@ -131,13 +139,6 @@ static int lcall (int narg, int clear) {
   signal(SIGINT, SIG_DFL);
   lua_remove(L, base);  /* remove traceback function */
   return status;
-}
-
-
-static int l_panic (lua_State *l) {
-  (void)l;
-  l_message(progname, "unable to recover; exiting");
-  return 0;
 }
 
 
@@ -285,7 +286,8 @@ static void manual_input (void) {
       lua_getglobal(L, "print");
       lua_insert(L, 1);
       if (lua_pcall(L, lua_gettop(L)-1, 0, 0) != 0)
-        l_message(progname, "error calling `print'");
+        l_message(progname, lua_pushfstring(L, "error calling `print' (%s)",
+                                               lua_tostring(L, -1)));
     }
   }
   lua_settop(L, 0);  /* clear stack */
@@ -296,7 +298,7 @@ static void manual_input (void) {
 
 static int handle_argv (char *argv[], int *interactive) {
   if (argv[1] == NULL) {  /* no more arguments? */
-    if (isatty(0)) {
+    if (stdin_is_tty()) {
       print_version();
       manual_input();
     }
@@ -309,6 +311,10 @@ static int handle_argv (char *argv[], int *interactive) {
       if (argv[i][0] != '-') break;  /* not an option? */
       switch (argv[i][1]) {  /* option */
         case '-': {  /* `--' */
+          if (argv[i][2] != '\0') {
+            print_usage();
+            return 1;
+          }
           i++;  /* skip this argument */
           goto endloop;  /* stop handling arguments */
         }
@@ -329,10 +335,10 @@ static int handle_argv (char *argv[], int *interactive) {
           if (*chunk == '\0') chunk = argv[++i];
           if (chunk == NULL) {
             print_usage();
-            return EXIT_FAILURE;
+            return 1;
           }
           if (dostring(chunk, "=<command line>") != 0)
-            return EXIT_FAILURE;
+            return 1;
           break;
         }
         case 'l': {
@@ -340,10 +346,10 @@ static int handle_argv (char *argv[], int *interactive) {
           if (*filename == '\0') filename = argv[++i];
           if (filename == NULL) {
             print_usage();
-            return EXIT_FAILURE;
+            return 1;
           }
           if (load_file(filename))
-            return EXIT_FAILURE;  /* stop if file fails */
+            return 1;  /* stop if file fails */
           break;
         }
         case 'c': {
@@ -356,7 +362,7 @@ static int handle_argv (char *argv[], int *interactive) {
         }
         default: {
           print_usage();
-          return EXIT_FAILURE;
+          return 1;
         }
       }
     } endloop:
@@ -373,7 +379,7 @@ static int handle_argv (char *argv[], int *interactive) {
 
 static void openstdlibs (lua_State *l) {
   const luaL_reg *lib = lualibs;
-  for (; lib->name; lib++) {
+  for (; lib->func; lib++) {
     lib->func(l);  /* open library */
     lua_settop(l, 0);  /* discard any results */
   }
@@ -401,7 +407,7 @@ static int pmain (lua_State *l) {
   struct Smain *s = (struct Smain *)lua_touserdata(l, 1);
   int status;
   int interactive = 0;
-  progname = s->argv[0];
+  if (s->argv[0] && s->argv[0][0]) progname = s->argv[0];
   L = l;
   lua_userinit(l);  /* open libraries */
   status = handle_luainit();
@@ -424,7 +430,6 @@ int main (int argc, char *argv[]) {
   }
   s.argc = argc;
   s.argv = argv;
-  lua_atpanic(l, l_panic);
   status = lua_cpcall(l, &pmain, &s);
   report(status);
   lua_close(l);

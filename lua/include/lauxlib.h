@@ -1,5 +1,5 @@
 /*
-** $Id: lauxlib.h,v 1.55 2002/11/14 15:41:38 roberto Exp $
+** $Id: lauxlib.h,v 1.60 2003/04/03 13:35:34 roberto Exp $
 ** Auxiliary functions for building Lua libraries
 ** See Copyright Notice in lua.h
 */
@@ -16,7 +16,7 @@
 
 
 #ifndef LUALIB_API
-#define LUALIB_API	extern
+#define LUALIB_API	LUA_API
 #endif
 
 
@@ -43,6 +43,10 @@ LUALIB_API void luaL_checkstack (lua_State *L, int sz, const char *msg);
 LUALIB_API void luaL_checktype (lua_State *L, int narg, int t);
 LUALIB_API void luaL_checkany (lua_State *L, int narg);
 
+LUALIB_API int   luaL_newmetatable (lua_State *L, const char *tname);
+LUALIB_API void  luaL_getmetatable (lua_State *L, const char *tname);
+LUALIB_API void *luaL_checkudata (lua_State *L, int ud, const char *tname);
+
 LUALIB_API void luaL_where (lua_State *L, int lvl);
 LUALIB_API int luaL_error (lua_State *L, const char *fmt, ...);
 
@@ -50,6 +54,9 @@ LUALIB_API int luaL_findstring (const char *st, const char *const lst[]);
 
 LUALIB_API int luaL_ref (lua_State *L, int t);
 LUALIB_API void luaL_unref (lua_State *L, int t, int ref);
+
+LUALIB_API int luaL_getn (lua_State *L, int t);
+LUALIB_API void luaL_setn (lua_State *L, int t, int n);
 
 LUALIB_API int luaL_loadfile (lua_State *L, const char *filename);
 LUALIB_API int luaL_loadbuffer (lua_State *L, const char *buff, size_t sz,
@@ -69,8 +76,8 @@ LUALIB_API int luaL_loadbuffer (lua_State *L, const char *buff, size_t sz,
 #define luaL_optstring(L,n,d)	(luaL_optlstring(L, (n), (d), NULL))
 #define luaL_checkint(L,n)	((int)luaL_checknumber(L, n))
 #define luaL_checklong(L,n)	((long)luaL_checknumber(L, n))
-#define luaL_optint(L,n,d)	((int)luaL_optnumber(L, n,d))
-#define luaL_optlong(L,n,d)	((long)luaL_optnumber(L, n,d))
+#define luaL_optint(L,n,d)	((int)luaL_optnumber(L, n,(lua_Number)(d)))
+#define luaL_optlong(L,n,d)	((long)luaL_optnumber(L, n,(lua_Number)(d)))
 
 
 /*
@@ -111,7 +118,7 @@ LUALIB_API void luaL_pushresult (luaL_Buffer *B);
 
 
 /*
-** Compatibility macros
+** Compatibility macros and functions
 */
 
 LUALIB_API int   lua_dofile (lua_State *L, const char *filename);
@@ -119,7 +126,7 @@ LUALIB_API int   lua_dostring (lua_State *L, const char *str);
 LUALIB_API int   lua_dobuffer (lua_State *L, const char *buff, size_t sz,
                                const char *n);
 
-/*
+
 #define luaL_check_lstr 	luaL_checklstring
 #define luaL_opt_lstr 	luaL_optlstring 
 #define luaL_check_number 	luaL_checknumber 
@@ -131,7 +138,7 @@ LUALIB_API int   lua_dobuffer (lua_State *L, const char *buff, size_t sz,
 #define luaL_check_long	luaL_checklong
 #define luaL_opt_int	luaL_optint
 #define luaL_opt_long	luaL_optlong
-*/
+
 
 #endif
 

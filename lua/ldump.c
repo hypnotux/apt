@@ -1,5 +1,5 @@
 /*
-** $Id: ldump.c,v 1.2 2002/12/04 17:38:31 roberto Exp $
+** $Id: ldump.c,v 1.4 2003/02/11 23:52:12 lhf Exp $
 ** save bytecodes
 ** See Copyright Notice in lua.h
 */
@@ -19,13 +19,12 @@
 #define DumpLiteral(s,D)	DumpBlock("" s,(sizeof(s))-1,D)
 
 typedef struct {
- lua_State *L;
+ lua_State* L;
  lua_Chunkwriter write;
- void *data;
+ void* data;
 } DumpState;
 
-
-static void DumpBlock(const void *b, size_t size, DumpState* D)
+static void DumpBlock(const void* b, size_t size, DumpState* D)
 {
  lua_unlock(D->L);
  (*D->write)(D->L,b,size,D->data);
@@ -89,6 +88,13 @@ static void DumpLines(const Proto* f, DumpState* D)
  DumpVector(f->lineinfo,f->sizelineinfo,sizeof(*f->lineinfo),D);
 }
 
+static void DumpUpvalues(const Proto* f, DumpState* D)
+{
+ int i,n=f->sizeupvalues;
+ DumpInt(n,D);
+ for (i=0; i<n; i++) DumpString(f->upvalues[i],D);
+}
+
 static void DumpFunction(const Proto* f, const TString* p, DumpState* D);
 
 static void DumpConstants(const Proto* f, DumpState* D)
@@ -122,12 +128,13 @@ static void DumpFunction(const Proto* f, const TString* p, DumpState* D)
 {
  DumpString((f->source==p) ? NULL : f->source,D);
  DumpInt(f->lineDefined,D);
- DumpByte(f->nupvalues,D);
+ DumpByte(f->nups,D);
  DumpByte(f->numparams,D);
  DumpByte(f->is_vararg,D);
  DumpByte(f->maxstacksize,D);
- DumpLocals(f,D);
  DumpLines(f,D);
+ DumpLocals(f,D);
+ DumpUpvalues(f,D);
  DumpConstants(f,D);
  DumpCode(f,D);
 }
@@ -148,7 +155,10 @@ static void DumpHeader(DumpState* D)
  DumpNumber(TEST_NUMBER,D);
 }
 
-void luaU_dump(lua_State *L, const Proto* Main, lua_Chunkwriter w, void* data)
+/*
+** dump function as precompiled chunk
+*/
+void luaU_dump (lua_State* L, const Proto* Main, lua_Chunkwriter w, void* data)
 {
  DumpState D;
  D.L=L;

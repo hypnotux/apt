@@ -1,5 +1,5 @@
 /*
-** $Id: lundump.c,v 1.46 2002/12/13 11:17:27 lhf Exp $
+** $Id: lundump.c,v 1.49 2003/04/07 20:34:20 lhf Exp $
 ** load pre-compiled Lua chunks
 ** See Copyright Notice in lua.h
 */
@@ -104,7 +104,7 @@ static TString* LoadString (LoadState* S)
  {
   char* s=luaZ_openspace(S->L,S->b,size);
   ezread(S,s,size);
-  return luaS_newlstr(S->L,s,size-1);	/* remove trailing '\0' */
+  return luaS_newlstr(S->L,s,size-1);		/* remove trailing '\0' */
  }
 }
 
@@ -136,6 +136,18 @@ static void LoadLines (LoadState* S, Proto* f)
  f->lineinfo=luaM_newvector(S->L,size,int);
  f->sizelineinfo=size;
  LoadVector(S,f->lineinfo,size,sizeof(*f->lineinfo));
+}
+
+static void LoadUpvalues (LoadState* S, Proto* f)
+{
+ int i,n;
+ n=LoadInt(S);
+ if (n!=0 && n!=f->nups) 
+  luaG_runerror(S->L,"bad nupvalues in %s: read %d; expected %d",
+		S->name,n,f->nups);
+ f->upvalues=luaM_newvector(S->L,n,TString*);
+ f->sizeupvalues=n;
+ for (i=0; i<n; i++) f->upvalues[i]=LoadString(S);
 }
 
 static Proto* LoadFunction (LoadState* S, TString* p);
@@ -177,12 +189,13 @@ static Proto* LoadFunction (LoadState* S, TString* p)
  Proto* f=luaF_newproto(S->L);
  f->source=LoadString(S); if (f->source==NULL) f->source=p;
  f->lineDefined=LoadInt(S);
- f->nupvalues=LoadByte(S);
+ f->nups=LoadByte(S);
  f->numparams=LoadByte(S);
  f->is_vararg=LoadByte(S);
  f->maxstacksize=LoadByte(S);
- LoadLocals(S,f);
  LoadLines(S,f);
+ LoadLocals(S,f);
+ LoadUpvalues(S,f);
  LoadConstants(S,f);
  LoadCode(S,f);
 #ifndef TRUST_BINARIES
@@ -213,14 +226,14 @@ static void TestSize (LoadState* S, int s, const char* what)
 static void LoadHeader (LoadState* S)
 {
  int version;
- lua_Number x=0,tx=TEST_NUMBER;
+ lua_Number x,tx=TEST_NUMBER;
  LoadSignature(S);
  version=LoadByte(S);
  if (version>VERSION)
   luaG_runerror(S->L,"%s too new: "
 	"read version %d.%d; expected at most %d.%d",
 	S->name,V(version),V(VERSION));
- if (version<VERSION0)			/* check last major change */
+ if (version<VERSION0)				/* check last major change */
   luaG_runerror(S->L,"%s too old: "
 	"read version %d.%d; expected at least %d.%d",
 	S->name,V(version),V(VERSION0));

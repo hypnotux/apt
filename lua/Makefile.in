@@ -187,6 +187,7 @@ liblua_la_SOURCES = \
 		lib/ldblib.c \
 		lib/liolib.c \
 		lib/lmathlib.c \
+		lib/loadlib.c \
 		lib/lstrlib.c \
 		lib/ltablib.c \
 		lapi.c \
@@ -238,10 +239,11 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblua_la_LDFLAGS =
 liblua_la_LIBADD =
 am_liblua_la_OBJECTS = lib/lauxlib.lo lib/lbaselib.lo lib/ldblib.lo \
-	lib/liolib.lo lib/lmathlib.lo lib/lstrlib.lo lib/ltablib.lo \
-	lapi.lo lcode.lo ldebug.lo ldo.lo ldump.lo lfunc.lo lgc.lo \
-	llex.lo lmem.lo lobject.lo lopcodes.lo lparser.lo lstate.lo \
-	lstring.lo ltable.lo ltests.lo ltm.lo lundump.lo lvm.lo lzio.lo
+	lib/liolib.lo lib/lmathlib.lo lib/loadlib.lo lib/lstrlib.lo \
+	lib/ltablib.lo lapi.lo lcode.lo ldebug.lo ldo.lo ldump.lo \
+	lfunc.lo lgc.lo llex.lo lmem.lo lobject.lo lopcodes.lo \
+	lparser.lo lstate.lo lstring.lo ltable.lo ltests.lo ltm.lo \
+	lundump.lo lvm.lo lzio.lo
 liblua_la_OBJECTS = $(am_liblua_la_OBJECTS)
 @WITH_LUA_TRUE@noinst_PROGRAMS = lua/lua$(EXEEXT) luac/luac$(EXEEXT)
 @WITH_LUA_FALSE@noinst_PROGRAMS =
@@ -276,8 +278,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/lzio.Plo lib/$(DEPDIR)/lauxlib.Plo \
 @AMDEP_TRUE@	lib/$(DEPDIR)/lbaselib.Plo lib/$(DEPDIR)/ldblib.Plo \
 @AMDEP_TRUE@	lib/$(DEPDIR)/liolib.Plo lib/$(DEPDIR)/lmathlib.Plo \
-@AMDEP_TRUE@	lib/$(DEPDIR)/lstrlib.Plo lib/$(DEPDIR)/ltablib.Plo \
-@AMDEP_TRUE@	lua/$(DEPDIR)/lua.Po \
+@AMDEP_TRUE@	lib/$(DEPDIR)/loadlib.Plo lib/$(DEPDIR)/lstrlib.Plo \
+@AMDEP_TRUE@	lib/$(DEPDIR)/ltablib.Plo lua/$(DEPDIR)/lua.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-luac.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-print.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -321,6 +323,7 @@ lib/lbaselib.lo: lib/lbaselib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 lib/ldblib.lo: lib/ldblib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 lib/liolib.lo: lib/liolib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 lib/lmathlib.lo: lib/lmathlib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
+lib/loadlib.lo: lib/loadlib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 lib/lstrlib.lo: lib/lstrlib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 lib/ltablib.lo: lib/ltablib.c lib/.dirstamp lib/$(DEPDIR)/.dirstamp
 liblua.la: $(liblua_la_OBJECTS) $(liblua_la_DEPENDENCIES) 
@@ -369,6 +372,8 @@ mostlyclean-compile:
 	-rm -f lib/liolib.lo
 	-rm -f lib/lmathlib.$(OBJEXT)
 	-rm -f lib/lmathlib.lo
+	-rm -f lib/loadlib.$(OBJEXT)
+	-rm -f lib/loadlib.lo
 	-rm -f lib/lstrlib.$(OBJEXT)
 	-rm -f lib/lstrlib.lo
 	-rm -f lib/ltablib.$(OBJEXT)
@@ -406,6 +411,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/ldblib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liolib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lmathlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/loadlib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/lstrlib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/ltablib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lua/$(DEPDIR)/lua.Po@am__quote@
@@ -612,6 +618,39 @@ lib/lmathlib.lo: lib/lmathlib.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/lmathlib.Plo' tmpdepfile='lib/$(DEPDIR)/lmathlib.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/lmathlib.lo `test -f 'lib/lmathlib.c' || echo '$(srcdir)/'`lib/lmathlib.c
+
+lib/loadlib.o: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.o -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
+@am__fastdepCC_TRUE@	then mv "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Po' tmpdepfile='lib/$(DEPDIR)/loadlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.o `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
+
+lib/loadlib.obj: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.obj -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'`; \
+@am__fastdepCC_TRUE@	then mv "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Po' tmpdepfile='lib/$(DEPDIR)/loadlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.obj `if test -f 'lib/loadlib.c'; then $(CYGPATH_W) 'lib/loadlib.c'; else $(CYGPATH_W) '$(srcdir)/lib/loadlib.c'`
+
+lib/loadlib.lo: lib/loadlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/loadlib.lo -MD -MP -MF "lib/$(DEPDIR)/loadlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lib/loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c; \
+@am__fastdepCC_TRUE@	then mv "lib/$(DEPDIR)/loadlib.Tpo" "lib/$(DEPDIR)/loadlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lib/$(DEPDIR)/loadlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lib/loadlib.c' object='lib/loadlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lib/$(DEPDIR)/loadlib.Plo' tmpdepfile='lib/$(DEPDIR)/loadlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib/loadlib.lo `test -f 'lib/loadlib.c' || echo '$(srcdir)/'`lib/loadlib.c
 
 lib/lstrlib.o: lib/lstrlib.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lib/lstrlib.o -MD -MP -MF "lib/$(DEPDIR)/lstrlib.Tpo" \

@@ -1,5 +1,5 @@
 /*
-** $Id: ldebug.c,v 1.143 2002/12/11 12:34:22 roberto Exp $
+** $Id: ldebug.c,v 1.150 2003/03/19 21:24:04 roberto Exp $
 ** Debug Interface
 ** See Copyright Notice in lua.h
 */
@@ -93,13 +93,21 @@ LUA_API int lua_gethookcount (lua_State *L) {
 
 LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar) {
   int status;
-  int ci;
+  CallInfo *ci;
   lua_lock(L);
-  ci = (L->ci - L->base_ci) - level;
-  if (ci <= 0) status = 0;  /* there is no such level */
-  else {
-    ar->i_ci = ci;
+  for (ci = L->ci; level > 0 && ci > L->base_ci; ci--) {
+    level--;
+    if (!(ci->state & CI_C))  /* Lua function? */
+      level -= ci->u.l.tailcalls;  /* skip lost tail calls */
+  }
+  if (level > 0 || ci == L->base_ci) status = 0;  /* there is no such level */
+  else if (level < 0) {  /* level is of a lost tail call */
     status = 1;
+    ar->i_ci = 0;
+  }
+  else {
+    status = 1;
+    ar->i_ci = ci - L->base_ci;
   }
   lua_unlock(L);
   return status;
@@ -150,31 +158,19 @@ LUA_API const char *lua_setlocal (lua_State *L, const lua_Debug *ar, int n) {
 }
 
 
-static void infoLproto (lua_Debug *ar, Proto *f) {
-  ar->source = getstr(f->source);
-  ar->linedefined = f->lineDefined;
-  ar->what = "Lua";
-}
-
-
-static void funcinfo (lua_State *L, lua_Debug *ar, StkId func) {
-  Closure *cl;
-  if (ttisfunction(func))
-    cl = clvalue(func);
-  else {
-    luaG_runerror(L, "value for `lua_getinfo' is not a function");
-    cl = NULL;  /* to avoid warnings */
-  }
+static void funcinfo (lua_Debug *ar, StkId func) {
+  Closure *cl = clvalue(func);
   if (cl->c.isC) {
     ar->source = "=[C]";
     ar->linedefined = -1;
     ar->what = "C";
   }
-  else
-    infoLproto(ar, cl->l.p);
+  else {
+    ar->source = getstr(cl->l.p->source);
+    ar->linedefined = cl->l.p->lineDefined;
+    ar->what = (ar->linedefined == 0) ? "main" : "Lua";
+  }
   luaO_chunkid(ar->short_src, ar->source, LUA_IDSIZE);
-  if (ar->linedefined == 0)
-    ar->what = "main";
 }
 
 
@@ -182,41 +178,32 @@ static const char *travglobals (lua_State *L, const TObject *o) {
   Table *g = hvalue(gt(L));
   int i = sizenode(g);
   while (i--) {
-    Node *n = node(g, i);
-    if (luaO_rawequalObj(o, val(n)) && ttisstring(key(n)))
-      return getstr(tsvalue(key(n)));
+    Node *n = gnode(g, i);
+    if (luaO_rawequalObj(o, gval(n)) && ttisstring(gkey(n)))
+      return getstr(tsvalue(gkey(n)));
   }
   return NULL;
 }
 
 
-static void getname (lua_State *L, const TObject *f, lua_Debug *ar) {
-  /* try to find a name for given function */
-  if ((ar->name = travglobals(L, f)) != NULL)
-    ar->namewhat = "global";
-  else ar->namewhat = "";  /* not found */
+static void info_tailcall (lua_State *L, lua_Debug *ar) {
+  ar->name = ar->namewhat = "";
+  ar->what = "tail";
+  ar->linedefined = ar->currentline = -1;
+  ar->source = "=(tail call)";
+  luaO_chunkid(ar->short_src, ar->source, LUA_IDSIZE);
+  ar->nups = 0;
+  setnilvalue(L->top);
 }
 
 
-
-LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
-  StkId f;
-  CallInfo *ci;
+static int auxgetinfo (lua_State *L, const char *what, lua_Debug *ar,
+                    StkId f, CallInfo *ci) {
   int status = 1;
-  lua_lock(L);
-  if (*what != '>') {  /* function is active? */
-    ci = L->base_ci + ar->i_ci;
-    f = ci->base - 1;
-  }
-  else {
-    what++;  /* skip the `>' */
-    ci = NULL;
-    f = L->top - 1;
-  }
   for (; *what; what++) {
     switch (*what) {
       case 'S': {
-        funcinfo(L, ar, f);
+        funcinfo(ar, f);
         break;
       }
       case 'l': {
@@ -224,25 +211,48 @@ LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
         break;
       }
       case 'u': {
-        ar->nups = (ttisfunction(f)) ? clvalue(f)->c.nupvalues : 0;
+        ar->nups = clvalue(f)->c.nupvalues;
         break;
       }
       case 'n': {
         ar->namewhat = (ci) ? getfuncname(ci, &ar->name) : NULL;
-        if (ar->namewhat == NULL)
-          getname(L, f, ar);
+        if (ar->namewhat == NULL) {
+          /* try to find a global name */
+          if ((ar->name = travglobals(L, f)) != NULL)
+            ar->namewhat = "global";
+          else ar->namewhat = "";  /* not found */
+        }
         break;
       }
       case 'f': {
         setobj2s(L->top, f);
-        status = 2;
         break;
       }
       default: status = 0;  /* invalid option */
     }
   }
-  if (!ci) L->top--;  /* pop function */
-  if (status == 2) incr_top(L);
+  return status;
+}
+
+
+LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
+  int status = 1;
+  lua_lock(L);
+  if (*what == '>') {
+    StkId f = L->top - 1;
+    if (!ttisfunction(f))
+      luaG_runerror(L, "value for `lua_getinfo' is not a function");
+    status = auxgetinfo(L, what + 1, ar, f, NULL);
+    L->top--;  /* pop function */
+  }
+  else if (ar->i_ci != 0) {  /* no tail call? */
+    CallInfo *ci = L->base_ci + ar->i_ci;
+    lua_assert(ttisfunction(ci->base - 1));
+    status = auxgetinfo(L, what, ar, ci->base - 1, ci);
+  }
+  else
+    info_tailcall(L, ar);
+  if (strchr(what, 'f')) incr_top(L);
   lua_unlock(L);
   return status;
 }
@@ -345,7 +355,7 @@ static Instruction luaG_symbexec (const Proto *pt, int lastpc, int reg) {
       }
       case OP_GETUPVAL:
       case OP_SETUPVAL: {
-        check(b < pt->nupvalues);
+        check(b < pt->nups);
         break;
       }
       case OP_GETGLOBAL:
@@ -404,7 +414,7 @@ static Instruction luaG_symbexec (const Proto *pt, int lastpc, int reg) {
       case OP_CLOSURE: {
         int nup;
         check(b < pt->sizep);
-        nup = pt->p[b]->nupvalues;
+        nup = pt->p[b]->nups;
         check(pc + nup < pt->sizecode);
         for (; nup>0; nup--) {
           OpCode op1 = GET_OPCODE(pt->code[pc+nup]);
@@ -451,8 +461,9 @@ static const char *getobjname (CallInfo *ci, int stackpos, const char **name) {
     lua_assert(pc != -1);
     switch (GET_OPCODE(i)) {
       case OP_GETGLOBAL: {
-        lua_assert(ttisstring(&p->k[GETARG_Bx(i)]));
-        *name = svalue(&p->k[GETARG_Bx(i)]);
+        int g = GETARG_Bx(i);  /* global index */
+        lua_assert(ttisstring(&p->k[g]));
+        *name = svalue(&p->k[g]);
         return "global";
       }
       case OP_MOVE: {
@@ -463,11 +474,13 @@ static const char *getobjname (CallInfo *ci, int stackpos, const char **name) {
         break;
       }
       case OP_GETTABLE: {
-        *name = kname(p, GETARG_C(i));
+        int k = GETARG_C(i);  /* key index */
+        *name = kname(p, k);
         return "field";
       }
       case OP_SELF: {
-        *name = kname(p, GETARG_C(i));
+        int k = GETARG_C(i);  /* key index */
+        *name = kname(p, k);
         return "method";
       }
       default: break;
@@ -477,18 +490,16 @@ static const char *getobjname (CallInfo *ci, int stackpos, const char **name) {
 }
 
 
-static Instruction getcurrentinstr (CallInfo *ci) {
-  return (!isLua(ci)) ? (Instruction)(-1) :
-                        ci_func(ci)->l.p->code[currentpc(ci)];
-}
-
-
 static const char *getfuncname (CallInfo *ci, const char **name) {
   Instruction i;
+  if ((isLua(ci) && ci->u.l.tailcalls > 0) || !isLua(ci - 1))
+    return NULL;  /* calling function is not Lua (or is unknown) */
   ci--;  /* calling function */
-  i = getcurrentinstr(ci);
-  return (GET_OPCODE(i) == OP_CALL ? getobjname(ci, GETARG_A(i), name)
-                                   : NULL);  /* no useful name found */
+  i = ci_func(ci)->l.p->code[currentpc(ci)];
+  if (GET_OPCODE(i) == OP_CALL || GET_OPCODE(i) == OP_TAILCALL)
+    return getobjname(ci, GETARG_A(i), name);
+  else
+    return NULL;  /* no useful name can be found */
 }
 
 
@@ -517,7 +528,7 @@ void luaG_typeerror (lua_State *L, const TObject *o, const char *op) {
 void luaG_concaterror (lua_State *L, StkId p1, StkId p2) {
   if (ttisstring(p1)) p1 = p2;
   lua_assert(!ttisstring(p1));
-  luaG_typeerror(L, p1, "concat");
+  luaG_typeerror(L, p1, "concatenate");
 }
 
 

@@ -1,5 +1,5 @@
 /*
-** $Id: lparser.c,v 1.202 2002/12/11 12:34:22 roberto Exp $
+** $Id: lparser.c,v 1.208 2003/04/03 13:35:34 roberto Exp $
 ** Lua Parser
 ** See Copyright Notice in lua.h
 */
@@ -179,16 +179,22 @@ static void create_local (LexState *ls, const char *name) {
 }
 
 
-static int indexupvalue (FuncState *fs, expdesc *v) {
+static int indexupvalue (FuncState *fs, TString *name, expdesc *v) {
   int i;
-  for (i=0; i<fs->f->nupvalues; i++) {
-    if (fs->upvalues[i].k == v->k && fs->upvalues[i].info == v->info)
+  Proto *f = fs->f;
+  for (i=0; i<f->nups; i++) {
+    if (fs->upvalues[i].k == v->k && fs->upvalues[i].info == v->info) {
+      lua_assert(fs->f->upvalues[i] == name);
       return i;
+    }
   }
   /* new one */
-  luaX_checklimit(fs->ls, fs->f->nupvalues+1, MAXUPVALUES, "upvalues");
-  fs->upvalues[fs->f->nupvalues] = *v;
-  return fs->f->nupvalues++;
+  luaX_checklimit(fs->ls, f->nups + 1, MAXUPVALUES, "upvalues");
+  luaM_growvector(fs->L, fs->f->upvalues, f->nups, fs->f->sizeupvalues,
+                  TString *, MAX_INT, "");
+  fs->f->upvalues[f->nups] = name;
+  fs->upvalues[f->nups] = *v;
+  return f->nups++;
 }
 
 
@@ -226,7 +232,7 @@ static void singlevaraux (FuncState *fs, TString *n, expdesc *var, int base) {
           var->info = luaK_stringK(fs, n);  /* info points to global name */
       }
       else {  /* LOCAL or UPVAL */
-        var->info = indexupvalue(fs, var);
+        var->info = indexupvalue(fs, n, var);
         var->k = VUPVAL;  /* upvalue in this level */
       }
     }
@@ -234,8 +240,10 @@ static void singlevaraux (FuncState *fs, TString *n, expdesc *var, int base) {
 }
 
 
-static void singlevar (LexState *ls, expdesc *var, int base) {
-  singlevaraux(ls->fs, str_checkname(ls), var, base);
+static TString *singlevar (LexState *ls, expdesc *var, int base) {
+  TString *varname = str_checkname(ls);
+  singlevaraux(ls->fs, varname, var, base);
+  return varname;
 }
 
 
@@ -302,7 +310,7 @@ static void pushclosure (LexState *ls, FuncState *func, expdesc *v) {
                   MAXARG_Bx, "constant table overflow");
   f->p[fs->np++] = func->f;
   init_exp(v, VRELOCABLE, luaK_codeABx(fs, OP_CLOSURE, 0, fs->np-1));
-  for (i=0; i<func->f->nupvalues; i++) {
+  for (i=0; i<func->f->nups; i++) {
     OpCode o = (func->upvalues[i].k == VLOCAL) ? OP_MOVE : OP_GETUPVAL;
     luaK_codeABC(fs, o, 0, func->upvalues[i].info, 0);
   }
@@ -326,11 +334,8 @@ static void open_func (LexState *ls, FuncState *fs) {
   fs->nlocvars = 0;
   fs->nactvar = 0;
   fs->bl = NULL;
-  f->code = NULL;
   f->source = ls->source;
   f->maxstacksize = 2;  /* registers 0/1 are always valid */
-  f->numparams = 0;  /* default for main chunk */
-  f->is_vararg = 0;  /* default for main chunk */
 }
 
 
@@ -350,6 +355,8 @@ static void close_func (LexState *ls) {
   f->sizep = fs->np;
   luaM_reallocvector(L, f->locvars, f->sizelocvars, fs->nlocvars, LocVar);
   f->sizelocvars = fs->nlocvars;
+  luaM_reallocvector(L, f->upvalues, f->sizeupvalues, f->nups, TString *);
+  f->sizeupvalues = f->nups;
   lua_assert(luaG_checkcode(f));
   lua_assert(fs->bl == NULL);
   ls->fs = fs->prev;
@@ -368,7 +375,7 @@ Proto *luaY_parser (lua_State *L, ZIO *z, Mbuffer *buff) {
   check_condition(&lexstate, (lexstate.t.token == TK_EOS), "<eof> expected");
   close_func(&lexstate);
   lua_assert(funcstate.prev == NULL);
-  lua_assert(funcstate.f->nupvalues == 0);
+  lua_assert(funcstate.f->nups == 0);
   lua_assert(lexstate.nestlevel == 0);
   return funcstate.f;
 }
@@ -510,8 +517,7 @@ static void constructor (LexState *ls, expdesc *t) {
   } while (testnext(ls, ',') || testnext(ls, ';'));
   check_match(ls, '}', '{', line);
   lastlistfield(fs, &cc);
-  if (cc.na > 0)
-    SETARG_B(fs->f->code[pc], luaO_log2(cc.na-1)+2); /* set initial table size */
+  SETARG_B(fs->f->code[pc], luaO_int2fb(cc.na)); /* set initial array size */
   SETARG_C(fs->f->code[pc], luaO_log2(cc.nh)+1);  /* set initial table size */
 }
 
@@ -639,12 +645,18 @@ static void prefixexp (LexState *ls, expdesc *v) {
       singlevar(ls, v, 1);
       return;
     }
+#ifdef LUA_COMPATUPSYNTAX
     case '%': {  /* for compatibility only */
+      TString *varname;
+      int line = ls->linenumber;
       next(ls);  /* skip `%' */
-      singlevar(ls, v, 1);
-      check_condition(ls, v->k == VUPVAL, "global upvalues are obsolete");
+      varname = singlevar(ls, v, 1);
+      if (v->k != VUPVAL)
+        luaX_errorline(ls, "global upvalues are obsolete",
+                           getstr(varname), line);
       return;
     }
+#endif
     default: {
       luaX_syntaxerror(ls, "unexpected symbol");
       return;
@@ -949,7 +961,7 @@ static void cond (LexState *ls, expdesc *v) {
 static void whilestat (LexState *ls, int line) {
   /* whilestat -> WHILE cond DO block END */
   Instruction codeexp[MAXEXPWHILE + EXTRAEXP];
-  int lineexp = 0;
+  int lineexp;
   int i;
   int sizeexp;
   FuncState *fs = ls->fs;

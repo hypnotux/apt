@@ -1,5 +1,5 @@
 /*
-** $Id: liolib.c,v 2.28 2002/12/04 17:38:31 roberto Exp $
+** $Id: liolib.c,v 2.39 2003/03/19 21:16:12 roberto Exp $
 ** Standard I/O (and system) library
 ** See Copyright Notice in lua.h
 */
@@ -22,18 +22,48 @@
 
 
 /*
+** by default, gcc does not get `tmpname'
+*/
+#ifndef USE_TMPNAME
+#ifdef __GNUC__
+#define USE_TMPNAME	0
+#else
+#define USE_TMPNAME	1
+#endif
+#endif
+
+
+/*
+** by default, posix systems get `popen'
+*/
+#ifndef USE_POPEN
+#ifdef _POSIX_C_SOURCE
+#if _POSIX_C_SOURCE >= 2
+#define USE_POPEN	1
+#endif
+#endif
+#endif
+
+#ifndef USE_POPEN
+#define USE_POPEN	0
+#endif
+
+
+
+
+/*
 ** {======================================================
 ** FILE Operations
 ** =======================================================
 */
 
 
-#ifndef USE_POPEN
+#if !USE_POPEN
 #define pclose(f)    (-1)
 #endif
 
 
-#define FILEHANDLE		"FileHandle"
+#define FILEHANDLE		"FILE*"
 
 #define IO_INPUT		"_input"
 #define IO_OUTPUT		"_output"
@@ -57,21 +87,15 @@ static int pushresult (lua_State *L, int i, const char *filename) {
 
 
 static FILE **topfile (lua_State *L, int findex) {
-  FILE **f = (FILE **)lua_touserdata(L, findex);
-  if (f == NULL || !lua_getmetatable(L, findex) ||
-                   !lua_rawequal(L, -1, lua_upvalueindex(1))) {
-    luaL_argerror(L, findex, "bad file");
-  }
-  lua_pop(L, 1);
+  FILE **f = (FILE **)luaL_checkudata(L, findex, FILEHANDLE);
+  if (f == NULL) luaL_argerror(L, findex, "bad file");
   return f;
 }
 
 
 static int io_type (lua_State *L) {
-  FILE **f = (FILE **)lua_touserdata(L, 1);
-  if (f == NULL || !lua_getmetatable(L, 1) ||
-                   !lua_rawequal(L, -1, lua_upvalueindex(1)))
-    lua_pushnil(L);
+  FILE **f = (FILE **)luaL_checkudata(L, 1, FILEHANDLE);
+  if (f == NULL) lua_pushnil(L);
   else if (*f == NULL)
     lua_pushliteral(L, "closed file");
   else
@@ -97,8 +121,7 @@ static FILE *tofile (lua_State *L, int findex) {
 static FILE **newfile (lua_State *L) {
   FILE **pf = (FILE **)lua_newuserdata(L, sizeof(FILE *));
   *pf = NULL;  /* file handle is currently `closed' */
-  lua_pushliteral(L, FILEHANDLE);
-  lua_rawget(L, LUA_REGISTRYINDEX);
+  luaL_getmetatable(L, FILEHANDLE);
   lua_setmetatable(L, -2);
   return pf;
 }
@@ -173,7 +196,7 @@ static int io_open (lua_State *L) {
 
 
 static int io_popen (lua_State *L) {
-#ifndef USE_POPEN
+#if !USE_POPEN
   luaL_error(L, "`popen' not supported");
   return 0;
 #else
@@ -201,12 +224,7 @@ static FILE *getiofile (lua_State *L, const char *name) {
 
 
 static int g_iofile (lua_State *L, const char *name, const char *mode) {
-  if (lua_isnoneornil(L, 1)) {
-    lua_pushstring(L, name);
-    lua_rawget(L, lua_upvalueindex(1));
-    return 1;
-  }
-  else {
+  if (!lua_isnoneornil(L, 1)) {
     const char *filename = lua_tostring(L, 1);
     lua_pushstring(L, name);
     if (filename) {
@@ -222,8 +240,11 @@ static int g_iofile (lua_State *L, const char *name, const char *mode) {
       lua_pushvalue(L, 1);
     }
     lua_rawset(L, lua_upvalueindex(1));
-    return 0;
   }
+  /* return current value */
+  lua_pushstring(L, name);
+  lua_rawget(L, lua_upvalueindex(1));
+  return 1;
 }
 
 
@@ -240,10 +261,10 @@ static int io_output (lua_State *L) {
 static int io_readline (lua_State *L);
 
 
-static void aux_lines (lua_State *L, int index, int close) {
+static void aux_lines (lua_State *L, int idx, int close) {
   lua_pushliteral(L, FILEHANDLE);
   lua_rawget(L, LUA_REGISTRYINDEX);
-  lua_pushvalue(L, index);
+  lua_pushvalue(L, idx);
   lua_pushboolean(L, close);  /* close/not close file when finished */
   lua_pushcclosure(L, io_readline, 3);
 }
@@ -356,8 +377,7 @@ static int g_read (lua_State *L, FILE *f, int first) {
       }
       else {
         const char *p = lua_tostring(L, n);
-        if (!p || p[0] != '*')
-          return luaL_error(L, "invalid `read' option");
+        luaL_argcheck(L, p && p[0] == '*', n, "invalid option");
         switch (p[1]) {
           case 'n':  /* number */
             success = read_number(L, f);
@@ -370,7 +390,7 @@ static int g_read (lua_State *L, FILE *f, int first) {
             success = 1; /* always success */
             break;
           case 'w':  /* word */
-            return luaL_error(L, "obsolete option `*w'");
+            return luaL_error(L, "obsolete option `*w' to `read'");
           default:
             return luaL_argerror(L, n, "invalid format");
         }
@@ -492,29 +512,19 @@ static const luaL_reg flib[] = {
   {"seek", f_seek},
   {"write", f_write},
   {"close", io_close},
+  {"__gc", io_gc},
+  {"__tostring", io_tostring},
   {NULL, NULL}
 };
 
 
 static void createmeta (lua_State *L) {
-  lua_pushliteral(L, FILEHANDLE);
-  lua_newtable(L);  /* push new metatable for file handles */
-  /* close files when collected */
-  lua_pushliteral(L, "__gc");
-  lua_pushvalue(L, -2);  /* push metatable (will be upvalue for `gc' method) */
-  lua_pushcclosure(L, io_gc, 1);
-  lua_rawset(L, -3);  /* metatable.__gc = io_gc */
-  lua_pushliteral(L, "__tostring");
-  lua_pushvalue(L, -2);  /* push metatable */
-  lua_pushcclosure(L, io_tostring, 1);
-  lua_rawset(L, -3);
+  luaL_newmetatable(L, FILEHANDLE);  /* create new metatable for file handles */
   /* file methods */
   lua_pushliteral(L, "__index");
   lua_pushvalue(L, -2);  /* push metatable */
   lua_rawset(L, -3);  /* metatable.__index = metatable */
-  lua_pushvalue(L, -1);  /* push metatable (will be upvalue for library) */
-  luaL_openlib(L, NULL, flib, 1);
-  lua_rawset(L, LUA_REGISTRYINDEX);  /* registry.FILEHANDLE = metatable */
+  luaL_openlib(L, NULL, flib, 0);
 }
 
 /* }====================================================== */
@@ -546,11 +556,16 @@ static int io_rename (lua_State *L) {
 
 
 static int io_tmpname (lua_State *L) {
+#if !USE_TMPNAME
+  luaL_error(L, "`tmpname' not supported");
+  return 0;
+#else
   char buff[L_tmpnam];
   if (tmpnam(buff) != buff)
-    return luaL_error(L, "unable to generate a unique filename");
+    return luaL_error(L, "unable to generate a unique filename in `tmpname'");
   lua_pushstring(L, buff);
   return 1;
+#endif
 }
 
 
@@ -721,17 +736,15 @@ static const luaL_reg syslib[] = {
 
 
 
-LUALIB_API int lua_iolibopen (lua_State *L) {
-  createmeta(L);
+LUALIB_API int luaopen_io (lua_State *L) {
   luaL_openlib(L, LUA_OSLIBNAME, syslib, 0);
-  lua_pushliteral(L, FILEHANDLE);
-  lua_rawget(L, LUA_REGISTRYINDEX);
+  createmeta(L);
   lua_pushvalue(L, -1);
   luaL_openlib(L, LUA_IOLIBNAME, iolib, 1);
   /* put predefined file handles into `io' table */
   registerfile(L, stdin, "stdin", IO_INPUT);
   registerfile(L, stdout, "stdout", IO_OUTPUT);
   registerfile(L, stderr, "stderr", NULL);
-  return 0;
+  return 1;
 }
 

@@ -1,5 +1,5 @@
 /*
-** $Id: lbaselib.c,v 1.115 2002/12/06 17:05:15 roberto Exp $
+** $Id: lbaselib.c,v 1.130 2003/04/03 13:35:34 roberto Exp $
 ** Basic library
 ** See Copyright Notice in lua.h
 */
@@ -66,7 +66,7 @@ static int luaB_tonumber (lua_State *L) {
     if (s1 != s2) {  /* at least one valid digit? */
       while (isspace((unsigned char)(*s2))) s2++;  /* skip trailing spaces */
       if (*s2 == '\0') {  /* no invalid trailing characters? */
-        lua_pushnumber(L, n);
+        lua_pushnumber(L, (lua_Number)n);
         return 1;
       }
     }
@@ -123,36 +123,41 @@ static void getfunc (lua_State *L) {
     if (lua_getstack(L, level, &ar) == 0)
       luaL_argerror(L, 1, "invalid level");
     lua_getinfo(L, "f", &ar);
+    if (lua_isnil(L, -1))
+      luaL_error(L, "no function environment for tail call at level %d",
+                    level);
   }
 }
 
 
-static int aux_getglobals (lua_State *L) {
-  lua_getglobals(L, -1);
-  lua_pushliteral(L, "__globals");
+static int aux_getfenv (lua_State *L) {
+  lua_getfenv(L, -1);
+  lua_pushliteral(L, "__fenv");
   lua_rawget(L, -2);
   return !lua_isnil(L, -1);
 }
 
 
-static int luaB_getglobals (lua_State *L) {
+static int luaB_getfenv (lua_State *L) {
   getfunc(L);
-  if (!aux_getglobals(L))  /* __globals not defined? */
-    lua_pop(L, 1);  /* remove it, to return real globals */
+  if (!aux_getfenv(L))  /* __fenv not defined? */
+    lua_pop(L, 1);  /* remove it, to return real environment */
   return 1;
 }
 
 
-static int luaB_setglobals (lua_State *L) {
+static int luaB_setfenv (lua_State *L) {
   luaL_checktype(L, 2, LUA_TTABLE);
   getfunc(L);
-  if (aux_getglobals(L))  /* __globals defined? */
-    luaL_error(L, "cannot change a protected global table");
+  if (aux_getfenv(L))  /* __fenv defined? */
+    luaL_error(L, "`setfenv' cannot change a protected environment");
   else
-    lua_pop(L, 2);  /* remove __globals and real global table */
+    lua_pop(L, 2);  /* remove __fenv and real environment table */
   lua_pushvalue(L, 2);
-  if (lua_setglobals(L, -2) == 0)
-    luaL_error(L, "cannot change global table of given function");
+  if (lua_isnumber(L, 1) && lua_tonumber(L, 1) == 0)
+    lua_replace(L, LUA_GLOBALSINDEX);
+  else if (lua_setfenv(L, -2) == 0)
+    luaL_error(L, "`setfenv' cannot change environment of given function");
   return 0;
 }
 
@@ -182,8 +187,8 @@ static int luaB_rawset (lua_State *L) {
 
 
 static int luaB_gcinfo (lua_State *L) {
-  lua_pushnumber(L, lua_getgccount(L));
-  lua_pushnumber(L, lua_getgcthreshold(L));
+  lua_pushnumber(L, (lua_Number)lua_getgccount(L));
+  lua_pushnumber(L, (lua_Number)lua_getgcthreshold(L));
   return 2;
 }
 
@@ -243,19 +248,12 @@ static int luaB_ipairs (lua_State *L) {
 
 
 static int load_aux (lua_State *L, int status) {
-  if (status == 0) {  /* OK? */
-    lua_Debug ar;
-    lua_getstack(L, 1, &ar);
-    lua_getinfo(L, "f", &ar);  /* get calling function */
-    lua_getglobals(L, -1);  /* get its global table */
-    lua_setglobals(L, -3);  /* set it as the global table of the new chunk */
-    lua_pop(L, 1);  /* remove calling function */
+  if (status == 0)  /* OK? */
     return 1;
-  }
   else {
     lua_pushnil(L);
-    lua_insert(L, -2);
-    return 2;
+    lua_insert(L, -2);  /* put before error message */
+    return 2;  /* return nil plus error message */
   }
 }
 
@@ -295,20 +293,11 @@ static int luaB_assert (lua_State *L) {
 static int luaB_unpack (lua_State *L) {
   int n, i;
   luaL_checktype(L, 1, LUA_TTABLE);
-  lua_pushliteral(L, "n");
-  lua_rawget(L, 1);
-  n = (lua_isnumber(L, -1)) ?  (int)lua_tonumber(L, -1) : -1;
-  for (i=0; i<n || n==-1; i++) {  /* push arg[1...n] */
-    luaL_checkstack(L, LUA_MINSTACK, "table too big to unpack");
-    lua_rawgeti(L, 1, i+1);
-    if (n == -1) {  /* no explicit limit? */
-      if (lua_isnil(L, -1)) {  /* stop at first `nil' element */
-        lua_pop(L, 1);  /* remove `nil' */
-        break;
-      }
-    }
-  }
-  return i;
+  n = luaL_getn(L, 1);
+  luaL_checkstack(L, n, "table too big to unpack");
+  for (i=1; i<=n; i++)  /* push arg[1...n] */
+    lua_rawgeti(L, 1, i);
+  return n;
 }
 
 
@@ -414,6 +403,10 @@ static int luaB_newproxy (lua_State *L) {
 #define LUA_PATH_SEP	';'
 #endif
 
+#ifndef LUA_PATH_MARK
+#define LUA_PATH_MARK	'?'
+#endif
+
 #ifndef LUA_PATH_DEFAULT
 #define LUA_PATH_DEFAULT	"?;?.lua"
 #endif
@@ -444,12 +437,18 @@ static const char *pushnextpath (lua_State *L, const char *path) {
 
 static void pushcomposename (lua_State *L) {
   const char *path = lua_tostring(L, -1);
-  const char *wild = strchr(path, '?');
-  if (wild == NULL) return;  /* no wild char; path is the file name */
-  lua_pushlstring(L, path, wild - path);
-  lua_pushvalue(L, 1);  /* package name */
-  lua_pushstring(L, wild + 1);
-  lua_concat(L, 3);
+  const char *wild;
+  int n = 1;
+  while ((wild = strchr(path, LUA_PATH_MARK)) != NULL) {
+    /* is there stack space for prefix, name, and eventual last sufix? */
+    luaL_checkstack(L, 3, "too many marks in a path component");
+    lua_pushlstring(L, path, wild - path);  /* push prefix */
+    lua_pushvalue(L, 1);  /* push package name (in place of MARK) */
+    path = wild + 1;  /* continue after MARK */
+    n += 2;
+  }
+  lua_pushstring(L, path);  /* push last sufix (`n' already includes this) */
+  lua_concat(L, n);
 }
 
 
@@ -458,15 +457,13 @@ static int luaB_require (lua_State *L) {
   int status = LUA_ERRFILE;  /* not found (yet) */
   luaL_checkstring(L, 1);
   lua_settop(L, 1);
-  lua_pushvalue(L, 1);
-  lua_setglobal(L, "_REQUIREDNAME");
   lua_getglobal(L, REQTAB);
   if (!lua_istable(L, 2)) return luaL_error(L, "`" REQTAB "' is not a table");
   path = getpath(L);
   lua_pushvalue(L, 1);  /* check package's name in book-keeping table */
   lua_rawget(L, 2);
-  if (!lua_isnil(L, -1))  /* is it there? */
-    return 0;  /* package is already loaded */
+  if (lua_toboolean(L, -1))  /* is it there? */
+    return 1;  /* package is already loaded; return its result */
   else {  /* must load it */
     while (status == LUA_ERRFILE) {
       lua_settop(L, 3);  /* reset stack position */
@@ -477,18 +474,29 @@ static int luaB_require (lua_State *L) {
   }
   switch (status) {
     case 0: {
-      lua_call(L, 0, 0);  /* run loaded module */
+      lua_getglobal(L, "_REQUIREDNAME");  /* save previous name */
+      lua_insert(L, -2);  /* put it below function */
       lua_pushvalue(L, 1);
-      lua_pushboolean(L, 1);
+      lua_setglobal(L, "_REQUIREDNAME");  /* set new name */
+      lua_call(L, 0, 1);  /* run loaded module */
+      lua_insert(L, -2);  /* put result below previous name */
+      lua_setglobal(L, "_REQUIREDNAME");  /* reset to previous name */
+      if (lua_isnil(L, -1)) {  /* no/nil return? */
+        lua_pushboolean(L, 1);
+        lua_replace(L, -2);  /* replace to true */
+      }
+      lua_pushvalue(L, 1);
+      lua_pushvalue(L, -2);
       lua_rawset(L, 2);  /* mark it as loaded */
-      return 0;
+      return 1;  /* return value */
     }
     case LUA_ERRFILE: {  /* file not found */
       return luaL_error(L, "could not load package `%s' from path `%s'",
                             lua_tostring(L, 1), getpath(L));
     }
     default: {
-      return luaL_error(L, "error loading package\n%s", lua_tostring(L, -1));
+      return luaL_error(L, "error loading package `%s' (%s)",
+                           lua_tostring(L, 1), lua_tostring(L, -1));
     }
   }
 }
@@ -500,8 +508,8 @@ static const luaL_reg base_funcs[] = {
   {"error", luaB_error},
   {"getmetatable", luaB_getmetatable},
   {"setmetatable", luaB_setmetatable},
-  {"getglobals", luaB_getglobals},
-  {"setglobals", luaB_setglobals},
+  {"getfenv", luaB_getfenv},
+  {"setfenv", luaB_setfenv},
   {"next", luaB_next},
   {"ipairs", luaB_ipairs},
   {"pairs", luaB_pairs},
@@ -540,7 +548,7 @@ static int auxresume (lua_State *L, lua_State *co, int narg) {
   status = lua_resume(co, narg);
   if (status == 0) {
     int nres = lua_gettop(co);
-    if (!lua_checkstack(L, narg))
+    if (!lua_checkstack(L, nres))
       luaL_error(L, "too many results to resume");
     lua_xmove(co, L, nres);  /* move yielded values */
     return nres;
@@ -573,7 +581,14 @@ static int luaB_coresume (lua_State *L) {
 static int luaB_auxwrap (lua_State *L) {
   lua_State *co = lua_tothread(L, lua_upvalueindex(1));
   int r = auxresume(L, co, lua_gettop(L));
-  if (r < 0) lua_error(L);  /* propagate error */
+  if (r < 0) {
+    if (lua_isstring(L, -1)) {  /* error object is a string? */
+      luaL_where(L, 1);  /* add extra info */
+      lua_insert(L, -2);
+      lua_concat(L, 2);
+    }
+    lua_error(L);  /* propagate error */
+  }
   return r;
 }
 
@@ -649,7 +664,7 @@ static void base_open (lua_State *L) {
 }
 
 
-LUALIB_API int lua_baselibopen (lua_State *L) {
+LUALIB_API int luaopen_base (lua_State *L) {
   base_open(L);
   luaL_openlib(L, LUA_COLIBNAME, co_funcs, 0);
   lua_newtable(L);

@@ -1,5 +1,5 @@
 /*
-** $Id: lobject.h,v 1.155 2002/11/14 16:16:21 roberto Exp $
+** $Id: lobject.h,v 1.159 2003/03/18 12:50:04 roberto Exp $
 ** Type definitions for Lua objects
 ** See Copyright Notice in lua.h
 */
@@ -214,7 +214,9 @@ typedef struct Proto {
   struct Proto **p;  /* functions defined inside the function */
   int *lineinfo;  /* map from opcodes to source lines */
   struct LocVar *locvars;  /* information about local variables */
+  TString **upvalues;  /* upvalue names */
   TString  *source;
+  int sizeupvalues;
   int sizek;  /* size of `k' */
   int sizecode;
   int sizelineinfo;
@@ -222,7 +224,7 @@ typedef struct Proto {
   int sizelocvars;
   int lineDefined;
   GCObject *gclist;
-  lu_byte nupvalues;
+  lu_byte nups;  /* number of upvalues */
   lu_byte numparams;
   lu_byte is_vararg;
   lu_byte maxstacksize;
@@ -314,14 +316,14 @@ typedef struct Table {
 
 #define twoto(x)	(1<<(x))
 #define sizenode(t)	(twoto((t)->lsizenode))
-#define sizearray(t)	((t)->sizearray)
 
 
 
 extern const TObject luaO_nilobject;
 
 int luaO_log2 (unsigned int x);
-
+int luaO_int2fb (unsigned int x);
+#define fb2int(x)	(((x) & 7) << ((x) >> 3))
 
 int luaO_rawequalObj (const TObject *t1, const TObject *t2);
 int luaO_str2d (const char *s, lua_Number *result);

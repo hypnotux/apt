@@ -1,5 +1,5 @@
 /*
-** $Id: lfunc.c,v 1.64 2002/12/04 17:38:31 roberto Exp $
+** $Id: lfunc.c,v 1.67 2003/03/18 12:50:04 roberto Exp $
 ** Auxiliary functions to manipulate prototypes and closures
 ** See Copyright Notice in lua.h
 */
@@ -35,11 +35,11 @@ Closure *luaF_newCclosure (lua_State *L, int nelems) {
 }
 
 
-Closure *luaF_newLclosure (lua_State *L, int nelems, TObject *gt) {
+Closure *luaF_newLclosure (lua_State *L, int nelems, TObject *e) {
   Closure *c = cast(Closure *, luaM_malloc(L, sizeLclosure(nelems)));
   luaC_link(L, valtogco(c), LUA_TFUNCTION);
   c->l.isC = 0;
-  c->l.g = *gt;
+  c->l.g = *e;
   c->l.nupvalues = cast(lu_byte, nelems);
   return c;
 }
@@ -84,7 +84,9 @@ Proto *luaF_newproto (lua_State *L) {
   f->code = NULL;
   f->sizecode = 0;
   f->sizelineinfo = 0;
-  f->nupvalues = 0;
+  f->sizeupvalues = 0;
+  f->nups = 0;
+  f->upvalues = NULL;
   f->numparams = 0;
   f->is_vararg = 0;
   f->maxstacksize = 0;
@@ -103,6 +105,7 @@ void luaF_freeproto (lua_State *L, Proto *f) {
   luaM_freearray(L, f->k, f->sizek, TObject);
   luaM_freearray(L, f->lineinfo, f->sizelineinfo, int);
   luaM_freearray(L, f->locvars, f->sizelocvars, struct LocVar);
+  luaM_freearray(L, f->upvalues, f->sizeupvalues, TString *);
   luaM_freelem(L, f);
 }
 

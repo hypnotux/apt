@@ -1,7 +1,7 @@
-This is Lua 5.0 (beta).
+This is Lua 5.0.
 
-* Changes from version 4.0 to 5.0 (beta)
-  ---------------------------------------
+* Changes from version 4.0 to 5.0
+  -------------------------------
   Language:
   + lexical scoping.
   + Lua coroutines.
@@ -39,8 +39,9 @@ This is Lua 5.0 (beta).
     use of sprintf to convert numbers to strings).
   + lua.c now runs the environment variable LUA_INIT, if present. It can
     be "@filename", to run a file, or the chunk itself.
-  + support to user extensions in lua.c.
-    sample implementations given for dynamic loading and command line editing.
+  + support for user extensions in lua.c.
+    sample implementation given for command line editing.
+  + new dynamic loading library, active by default on several platforms.
   + safe garbage-collector metamethods.
   + precompiled bytecodes checked for integrity (secure binary dostring).
   + strings are fully aligned.

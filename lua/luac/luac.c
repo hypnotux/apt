@@ -1,5 +1,5 @@
 /*
-** $Id: luac.c,v 1.40 2002/12/13 11:12:35 lhf Exp $
+** $Id: luac.c,v 1.44 2003/04/07 20:34:20 lhf Exp $
 ** Lua compiler (saves bytecodes to files; also list bytecodes)
 ** See Copyright Notice in lua.h
 */
@@ -22,8 +22,11 @@
 #define luaB_opentests(L)
 #endif
 
+#ifndef PROGNAME
 #define PROGNAME	"luac"		/* program name */
-#define	OUTPUT		PROGNAME ".out"	/* default output file */
+#endif
+
+#define	OUTPUT		"luac.out"	/* default output file */
 
 static int listing=0;			/* list bytecodes? */
 static int dumping=1;			/* dump bytecodes? */
@@ -108,13 +111,16 @@ static int doargs(int argc, char* argv[])
  return i;
 }
 
+static Proto* toproto(lua_State* L, int i)
+{
+ const Closure* c=(const Closure*)lua_topointer(L,i);
+ return c->l.p;
+}
+
 static Proto* combine(lua_State* L, int n)
 {
  if (n==1)
- {
-  const Closure* c=lua_topointer(L,-1);
-  return c->l.p;
- }
+  return toproto(L,-1);
  else
  {
   int i,pc=0;
@@ -127,8 +133,7 @@ static Proto* combine(lua_State* L, int n)
   f->code=luaM_newvector(L,f->sizecode,Instruction);
   for (i=0; i<n; i++)
   {
-   const Closure* c=lua_topointer(L,i-n);
-   f->p[i]=c->l.p;
+   f->p[i]=toproto(L,i-n);
    f->code[pc++]=CREATE_ABx(OP_CLOSURE,0,i);
    f->code[pc++]=CREATE_ABC(OP_CALL,0,1,1);
   }
@@ -142,10 +147,10 @@ static void strip(lua_State* L, Proto* f)
  int i,n=f->sizep;
  luaM_freearray(L, f->lineinfo, f->sizelineinfo, int);
  luaM_freearray(L, f->locvars, f->sizelocvars, struct LocVar);
- f->lineinfo=NULL;
- f->sizelineinfo=0;
- f->locvars=NULL;
- f->sizelocvars=0;
+ luaM_freearray(L, f->upvalues, f->sizeupvalues, TString *);
+ f->lineinfo=NULL; f->sizelineinfo=0;
+ f->locvars=NULL;  f->sizelocvars=0;
+ f->upvalues=NULL; f->sizeupvalues=0;
  f->source=luaS_newliteral(L,"=(none)");
  for (i=0; i<n; i++) strip(L,f->p[i]);
 }

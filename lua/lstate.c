@@ -1,5 +1,5 @@
 /*
-** $Id: lstate.c,v 1.117 2002/12/04 17:38:31 roberto Exp $
+** $Id: lstate.c,v 1.123 2003/04/03 13:35:34 roberto Exp $
 ** Global State
 ** See Copyright Notice in lua.h
 */
@@ -100,21 +100,21 @@ static void f_luaopen (lua_State *L, void *ud) {
   setnilvalue(defaultmeta(L));
   setnilvalue(registry(L));
   luaZ_initbuffer(L, &g->buff);
-  g->panic = &default_panic;
+  g->panic = default_panic;
   g->rootgc = NULL;
   g->rootudata = NULL;
   g->tmudata = NULL;
-  setnilvalue(key(g->dummynode));
-  setnilvalue(val(g->dummynode));
+  setnilvalue(gkey(g->dummynode));
+  setnilvalue(gval(g->dummynode));
   g->dummynode->next = NULL;
   g->nblocks = sizeof(lua_State) + sizeof(global_State);
   stack_init(L, L);  /* init stack */
   /* create default meta table with a dummy table, and then close the loop */
   defaultmeta(L)->tt = LUA_TTABLE;
-  sethvalue(defaultmeta(L), luaH_new(L, 0, 4));
+  sethvalue(defaultmeta(L), luaH_new(L, 0, 0));
   hvalue(defaultmeta(L))->metatable = hvalue(defaultmeta(L));
   sethvalue(gt(L), luaH_new(L, 0, 4));  /* table of globals */
-  sethvalue(registry(L), luaH_new(L, 0, 0));  /* registry */
+  sethvalue(registry(L), luaH_new(L, 4, 4));  /* registry */
   luaS_resize(L, MINSTRTABSIZE);  /* initial size of string table */
   luaT_init(L);
   luaX_init(L);
@@ -182,6 +182,8 @@ LUA_API lua_State *lua_open (void) {
   lua_State *L = mallocstate(NULL);
   if (L) {  /* allocation OK? */
     L->tt = LUA_TTHREAD;
+    L->marked = 0;
+    L->next = L->gclist = NULL;
     preinit_state(L);
     L->l_G = NULL;
     if (luaD_rawrunprotected(L, f_luaopen, NULL) != 0) {
@@ -195,10 +197,23 @@ LUA_API lua_State *lua_open (void) {
 }
 
 
+static void callallgcTM (lua_State *L, void *ud) {
+  UNUSED(ud);
+  luaC_callGCTM(L);  /* call GC metamethods for all udata */
+}
+
+
 LUA_API void lua_close (lua_State *L) {
   lua_lock(L);
   L = G(L)->mainthread;  /* only the main thread can be closed */
-  luaC_callallgcTM(L);  /* call GC tag methods for all udata */
+  luaF_close(L, L->stack);  /* close all upvalues for this thread */
+  luaC_separateudata(L);  /* separate udata that have GC metamethods */
+  L->errfunc = 0;  /* no error function during GC metamethods */
+  do {  /* repeat until no more errors */
+    L->ci = L->base_ci;
+    L->base = L->top = L->ci->base;
+    L->nCcalls = 0;
+  } while (luaD_rawrunprotected(L, callallgcTM, NULL) != 0);
   lua_assert(G(L)->tmudata == NULL);
   close_state(L);
 }

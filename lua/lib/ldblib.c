@@ -1,5 +1,5 @@
 /*
-** $Id: ldblib.c,v 1.75 2002/12/05 17:50:10 roberto Exp $
+** $Id: ldblib.c,v 1.80 2003/04/03 13:35:34 roberto Exp $
 ** Interface from Lua to its debug API
 ** See Copyright Notice in lua.h
 */
@@ -27,7 +27,7 @@ static void settabss (lua_State *L, const char *i, const char *v) {
 
 static void settabsi (lua_State *L, const char *i, int v) {
   lua_pushstring(L, i);
-  lua_pushnumber(L, v);
+  lua_pushnumber(L, (lua_Number)v);
   lua_rawset(L, -3);
 }
 
@@ -108,17 +108,43 @@ static int setlocal (lua_State *L) {
 }
 
 
+static int auxupvalue (lua_State *L, int get) {
+  const char *name;
+  int n = luaL_checkint(L, 2);
+  luaL_checktype(L, 1, LUA_TFUNCTION);
+  if (lua_iscfunction(L, 1)) return 0;  /* cannot touch C upvalues from Lua */
+  name = get ? lua_getupvalue(L, 1, n) : lua_setupvalue(L, 1, n);
+  if (name == NULL) return 0;
+  lua_pushstring(L, name);
+  lua_insert(L, -(get+1));
+  return get + 1;
+}
+
+
+static int getupvalue (lua_State *L) {
+  return auxupvalue(L, 1);
+}
+
+
+static int setupvalue (lua_State *L) {
+  luaL_checkany(L, 3);
+  return auxupvalue(L, 0);
+}
+
+
 
 static const char KEY_HOOK = 'h';
 
 
 static void hookf (lua_State *L, lua_Debug *ar) {
-  static const char *const hooknames[] = {"call", "return", "line", "count"};
+  static const char *const hooknames[] =
+    {"call", "return", "line", "count", "tail return"};
   lua_pushlightuserdata(L, (void *)&KEY_HOOK);
   lua_rawget(L, LUA_REGISTRYINDEX);
   if (lua_isfunction(L, -1)) {
     lua_pushstring(L, hooknames[(int)ar->event]);
-    if (ar->currentline >= 0) lua_pushnumber(L, ar->currentline);
+    if (ar->currentline >= 0)
+      lua_pushnumber(L, (lua_Number)ar->currentline);
     else lua_pushnil(L);
     lua_assert(lua_getinfo(L, "lS", ar));
     lua_call(L, 2, 0);
@@ -177,7 +203,7 @@ static int gethook (lua_State *L) {
     lua_rawget(L, LUA_REGISTRYINDEX);   /* get hook */
   }
   lua_pushstring(L, unmakemask(mask, buff));
-  lua_pushnumber(L, lua_gethookcount(L));
+  lua_pushnumber(L, (lua_Number)lua_gethookcount(L));
   return 3;
 }
 
@@ -235,8 +261,8 @@ static int errorfb (lua_State *L) {
       default: {
         if (*ar.what == 'm')  /* main? */
           lua_pushfstring(L, " in main chunk");
-        else if (*ar.what == 'C')  /* C function? */
-          lua_pushfstring(L, "%s", ar.short_src);
+        else if (*ar.what == 'C' || *ar.what == 't')
+          lua_pushliteral(L, " ?");  /* C function or tail call */
         else
           lua_pushfstring(L, " in function <%s:%d>",
                              ar.short_src, ar.linedefined);
@@ -253,19 +279,21 @@ static const luaL_reg dblib[] = {
   {"getlocal", getlocal},
   {"getinfo", getinfo},
   {"gethook", gethook},
+  {"getupvalue", getupvalue},
   {"sethook", sethook},
   {"setlocal", setlocal},
+  {"setupvalue", setupvalue},
   {"debug", debug},
   {"traceback", errorfb},
   {NULL, NULL}
 };
 
 
-LUALIB_API int lua_dblibopen (lua_State *L) {
+LUALIB_API int luaopen_debug (lua_State *L) {
   luaL_openlib(L, LUA_DBLIBNAME, dblib, 0);
   lua_pushliteral(L, "_TRACEBACK");
   lua_pushcfunction(L, errorfb);
   lua_settable(L, LUA_GLOBALSINDEX);
-  return 0;
+  return 1;
 }
 

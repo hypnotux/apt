@@ -1,5 +1,5 @@
 /*
-** $Id: lua.h,v 1.169 2002/12/04 17:28:27 roberto Exp $
+** $Id: lua.h,v 1.175 2003/03/18 12:31:39 roberto Exp $
 ** Lua - An Extensible Extension Language
 ** Tecgraf: Computer Graphics Technology Group, PUC-Rio, Brazil
 ** http://www.lua.org	mailto:info@lua.org
@@ -14,8 +14,8 @@
 #include <stddef.h>
 
 
-#define LUA_VERSION	"Lua 5.0 (beta)"
-#define LUA_COPYRIGHT	"Copyright (C) 1994-2002 Tecgraf, PUC-Rio"
+#define LUA_VERSION	"Lua 5.0"
+#define LUA_COPYRIGHT	"Copyright (C) 1994-2003 Tecgraf, PUC-Rio"
 #define LUA_AUTHORS 	"R. Ierusalimschy, L. H. de Figueiredo & W. Celes"
 
 
@@ -167,8 +167,9 @@ LUA_API void  lua_gettable (lua_State *L, int idx);
 LUA_API void  lua_rawget (lua_State *L, int idx);
 LUA_API void  lua_rawgeti (lua_State *L, int idx, int n);
 LUA_API void  lua_newtable (lua_State *L);
+LUA_API void *lua_newuserdata (lua_State *L, size_t sz);
 LUA_API int   lua_getmetatable (lua_State *L, int objindex);
-LUA_API void  lua_getglobals (lua_State *L, int idx);
+LUA_API void  lua_getfenv (lua_State *L, int idx);
 
 
 /*
@@ -178,7 +179,7 @@ LUA_API void  lua_settable (lua_State *L, int idx);
 LUA_API void  lua_rawset (lua_State *L, int idx);
 LUA_API void  lua_rawseti (lua_State *L, int idx, int n);
 LUA_API int   lua_setmetatable (lua_State *L, int objindex);
-LUA_API int   lua_setglobals (lua_State *L, int idx);
+LUA_API int   lua_setfenv (lua_State *L, int idx);
 
 
 /*
@@ -217,8 +218,6 @@ LUA_API int   lua_error (lua_State *L);
 LUA_API int   lua_next (lua_State *L, int idx);
 
 LUA_API void  lua_concat (lua_State *L, int n);
-
-LUA_API void *lua_newuserdata (lua_State *L, size_t sz);
 
 
 
@@ -317,6 +316,7 @@ LUA_API int lua_pushupvalues (lua_State *L);
 #define LUA_HOOKRET	1
 #define LUA_HOOKLINE	2
 #define LUA_HOOKCOUNT	3
+#define LUA_HOOKTAILRET 4
 
 
 /*
@@ -336,6 +336,8 @@ LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar);
 LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar);
 LUA_API const char *lua_getlocal (lua_State *L, const lua_Debug *ar, int n);
 LUA_API const char *lua_setlocal (lua_State *L, const lua_Debug *ar, int n);
+LUA_API const char *lua_getupvalue (lua_State *L, int funcindex, int n);
+LUA_API const char *lua_setupvalue (lua_State *L, int funcindex, int n);
 
 LUA_API int lua_sethook (lua_State *L, lua_Hook func, int mask, int count);
 LUA_API lua_Hook lua_gethook (lua_State *L);
@@ -349,7 +351,7 @@ struct lua_Debug {
   int event;
   const char *name;	/* (n) */
   const char *namewhat;	/* (n) `global', `local', `field', `method' */
-  const char *what;	/* (S) `Lua' function, `C' function, Lua `main' */
+  const char *what;	/* (S) `Lua', `C', `main', `tail' */
   const char *source;	/* (S) */
   int currentline;	/* (l) */
   int nups;		/* (u) number of upvalues */
@@ -363,7 +365,7 @@ struct lua_Debug {
 
 
 /******************************************************************************
-* Copyright (C) 2002 Tecgraf, PUC-Rio.  All rights reserved.
+* Copyright (C) 1994-2003 Tecgraf, PUC-Rio.  All rights reserved.
 *
 * Permission is hereby granted, free of charge, to any person obtaining
 * a copy of this software and associated documentation files (the

@@ -22,6 +22,7 @@ liblua_la_SOURCES = \
 		lib/ldblib.c \
 		lib/liolib.c \
 		lib/lmathlib.c \
+		lib/loadlib.c \
 		lib/lstrlib.c \
 		lib/ltablib.c \
 		lapi.c \
