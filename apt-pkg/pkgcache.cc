@@ -52,9 +52,13 @@ pkgCache::Header::Header()
    
    /* Whenever the structures change the major version should be bumped,
       whenever the generator changes the minor version should be bumped. */
-   MajorVersion = 4;
+   // CNC:2003-03-18
+   MajorVersion = 5;
    MinorVersion = 0;
    Dirty = false;
+
+   // CNC:2003-03-18
+   HasFileDeps = false;
    
    HeaderSz = sizeof(pkgCache::Header);
    PackageSz = sizeof(pkgCache::Package);

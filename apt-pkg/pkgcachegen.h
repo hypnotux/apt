@@ -74,6 +74,9 @@ class pkgCacheGenerator
 
    bool HasFileDeps() {return FoundFileDeps;};
    bool MergeFileProvides(ListParser &List);
+
+   // CNC:2003-03-18
+   inline void ResetFileDeps() {FoundFileDeps = false;};
       
    pkgCacheGenerator(DynamicMMap *Map,OpProgress *Progress);
    ~pkgCacheGenerator();

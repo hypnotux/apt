@@ -519,9 +519,21 @@ bool rpmListParser::CollectFileProvides(pkgCache &Cache,
 		     NULL, (void **) &names, &count);
    while (count--) 
    {
-      pkgCache::Package *P = Cache.FindPackage(names[count]);
-      if (P != NULL && !NewProvides(Ver, names[count], ""))
-	 return false;
+      const char *FileName = names[count];
+      pkgCache::Package *P = Cache.FindPackage(FileName);
+      if (P != NULL) {
+	 // Check if this is already provided.
+	 bool Found = false;
+	 for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
+	      Prv.end() == false; Prv++) {
+	    if (strcmp(Prv.Name(), FileName) == 0) {
+	       Found = true;
+	       break;
+	    }
+	 }
+	 if (Found == false && NewProvides(Ver, FileName, "") == false)
+	    return false;
+      }
    }
 
    return true;

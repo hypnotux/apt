@@ -167,6 +167,9 @@ struct pkgCache::Header
    short MajorVersion;
    short MinorVersion;
    bool Dirty;
+
+   // CNC:2003-03-18
+   bool HasFileDeps;
    
    // Size of structure values
    unsigned short HeaderSz;

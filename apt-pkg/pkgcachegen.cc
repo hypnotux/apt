@@ -724,27 +724,21 @@ static bool BuildCache(pkgCacheGenerator &Gen,
 // ---------------------------------------------------------------------
 /* */
 static bool CollectFileProvides(pkgCacheGenerator &Gen,
-			        OpProgress &Progress,
+				OpProgress &Progress,
+				unsigned long &CurrentSize,unsigned long TotalSize,
 			        FileIterator Start, FileIterator End)
 {
-   FileIterator I;
-   if (Gen.HasFileDeps() == true)
+   for (FileIterator I = Start; I != End; I++)
    {
-      Progress.Done();
-      unsigned long TotalSize = ComputeSize(Start, End);
-      unsigned long CurrentSize = 0;
-      for (I = Start; I != End; I++)
-      {
-	 if ((*I)->HasPackages() == false || (*I)->Exists() == false)
-	    continue;
+      if ((*I)->HasPackages() == false || (*I)->Exists() == false)
+	 continue;
 
-	 unsigned long Size = (*I)->Size();
-	 Progress.OverallProgress(CurrentSize,TotalSize,Size,_("Collecting File Provides"));
-	 CurrentSize += Size;
-	 if ((*I)->MergeFileProvides(Gen,Progress) == false)
-	    return false;
-      }
-      Progress.Done();
+      unsigned long Size = (*I)->Size();
+      Progress.OverallProgress(CurrentSize,TotalSize,Size,_("Reading Package Lists"));
+      CurrentSize += Size;
+
+      if ((*I)->MergeFileProvides(Gen,Progress) == false)
+	 return false;
    }
    return true;
 }
@@ -831,6 +825,12 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 	 return false;
 
       TotalSize = ComputeSize(Files.begin()+EndOfSource,Files.end());
+
+      // CNC:2003-03-18
+      // For the file provides collection phase.
+      unsigned long SrcSize = ComputeSize(Files.begin(),
+					  Files.begin()+EndOfSource);
+      TotalSize = TotalSize+(TotalSize+SrcSize);
       
       // Build the status cache
       pkgCacheGenerator Gen(Map.Get(),&Progress);
@@ -840,16 +840,31 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 		     Files.begin()+EndOfSource,Files.end()) == false)
 	 return false;
 
-      // CNC:2003-03-03
-      // Collect file provides over *all* files (sources + database), since
-      // the cache is saved without them.
-      if (CollectFileProvides(Gen,Progress,
-			      Files.begin(),Files.end()) == false)
-	 return false;
+      // CNC:2003-03-18
+      if (Gen.HasFileDeps() == true) {
+	 // There are new file dependencies. Collect over all packages.
+	 Gen.GetCache().HeaderP->HasFileDeps = true;
+	 if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+				 Files.begin(),Files.end()) == false)
+	    return false;
+      } else if (Gen.GetCache().HeaderP->HasFileDeps == true) {
+	 // Jump entries which are not going to be parsed.
+	 CurrentSize += SrcSize;
+	 // No new file dependencies. Collect over the new packages.
+	 if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+				 Files.begin()+EndOfSource,Files.end()) == false)
+	    return false;
+      }
    }
    else
    {
       TotalSize = ComputeSize(Files.begin(),Files.end());
+
+      // CNC:2003-03-18
+      // For the file provides collection phase.
+      unsigned long SrcSize = ComputeSize(Files.begin(),
+					  Files.begin()+EndOfSource);
+      TotalSize = (TotalSize*2)+SrcSize;
       
       // Build the source cache
       pkgCacheGenerator Gen(Map.Get(),&Progress);
@@ -858,6 +873,20 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
       if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
 		     Files.begin(),Files.begin()+EndOfSource) == false)
 	 return false;
+
+      // CNC:2003-03-18
+      if (Gen.HasFileDeps() == true) {
+	 // There are file dependencies. Collect over source packages.
+	 Gen.GetCache().HeaderP->HasFileDeps = true;
+	 if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+		     Files.begin(),Files.begin()+EndOfSource) == false)
+	    return false;
+	 // Reset to check for new file dependencies in the status cache.
+	 Gen.ResetFileDeps();
+      } else {
+	 // Jump entries which are not going to be parsed.
+	 CurrentSize += SrcSize;
+      }
       
       // Write it back
       // CNC:2003-03-03 - Notice that it is without the file provides. This
@@ -891,12 +920,21 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 		     Files.begin()+EndOfSource,Files.end()) == false)
 	 return false;
 
-      // CNC:2003-03-03
-      // Collect file provides over *all* files (sources + database), since
-      // the cache is saved without them.
-      if (CollectFileProvides(Gen,Progress,
-			      Files.begin(),Files.end()) == false)
-	 return false;
+      // CNC:2003-03-18
+      if (Gen.HasFileDeps() == true) {
+	 // There are new file dependencies. Collect over all packages.
+	 Gen.GetCache().HeaderP->HasFileDeps = true;
+	 if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+				 Files.begin(),Files.end()) == false)
+	    return false;
+      } else if (Gen.GetCache().HeaderP->HasFileDeps == true) {
+	 // Jump entries which are not going to be parsed.
+	 CurrentSize += SrcSize;
+	 // No new file dependencies. Collect over the new packages.
+	 if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+		     Files.begin()+EndOfSource,Files.end()) == false)
+	    return false;
+      }
    }
 
    if (_error->PendingError() == true)
@@ -938,6 +976,10 @@ bool pkgMakeOnlyStatusCache(OpProgress &Progress,DynamicMMap **OutMap)
    unsigned long TotalSize = 0;
    
    TotalSize = ComputeSize(Files.begin()+EndOfSource,Files.end());
+
+   // CNC:2003-03-18
+   // For the file provides collection phase.
+   TotalSize *= 2;
    
    // Build the status cache
    Progress.OverallProgress(0,1,1,_("Reading Package Lists"));
@@ -948,12 +990,12 @@ bool pkgMakeOnlyStatusCache(OpProgress &Progress,DynamicMMap **OutMap)
 		  Files.begin()+EndOfSource,Files.end()) == false)
       return false;
 
-   // CNC:2003-03-03
-   // Collect file provides over *all* files (sources + database), since
-   // the cache is saved without them.
-   if (CollectFileProvides(Gen,Progress,
-			   Files.begin(),Files.end()) == false)
-      return false;
+   // CNC:2003-03-18
+   if (Gen.HasFileDeps() == true) {
+      if (CollectFileProvides(Gen,Progress,CurrentSize,TotalSize,
+			      Files.begin()+EndOfSource,Files.end()) == false)
+	 return false;
+   }
    
    if (_error->PendingError() == true)
       return false;
