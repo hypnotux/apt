@@ -365,8 +365,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 #if RPM_VERSION >= 0x040100
    Handler = rpmtsCreate();
    rpmtsSetVSFlags(Handler, (rpmVSFlags_e)-1);
-   if (!Dir.empty())
-      rpmtsSetRootDir(Handler, Dir.c_str());
+   rpmtsSetRootDir(Handler, Dir.c_str());
    if (rpmtsOpenDB(Handler, WriteLock?O_RDWR:O_RDONLY) != 0)
    {
       _error->Error(_("could not open RPM database"));
