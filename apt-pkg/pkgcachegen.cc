@@ -913,6 +913,10 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 	 *OutMap = Map.UnGuard();
       }      
    }
+
+   // CNC:2003-03-07 - Signal to the system so that it can free it's
+   //		       internal caches, if any.
+   _system->CacheBuilt();
    
    return true;
 }
@@ -954,6 +958,11 @@ bool pkgMakeOnlyStatusCache(OpProgress &Progress,DynamicMMap **OutMap)
    if (_error->PendingError() == true)
       return false;
    *OutMap = Map.UnGuard();
+
+   // CNC:2003-03-07 - Signal to the system so that it can free it's
+   //		       internal caches, if any.
+   _system->CacheBuilt();
+   
    
    return true;
 }

@@ -71,6 +71,9 @@ class pkgSystem
 
    // CNC:2002-07-06
    virtual bool LockRead() {return true;};
+
+   // CNC:2003-03-07 - Signal to system that the cache has been built.
+   virtual void CacheBuilt() {};
    
    /* Various helper classes to interface with specific bits of this
       environment */

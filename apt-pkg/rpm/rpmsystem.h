@@ -64,6 +64,7 @@ class rpmSystem : public pkgSystem
 			  pkgIndexFile *&Found) const;
    virtual bool ProcessCache(pkgDepCache &Cache,pkgProblemResolver &Fix);
    virtual bool IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep);
+   virtual void CacheBuilt();
 
    rpmSystem();
    virtual ~rpmSystem();

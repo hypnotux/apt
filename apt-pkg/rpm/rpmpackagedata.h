@@ -111,18 +111,22 @@ class RPMPackageData
 
    void SetVersion(string ID, unsigned long Offset,
 		   pkgCache::VerIterator &Version)
-        {VerMap[Offset][ID] = Version;};
+   {
+      VerMap[Offset][ID] = Version;
+   };
    const pkgCache::VerIterator *GetVersion(string ID, unsigned long Offset)
-        {
-		VerMapType::const_iterator I1 = VerMap.find(Offset);
-		if (I1 != VerMap.end()) {
-			VerMapValueType::const_iterator I2 =
-				I1->second.find(ID);
-			if (I2 != I1->second.end())
-				return &I2->second;
-		}
-		return NULL;
-	};
+   {
+       VerMapType::const_iterator I1 = VerMap.find(Offset);
+       if (I1 != VerMap.end()) {
+	       VerMapValueType::const_iterator I2 =
+		       I1->second.find(ID);
+	       if (I2 != I1->second.end())
+		       return &I2->second;
+       }
+       return NULL;
+   };
+
+   void CacheBuilt() {VerMap.clear();};
 
    RPMPackageData();
 };

@@ -428,6 +428,16 @@ bool rpmSystem::IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep)
    return rpmdata->IgnoreDep(VS,Dep);
 }
 									/*}}}*/
+
+// System::CacheBuilt - free caches used during cache build		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+void rpmSystem::CacheBuilt()
+{
+   RPMPackageData *rpmdata = RPMPackageData::Singleton();
+   rpmdata->CacheBuilt();
+}
+									/*}}}*/
 #endif /* HAVE_RPM */
 
 // vim:sts=3:sw=3
