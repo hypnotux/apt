@@ -1607,7 +1607,7 @@ msgstr "Lendo Listas de Pacotes"
 
 #: apt-pkg/pkgcachegen.cc:685
 msgid "Collecting File Provides"
-msgstr "Coletando Provimento de Arquivos"
+msgstr "Coletando Provedores de Arquivos"
 
 #: apt-pkg/pkgcachegen.cc:728
 msgid "Unable to write to %s"
