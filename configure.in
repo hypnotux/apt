@@ -27,7 +27,7 @@ dnl Check the archs, we want the target type.
 AC_CANONICAL_SYSTEM
 
 dnl CNC:2002-07-08
-AM_INIT_AUTOMAKE("apt", "0.5.5cnc3")
+AM_INIT_AUTOMAKE("apt", "0.5.5cnc4")
 
 dnl Check our C compiler
 AC_CHECK_TOOL_PREFIX

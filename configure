@@ -1644,7 +1644,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE="apt"
- VERSION="0.5.5cnc3"
+ VERSION="0.5.5cnc4"
 
 
 cat >>confdefs.h <<_ACEOF
