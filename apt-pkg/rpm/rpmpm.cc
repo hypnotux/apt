@@ -230,6 +230,8 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
    
    Args[n++] = _config->Find("Dir::Bin::rpm","rpm").c_str();
 
+   bool nodeps;
+
    switch (op)
    {
       case Item::RPMInstall:
@@ -237,6 +239,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 	    operation = "-ivh";
 	 else
 	    operation = "-iv";
+	 nodeps = true;
 	 break;
 
       case Item::RPMUpgrade:
@@ -248,6 +251,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 
       case Item::RPMErase:
 	 operation = "-e";
+	 nodeps = true;
 	 break;
    }
    Args[n++] = operation;
@@ -265,7 +269,6 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
    Configuration::Item const *Opts;
    if (op == Item::RPMErase)
    {
-      bool nodeps = true;
       Opts = _config->Tree("RPM::Erase-Options");
       if (Opts != 0)
       {
@@ -279,8 +282,6 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 	    Args[n++] = Opts->Value.c_str();
 	 }
       }
-      if (nodeps == true)
-	 Args[n++] = "--nodeps";
    }
    else
    {
@@ -299,6 +300,8 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 	       replacepkgs = false;
 	    else if (Opts->Value == "--replacefiles")
 	       replacefiles = false;
+	    else if (Opts->Value == "--nodeps")
+	       nodeps = false;
 	    else if (Opts->Value.empty() == true)
 	       continue;
 	    Args[n++] = Opts->Value.c_str();
@@ -311,6 +314,9 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
       if (replacefiles == true)
 	 Args[n++] = "--replacefiles";
    }
+
+   if (nodeps == true)
+      Args[n++] = "--nodeps";
 
    Opts = _config->Tree("RPM::Options");
    if (Opts != 0)
