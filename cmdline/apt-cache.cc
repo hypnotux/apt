@@ -1468,7 +1468,8 @@ bool ShowHelp(CommandLine &Cmd)
    
    cout << 
     _("Usage: apt-cache [options] command\n"
-      "       apt-cache [options] add file1 [file1 ...]\n"
+// CNC:2003-02-20 - Use file2, not file1 twice.
+      "       apt-cache [options] add file1 [file2 ...]\n"
       "       apt-cache [options] showpkg pkg1 [pkg2 ...]\n"
       "       apt-cache [options] showsrc pkg1 [pkg2 ...]\n"
       "\n"

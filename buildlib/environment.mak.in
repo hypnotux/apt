@@ -39,7 +39,9 @@ DOCBOOK2MAN := @DOCBOOK2MAN@
 GMSGFMT = @GMSGFMT@
 XGETTEXT = @XGETTEXT@
 MSGCOMM:=$(dir $(XGETTEXT))/msgcomm
-MSGMERGE:=$(dir $(XGETTEXT))/msgmerge
+# CNC:2002-02-19
+#MSGMERGE:=$(dir $(XGETTEXT))/msgmerge
+MSGMERGE = @MSGMERGE@
 BASH = @BASH@
 
 # Various library checks

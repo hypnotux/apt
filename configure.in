@@ -221,7 +221,6 @@ dnl It used to be that the user could select translations and that could get
 dnl passed to the makefiles, but now that can only work if you use special
 dnl gettext approved makefiles, so this feature is unsupported by this.
 dnl CNC:2002-10-22
-ALL_LINGUAS="de_DE es_ES it_IT pt_BR ru"
 AM_GNU_GETTEXT(external)
 if test x"$USE_NLS" = "xyes"; then
    AC_DEFINE(USE_NLS)

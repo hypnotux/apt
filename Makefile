@@ -19,8 +19,8 @@ all headers library clean veryclean binary program doc dirs:
 	#$(MAKE) -C ftparchive $@
 	#$(MAKE) -C dselect $@
 	$(MAKE) -C doc $@
-	$(MAKE) -C po $@
 	$(MAKE) -C tools $@
+	$(MAKE) -C po $@
 
 # Some very common aliases
 .PHONY: maintainer-clean dist-clean distclean pristine sanity 

@@ -74,4 +74,13 @@ ifneq ($(words $(The_DFiles)),0)
 include $(The_DFiles)
 endif
 
+update-po: $(PACKAGE)-all.pot
+	for lang in $(LINGUAS); do \
+		echo "Updating $$lang.po"; \
+		$(MSGMERGE) $$lang.po $(PACKAGE)-all.pot -o $$lang.new.po; \
+		cmp $$lang.new.po $$lang.po || cp $$lang.new.po $$lang.po; \
+		rm -f $$lang.new.po; \
+	done
+
+.PHONY: update-po
 .NOTPARALLEL:

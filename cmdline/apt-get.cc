@@ -807,7 +807,7 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
 			      OutputDir.c_str());
       // CNC:2002-07-11
       if (unsigned(Buf.f_bavail) < (FetchBytes - FetchPBytes)/Buf.f_bsize)
-	 return _error->Error(_("Sorry, you don't have enough free space in %s to hold all packages."),
+	 return _error->Error(_("You don't have enough free space in %s."),
 			      OutputDir.c_str());
    }
    
@@ -1836,7 +1836,7 @@ bool DoSource(CommandLine &CmdL)
 			   OutputDir.c_str());
    // CNC:2002-07-12
    if (unsigned(Buf.f_bavail) < (FetchBytes - FetchPBytes)/Buf.f_bsize)
-      return _error->Error(_("Sorry, you don't have enough free space in %s"),
+      return _error->Error(_("You don't have enough free space in %s"),
 			   OutputDir.c_str());
    
    // Number of bytes
@@ -2242,7 +2242,8 @@ bool ShowHelp(CommandLine &CmdL)
       "Commands:\n"
       "   update - Retrieve new lists of packages\n"
       "   upgrade - Perform an upgrade\n"
-      "   install - Install new packages (pkg is libc6 not libc6.deb)\n"
+// CNC:2003-02-20 - Use .rpm extension in documentation.
+      "   install - Install new packages (pkg is libc6 not libc6.rpm)\n"
       "   remove - Remove packages\n"
       "   source - Download source archives\n"
       "   build-dep - Configure build-dependencies for source packages\n"

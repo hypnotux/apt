@@ -80,7 +80,7 @@ RPMPackageData::RPMPackageData()
       regex_t *ptrn = new regex_t;
       if (regcomp(ptrn,Top->Value.c_str(),REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0)
       {
-	 _error->Warning(_("Bad regular expression '%s' in option RPM::HoldPackages."),
+	 _error->Warning(_("Bad regular expression '%s' in option RPM::Hold."),
 			 Top->Value.c_str());
 	 delete ptrn;
       }
