@@ -23,6 +23,7 @@
 #include <fstream>
 
 // CNC:2003-03-03 - This is needed for ReadDir stuff.
+#include <algorithm>
 #include <stdio.h>
 #include <dirent.h>
 #include <sys/stat.h>
