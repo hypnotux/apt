@@ -994,7 +994,7 @@ msgstr "Impossível aceitar conexão"
 
 #: methods/ftp.cc:862 methods/http.cc:916 methods/rsh.cc:303
 msgid "Problem hashing file"
-msgstr "Problema ao abrir %s"
+msgstr "Problema criando hash do arquivo"
 
 #: methods/ftp.cc:875
 msgid "Unable to fetch file, server said '%s'"
@@ -1727,7 +1727,7 @@ msgstr "Problema em MergeList %s"
 
 #: apt-pkg/rpm/rpmindexfile.cc:509 apt-pkg/rpm/rpmindexfile.cc:538
 msgid "Problem opening RPM database"
-msgstr "Problema ao abrir %s"
+msgstr "Problema ao abrir a base de dados do RPM"
 
 #: apt-pkg/rpm/rpmindexfile.cc:513
 msgid "Problem with SelectFile RPM Database"

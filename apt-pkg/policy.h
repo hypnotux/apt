@@ -41,9 +41,6 @@
 #include <apt-pkg/versionmatch.h>
 #include <vector>
 
-// CNC:2002-03-17 - See IsImportantDep() below.
-#include <apt-pkg/error.h>
-
 using std::vector;
 
 class pkgPolicy : public pkgDepCache::Policy
@@ -84,17 +81,9 @@ class pkgPolicy : public pkgDepCache::Policy
    virtual pkgCache::VerIterator GetCandidateVer(pkgCache::PkgIterator Pkg);
    // CNC:2002-03-17 - Every place that uses this function seems to
    //		       currently check for IsCritical() as well. Since
-   //		       this is a virtual (heavy) function, we'll disable
-   //		       IsImportantDep() while it's not used.
-#if 0
+   //		       this is a virtual (heavy) function, we'll try
+   //		       not to use it while not necessary.
    virtual bool IsImportantDep(pkgCache::DepIterator Dep) {return pkgDepCache::Policy::IsImportantDep(Dep);};
-#else
-   // When going back to the code above, remove the header at the top.
-   virtual bool IsImportantDep(pkgCache::DepIterator Dep)
-       {_error->Error("IsImportantDep() was called! "
-		      "Report to the maintainer.");
-	return pkgDepCache::Policy::IsImportantDep(Dep);};
-#endif
    bool InitDefaults();
    
    pkgPolicy(pkgCache *Owner);

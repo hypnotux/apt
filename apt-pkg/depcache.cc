@@ -1005,9 +1005,8 @@ bool pkgDepCache::Policy::IsImportantDep(DepIterator Dep)
 {
    // CNC:2002-03-17 - Every place that uses this function seems to
    //		       currently check for IsCritical() as well. Since
-   //		       this is a virtual (heavy) function, we'll disable
-   //		       IsImportantDep() while it's not used.
-   _error->Error("IsImportantDep() was called! Report to the maintainer.");
+   //		       this is a virtual (heavy) function, we'll try
+   //		       not to use it while not necessary.
    return Dep.IsCritical();
 }
 									/*}}}*/

@@ -240,8 +240,16 @@ void ShowBroken(ostream &out,CacheFile &Cache,bool Now)
 	 pkgCache::DepIterator End;
 	 D.GlobOr(Start,End);
 
+         // CNC:2003-02-22 - IsImportantDep() currently calls IsCritical(), so
+         //		     these two are currently doing the same thing. Check
+         //		     comments in IsImportantDep() definition.
+#if 0
 	 if (Cache->IsImportantDep(End) == false)
 	    continue;
+#else
+	 if (End.IsCritical() == false)
+	    continue;
+#endif
 	 
 	 if (Now == true)
 	 {
