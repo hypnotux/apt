@@ -112,8 +112,14 @@ int rpmVersioningSystem::DoCmpVersion(const char *A,const char *AEnd,
    if (rc == 0)
    {
       rc = rpmvercmp(AV, BV);
-      if (rc == 0)
-	 rc = rpmvercmp(AR, BR);
+      if (rc == 0) {
+	  if (AR && !BR)
+	      rc = 1;
+	  else if (!AR && BR)
+	      rc = -1;
+	  else if (AR && BR)
+	      rc = rpmvercmp(AR, BR);
+      }
    }
    free(AE);free(AV);free(AR);;
    return rc;
