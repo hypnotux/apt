@@ -428,6 +428,10 @@ bool pkgSourceList::ReadSourceDir(string Dir)
    {
       if (Ent->d_name[0] == '.')
 	 continue;
+
+      // CNC:2003-12-02 Only accept .list files as valid sourceparts
+      if (flExtension(Ent->d_name) != "list")
+	 continue;
       
       // Skip bad file names ala run-parts
       const char *C = Ent->d_name;

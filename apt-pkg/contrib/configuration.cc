@@ -740,6 +740,11 @@ bool ReadConfigDir(Configuration &Conf,string Dir,bool AsSectional,
    {
       if (Ent->d_name[0] == '.')
 	 continue;
+
+      // CNC:2003-12-02 Only accept .list & .conf files as valid config parts
+      if ((flExtension(Ent->d_name) != "list") && 
+	  (flExtension(Ent->d_name) != "conf"))
+	 continue;
       
       // Skip bad file names ala run-parts
       const char *C = Ent->d_name;
