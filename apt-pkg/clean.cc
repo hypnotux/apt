@@ -82,8 +82,11 @@ bool pkgArchiveCleaner::Go(string Dir,pkgCache &Cache)
 	 continue;
       string Arch = DeQuoteString(string(Start,I-Start));
       
+// CNC:2004-04-19
+#if 0
       if (Arch != "all" && Arch != MyArch)
 	 continue;
+#endif
       
       // Lookup the package
       pkgCache::PkgIterator P = Cache.FindPkg(Pkg);
