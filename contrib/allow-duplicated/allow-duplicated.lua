@@ -62,12 +62,12 @@ if script_slot == "Scripts::AptGet::DistUpgrade" or
 
     -- Compile expressions with package names which should
     -- be considered for upgrade.
-    local exprlist = confgetlist("RPM::Allow-Duplicated-Upgrade")
-    for i, expr in ipairs(exprlist) do
-        exprlist[i] = rex.new(expr)
+    local updatelist = confgetlist("RPM::Allow-Duplicated-Upgrade")
+    for i, expr in ipairs(updatelist) do
+        updatelist[i] = rex.new(expr)
     end
 
-    if table.getn(exprlist) ~= 0 then
+    if table.getn(updatelist) ~= 0 then
 
         -- Gather information about Allow-Duplicated packges.
         local canddups = {}
@@ -91,13 +91,28 @@ if script_slot == "Scripts::AptGet::DistUpgrade" or
             end
         end
 
-        -- Remove packages without any matches in exprlist.
+        -- Compile expressions with package names which should be hold.
+        local holdlist = confgetlist("RPM::Hold")
+        for i, expr in ipairs(holdlist) do
+            holdlist[i] = rex.new(expr)
+        end
+
+        -- Remove packages without any matches in updatelist, or with
+        -- any matches in holdlist.
         for name, _ in pairs(curdups) do
             local found = false
-            for i, expr in ipairs(exprlist) do
+            for i, expr in ipairs(updatelist) do
                 if expr:match(name) then
                     found = true
                     break
+                end
+            end
+            if found then
+                for i, expr in ipairs(holdlist) do
+                    if expr:match(name) then
+                        found = false
+                        break
+                    end
                 end
             end
             if not found then
