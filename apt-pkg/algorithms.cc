@@ -419,7 +419,8 @@ bool pkgDistUpgrade(pkgDepCache &Cache)
    if (_config->FindB("APT::Remove-Depends",false) == true)
       Fix.RemoveDepends();
    
-   return Fix.Resolve();
+   // CNC:2003-03-22
+   return Fix.Resolve(true);
 }
 									/*}}}*/
 // AllUpgrade - Upgrade as many packages as possible			/*{{{*/
@@ -637,9 +638,23 @@ void pkgProblemResolver::MakeScores()
    installable */
 bool pkgProblemResolver::DoUpgrade(pkgCache::PkgIterator Pkg)
 {
-   if ((Flags[Pkg->ID] & Upgradable) == 0 || Cache[Pkg].Upgradable() == false)
-      return false;
+   // CNC:2003-03-22
    if ((Flags[Pkg->ID] & Protected) == Protected)
+      return false;
+   for (pkgCache::DepIterator D = Pkg.RevDependsList(); D.end() == false; D++)
+   {
+      if (D->Type == pkgCache::Dep::Obsoletes &&
+	  Cache[D.ParentPkg()].CandidateVer != 0 &&
+	  Cache[D.ParentPkg()].CandidateVerIter(Cache).Downloadable() == true &&
+	  (pkgCache::Version*)D.ParentVer() == Cache[D.ParentPkg()].CandidateVer &&
+	  Cache.VS().CheckDep(Pkg.CurrentVer().VerStr(), D) == true &&
+	  Cache.GetPkgPriority(D.ParentPkg()) >= Cache.GetPkgPriority(Pkg))
+      {
+	 Pkg = D.ParentPkg();
+	 break;
+      }
+   }
+   if ((Flags[Pkg->ID] & Upgradable) == 0 || Cache[Pkg].Upgradable() == false)
       return false;
    
    Flags[Pkg->ID] &= ~Upgradable;
@@ -1029,6 +1044,21 @@ bool pkgProblemResolver::Resolve(bool BrokenFix)
 		  if ((Flags[Pkg->ID] & Protected) != 0)
 		     continue;
 		
+		  // CNC:2003-03-22
+		  pkgDepCache::State State(&Cache);
+		  if (BrokenFix == true && DoUpgrade(Pkg) == true)
+		  {
+		     if (Cache[I].InstBroken() == false &&
+			 State.BrokenCount() >= Cache.BrokenCount())
+		     {
+			if (Debug == true)
+			   clog << "  Installing " << Pkg.Name() << endl;
+			break;
+		     }
+		     else
+			State.Restore();
+		  }
+
 		  if (Debug == true)
 		     clog << "  Added " << Pkg.Name() << " to the remove list" << endl;
 		  
