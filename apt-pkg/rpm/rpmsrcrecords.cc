@@ -17,6 +17,7 @@
 
 #ifdef HAVE_RPM
 
+#include <assert.h>
 
 #include <apt-pkg/rpmsrcrecords.h>
 #include <apt-pkg/error.h>

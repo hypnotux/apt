@@ -35,6 +35,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <rpm/rpmlib.h>
+#include <assert.h>
 									/*}}}*/
 
 rpmSystem rpmSys;

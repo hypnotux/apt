@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <utime.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include <apt-pkg/error.h>
 #include <apt-pkg/configuration.h>

@@ -29,6 +29,7 @@
 #include <config.h>
 #include <apt-pkg/luaiface.h>
 #include <iostream>
+#include <assert.h>
 using namespace std;
 
 #include <apti18n.h>

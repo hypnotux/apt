@@ -26,6 +26,7 @@
 #include <rpm/misc.h>
 
 #include <stdlib.h>
+#include <assert.h>
 
 #ifdef HAVE_RPM41
 #include <rpm/rpmds.h>
