@@ -487,6 +487,23 @@ static int AptLua_confget(lua_State *L)
    return 1;
 }
 
+static int AptLua_confgetlist(lua_State *L)
+{
+   const char *key = luaL_checkstring(L, 1);
+   if (key == NULL)
+      return 0;
+   const Configuration::Item *Top = _config->Tree(key);
+   lua_newtable(L);
+   int i = 1;
+   for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next) {
+       if (Top->Value.empty() == true)
+          continue;
+       lua_pushstring(L, Top->Value.c_str());
+       lua_rawseti(L, -2, i++);
+   }
+   return 1;
+}
+
 static int AptLua_confset(lua_State *L)
 {
    const char *key = luaL_checkstring(L, 1);
@@ -909,6 +926,7 @@ static int AptLua_aptwarning(lua_State *L)
 
 static const luaL_reg aptlib[] = {
    {"confget",		AptLua_confget},
+   {"confgetlist",	AptLua_confgetlist},
    {"confset",		AptLua_confset},
    {"confexists",	AptLua_confexists},
    {"confclear",	AptLua_confclear},
