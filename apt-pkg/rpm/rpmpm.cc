@@ -954,6 +954,16 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    _config->Set("RPM::NoDeps", true);
 	 else if (Opts->Value == "--noorder")
 	    _config->Set("RPM::Order", false);
+	 else if (Opts->Value == "-v") {
+	    rpmIncreaseVerbosity();
+	 } else if (Opts->Value == "-vv") {
+	    rpmIncreaseVerbosity();
+	    rpmIncreaseVerbosity();
+	 } else if (Opts->Value == "-vvv") {
+	    rpmIncreaseVerbosity();
+	    rpmIncreaseVerbosity();
+	    rpmIncreaseVerbosity();
+	 }
 	 // TODO: --root, --relocate, --prefix, --excludepath etc...
 
       }
