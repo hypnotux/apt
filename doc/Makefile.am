@@ -37,6 +37,8 @@ EXTRA_DIST = \
 		fr/apt_preferences.5.fr.sgml \
 		fr/sources.list.5.fr.sgml
 
+CLEANFILES = manpage.links manpage.refs
+
 if COMPILE_MANPAGES
 man_MANS = $(STATIC_MANPAGES) $(SGML_MANPAGES)
 

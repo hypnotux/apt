@@ -3,10 +3,8 @@ cmdline/acqprogress.cc
 cmdline/apt-cache.cc
 cmdline/apt-cdrom.cc
 cmdline/apt-config.cc
-cmdline/apt-extracttemplates.cc
 cmdline/apt-get.cc
 cmdline/apt-shell.cc
-cmdline/apt-sortpkgs.cc
 cmdline/rpmindexcopy.cc
 
 apt-pkg/contrib/cdromutl.cc

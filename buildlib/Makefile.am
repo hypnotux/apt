@@ -9,7 +9,14 @@ EXTRA_DIST = \
 	     gettext.h \
 	     inttypes.h \
 	     statvfs.h \
-	     netdb.h
+	     netdb.h \
+	     tools.m4
+
+CLEANFILES  = $(top_builddir)/include/apti18n.h \
+              $(top_builddir)/include/inttypes.h \
+              $(top_builddir)/include/statvfs.h \
+              $(top_builddir)/include/netdb.h
+
 
 COPYHEADERS = copy-apti18n
 
@@ -28,16 +35,16 @@ copy-headers: $(COPYHEADERS)
 copy-apti18n:
 	@$(mkinstalldirs) $(top_builddir)/include
 	@echo "Copying gettext.h to $(top_builddir)/include/apti18n.h"
-	@cp -f -p gettext.h $(top_builddir)/include/apti18n.h
+	@cp -f -p $(srcdir)/gettext.h $(top_builddir)/include/apti18n.h
 	
 copy-inttypes:
 	@echo "Copying inttypes.h to $(top_builddir)/include/apti18n.h"
-	@cp -f -p inttypes.h.in $(top_builddir)/include/inttypes.h
+	@cp -f -p $(srcdir)/inttypes.h $(top_builddir)/include/inttypes.h
 
 copy-statvfs:
 	@echo "Copying statvfs.h to $(top_builddir)/include/apti18n.h"
-	@cp -f -p statvfs.h $(top_builddir)/include/statvfs.h
+	@cp -f -p $(srcdir)/statvfs.h $(top_builddir)/include/statvfs.h
 
 copy-netdb:
 	@echo "Copying netdb.h to $(top_builddir)/include/netdb.h"
-	@cp -f -p netdb.h $(top_builddir)/include/netdb.h
+	@cp -f -p $(srcdir)/netdb.h $(top_builddir)/include/netdb.h

@@ -16198,6 +16198,9 @@ echo "${ECHO_T}$LIBSTDCPP_VER" >&6
 
 
 
+          ac_config_commands="$ac_config_commands fixintl"
+
+
                                                                                                               ac_config_files="$ac_config_files Makefile buildlib/Makefile intl/Makefile lua/Makefile apt-pkg/Makefile methods/Makefile cmdline/Makefile tools/Makefile doc/Makefile m4/Makefile po/Makefile.in"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16823,6 +16826,7 @@ do
   "po/Makefile.in" ) CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
+  "fixintl" ) CONFIG_COMMANDS="$CONFIG_COMMANDS fixintl" ;;
   "include/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/config.h:buildlib/config.h.in" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -17696,6 +17700,12 @@ done
         ;;
       esac
     done ;;
+    fixintl )
+	sed -e 's,\.\./config.h,$(top_builddir)/include/config.h,g' \
+	    -e 's,^\(INCLUDES = .*\)$,\1 -I$(top_builddir)/include,g' \
+	    intl/Makefile > intl/Makefile.tmp
+	mv -f intl/Makefile{.tmp,}
+ ;;
   esac
 done
 _ACEOF

@@ -211,6 +211,8 @@ EXTRA_DIST = \
 		fr/sources.list.5.fr.sgml
 
 
+CLEANFILES = manpage.links manpage.refs
+
 @COMPILE_MANPAGES_TRUE@man_MANS = $(STATIC_MANPAGES) $(SGML_MANPAGES)
 subdir = doc
 mkinstalldirs = $(SHELL) $(top_srcdir)/buildlib/mkinstalldirs
@@ -388,6 +390,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)
