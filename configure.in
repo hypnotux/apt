@@ -4,7 +4,7 @@ AC_PREREQ(2.54)
 AC_INIT([apt],[0.5.5cnc4.1])
 dnl Check the archs, we want the target type.
 AC_CONFIG_AUX_DIR([buildlib])
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE([foreign subdir-objects dist-bzip2 1.7])
 
@@ -13,7 +13,6 @@ AC_CONFIG_HEADER([include/config.h:buildlib/config.h.in])
 AC_PROG_LIBTOOL
 
 dnl Check our C compiler
-AC_CHECK_TOOL_PREFIX
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_ISC_POSIX

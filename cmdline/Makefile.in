@@ -35,9 +35,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = @build@
 host_triplet = @host@
-target_triplet = @target@
 @COMPILE_APTSHELL_TRUE@am__append_1 = apt-shell
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
@@ -167,11 +165,7 @@ program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
-target = @target@
 target_alias = @target_alias@
-target_cpu = @target_cpu@
-target_os = @target_os@
-target_vendor = @target_vendor@
 
 bin_PROGRAMS = apt-get apt-cache apt-cdrom apt-config $(am__append_1)
 

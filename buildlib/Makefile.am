@@ -14,7 +14,7 @@ EXTRA_DIST = \
 
 CLEANFILES  = $(top_builddir)/include/apti18n.h \
               $(top_builddir)/include/inttypes.h \
-              $(top_builddir)/include/statvfs.h \
+              $(top_builddir)/include/sys/statvfs.h \
               $(top_builddir)/include/netdb.h
 
 
@@ -38,12 +38,13 @@ copy-apti18n:
 	@cp -f -p $(srcdir)/gettext.h $(top_builddir)/include/apti18n.h
 	
 copy-inttypes:
-	@echo "Copying inttypes.h to $(top_builddir)/include/apti18n.h"
+	@echo "Copying inttypes.h to $(top_builddir)/include/inttypes.h"
 	@cp -f -p $(srcdir)/inttypes.h $(top_builddir)/include/inttypes.h
 
 copy-statvfs:
-	@echo "Copying statvfs.h to $(top_builddir)/include/apti18n.h"
-	@cp -f -p $(srcdir)/statvfs.h $(top_builddir)/include/statvfs.h
+	@$(mkinstalldirs) $(top_builddir)/include/sys
+	@echo "Copying statvfs.h to $(top_builddir)/include/sys/statvfs.h"
+	@cp -f -p $(srcdir)/statvfs.h $(top_builddir)/include/sys/statvfs.h
 
 copy-netdb:
 	@echo "Copying netdb.h to $(top_builddir)/include/netdb.h"

@@ -35,9 +35,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = @build@
 host_triplet = @host@
-target_triplet = @target@
 @NEED_INTTYPES_H_TRUE@am__append_1 = copy-inttypes
 @NEED_STATVFS_H_TRUE@am__append_2 = copy-statvfs
 @NEED_NETDB_H_TRUE@am__append_3 = copy-netdb
@@ -169,11 +167,7 @@ program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
-target = @target@
 target_alias = @target_alias@
-target_cpu = @target_cpu@
-target_os = @target_os@
-target_vendor = @target_vendor@
 
 EXTRA_DIST = \
 	     archtable \
@@ -189,7 +183,7 @@ EXTRA_DIST = \
 
 CLEANFILES = $(top_builddir)/include/apti18n.h \
               $(top_builddir)/include/inttypes.h \
-              $(top_builddir)/include/statvfs.h \
+              $(top_builddir)/include/sys/statvfs.h \
               $(top_builddir)/include/netdb.h
 
 
@@ -353,12 +347,13 @@ copy-apti18n:
 	@cp -f -p $(srcdir)/gettext.h $(top_builddir)/include/apti18n.h
 
 copy-inttypes:
-	@echo "Copying inttypes.h to $(top_builddir)/include/apti18n.h"
+	@echo "Copying inttypes.h to $(top_builddir)/include/inttypes.h"
 	@cp -f -p $(srcdir)/inttypes.h $(top_builddir)/include/inttypes.h
 
 copy-statvfs:
-	@echo "Copying statvfs.h to $(top_builddir)/include/apti18n.h"
-	@cp -f -p $(srcdir)/statvfs.h $(top_builddir)/include/statvfs.h
+	@$(mkinstalldirs) $(top_builddir)/include/sys
+	@echo "Copying statvfs.h to $(top_builddir)/include/sys/statvfs.h"
+	@cp -f -p $(srcdir)/statvfs.h $(top_builddir)/include/sys/statvfs.h
 
 copy-netdb:
 	@echo "Copying netdb.h to $(top_builddir)/include/netdb.h"
