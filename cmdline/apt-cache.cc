@@ -1627,6 +1627,27 @@ bool ShowPackage(CommandLine &CmdL)
 
       ++found;
 
+      // CNC:2004-07-09
+      // If it's a virtual package, require user to select similarly to apt-get
+      if (Pkg.VersionList().end() == true and Pkg->ProvidesList != 0)
+      {
+         ioprintf(cout, _("Package %s is a virtual package provided by:\n"),
+                  Pkg.Name());
+         for (pkgCache::PrvIterator Prv = Pkg.ProvidesList();
+             Prv.end() == false; Prv++)
+         {
+	    pkgCache::VerIterator V = Plcy.GetCandidateVer(Prv.OwnerPkg());
+            if (V.end() == true)
+               continue;
+            if (V != Prv.OwnerVer())
+               continue;
+            cout << "  " << Prv.OwnerPkg().Name() << " " << V.VerStr() << endl;
+         }
+         cout << _("You should explicitly select one to show.") << endl;
+         _error->Error(_("Package %s is a virtual package with multiple providers."), Pkg.Name());
+         return false;
+      }
+
       // Find the proper version to use.
       if (_config->FindB("APT::Cache::AllVersions","true") == true)
       {
