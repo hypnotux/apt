@@ -67,8 +67,13 @@ if script_slot == "Scripts::PM::Pre" then
     table.foreach(upgrading, write)
     file:close()
 elseif script_slot == "Scripts::PM::Post" then
+    if transaction_success then
+        word = "succeeded"
+    else
+        word = "failed"
+    end
     file = io.open(filename, "a+")
-    file:write("Transaction finished at ", os.date(), "\n")
+    file:write("Transaction ", word, " at ", os.date(), "\n")
     file:close()
 end
 
