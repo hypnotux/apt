@@ -507,6 +507,8 @@ unsigned long rpmSrcDirIndex::Size() const
 string rpmSinglePkgIndex::ArchiveURI(string File) const
 {
    char *cwd = getcwd(NULL,0);
+   if (File[0] == '.' && File[1] == '/')
+      File = string(File, 2);
    string URI = "file://"+flCombine(cwd, File);
    free(cwd);
    return URI;
@@ -517,6 +519,8 @@ string rpmSinglePkgIndex::ArchiveURI(string File) const
 string rpmSingleSrcIndex::ArchiveURI(string File) const
 {
    char *cwd = getcwd(NULL,0);
+   if (File[0] == '.' && File[1] == '/')
+      File = string(File, 2);
    string URI = "file://"+flCombine(cwd, File);
    free(cwd);
    return URI;
