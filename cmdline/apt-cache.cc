@@ -565,7 +565,8 @@ bool Depends(CommandLine &CmdL)
 	    continue;
 	 }
 	 
-	 cout << Pkg.Name() << endl;
+	 // CNC:2003-03-03
+	 cout << Pkg.Name() << "-" << Ver.VerStr() << endl;
 	 
 	 for (pkgCache::DepIterator D = Ver.DependsList(); D.end() == false; D++)
 	 {
@@ -578,8 +579,12 @@ bool Depends(CommandLine &CmdL)
 	    pkgCache::PkgIterator Trg = D.TargetPkg();
 	    if (Trg->VersionList == 0)
 	       cout << D.DepType() << ": <" << Trg.Name() << ">" << endl;
-	    else
+	    // CNC:2003-03-03
+	    else if (D.TargetVer() == 0)
 	       cout << D.DepType() << ": " << Trg.Name() << endl;
+	    else
+	       cout << D.DepType() << ": " << Trg.Name()
+		    << " " << D.CompType() << " " << D.TargetVer() << endl;
 	    
 	    if (Recurse == true)
 	       Colours[D.TargetPkg()->ID]++;
@@ -593,7 +598,9 @@ bool Depends(CommandLine &CmdL)
 	       if (V != Cache.VerP + V.ParentPkg()->VersionList ||
 		   V->ParentPkg == D->Package)
 		  continue;
-	       cout << "    " << V.ParentPkg().Name() << endl;
+	       // CNC:2003-03-03
+	       cout << "    " << V.ParentPkg().Name()
+		    << "-" << V.VerStr() << endl;
 	       
 	       if (Recurse == true)
 		  Colours[D.ParentPkg()->ID]++;
@@ -643,7 +650,7 @@ bool WhatDepends(CommandLine &CmdL)
 	 if (Ver.end() == true)
 	    cout << '<' << Pkg.Name() << '>' << endl;
 	 else
-	    cout << Pkg.Name() << endl;
+	    cout << Pkg.Name() << "-" << Ver.VerStr() << endl;
 
 	 SPtrArray<unsigned> LocalColours = 
 		     new unsigned[Cache.Head().PackageCount];
@@ -659,19 +666,20 @@ bool WhatDepends(CommandLine &CmdL)
 	       continue;
 	    LocalColours[Parent->ID] = 1;
 	       
-	    if (Ver.end() == false &&
-	        Cache.VS->CheckDep(Ver.VerStr(),RD->CompareOp,RD.TargetVer()) == false)
+	    if (Ver.end() == false && RD.TargetVer() &&
+	        Cache.VS->CheckDep(Ver.VerStr(),RD) == false)
 	       continue;
-
-	    // Show the package
-	    cout << "  " << Parent.Name() << endl;
 
 	    if (Recurse == true && Colours[Parent->ID] == 0)
 	       Colours[Parent->ID] = 1;
 
 	    pkgCache::VerIterator ParentVer = Parent.VersionList();
 
-	    // Display all dependencies on that package that relate
+	    // Show the package
+	    cout << "  " << Parent.Name()
+		 << "-" << ParentVer.VerStr() << endl;
+
+	    // Display all dependencies from that package that relate
 	    // to the queried package.
 	    for (pkgCache::DepIterator D = ParentVer.DependsList();
 	         D.end() == false; D++)
@@ -681,8 +689,7 @@ bool WhatDepends(CommandLine &CmdL)
 	       // (a virtual package).
 	       if (D.TargetPkg() != Pkg ||
 	           Ver.end() == false &&
-		   Cache.VS->CheckDep(Ver.VerStr(),
-				      D->CompareOp,D.TargetVer()) == false) {
+		   Cache.VS->CheckDep(Ver.VerStr(),D) == false) {
 		  // Oops. Either it's not the same package, or the
 		  // version didn't match. Check virtual provides from
 		  // the queried package version and verify if this
@@ -691,9 +698,8 @@ bool WhatDepends(CommandLine &CmdL)
 		  for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
 		       Prv.end() == false; Prv++) {
 		     if (Prv.ParentPkg() == D.TargetPkg() &&
-			 Prv.ParentPkg()->VersionList == 0 ||
-			 Cache.VS->CheckDep(Prv.ProvideVersion(),
-					    D->CompareOp,D.TargetVer()) == false) {
+			 (Prv.ParentPkg()->VersionList == 0 ||
+			  Cache.VS->CheckDep(Prv.ProvideVersion(),D)==false)) {
 			Hit = true;
 			break;
 		     }
@@ -705,9 +711,16 @@ bool WhatDepends(CommandLine &CmdL)
 	       // Bingo!
 	       pkgCache::PkgIterator Trg = D.TargetPkg();
 	       if (Trg->VersionList == 0)
-		  cout << "    " << D.DepType() << ": <" << Trg.Name() << ">" << endl;
+		  cout << "    " << D.DepType()
+				 << ": <" << Trg.Name() << ">" << endl;
+	       else if (D.TargetVer() == 0)
+		  cout << "    " << D.DepType()
+				 << ": " << Trg.Name() << endl;
 	       else
-		  cout << "    " << D.DepType() << ": " << Trg.Name() << endl;
+		  cout << "    " << D.DepType()
+				 << ": " << Trg.Name()
+				 << " " << D.CompType() << " "
+				 << D.TargetVer() << endl;
 
 	       // Display all solutions
 	       SPtrArray<pkgCache::Version *> List = D.AllTargets();
@@ -718,7 +731,8 @@ bool WhatDepends(CommandLine &CmdL)
 		  if (V != Cache.VerP + V.ParentPkg()->VersionList ||
 		      V->ParentPkg == D->Package)
 		     continue;
-		  cout << "      " << V.ParentPkg().Name() << endl;
+		  cout << "      " << V.ParentPkg().Name()
+		       << "-" << V.VerStr() << endl;
 		  
 		  if (Recurse == true)
 		     Colours[D.ParentPkg()->ID]++;
@@ -744,16 +758,17 @@ bool WhatDepends(CommandLine &CmdL)
 	       LocalColours[Parent->ID] = 1;
 		  
 	       if (Ver.end() == false &&
-		   Cache.VS->CheckDep(Ver.VerStr(),RD->CompareOp,RD.TargetVer()) == false)
+		   Cache.VS->CheckDep(Ver.VerStr(),RD) == false)
 		  continue;
-
-	       // Show the package
-	       cout << "  " << Parent.Name() << endl;
 
 	       if (Recurse == true && Colours[Parent->ID] == 0)
 		  Colours[Parent->ID] = 1;
 
 	       pkgCache::VerIterator ParentVer = Parent.VersionList();
+
+	       // Show the package
+	       cout << "  " << Parent.Name()
+		    << "-" << ParentVer.VerStr() << endl;
 
 	       for (pkgCache::DepIterator D = ParentVer.DependsList();
 		    D.end() == false; D++)
@@ -763,8 +778,7 @@ bool WhatDepends(CommandLine &CmdL)
 		  // (a virtual package).
 		  if (D.TargetPkg() != RDPrv.ParentPkg() ||
 		      Ver.end() == false &&
-		      Cache.VS->CheckDep(Ver.VerStr(),
-					 D->CompareOp,D.TargetVer()) == false) {
+		      Cache.VS->CheckDep(Ver.VerStr(),D) == false) {
 		     // Oops. Either it's not the same package, or the
 		     // version didn't match. Check virtual provides from
 		     // the queried package version and verify if this
@@ -773,9 +787,8 @@ bool WhatDepends(CommandLine &CmdL)
 		     for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
 			  Prv.end() == false; Prv++) {
 			if (Prv.ParentPkg() == D.TargetPkg() &&
-			    Prv.ParentPkg()->VersionList == 0 ||
-			    Cache.VS->CheckDep(Prv.ProvideVersion(),
-					       D->CompareOp,D.TargetVer()) == false) {
+			    (Prv.ParentPkg()->VersionList == 0 ||
+			     Cache.VS->CheckDep(Prv.ProvideVersion(),D)) == false) {
 			   Hit = true;
 			   break;
 			}
@@ -787,9 +800,16 @@ bool WhatDepends(CommandLine &CmdL)
 		  // Bingo!
 		  pkgCache::PkgIterator Trg = D.TargetPkg();
 		  if (Trg->VersionList == 0)
-		     cout << "    " << D.DepType() << ": <" << Trg.Name() << ">" << endl;
+		     cout << "    " << D.DepType()
+				    << ": <" << Trg.Name() << ">" << endl;
+		  else if (D.TargetVer() == 0)
+		     cout << "    " << D.DepType()
+				    << ": " << Trg.Name() << endl;
 		  else
-		     cout << "    " << D.DepType() << ": " << Trg.Name() << endl;
+		     cout << "    " << D.DepType()
+				    << ": " << Trg.Name()
+				    << " " << D.CompType() << " "
+				    << D.TargetVer() << endl;
 
 		  // Display all solutions
 		  SPtrArray<pkgCache::Version *> List = D.AllTargets();
@@ -800,7 +820,8 @@ bool WhatDepends(CommandLine &CmdL)
 		     if (V != Cache.VerP + V.ParentPkg()->VersionList ||
 			 V->ParentPkg == D->Package)
 			continue;
-		     cout << "      " << V.ParentPkg().Name() << endl;
+		     cout << "      " << V.ParentPkg().Name()
+			  << "-" << V.VerStr() << endl;
 		     
 		     if (Recurse == true)
 			Colours[D.ParentPkg()->ID]++;
