@@ -48,33 +48,35 @@ for i, file in ipairs(files_install) do
 	start = string.find(pkgname(pkgs_install[i]), skip)
 	if start then
 	    skipthis = true
-	    print(_("Skipping GPG check on "..pkgname(pkgs_install[i])))
+	    aptwarning(_("Skipped GPG check on "..pkgname(pkgs_install[i])))
 	    break
 	end
     end
     if quiet == 0 then
 	printhash(i, table.getn(files_install))
     end
-    inp = io.popen("LANG=C /bin/rpm --checksig  "..file.." 2>&1")
+    if skipthis == false then
+	inp = io.popen("LANG=C /bin/rpm --checksig  "..file.." 2>&1")
  
-    for line in inp.lines(inp) do
-        if string.find(line, "gpg") then
-            break
-        elseif string.find(line, "GPG") then
-            table.insert(errors, _("Unknown signature "..line))
-			unknown = unknown + 1
-            good = nil
-        elseif string.find(line, "rpmReadSignature") then
-            table.insert(errors, _("Illegal signature "..line))
-			illegal = illegal + 1
-            good = nil
-        else
-            table.insert(errors, _("Unsigned "..line))
-			unsigned = unsigned + 1
-			good = nil
-        end
+	for line in inp.lines(inp) do
+	    if string.find(line, "gpg") then
+		break
+	    elseif string.find(line, "GPG") then
+		table.insert(errors, _("Unknown signature "..line))
+		unknown = unknown + 1
+		good = nil
+	    elseif string.find(line, "rpmReadSignature") then
+		table.insert(errors, _("Illegal signature "..line))
+		illegal = illegal + 1
+		good = nil
+	    else
+		table.insert(errors, _("Unsigned "..line))
+		unsigned = unsigned + 1
+		good = nil
+	    end
+	end
+	io.close(inp)
     end
-    io.close(inp)
 end
 if interactive == "true" then
     io.stdout.write(io.stdout, '\n')
