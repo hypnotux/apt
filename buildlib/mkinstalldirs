@@ -1,11 +1,10 @@
 #! /bin/sh
-# CNC:2002-07-08
 # mkinstalldirs --- make directory hierarchy
 # Author: Noah Friedman <friedman@prep.ai.mit.edu>
 # Created: 1993-05-16
 # Public domain
 
-# $Id: mkinstalldirs,v 1.1 2002/07/23 17:54:51 niemeyer Exp $
+# $Id: mkinstalldirs,v 1.13 1999/01/05 03:18:55 bje Exp $
 
 errstatus=0
 
@@ -23,7 +22,7 @@ do
      esac
 
      if test ! -d "$pathcomp"; then
-        echo "mkdir $pathcomp" 1>&2
+        echo "mkdir $pathcomp"
 
         mkdir "$pathcomp" || lasterr=$?
 
