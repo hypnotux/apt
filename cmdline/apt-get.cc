@@ -494,8 +494,25 @@ bool ShowEssential(ostream &out,CacheFile &Cache)
       {
 	 if (Added[I->ID] == false)
 	 {
-	    Added[I->ID] = true;
-	    List += string(I.Name()) + " ";
+	    // CNC:2003-03-21 - Do not consider a problem if that package is being obsoleted
+	    //                  by something else.
+	    bool Obsoleted = false;
+	    for (pkgCache::DepIterator D = I.RevDependsList(); D.end() == false; D++)
+	    {
+	       if (D->Type == pkgCache::Dep::Obsoletes &&
+		   Cache[D.ParentPkg()].Install() &&
+		   ((pkgCache::Version*)D.ParentVer() == Cache[D.ParentPkg()].InstallVer ||
+		    (pkgCache::Version*)D.ParentVer() == ((pkgCache::Version*)D.ParentPkg().CurrentVer())) &&
+		   Cache->VS().CheckDep(I.CurrentVer().VerStr(), D) == true)
+	       {
+		  Obsoleted = true;
+		  break;
+	       }
+	    }
+	    if (Obsoleted == false) {
+	       Added[I->ID] = true;
+	       List += string(I.Name()) + " ";
+	    }
 	 }
       }
       
@@ -515,6 +532,25 @@ bool ShowEssential(ostream &out,CacheFile &Cache)
 	 {
 	    if (Added[P->ID] == true)
 	       continue;
+
+	    // CNC:2003-03-21 - Do not consider a problem if that package is being obsoleted
+	    //                  by something else.
+	    bool Obsoleted = false;
+	    for (pkgCache::DepIterator D = P.RevDependsList(); D.end() == false; D++)
+	    {
+	       if (D->Type == pkgCache::Dep::Obsoletes &&
+		   Cache[D.ParentPkg()].Install() &&
+		   ((pkgCache::Version*)D.ParentVer() == Cache[D.ParentPkg()].InstallVer ||
+		    (pkgCache::Version*)D.ParentVer() == ((pkgCache::Version*)D.ParentPkg().CurrentVer())) &&
+		   Cache->VS().CheckDep(P.CurrentVer().VerStr(), D) == true)
+	       {
+		  Obsoleted = true;
+		  break;
+	       }
+	    }
+	    if (Obsoleted == true)
+	       continue;
+
 	    Added[P->ID] = true;
 	    
 	    char S[300];
