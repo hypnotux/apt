@@ -1812,7 +1812,11 @@ bool Policy(CommandLine &CmdL)
 	    cout << " *** " << V.VerStr();
 	 else
 	    cout << "     " << V.VerStr();
-	 cout << " " << Plcy.GetPriority(Pkg) << endl;
+	 // CNC:2004-05-29
+	 if (Plcy.GetCandidateVer(Pkg) == V)
+	    cout << " " << Plcy.GetPriority(Pkg) << endl;
+	 else
+	    cout << " 0" << endl;
 	 for (pkgCache::VerFileIterator VF = V.FileList(); VF.end() == false; VF++)
 	 {
 	    // Locate the associated index files so we can derive a description
