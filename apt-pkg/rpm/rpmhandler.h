@@ -31,6 +31,7 @@ class RPMHandler
    virtual bool Jump(unsigned int Offset) = 0;
    virtual void Rewind() = 0;
    inline unsigned Offset() {return iOffset;};
+   virtual bool OrderedOffset() {return true;};
    inline unsigned Size() {return iSize;};
    inline Header GetHeader() {return HeaderP;};
    virtual bool IsDatabase() = 0;
@@ -80,6 +81,7 @@ class RPMDBHandler : public RPMHandler
    virtual inline bool IsDatabase() {return true;};
    virtual bool HasWriteLock() {return WriteLock;};
    virtual time_t Mtime() {return DbFileMtime;}
+   virtual bool OrderedOffset() {return false;};
 
    RPMDBHandler(bool WriteLock=false);
    virtual ~RPMDBHandler();

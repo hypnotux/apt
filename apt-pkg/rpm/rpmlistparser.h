@@ -14,6 +14,7 @@
 #define PKGLIB_RPMLISTPARSER_H
 
 #include <apt-pkg/pkgcachegen.h>
+#include <apt-pkg/rpmhandler.h>
 #include <rpm/rpmlib.h>
 #include <map>
 #include <vector>
@@ -59,8 +60,13 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    virtual unsigned short VersionHash();
    virtual bool UsePackage(pkgCache::PkgIterator Pkg,
 			   pkgCache::VerIterator Ver);
-   virtual unsigned long Offset();
+   virtual unsigned long Offset()
+	{return Handler->Offset();};
    virtual unsigned long Size();
+
+   virtual bool OrderedOffset()
+   	{return Handler->OrderedOffset();};
+
    virtual bool CollectFileProvides(pkgCache &Cache,
 				    pkgCache::VerIterator Ver); 
    virtual bool Step();

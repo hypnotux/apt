@@ -116,8 +116,13 @@ bool pkgCacheGenerator::MergeList(ListParser &List,
       if (NewPackage(Pkg,PackageName) == false)
 	 return _error->Error(_("Error occured while processing %s (NewPackage)"),PackageName.c_str());
       Counter++;
-      if (Counter % 100 == 0 && Progress != 0)
-	 Progress->Progress(List.Offset());
+      // CNC:2003-02-16
+      if (Counter % 100 == 0 && Progress != 0) {
+	 if (List.OrderedOffset() == true)
+	    Progress->Progress(List.Offset());
+	 else
+	    Progress->Progress(Counter);
+      }
 
       /* Get a pointer to the version structure. We know the list is sorted
          so we use that fact in the search. Insertion of new versions is
@@ -247,8 +252,13 @@ bool pkgCacheGenerator::MergeFileProvides(ListParser &List)
 	 return _error->Error(_("Error occured while processing %s (FindPkg)"),
 				PackageName.c_str());
       Counter++;
-      if (Counter % 100 == 0 && Progress != 0)
-	 Progress->Progress(List.Offset());
+      // CNC:2003-02-16
+      if (Counter % 100 == 0 && Progress != 0) {
+	 if (List.OrderedOffset() == true)
+	    Progress->Progress(List.Offset());
+	 else
+	    Progress->Progress(Counter);
+      }
 
       unsigned long Hash = List.VersionHash();
       pkgCache::VerIterator Ver = Pkg.VersionList();

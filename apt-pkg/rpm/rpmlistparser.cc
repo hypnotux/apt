@@ -54,12 +54,6 @@ rpmListParser::~rpmListParser()
    delete DupPackages;
 }
 
-unsigned long rpmListParser::Offset()
-{
-   return Handler->Offset();
-}
-
-
 bool rpmListParser::GetConfig()
 {
    const Configuration::Item *Top = _config->Tree("RPM::Allow-Duplicated");
