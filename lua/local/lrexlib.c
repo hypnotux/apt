@@ -1,7 +1,7 @@
 /* lrexlib.c - POSIX & PCRE regular expression library */
 /* POSIX regexs can use Spencer extensions for matching NULs if available
    (REG_BASIC) */
-/* Reuben Thomas   nov00-06oct03 */
+/* Reuben Thomas   nov00-09jan04 */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +22,7 @@
 
 #include <regex.h>
 
-static int rex_comp(lua_State *L) {
+static int posix_comp(lua_State *L) {
   size_t l;
   const char *pattern;
   int res;
@@ -46,8 +46,12 @@ static int rex_comp(lua_State *L) {
   return 1;
 }
 
-static void rex_getargs(lua_State *L, size_t *len, size_t *ncapt,
-                        const char **text, regex_t **pr, regmatch_t **match) {
+static void posix_getargs(lua_State *L,
+#ifdef REG_BASIC
+                          size_t *len,
+#endif
+                          size_t *ncapt, const char **text, regex_t **pr,
+                          regmatch_t **match) {
   luaL_checkany(L, 1);
   *pr = (regex_t *)lua_touserdata(L, 1);
 #ifdef REG_BASIC
@@ -60,7 +64,7 @@ static void rex_getargs(lua_State *L, size_t *len, size_t *ncapt,
   *match = malloc((*ncapt + 1) * sizeof(regmatch_t));
 }
 
-static void rex_push_matches(lua_State *L, const char *text, regmatch_t *match,
+static void posix_push_matches(lua_State *L, const char *text, regmatch_t *match,
                              size_t ncapt) {
   size_t i;
   lua_newtable(L);
@@ -73,7 +77,7 @@ static void rex_push_matches(lua_State *L, const char *text, regmatch_t *match,
   }
 }
 
-static int rex_match(lua_State *L) {
+static int posix_match(lua_State *L) {
   int res;
 #ifdef REG_BASIC
   size_t len;
@@ -82,11 +86,9 @@ static int rex_match(lua_State *L) {
   const char *text;
   regex_t *pr;
   regmatch_t *match;
-  rex_getargs(L,
+  posix_getargs(L,
 #ifdef REG_BASIC
           &len,
-#else
-          NULL,
 #endif
           &ncapt, &text, &pr, &match);
 #ifdef REG_BASIC
@@ -99,7 +101,7 @@ static int rex_match(lua_State *L) {
   if (res == 0) {
     lua_pushnumber(L, match[0].rm_so + 1);
     lua_pushnumber(L, match[0].rm_eo);
-    rex_push_matches(L, text, match, ncapt);
+    posix_push_matches(L, text, match, ncapt);
     lua_pushstring(L, "n");
     lua_pushnumber(L, ncapt);
     lua_rawset(L, -3);
@@ -108,20 +110,18 @@ static int rex_match(lua_State *L) {
     return 0;
 }
 
-static int rex_gmatch(lua_State *L) {
+static int posix_gmatch(lua_State *L) {
   int res;
 #ifdef REG_BASIC
   size_t len;
 #endif
-  size_t ncapt, nmatch = 0, maxmatch, limit = 0;
+  size_t ncapt, nmatch = 0, maxmatch = 0, limit = 0;
   const char *text;
   regex_t *pr;
   regmatch_t *match;
-  rex_getargs(L,
+  posix_getargs(L,
 #ifdef REG_BASIC
           &len,
-#else
-          NULL,
 #endif
           &ncapt, &text, &pr, &match);
   luaL_checktype(L, 3, LUA_TFUNCTION);
@@ -140,7 +140,7 @@ static int rex_gmatch(lua_State *L) {
     if (res == 0) {
       lua_pushvalue(L, 3);
       lua_pushlstring(L, text + match[0].rm_so, match[0].rm_eo - match[0].rm_so);
-      rex_push_matches(L, text, match, ncapt);
+      posix_push_matches(L, text, match, ncapt);
       lua_call(L, 2, 0);
       text += match[0].rm_eo;
 #ifdef REG_BASIC
@@ -154,17 +154,17 @@ static int rex_gmatch(lua_State *L) {
   return 1;
 }
 
-static int rex_gc (lua_State *L) {
+static int posix_gc (lua_State *L) {
   regex_t *r = (regex_t *)luaL_checkudata(L, 1, "regex_t");
   if (r)
     regfree(r);
   return 0;
 }
 
-static const luaL_reg rexmeta[] = {
-  {"match",   rex_match},
-  {"gmatch",  rex_gmatch},
-  {"__gc",    rex_gc},
+static const luaL_reg posixmeta[] = {
+  {"match",   posix_match},
+  {"gmatch",  posix_gmatch},
+  {"__gc",    posix_gc},
   {NULL, NULL}
 };
 
@@ -197,7 +197,7 @@ static int pcre_comp(lua_State *L)
   return 1;
 }
 
-static void pcre_getargs(lua_State *L, int *len, int *ncapt, const char **text,
+static void pcre_getargs(lua_State *L, size_t *len, int *ncapt, const char **text,
                         pcre ***ppr, int **match)
 {
   luaL_checkany(L, 1);
@@ -230,9 +230,9 @@ static int pcre_match(lua_State *L)
   pcre **ppr;
   int *match;
   int ncapt;
-  int len;
+  size_t len;
   pcre_getargs(L, &len, &ncapt, &text, &ppr, &match);
-  res = pcre_exec(*ppr, NULL, text, len, 0, 0, match, (ncapt + 1) * 3);
+  res = pcre_exec(*ppr, NULL, text, (int)len, 0, 0, match, (ncapt + 1) * 3);
   if (res >= 0) {
     lua_pushnumber(L, match[0] + 1);
     lua_pushnumber(L, match[1]);
@@ -248,12 +248,11 @@ static int pcre_match(lua_State *L)
 static int pcre_gmatch(lua_State *L)
 {
   int res;
+  size_t len;
+  int ncapt, nmatch = 0, maxmatch = 0, limit = 0;
   const char *text;
-  int limit = 0;
-  int ncapt, nmatch = 0, maxmatch;
   pcre **ppr;
   int *match;
-  int len;
   pcre_getargs(L, &len, &ncapt, &text, &ppr, &match);
   luaL_checktype(L, 3, LUA_TFUNCTION);
   if (lua_gettop(L) > 3) {
@@ -261,8 +260,9 @@ static int pcre_gmatch(lua_State *L)
     limit = 1;
   }
   while (!limit || nmatch < maxmatch) {
-    res = pcre_exec(*ppr, NULL, text, len, 0, 0, match, (ncapt + 1) * 3);
-    if (res == 0) {
+    res = pcre_exec(*ppr, NULL, text, (int)len, 0, 0, match,
+                    (ncapt + 1) * 3);
+    if (res >= 0) {
       lua_pushvalue(L, 3);
       lua_pushlstring(L, text + match[0], match[1] - match[0]);
       pcre_push_matches(L, text, match, ncapt);
@@ -299,7 +299,7 @@ static const luaL_reg pcremeta[] = {
 
 static const luaL_reg rexlib[] = {
 #ifdef WITH_POSIX
-  {"newPOSIX", rex_comp},
+  {"newPOSIX", posix_comp},
 #endif
 #ifdef WITH_PCRE
   {"newPCRE", pcre_comp},
@@ -319,7 +319,7 @@ LUALIB_API int luaopen_rex(lua_State *L)
 {
 #ifdef WITH_POSIX
   createmeta(L, "regex_t");
-  luaL_openlib(L, NULL, rexmeta, 0);
+  luaL_openlib(L, NULL, posixmeta, 0);
   lua_pop(L, 1);
 #endif
 #ifdef WITH_PCRE
