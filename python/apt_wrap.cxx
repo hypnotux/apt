@@ -680,48 +680,50 @@ SWIG_InstallConstants(PyObject *d, swig_const_info constants[]) {
 #define  SWIGTYPE_p_void swig_types[32] 
 #define  SWIGTYPE_p_pkgAcquire__Item swig_types[33] 
 #define  SWIGTYPE_p_MMap swig_types[34] 
-#define  SWIGTYPE_p_pkgRecords__Parser swig_types[35] 
-#define  SWIGTYPE_p_p_pkgCache__Version swig_types[36] 
-#define  SWIGTYPE_p_p_Version swig_types[37] 
-#define  SWIGTYPE_p_pkgCache__Version swig_types[38] 
-#define  SWIGTYPE_p_Version swig_types[39] 
-#define  SWIGTYPE_p_std__vectorTpkgIndexFile_p_t swig_types[40] 
-#define  SWIGTYPE_p_time_t swig_types[41] 
-#define  SWIGTYPE_p_p_pkgIndexFile swig_types[42] 
-#define  SWIGTYPE_p_pkgProblemResolver swig_types[43] 
-#define  SWIGTYPE_p_pkgAcqArchive swig_types[44] 
-#define  SWIGTYPE_p_p_char swig_types[45] 
-#define  SWIGTYPE_p_pkgAcquireStatusDumb swig_types[46] 
-#define  SWIGTYPE_p_pkgCacheFile swig_types[47] 
-#define  SWIGTYPE_p_pkgAcquire__ItemDesc swig_types[48] 
-#define  SWIGTYPE_p_pkgAcquireStatus swig_types[49] 
-#define  SWIGTYPE_p_pkgDepCache swig_types[50] 
-#define  SWIGTYPE_p_DynamicMMap__Pool swig_types[51] 
-#define  SWIGTYPE_p_pkgPackageManager swig_types[52] 
-#define  SWIGTYPE_p_OpTextProgress swig_types[53] 
-#define  SWIGTYPE_p_OpProgress swig_types[54] 
-#define  SWIGTYPE_p_Provides swig_types[55] 
-#define  SWIGTYPE_p_pkgCache__Provides swig_types[56] 
-#define  SWIGTYPE_p_pkgRepository swig_types[57] 
-#define  SWIGTYPE_p_std__ostream swig_types[58] 
-#define  SWIGTYPE_p_pkgAcqFile swig_types[59] 
-#define  SWIGTYPE_p_pkgSourceList swig_types[60] 
-#define  SWIGTYPE_p_string swig_types[61] 
-#define  SWIGTYPE_p_p_pkgVersioningSystem swig_types[62] 
-#define  SWIGTYPE_p_pkgSystem swig_types[63] 
-#define  SWIGTYPE_p_p_pkgSystem swig_types[64] 
-#define  SWIGTYPE_p_pkgVersioningSystem swig_types[65] 
-#define  SWIGTYPE_p_VerFile swig_types[66] 
-#define  SWIGTYPE_p_pkgCache__VerFile swig_types[67] 
-#define  SWIGTYPE_p_pkgAcquire__MethodConfig swig_types[68] 
-#define  SWIGTYPE_p_pkgCache__Package swig_types[69] 
-#define  SWIGTYPE_p_Package swig_types[70] 
-#define  SWIGTYPE_p_unsigned_char swig_types[71] 
-#define  SWIGTYPE_p_pkgRecords swig_types[72] 
-#define  SWIGTYPE_p_pkgAcquire__Worker swig_types[73] 
-#define  SWIGTYPE_p_pkgCache swig_types[74] 
-#define  SWIGTYPE_p_pkgCache__StringItem swig_types[75] 
-static swig_type_info *swig_types[77];
+#define  SWIGTYPE_p_PyObject swig_types[35] 
+#define  SWIGTYPE_p_pkgRecords__Parser swig_types[36] 
+#define  SWIGTYPE_p_p_pkgCache__Version swig_types[37] 
+#define  SWIGTYPE_p_p_Version swig_types[38] 
+#define  SWIGTYPE_p_pkgCache__Version swig_types[39] 
+#define  SWIGTYPE_p_Version swig_types[40] 
+#define  SWIGTYPE_p_std__vectorTpkgIndexFile_p_t swig_types[41] 
+#define  SWIGTYPE_p_time_t swig_types[42] 
+#define  SWIGTYPE_p_p_pkgIndexFile swig_types[43] 
+#define  SWIGTYPE_p_pkgProblemResolver swig_types[44] 
+#define  SWIGTYPE_p_pkgAcqArchive swig_types[45] 
+#define  SWIGTYPE_p_p_char swig_types[46] 
+#define  SWIGTYPE_p_pkgAcquireStatusDumb swig_types[47] 
+#define  SWIGTYPE_p_pkgCacheFile swig_types[48] 
+#define  SWIGTYPE_p_pkgAcquire__ItemDesc swig_types[49] 
+#define  SWIGTYPE_p_pkgAcquireStatus swig_types[50] 
+#define  SWIGTYPE_p_pkgDepCache swig_types[51] 
+#define  SWIGTYPE_p_DynamicMMap__Pool swig_types[52] 
+#define  SWIGTYPE_p_pkgPackageManager swig_types[53] 
+#define  SWIGTYPE_p_OpTextProgress swig_types[54] 
+#define  SWIGTYPE_p_OpProgress swig_types[55] 
+#define  SWIGTYPE_p_ROpPyProgress swig_types[56] 
+#define  SWIGTYPE_p_Provides swig_types[57] 
+#define  SWIGTYPE_p_pkgCache__Provides swig_types[58] 
+#define  SWIGTYPE_p_pkgRepository swig_types[59] 
+#define  SWIGTYPE_p_std__ostream swig_types[60] 
+#define  SWIGTYPE_p_pkgAcqFile swig_types[61] 
+#define  SWIGTYPE_p_pkgSourceList swig_types[62] 
+#define  SWIGTYPE_p_string swig_types[63] 
+#define  SWIGTYPE_p_p_pkgVersioningSystem swig_types[64] 
+#define  SWIGTYPE_p_pkgSystem swig_types[65] 
+#define  SWIGTYPE_p_p_pkgSystem swig_types[66] 
+#define  SWIGTYPE_p_pkgVersioningSystem swig_types[67] 
+#define  SWIGTYPE_p_VerFile swig_types[68] 
+#define  SWIGTYPE_p_pkgCache__VerFile swig_types[69] 
+#define  SWIGTYPE_p_pkgAcquire__MethodConfig swig_types[70] 
+#define  SWIGTYPE_p_pkgCache__Package swig_types[71] 
+#define  SWIGTYPE_p_Package swig_types[72] 
+#define  SWIGTYPE_p_unsigned_char swig_types[73] 
+#define  SWIGTYPE_p_pkgRecords swig_types[74] 
+#define  SWIGTYPE_p_pkgAcquire__Worker swig_types[75] 
+#define  SWIGTYPE_p_pkgCache swig_types[76] 
+#define  SWIGTYPE_p_pkgCache__StringItem swig_types[77] 
+static swig_type_info *swig_types[79];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -878,9 +880,27 @@ extern char const *pkgVersion;
 extern char const *pkgLibVersion;
 extern char const *pkgOS;
 extern char const *pkgCPU;
+bool pkgCache_PkgIterator___nonzero__(pkgCache::PkgIterator *self){ return self->end() == false; }
+pkgCache::PkgIterator *pkgCache_PkgIterator_next(pkgCache::PkgIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::PkgIterator *ret = new pkgCache::PkgIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::PkgIterator *pkgCache_PkgIterator___iter__(pkgCache::PkgIterator *self){ return new pkgCache::PkgIterator(*self); }
+bool pkgCache_VerIterator___nonzero__(pkgCache::VerIterator *self){ return self->end() == false; }
+pkgCache::VerIterator *pkgCache_VerIterator_next(pkgCache::VerIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::VerIterator *ret = new pkgCache::VerIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::VerIterator *pkgCache_VerIterator___iter__(pkgCache::VerIterator *self){ return new pkgCache::VerIterator(*self); }
+bool pkgCache_DepIterator___nonzero__(pkgCache::DepIterator *self){ return self->end() == false; }
+pkgCache::DepIterator *pkgCache_DepIterator_next(pkgCache::DepIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::DepIterator *ret = new pkgCache::DepIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::DepIterator *pkgCache_DepIterator___iter__(pkgCache::DepIterator *self){ return new pkgCache::DepIterator(*self); }
+bool pkgCache_PrvIterator___nonzero__(pkgCache::PrvIterator *self){ return self->end() == false; }
+pkgCache::PrvIterator *pkgCache_PrvIterator_next(pkgCache::PrvIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::PrvIterator *ret = new pkgCache::PrvIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::PrvIterator *pkgCache_PrvIterator___iter__(pkgCache::PrvIterator *self){ return new pkgCache::PrvIterator(*self); }
+bool pkgCache_PkgFileIterator___nonzero__(pkgCache::PkgFileIterator *self){ return self->end() == false; }
+pkgCache::PkgFileIterator *pkgCache_PkgFileIterator_next(pkgCache::PkgFileIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::PkgFileIterator *ret = new pkgCache::PkgFileIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::PkgFileIterator *pkgCache_PkgFileIterator___iter__(pkgCache::PkgFileIterator *self){ return new pkgCache::PkgFileIterator(*self); }
+bool pkgCache_VerFileIterator___nonzero__(pkgCache::VerFileIterator *self){ return self->end() == false; }
+pkgCache::VerFileIterator *pkgCache_VerFileIterator_next(pkgCache::VerFileIterator *self){  		if (self->end() == true) {  			PyErr_SetObject(PyExc_StopIteration, Py_None);  			return NULL;  		}  		pkgCache::VerFileIterator *ret = new pkgCache::VerFileIterator(*self);  		(*self)++;  		return ret;  	}
+pkgCache::VerFileIterator *pkgCache_VerFileIterator___iter__(pkgCache::VerFileIterator *self){ return new pkgCache::VerFileIterator(*self); }
 extern pkgSystem *_system;
 extern Configuration *_config;
-PyObject *pkgAcquire_ItemsList(pkgAcquire *self){
+PyObject *pkgAcquire_ItemsIter(pkgAcquire *self){
 	static swig_type_info *ItemDescr = NULL;
 	PyObject *list, *o;
 	pkgAcquire::ItemIterator I;
@@ -907,6 +927,45 @@ class pkgAcquireStatusDumb : public pkgAcquireStatus
 {
    virtual bool MediaChange(string Media,string Drive) {};
 };
+
+
+class ROpPyProgress : public OpProgress {
+	PyObject *PyObj;
+
+	public:
+	OpProgress::Op;
+	OpProgress::SubOp;
+	OpProgress::Percent;
+	OpProgress::MajorChange;
+	OpProgress::CheckChange;
+
+	virtual void Update()
+	{
+		if (PyObject_HasAttrString(PyObj, "Update")) {
+			PyObject *Ret;
+			Ret = PyObject_CallMethod(PyObj, "Update", NULL);
+			Py_XDECREF(Ret);
+		}
+	};
+
+	virtual void Done()
+	{
+		if (PyObject_HasAttrString(PyObj, "Done")) {
+			PyObject *Ret;
+			Ret = PyObject_CallMethod(PyObj, "Done", NULL);
+			Py_XDECREF(Ret);
+		}
+	};
+	
+	ROpPyProgress(PyObject *PyObj) : PyObj(PyObj) {Py_INCREF(PyObj);};
+	~ROpPyProgress() {Py_DECREF(PyObj);};
+};
+
+
+#define ROpPyProgress_Op_get(x) ((x)->Op.c_str())
+#define ROpPyProgress_Op_set(x,y) ((x)->Op = (y))
+#define ROpPyProgress_SubOp_get(x) ((x)->SubOp.c_str())
+#define ROpPyProgress_SubOp_set(x,y) ((x)->SubOp = (y))
 
 #ifdef __cplusplus
 extern "C" {
@@ -1614,13 +1673,13 @@ static PyObject *_wrap_pkgCache_Head(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_pkgCache_PkgBegin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCache_PkgIter(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache *arg1 = (pkgCache *) 0 ;
     pkgCache::PkgIterator result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_PkgBegin",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_PkgIter",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (arg1)->PkgBegin();
     
@@ -1635,57 +1694,15 @@ static PyObject *_wrap_pkgCache_PkgBegin(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_pkgCache_PkgEnd(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache *arg1 = (pkgCache *) 0 ;
-    pkgCache::PkgIterator result;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_PkgEnd",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = (arg1)->PkgEnd();
-    
-    {
-        pkgCache::PkgIterator * resultptr;
-        resultptr = new pkgCache::PkgIterator((pkgCache::PkgIterator &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_pkgCache__PkgIterator, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCache_FileBegin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCache_FileIter(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache *arg1 = (pkgCache *) 0 ;
     pkgCache::PkgFileIterator result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_FileBegin",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_FileIter",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (arg1)->FileBegin();
-    
-    {
-        pkgCache::PkgFileIterator * resultptr;
-        resultptr = new pkgCache::PkgFileIterator((pkgCache::PkgFileIterator &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_pkgCache__PkgFileIterator, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCache_FileEnd(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache *arg1 = (pkgCache *) 0 ;
-    pkgCache::PkgFileIterator result;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCache_FileEnd",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = (arg1)->FileEnd();
     
     {
         pkgCache::PkgFileIterator * resultptr;
@@ -5106,13 +5123,13 @@ static PyObject *_wrap_pkgDepCache_Head(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_pkgDepCache_PkgBegin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgDepCache_PkgIter(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgDepCache *arg1 = (pkgDepCache *) 0 ;
     PkgIterator result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgDepCache_PkgBegin",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgDepCache_PkgIter",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgDepCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (arg1)->PkgBegin();
     
@@ -6295,33 +6312,17 @@ static PyObject * pkgDepCacheStateCache_swigregister(PyObject *self, PyObject *a
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCachePkgIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCachePkgIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePkgIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_PkgIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCachePkgIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -6329,51 +6330,39 @@ static PyObject *_wrap_pkgCachePkgIterator_next__SWIG_1(PyObject *self, PyObject
 
 
 static PyObject *_wrap_pkgCachePkgIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
+    pkgCache::PkgIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::PkgIterator *)pkgCache_PkgIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PkgIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCachePkgIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PkgIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCachePkgIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PkgIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCachePkgIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
+    pkgCache::PkgIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCachePkgIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::PkgIterator *)pkgCache_PkgIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PkgIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -7091,33 +7080,17 @@ static PyObject * pkgCachePkgIterator_swigregister(PyObject *self, PyObject *arg
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCacheVerIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCacheVerIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_VerIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCacheVerIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -7125,51 +7098,39 @@ static PyObject *_wrap_pkgCacheVerIterator_next__SWIG_1(PyObject *self, PyObject
 
 
 static PyObject *_wrap_pkgCacheVerIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
+    pkgCache::VerIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::VerIterator *)pkgCache_VerIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__VerIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCacheVerIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__VerIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCacheVerIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__VerIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCacheVerIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
+    pkgCache::VerIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCacheVerIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::VerIterator *)pkgCache_VerIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__VerIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -8030,33 +7991,17 @@ static PyObject * pkgCacheVerIterator_swigregister(PyObject *self, PyObject *arg
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCacheDepIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCacheDepIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheDepIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_DepIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCacheDepIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheDepIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -8064,51 +8009,39 @@ static PyObject *_wrap_pkgCacheDepIterator_next__SWIG_1(PyObject *self, PyObject
 
 
 static PyObject *_wrap_pkgCacheDepIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
+    pkgCache::DepIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheDepIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::DepIterator *)pkgCache_DepIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__DepIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCacheDepIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__DepIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCacheDepIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__DepIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCacheDepIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
+    pkgCache::DepIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCacheDepIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheDepIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::DepIterator *)pkgCache_DepIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__DepIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -9093,33 +9026,17 @@ static PyObject * pkgCacheDepIterator_swigregister(PyObject *self, PyObject *arg
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCachePrvIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCachePrvIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePrvIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePrvIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_PrvIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCachePrvIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePrvIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9127,51 +9044,39 @@ static PyObject *_wrap_pkgCachePrvIterator_next__SWIG_1(PyObject *self, PyObject
 
 
 static PyObject *_wrap_pkgCachePrvIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
+    pkgCache::PrvIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePrvIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::PrvIterator *)pkgCache_PrvIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PrvIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCachePrvIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PrvIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCachePrvIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PrvIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCachePrvIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
+    pkgCache::PrvIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCachePrvIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePrvIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::PrvIterator *)pkgCache_PrvIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PrvIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -9805,33 +9710,17 @@ static PyObject * pkgCachePrvIterator_swigregister(PyObject *self, PyObject *arg
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCachePkgFileIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCachePkgFileIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::PkgFileIterator *arg1 = (pkgCache::PkgFileIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePkgFileIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgFileIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_PkgFileIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCachePkgFileIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::PkgFileIterator *arg1 = (pkgCache::PkgFileIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgFileIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9839,51 +9728,39 @@ static PyObject *_wrap_pkgCachePkgFileIterator_next__SWIG_1(PyObject *self, PyOb
 
 
 static PyObject *_wrap_pkgCachePkgFileIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::PkgFileIterator *arg1 = (pkgCache::PkgFileIterator *) 0 ;
+    pkgCache::PkgFileIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgFileIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::PkgFileIterator *)pkgCache_PkgFileIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PkgFileIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCachePkgFileIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__PkgFileIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCachePkgFileIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PkgFileIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCachePkgFileIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::PkgFileIterator *arg1 = (pkgCache::PkgFileIterator *) 0 ;
+    pkgCache::PkgFileIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCachePkgFileIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCachePkgFileIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::PkgFileIterator *)pkgCache_PkgFileIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__PkgFileIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -10604,33 +10481,17 @@ static PyObject * pkgCachePkgFileIterator_swigregister(PyObject *self, PyObject 
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgCacheVerFileIterator_next__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCacheVerFileIterator___nonzero__(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
-    int arg2 ;
+    bool result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFileIterator_next",&obj0,&arg2)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerFileIterator___nonzero__",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++(arg2);
+    result = (bool)pkgCache_VerFileIterator___nonzero__(arg1);
     
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_pkgCacheVerFileIterator_next__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
-    PyObject * obj0  = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerFileIterator_next",&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    (arg1)->operator ++();
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -10638,51 +10499,39 @@ static PyObject *_wrap_pkgCacheVerFileIterator_next__SWIG_1(PyObject *self, PyOb
 
 
 static PyObject *_wrap_pkgCacheVerFileIterator_next(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[3];
-    int ii;
+    PyObject *resultobj;
+    pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
+    pkgCache::VerFileIterator *result;
+    PyObject * obj0  = 0 ;
     
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 2); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerFileIterator_next",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        result = (pkgCache::VerFileIterator *)pkgCache_VerFileIterator_next(arg1);
+        
+        /* Pass ahead the StopIteration exception. */
+        if (!result) return NULL;
     }
-    if (argc == 1) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__VerFileIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            return _wrap_pkgCacheVerFileIterator_next__SWIG_1(self,args);
-        }
-    }
-    if (argc == 2) {
-        int _v;
-        {
-            void *ptr;
-            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_pkgCache__VerFileIterator, 0) == -1) {
-                _v = 0;
-                PyErr_Clear();
-            }else {
-                _v = 1;
-            }
-        }
-        if (_v) {
-            {
-                _v = (PyInt_Check(argv[1]) || PyLong_Check(argv[1])) ? 1 : 0;
-            }
-            if (_v) {
-                return _wrap_pkgCacheVerFileIterator_next__SWIG_0(self,args);
-            }
-        }
-    }
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__VerFileIterator, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCacheVerFileIterator___iter__(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
+    pkgCache::VerFileIterator *result;
+    PyObject * obj0  = 0 ;
     
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'pkgCacheVerFileIterator_next'");
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheVerFileIterator___iter__",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::VerFileIterator *)pkgCache_VerFileIterator___iter__(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__VerFileIterator, 1);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -11499,13 +11348,13 @@ static PyObject *_wrap_pkgCacheFile_Head(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_pkgCacheFile_PkgBegin(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgCacheFile_PkgIter(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgCacheFile *arg1 = (pkgCacheFile *) 0 ;
     PkgIterator result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheFile_PkgBegin",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgCacheFile_PkgIter",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCacheFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result = (*arg1)->PkgBegin();
     
@@ -16574,15 +16423,15 @@ static PyObject * pkgAcqFile_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_pkgAcquire_ItemsList(PyObject *self, PyObject *args) {
+static PyObject *_wrap_pkgAcquire_ItemsIter(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgAcquire *arg1 = (pkgAcquire *) 0 ;
     PyObject *result;
     PyObject * obj0  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"O:pkgAcquire_ItemsList",&obj0)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgAcquire_ItemsIter",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgAcquire,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = (PyObject *)pkgAcquire_ItemsList(arg1);
+    result = (PyObject *)pkgAcquire_ItemsIter(arg1);
     
     resultobj = result;
     return resultobj;
@@ -17812,6 +17661,203 @@ static PyObject * pkgAcquireStatusDumb_swigregister(PyObject *self, PyObject *ar
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_ROpPyProgress_Op_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    char *arg2 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Os:ROpPyProgress_Op_set",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    ROpPyProgress_Op_set(arg1,(char const *)arg2);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_Op_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    char *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ROpPyProgress_Op_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (char *)ROpPyProgress_Op_get(arg1);
+    
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_SubOp_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    char *arg2 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Os:ROpPyProgress_SubOp_set",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    ROpPyProgress_SubOp_set(arg1,(char const *)arg2);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_SubOp_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    char *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ROpPyProgress_SubOp_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (char *)ROpPyProgress_SubOp_get(arg1);
+    
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_Percent_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    float arg2 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Of:ROpPyProgress_Percent_set",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1) (arg1)->Percent = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_Percent_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    float result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ROpPyProgress_Percent_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (float) ((arg1)->Percent);
+    
+    resultobj = PyFloat_FromDouble(result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_MajorChange_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    bool arg2 ;
+    PyObject * obj0  = 0 ;
+    PyObject * obj1  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ROpPyProgress_MajorChange_set",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    arg2 = (bool) PyInt_AsLong(obj1);
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->MajorChange = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_MajorChange_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    bool result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ROpPyProgress_MajorChange_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (bool) ((arg1)->MajorChange);
+    
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ROpPyProgress_CheckChange(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    float arg2 = (float) 0.7 ;
+    bool result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O|f:ROpPyProgress_CheckChange",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (bool)(arg1)->CheckChange(arg2);
+    
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_ROpPyProgress(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    PyObject *arg1 = (PyObject *) 0 ;
+    ROpPyProgress *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_ROpPyProgress",&obj0)) goto fail;
+    arg1 = obj0;
+    result = (ROpPyProgress *)new ROpPyProgress(arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_ROpPyProgress, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_ROpPyProgress(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    ROpPyProgress *arg1 = (ROpPyProgress *) 0 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:delete_ROpPyProgress",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_ROpPyProgress,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    delete arg1;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * ROpPyProgress_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_ROpPyProgress, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgInit", _wrap_pkgInit, METH_VARARGS },
 	 { (char *)"pkgInitConfig", _wrap_pkgInitConfig, METH_VARARGS },
@@ -17843,10 +17889,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCache_FindPkg", _wrap_pkgCache_FindPkg, METH_VARARGS },
 	 { (char *)"pkgCache_FindPackage", _wrap_pkgCache_FindPackage, METH_VARARGS },
 	 { (char *)"pkgCache_Head", _wrap_pkgCache_Head, METH_VARARGS },
-	 { (char *)"pkgCache_PkgBegin", _wrap_pkgCache_PkgBegin, METH_VARARGS },
-	 { (char *)"pkgCache_PkgEnd", _wrap_pkgCache_PkgEnd, METH_VARARGS },
-	 { (char *)"pkgCache_FileBegin", _wrap_pkgCache_FileBegin, METH_VARARGS },
-	 { (char *)"pkgCache_FileEnd", _wrap_pkgCache_FileEnd, METH_VARARGS },
+	 { (char *)"pkgCache_PkgIter", _wrap_pkgCache_PkgIter, METH_VARARGS },
+	 { (char *)"pkgCache_FileIter", _wrap_pkgCache_FileIter, METH_VARARGS },
 	 { (char *)"pkgCache_VS_set", _wrap_pkgCache_VS_set, METH_VARARGS },
 	 { (char *)"pkgCache_VS_get", _wrap_pkgCache_VS_get, METH_VARARGS },
 	 { (char *)"pkgCache_CompTypeDeb", _wrap_pkgCache_CompTypeDeb, METH_VARARGS },
@@ -18047,7 +18091,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgDepCache_BuildGroupOrs", _wrap_pkgDepCache_BuildGroupOrs, METH_VARARGS },
 	 { (char *)"pkgDepCache_UpdateVerState", _wrap_pkgDepCache_UpdateVerState, METH_VARARGS },
 	 { (char *)"pkgDepCache_Head", _wrap_pkgDepCache_Head, METH_VARARGS },
-	 { (char *)"pkgDepCache_PkgBegin", _wrap_pkgDepCache_PkgBegin, METH_VARARGS },
+	 { (char *)"pkgDepCache_PkgIter", _wrap_pkgDepCache_PkgIter, METH_VARARGS },
 	 { (char *)"pkgDepCache_FindPkg", _wrap_pkgDepCache_FindPkg, METH_VARARGS },
 	 { (char *)"pkgDepCache_GetCache", _wrap_pkgDepCache_GetCache, METH_VARARGS },
 	 { (char *)"pkgDepCache_VS", _wrap_pkgDepCache_VS, METH_VARARGS },
@@ -18105,7 +18149,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_pkgDepCacheStateCache", _wrap_new_pkgDepCacheStateCache, METH_VARARGS },
 	 { (char *)"delete_pkgDepCacheStateCache", _wrap_delete_pkgDepCacheStateCache, METH_VARARGS },
 	 { (char *)"pkgDepCacheStateCache_swigregister", pkgDepCacheStateCache_swigregister, METH_VARARGS },
+	 { (char *)"pkgCachePkgIterator___nonzero__", _wrap_pkgCachePkgIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCachePkgIterator_next", _wrap_pkgCachePkgIterator_next, METH_VARARGS },
+	 { (char *)"pkgCachePkgIterator___iter__", _wrap_pkgCachePkgIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCachePkgIterator_end", _wrap_pkgCachePkgIterator_end, METH_VARARGS },
 	 { (char *)"pkgCachePkgIterator___eq__", _wrap_pkgCachePkgIterator___eq__, METH_VARARGS },
 	 { (char *)"pkgCachePkgIterator___ne__", _wrap_pkgCachePkgIterator___ne__, METH_VARARGS },
@@ -18139,7 +18185,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCachePkgIterator_Flags_get", _wrap_pkgCachePkgIterator_Flags_get, METH_VARARGS },
 	 { (char *)"delete_pkgCachePkgIterator", _wrap_delete_pkgCachePkgIterator, METH_VARARGS },
 	 { (char *)"pkgCachePkgIterator_swigregister", pkgCachePkgIterator_swigregister, METH_VARARGS },
+	 { (char *)"pkgCacheVerIterator___nonzero__", _wrap_pkgCacheVerIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCacheVerIterator_next", _wrap_pkgCacheVerIterator_next, METH_VARARGS },
+	 { (char *)"pkgCacheVerIterator___iter__", _wrap_pkgCacheVerIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCacheVerIterator_end", _wrap_pkgCacheVerIterator_end, METH_VARARGS },
 	 { (char *)"pkgCacheVerIterator_assign", _wrap_pkgCacheVerIterator_assign, METH_VARARGS },
 	 { (char *)"pkgCacheVerIterator___eq__", _wrap_pkgCacheVerIterator___eq__, METH_VARARGS },
@@ -18177,7 +18225,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCacheVerIterator_Priority_get", _wrap_pkgCacheVerIterator_Priority_get, METH_VARARGS },
 	 { (char *)"delete_pkgCacheVerIterator", _wrap_delete_pkgCacheVerIterator, METH_VARARGS },
 	 { (char *)"pkgCacheVerIterator_swigregister", pkgCacheVerIterator_swigregister, METH_VARARGS },
+	 { (char *)"pkgCacheDepIterator___nonzero__", _wrap_pkgCacheDepIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCacheDepIterator_next", _wrap_pkgCacheDepIterator_next, METH_VARARGS },
+	 { (char *)"pkgCacheDepIterator___iter__", _wrap_pkgCacheDepIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCacheDepIterator_end", _wrap_pkgCacheDepIterator_end, METH_VARARGS },
 	 { (char *)"pkgCacheDepIterator___eq__", _wrap_pkgCacheDepIterator___eq__, METH_VARARGS },
 	 { (char *)"pkgCacheDepIterator___ne__", _wrap_pkgCacheDepIterator___ne__, METH_VARARGS },
@@ -18214,7 +18264,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCacheDepIterator_CompareOp_get", _wrap_pkgCacheDepIterator_CompareOp_get, METH_VARARGS },
 	 { (char *)"delete_pkgCacheDepIterator", _wrap_delete_pkgCacheDepIterator, METH_VARARGS },
 	 { (char *)"pkgCacheDepIterator_swigregister", pkgCacheDepIterator_swigregister, METH_VARARGS },
+	 { (char *)"pkgCachePrvIterator___nonzero__", _wrap_pkgCachePrvIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCachePrvIterator_next", _wrap_pkgCachePrvIterator_next, METH_VARARGS },
+	 { (char *)"pkgCachePrvIterator___iter__", _wrap_pkgCachePrvIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCachePrvIterator_end", _wrap_pkgCachePrvIterator_end, METH_VARARGS },
 	 { (char *)"pkgCachePrvIterator___eq__", _wrap_pkgCachePrvIterator___eq__, METH_VARARGS },
 	 { (char *)"pkgCachePrvIterator___ne__", _wrap_pkgCachePrvIterator___ne__, METH_VARARGS },
@@ -18237,7 +18289,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCachePrvIterator_NextPkgProv_get", _wrap_pkgCachePrvIterator_NextPkgProv_get, METH_VARARGS },
 	 { (char *)"delete_pkgCachePrvIterator", _wrap_delete_pkgCachePrvIterator, METH_VARARGS },
 	 { (char *)"pkgCachePrvIterator_swigregister", pkgCachePrvIterator_swigregister, METH_VARARGS },
+	 { (char *)"pkgCachePkgFileIterator___nonzero__", _wrap_pkgCachePkgFileIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCachePkgFileIterator_next", _wrap_pkgCachePkgFileIterator_next, METH_VARARGS },
+	 { (char *)"pkgCachePkgFileIterator___iter__", _wrap_pkgCachePkgFileIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCachePkgFileIterator_end", _wrap_pkgCachePkgFileIterator_end, METH_VARARGS },
 	 { (char *)"pkgCachePkgFileIterator___eq__", _wrap_pkgCachePkgFileIterator___eq__, METH_VARARGS },
 	 { (char *)"pkgCachePkgFileIterator___ne__", _wrap_pkgCachePkgFileIterator___ne__, METH_VARARGS },
@@ -18270,7 +18324,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCachePkgFileIterator_mtime_get", _wrap_pkgCachePkgFileIterator_mtime_get, METH_VARARGS },
 	 { (char *)"delete_pkgCachePkgFileIterator", _wrap_delete_pkgCachePkgFileIterator, METH_VARARGS },
 	 { (char *)"pkgCachePkgFileIterator_swigregister", pkgCachePkgFileIterator_swigregister, METH_VARARGS },
+	 { (char *)"pkgCacheVerFileIterator___nonzero__", _wrap_pkgCacheVerFileIterator___nonzero__, METH_VARARGS },
 	 { (char *)"pkgCacheVerFileIterator_next", _wrap_pkgCacheVerFileIterator_next, METH_VARARGS },
+	 { (char *)"pkgCacheVerFileIterator___iter__", _wrap_pkgCacheVerFileIterator___iter__, METH_VARARGS },
 	 { (char *)"pkgCacheVerFileIterator_end", _wrap_pkgCacheVerFileIterator_end, METH_VARARGS },
 	 { (char *)"pkgCacheVerFileIterator___eq__", _wrap_pkgCacheVerFileIterator___eq__, METH_VARARGS },
 	 { (char *)"pkgCacheVerFileIterator___ne__", _wrap_pkgCacheVerFileIterator___ne__, METH_VARARGS },
@@ -18304,7 +18360,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCacheFile_BuildGroupOrs", _wrap_pkgCacheFile_BuildGroupOrs, METH_VARARGS },
 	 { (char *)"pkgCacheFile_UpdateVerState", _wrap_pkgCacheFile_UpdateVerState, METH_VARARGS },
 	 { (char *)"pkgCacheFile_Head", _wrap_pkgCacheFile_Head, METH_VARARGS },
-	 { (char *)"pkgCacheFile_PkgBegin", _wrap_pkgCacheFile_PkgBegin, METH_VARARGS },
+	 { (char *)"pkgCacheFile_PkgIter", _wrap_pkgCacheFile_PkgIter, METH_VARARGS },
 	 { (char *)"pkgCacheFile_FindPkg", _wrap_pkgCacheFile_FindPkg, METH_VARARGS },
 	 { (char *)"pkgCacheFile_GetCache", _wrap_pkgCacheFile_GetCache, METH_VARARGS },
 	 { (char *)"pkgCacheFile_VS", _wrap_pkgCacheFile_VS, METH_VARARGS },
@@ -18487,7 +18543,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_pkgAcqFile", _wrap_new_pkgAcqFile, METH_VARARGS },
 	 { (char *)"delete_pkgAcqFile", _wrap_delete_pkgAcqFile, METH_VARARGS },
 	 { (char *)"pkgAcqFile_swigregister", pkgAcqFile_swigregister, METH_VARARGS },
-	 { (char *)"pkgAcquire_ItemsList", _wrap_pkgAcquire_ItemsList, METH_VARARGS },
+	 { (char *)"pkgAcquire_ItemsIter", _wrap_pkgAcquire_ItemsIter, METH_VARARGS },
 	 { (char *)"pkgAcquire_GetConfig", _wrap_pkgAcquire_GetConfig, METH_VARARGS },
 	 { (char *)"pkgAcquire_Run", _wrap_pkgAcquire_Run, METH_VARARGS },
 	 { (char *)"pkgAcquire_Shutdown", _wrap_pkgAcquire_Shutdown, METH_VARARGS },
@@ -18555,6 +18611,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_pkgAcquireStatusDumb", _wrap_new_pkgAcquireStatusDumb, METH_VARARGS },
 	 { (char *)"delete_pkgAcquireStatusDumb", _wrap_delete_pkgAcquireStatusDumb, METH_VARARGS },
 	 { (char *)"pkgAcquireStatusDumb_swigregister", pkgAcquireStatusDumb_swigregister, METH_VARARGS },
+	 { (char *)"ROpPyProgress_Op_set", _wrap_ROpPyProgress_Op_set, METH_VARARGS },
+	 { (char *)"ROpPyProgress_Op_get", _wrap_ROpPyProgress_Op_get, METH_VARARGS },
+	 { (char *)"ROpPyProgress_SubOp_set", _wrap_ROpPyProgress_SubOp_set, METH_VARARGS },
+	 { (char *)"ROpPyProgress_SubOp_get", _wrap_ROpPyProgress_SubOp_get, METH_VARARGS },
+	 { (char *)"ROpPyProgress_Percent_set", _wrap_ROpPyProgress_Percent_set, METH_VARARGS },
+	 { (char *)"ROpPyProgress_Percent_get", _wrap_ROpPyProgress_Percent_get, METH_VARARGS },
+	 { (char *)"ROpPyProgress_MajorChange_set", _wrap_ROpPyProgress_MajorChange_set, METH_VARARGS },
+	 { (char *)"ROpPyProgress_MajorChange_get", _wrap_ROpPyProgress_MajorChange_get, METH_VARARGS },
+	 { (char *)"ROpPyProgress_CheckChange", _wrap_ROpPyProgress_CheckChange, METH_VARARGS },
+	 { (char *)"new_ROpPyProgress", _wrap_new_ROpPyProgress, METH_VARARGS },
+	 { (char *)"delete_ROpPyProgress", _wrap_delete_ROpPyProgress, METH_VARARGS },
+	 { (char *)"ROpPyProgress_swigregister", ROpPyProgress_swigregister, METH_VARARGS },
 	 { NULL, NULL }
 };
 
@@ -18578,6 +18646,9 @@ static void *_p_pkgAcquireStatusDumbTo_p_pkgAcquireStatus(void *x) {
 }
 static void *_p_OpTextProgressTo_p_OpProgress(void *x) {
     return (void *)((OpProgress *)  ((OpTextProgress *) x));
+}
+static void *_p_ROpPyProgressTo_p_OpProgress(void *x) {
+    return (void *)((OpProgress *)  ((ROpPyProgress *) x));
 }
 static swig_type_info _swigt__p_PackageFile[] = {{"_p_PackageFile", 0, "PackageFile *", 0},{"_p_PackageFile"},{"_p_pkgCache__PackageFile"},{0}};
 static swig_type_info _swigt__p_pkgCache__PackageFile[] = {{"_p_pkgCache__PackageFile", 0, "pkgCache::PackageFile *", 0},{"_p_pkgCache__PackageFile"},{"_p_PackageFile"},{0}};
@@ -18614,6 +18685,7 @@ static swig_type_info _swigt__p_Item[] = {{"_p_Item", 0, "Item const *", 0},{"_p
 static swig_type_info _swigt__p_void[] = {{"_p_void", 0, "void *", 0},{"_p_void"},{0}};
 static swig_type_info _swigt__p_pkgAcquire__Item[] = {{"_p_pkgAcquire__Item", 0, "pkgAcquire::Item *", 0},{"_p_pkgAcqArchive", _p_pkgAcqArchiveTo_p_pkgAcquire__Item},{"_p_pkgAcqFile", _p_pkgAcqFileTo_p_pkgAcquire__Item},{"_p_pkgAcqIndex", _p_pkgAcqIndexTo_p_pkgAcquire__Item},{"_p_pkgAcqIndexRel", _p_pkgAcqIndexRelTo_p_pkgAcquire__Item},{"_p_pkgAcquire__Item"},{0}};
 static swig_type_info _swigt__p_MMap[] = {{"_p_MMap", 0, "MMap *", 0},{"_p_MMap"},{0}};
+static swig_type_info _swigt__p_PyObject[] = {{"_p_PyObject", 0, "PyObject *", 0},{"_p_PyObject"},{0}};
 static swig_type_info _swigt__p_pkgRecords__Parser[] = {{"_p_pkgRecords__Parser", 0, "pkgRecords::Parser *", 0},{"_p_pkgRecords__Parser"},{0}};
 static swig_type_info _swigt__p_p_pkgCache__Version[] = {{"_p_p_pkgCache__Version", 0, "pkgCache::Version **", 0},{"_p_p_pkgCache__Version"},{"_p_p_Version"},{0}};
 static swig_type_info _swigt__p_p_Version[] = {{"_p_p_Version", 0, "Version **", 0},{"_p_p_Version"},{"_p_p_pkgCache__Version"},{0}};
@@ -18633,7 +18705,8 @@ static swig_type_info _swigt__p_pkgDepCache[] = {{"_p_pkgDepCache", 0, "pkgDepCa
 static swig_type_info _swigt__p_DynamicMMap__Pool[] = {{"_p_DynamicMMap__Pool", 0, "DynamicMMap::Pool *", 0},{"_p_DynamicMMap__Pool"},{0}};
 static swig_type_info _swigt__p_pkgPackageManager[] = {{"_p_pkgPackageManager", 0, "pkgPackageManager *", 0},{"_p_pkgPackageManager"},{0}};
 static swig_type_info _swigt__p_OpTextProgress[] = {{"_p_OpTextProgress", 0, "OpTextProgress *", 0},{"_p_OpTextProgress"},{0}};
-static swig_type_info _swigt__p_OpProgress[] = {{"_p_OpProgress", 0, "OpProgress *", 0},{"_p_OpProgress"},{"_p_OpTextProgress", _p_OpTextProgressTo_p_OpProgress},{0}};
+static swig_type_info _swigt__p_OpProgress[] = {{"_p_OpProgress", 0, "OpProgress *", 0},{"_p_OpProgress"},{"_p_OpTextProgress", _p_OpTextProgressTo_p_OpProgress},{"_p_ROpPyProgress", _p_ROpPyProgressTo_p_OpProgress},{0}};
+static swig_type_info _swigt__p_ROpPyProgress[] = {{"_p_ROpPyProgress", 0, "ROpPyProgress *", 0},{"_p_ROpPyProgress"},{0}};
 static swig_type_info _swigt__p_Provides[] = {{"_p_Provides", 0, "Provides *", 0},{"_p_Provides"},{"_p_pkgCache__Provides"},{0}};
 static swig_type_info _swigt__p_pkgCache__Provides[] = {{"_p_pkgCache__Provides", 0, "pkgCache::Provides *", 0},{"_p_pkgCache__Provides"},{"_p_Provides"},{0}};
 static swig_type_info _swigt__p_pkgRepository[] = {{"_p_pkgRepository", 0, "pkgRepository *", 0},{"_p_pkgRepository"},{0}};
@@ -18692,6 +18765,7 @@ _swigt__p_Item,
 _swigt__p_void, 
 _swigt__p_pkgAcquire__Item, 
 _swigt__p_MMap, 
+_swigt__p_PyObject, 
 _swigt__p_pkgRecords__Parser, 
 _swigt__p_p_pkgCache__Version, 
 _swigt__p_p_Version, 
@@ -18712,6 +18786,7 @@ _swigt__p_DynamicMMap__Pool,
 _swigt__p_pkgPackageManager, 
 _swigt__p_OpTextProgress, 
 _swigt__p_OpProgress, 
+_swigt__p_ROpPyProgress, 
 _swigt__p_Provides, 
 _swigt__p_pkgCache__Provides, 
 _swigt__p_pkgRepository, 
