@@ -626,6 +626,10 @@ static bool CheckValidity(string CacheFile, FileIterator Start,
       return false;
    }
    
+   // CNC:2003-11-24
+   if (_system->OptionsHash() != Cache.HeaderP->OptionsHash)
+      return false;
+
    /* Now we check every index file, see if it is in the cache,
       verify the IMS data and check that it is on the disk too.. */
    SPtrArray<bool> Visited = new bool[Cache.HeaderP->PackageFileCount];
@@ -873,6 +877,9 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
       if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
 		     Files.begin(),Files.begin()+EndOfSource) == false)
 	 return false;
+
+      // CNC:2003-11-24
+      Gen.GetCache().HeaderP->OptionsHash = _system->OptionsHash();
 
       // CNC:2003-03-18
       if (Gen.HasFileDeps() == true) {

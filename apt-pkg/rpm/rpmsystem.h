@@ -67,6 +67,8 @@ class rpmSystem : public pkgSystem
    virtual bool IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep);
    virtual void CacheBuilt();
 
+   virtual unsigned long OptionsHash() const;
+
    rpmSystem();
    virtual ~rpmSystem();
 };

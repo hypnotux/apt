@@ -107,6 +107,9 @@ class pkgSystem
    virtual bool IgnoreDep(pkgVersioningSystem &VS, pkgCache::DepIterator &Dep)
 	{return false;};
 
+   // CNC:2003-11-24
+   virtual unsigned long OptionsHash() const {return 0;};
+
    pkgSystem();
    virtual ~pkgSystem() {};
 };

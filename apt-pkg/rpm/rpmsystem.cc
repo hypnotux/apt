@@ -465,6 +465,38 @@ void rpmSystem::CacheBuilt()
    rpmdata->CacheBuilt();
 }
 									/*}}}*/
+
+// System::OptionsHash - Identify options which change the cache	/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+static void HashString(unsigned long &Hash, const char *Str)
+{
+   for (const char *I = Str; *I != 0; I++)
+      Hash = 5*Hash + *I;
+}
+static void HashOption(unsigned long &Hash, const char *Name)
+{
+   const Configuration::Item *Top = _config->Tree(Name);
+   if (Top != 0)
+      HashString(Hash, Top->Value.c_str());
+}
+static void HashOptionTree(unsigned long &Hash, const char *Name)
+{
+   const Configuration::Item *Top = _config->Tree(Name);
+   if (Top != 0)
+      for (Top = Top->Child; Top != 0; Top = Top->Next)
+	 HashString(Hash, Top->Value.c_str());
+}
+unsigned long rpmSystem::OptionsHash() const
+{
+   unsigned long Hash = 0;
+   HashOption(Hash, "RPM::Architecture");
+   HashOptionTree(Hash, "RPM::Allow-Duplicated");
+   HashOptionTree(Hash, "RPM::Ignore");
+   return Hash;
+}
+									/*}}}*/
+
 #endif /* HAVE_RPM */
 
 // vim:sts=3:sw=3
