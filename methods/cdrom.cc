@@ -39,6 +39,7 @@ class CDROMMethod : public pkgAcqMethod
    virtual bool Fetch(FetchItem *Itm);
    string GetID(string Name);
    virtual void Exit();
+   virtual string PreferredURI();
 
    // CNC:2002-10-18
    bool Copy(string Src, string Dest);
@@ -53,11 +54,43 @@ class CDROMMethod : public pkgAcqMethod
 /* */
 CDROMMethod::CDROMMethod() : pkgAcqMethod("1.0",SingleInstance | LocalOnly |
 					  SendConfig | NeedsCleanup |
-					  Removable), 
+					  Removable | HasPreferredURI), 
                                           DatabaseLoaded(false), 
                                           Mounted(false)
 {
 };
+									/*}}}*/
+// CNC:2004-04-27
+// CDROMMethod::PreferredURI() -					/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+string CDROMMethod::PreferredURI()
+{
+   CDROM = _config->FindDir("Acquire::cdrom::mount","/cdrom/");
+   if (CDROM[0] == '.')
+      CDROM= SafeGetCWD() + '/' + CDROM;
+   string ID;
+   MountCdrom(CDROM);
+   if (IdentCdrom(CDROM,ID,2) == true) {
+      if (DatabaseLoaded == false)
+      {
+	 string DFile = _config->FindFile("Dir::State::cdroms");
+	 if (FileExists(DFile) == true)
+	 {
+	    if (ReadConfigFile(Database,DFile) == false) {
+	       _error->Error(_("Unable to read the cdrom database %s"),
+			     DFile.c_str());
+	       return "";
+	    }
+	 }
+	 DatabaseLoaded = true;
+      }
+      string Name = Database.Find("CD::"+ID);
+      if (Name.empty() == false)
+	 return "cdrom:[" + Name + "]";
+   }
+   return "";
+}
 									/*}}}*/
 // CDROMMethod::Exit - Unmount the disc if necessary			/*{{{*/
 // ---------------------------------------------------------------------

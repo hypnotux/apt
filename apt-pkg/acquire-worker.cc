@@ -164,6 +164,20 @@ bool pkgAcquire::Worker::Start()
    if (OwnerQ != 0)
       SendConfiguration();
    
+   // CNC:2004-04-27
+   if (Config->HasPreferredURI == true &&
+       Config->DonePreferredURI == false &&
+       Config->PreferredURI.empty() == true) {
+      SetNonBlock(InFd,false);
+      SetNonBlock(OutFd,false);
+      OutQueue += "679 Preferred URI\n\n";
+      Config->PreferredURI = "<none>";
+      if (OutFdReady() == true)
+	 while (InFdReady() == true && Config->PreferredURI == "<none>");
+      SetNonBlock(InFd,true);
+      SetNonBlock(OutFd,true);
+   }
+
    return true;
 }
 									/*}}}*/
@@ -220,6 +234,12 @@ bool pkgAcquire::Worker::RunMessages()
 	 // 102 Status
 	 case 102:
 	 Status = LookupTag(Message,"Message");
+	 break;
+
+	 // CNC:2004-04-27
+	 // 179 Preferred URI
+	 case 179:
+	 Config->PreferredURI = LookupTag(Message, "PreferredURI");
 	 break;
 	    
 	 // 200 URI Start
@@ -345,6 +365,8 @@ bool pkgAcquire::Worker::Capabilities(string Message)
    Config->LocalOnly = StringToBool(LookupTag(Message,"Local-Only"),false);
    Config->NeedsCleanup = StringToBool(LookupTag(Message,"Needs-Cleanup"),false);
    Config->Removable = StringToBool(LookupTag(Message,"Removable"),false);
+   // CNC:2004-04-27
+   Config->HasPreferredURI = StringToBool(LookupTag(Message,"Has-Preferred-URI"),false);
 
    // Some debug text
    if (Debug == true)
@@ -356,7 +378,9 @@ bool pkgAcquire::Worker::Capabilities(string Message)
 	      " SendConfig:" << Config->SendConfig << 
 	      " LocalOnly: " << Config->LocalOnly << 
 	      " NeedsCleanup: " << Config->NeedsCleanup << 
-	      " Removable: " << Config->Removable << endl;
+	      // CNC:2004-04-27
+	      " Removable: " << Config->Removable <<
+	      " HasPreferredURI: " << Config->HasPreferredURI << endl;
    }
    
    return true;
@@ -546,3 +570,5 @@ void pkgAcquire::Worker::ItemDone()
    Status = string();
 }
 									/*}}}*/
+
+// vim:sts=3:sw=3

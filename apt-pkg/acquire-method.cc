@@ -61,6 +61,10 @@ pkgAcqMethod::pkgAcqMethod(const char *Ver,unsigned long Flags)
 
    if ((Flags & Removable) == Removable)
       strcat(End,"Removable: true\n");
+
+   // CNC:2004-04-27
+   if ((Flags & HasPreferredURI) == HasPreferredURI)
+      strcat(End,"Has-Preferred-URI: true\n");
    strcat(End,"\n");
 
    if (write(STDOUT_FILENO,S,strlen(S)) != (signed)strlen(S))
@@ -390,6 +394,18 @@ int pkgAcqMethod::Run(bool Single)
 	    
 	    break;					     
 	 }   
+
+	 // CNC:2004-04-27
+	 case 679:
+	 {
+	    char S[1024];
+	    snprintf(S,sizeof(S),"179 Preferred URI\nPreferredURI: %s\n\n",
+		     PreferredURI().c_str());
+	    if (write(STDOUT_FILENO,S,strlen(S)) != (signed)strlen(S))
+	       exit(100);
+	    break;
+
+	 }
       }      
    }
 

@@ -239,6 +239,9 @@ bool pkgRPMPM::RunScriptsWithPkgs(const char *Cnf)
 /* This globs the operations and calls rpm */
 bool pkgRPMPM::Go()
 {
+   if (List.empty() == true)
+      return true;
+
    if (RunScripts("RPM::Pre-Invoke") == false)
       return false;
 
@@ -323,6 +326,7 @@ bool pkgRPMPM::Go()
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {
+	 _error->DumpErrors();
 	 Ret = false;
 	 goto exit;
       }
@@ -344,6 +348,7 @@ bool pkgRPMPM::Go()
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {
+	 _error->DumpErrors();
 	 Ret = false;
 	 goto exit;
       }

@@ -240,6 +240,10 @@ struct pkgAcquire::MethodConfig
    bool LocalOnly;
    bool NeedsCleanup;
    bool Removable;
+   // CNC:2004-04-27
+   bool HasPreferredURI;
+   bool DonePreferredURI;
+   string PreferredURI;
    
    MethodConfig();
 };
@@ -284,3 +288,5 @@ class pkgAcquireStatus
 };
 
 #endif
+
+// vim:sts=3:sw=3

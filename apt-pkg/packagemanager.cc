@@ -609,8 +609,14 @@ pkgPackageManager::OrderResult pkgPackageManager::OrderInstall()
 	    clog << "Sequence completed at " << Pkg.Name() << endl;
 	 if (DoneSomething == false)
 	 {
+// CNC:2004-04-27 - This has changed due to PreferredURI.
+#if 0
 	    _error->Error("Internal Error, ordering was unable to handle the media swap");
 	    return Failed;
+#else
+	    if (Debug == true)
+	       clog << "Haven't done anything in OrderInstall()" << endl;
+#endif
 	 }	 
 	 return Incomplete;
       }

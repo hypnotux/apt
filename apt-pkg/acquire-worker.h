@@ -87,3 +87,5 @@ class pkgAcquire::Worker
 };
 
 #endif
+
+// vim:sts=3:sw=3
