@@ -518,12 +518,20 @@ static void HashOptionTree(unsigned long &Hash, const char *Name)
       for (Top = Top->Child; Top != 0; Top = Top->Next)
 	 HashString(Hash, Top->Value.c_str());
 }
+static void HashOptionFile(unsigned long &Hash, const char *Name)
+{
+   string FileName = _config->FindFile(Name);
+   struct stat st;
+   stat(FileName.c_str(), &st);
+   Hash += st.st_mtime;
+}
 unsigned long rpmSystem::OptionsHash() const
 {
    unsigned long Hash = 0;
    HashOption(Hash, "RPM::Architecture");
    HashOptionTree(Hash, "RPM::Allow-Duplicated");
    HashOptionTree(Hash, "RPM::Ignore");
+   HashOptionFile(Hash, "Dir::Etc::rpmpriorities");
    return Hash;
 }
 									/*}}}*/
