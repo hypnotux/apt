@@ -337,6 +337,14 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 #else
    iSize = St.st_size;
 #endif
+
+   // Restore just after opening the database, and just after closing.
+   if (WriteLock) {
+      struct utimbuf Ut;
+      Ut.actime = DbFileMtime;
+      Ut.modtime = DbFileMtime;
+      utime(DataPath(false).c_str(), &Ut);
+   }
 }
 
 RPMDBHandler::~RPMDBHandler()
@@ -357,6 +365,7 @@ RPMDBHandler::~RPMDBHandler()
    rpmdbClose(Handler);
 #endif
 
+   // Restore just after opening the database, and just after closing.
    if (WriteLock) {
       struct utimbuf Ut;
       Ut.actime = DbFileMtime;
