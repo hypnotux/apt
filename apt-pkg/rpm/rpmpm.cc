@@ -802,13 +802,15 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    packagesTotal = install.size()+upgrade.size();
 
 #if RPM_VERSION >= 0x040100
-   rc = rpmtsCheck(TS);
-   probs = rpmtsProblems(TS);
-   if (rc || probs->numProblems > 0) {
-      rpmpsPrint(NULL, probs);
-      rpmpsFree(probs);
-      _error->Error(_("Transaction set check failed"));
-      goto exit;
+   if (_config->FindB("RPM::NoDeps", false) == false) {
+      rc = rpmtsCheck(TS);
+      probs = rpmtsProblems(TS);
+      if (rc || probs->numProblems > 0) {
+	 rpmpsPrint(NULL, probs);
+	 rpmpsFree(probs);
+	 _error->Error(_("Transaction set check failed"));
+	 goto exit;
+      }
    }
 #else
 #if RPM_VERSION < 0x040000
@@ -816,16 +818,16 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 #else
    rpmDependencyConflict conflicts;
 #endif
-   int numConflicts;
-   if (_config->FindB("RPM::NoDeps", false) == false &&
-       rpmdepCheck(TS, &conflicts, &numConflicts)) 
-   {
-      _error->Error(_("Transaction set check failed"));
-      if (conflicts) {
-	 printDepProblems(stderr, conflicts, numConflicts);
-	 rpmdepFreeConflicts(conflicts, numConflicts);
+   if (_config->FindB("RPM::NoDeps", false) == false) {
+      int numConflicts;
+      if (rpmdepCheck(TS, &conflicts, &numConflicts)) {
+	 _error->Error(_("Transaction set check failed"));
+	 if (conflicts) {
+	    printDepProblems(stderr, conflicts, numConflicts);
+	    rpmdepFreeConflicts(conflicts, numConflicts);
+	 }
+	 goto exit;
       }
-      goto exit;
    }
 #endif
 
