@@ -1,0 +1,165 @@
+function usage
+{
+	( echo "$SHORTHELP"
+	  echo "See $PRGNAME --help for extended help."
+	) >&2
+}
+
+function help
+{
+	cat << EOF >&1
+Usage: $PRGNAME [options] [apt-get options]
+Options:
+  --apt-help	print apt help.
+
+  --apt-version	print apt version.
+
+   -h		print short help and exit.
+
+  --help	print this help and exit.
+
+  --sourceslist
+		Select the sourceslist file to be used (default
+		is /etc/apt/sources.list)
+
+
+Options handed over to rpm, see rpm manual for their functionality.
+
+  --test	Rpm option --test.
+
+  --force-rpm	Rpm option --force.
+
+  --force-rpm-install
+             	Rpm option --force, this option will only be active
+		during rpm installation (rpm -U or rpm -i).
+
+$PRGNAME is a wrapper around apt-get, extending the available arguments of
+apt-get with some specific rpm arguments.  $PRGNAME does nothing more than
+passing the provided arguments to apt-get.  The specific rpm arguments are
+converted into the apt-get argument convention, before they are passed to
+apt-get.
+
+Report bugs to <apt4rpm-devel@lists.sourceforge.net>.
+EOF
+}
+
+PRGNAME=$(basename $0)
+
+readonly SHORTHELP="Usage: $PRGNAME [apt-options] [--apt-help]
+  [--test] [--force-rpm] [--force-rpm-install} [--sourceslist] [--verbose]"
+
+# Command line argument parsing, the allowed arguments (for apt-get) are
+# alphabetically listed, keep it this way please.
+APTOPT="checksig,force,test,arch-only,assume-yes,build,compile,config-file:"
+APTOPT="$APTOPT,default-release,diff-only,download-only,dry-run,fix-broken"
+APTOPT="$APTOPT,fix-missing,force-yes,help,ignore-hold,ignore-missing"
+APTOPT="$APTOPT,just-print,list-cleanup,no-act,no-download,no-list-cleanup"
+APTOPT="$APTOPT,no-remove,no-upgrade,only-source,option:,print-uris,purge"
+APTOPT="$APTOPT,quiet,recon,reinstall,remove,show-upgraded,simulate,tar-only"
+APTOPT="$APTOPT,target-release,trivial-only,version,yes"
+
+# Additional options, provided by apt-rpm
+# ADDOPT="apt-help,apt-version,checksig,force-rpm,no-checksig,test"
+ADDOPT="apt-help,apt-version,force-rpm,force-rpm-install,sourceslist:,test"
+
+# Note that we use `"$@"' to let each command-line parameter expand to a
+# separate word. The quotes around `$@' are essential!
+# We need TEMP as the `eval set --' would nuke the return value of getopt.
+TEMP=$(getopt --options=bc:dfhmo:qstuvy --long $ADDOPT,$APTOPT -n $PRGNAME -- "$@")
+if [ $? -ne 0 ]; then
+  echo "Terminating..." >&2
+  exit 1
+fi
+
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+while true
+do
+	case $1 in
+	--apt-help)		ARG="$ARG --help";;
+	--apt-version|-v)	ARG="$ARG --version";;
+	--arch-only)		ARG="$ARG $1";;
+	--assume-yes)		ARG="$ARG $1";;
+	--build|-b)		ARG="$ARG $1";;
+	--checksig)		RPM_CHECKSIG=yes;;
+	--compile)		ARG="$ARG $1";;
+	--config-file|-c)	ARG="$ARG $1 $2"; shift;;
+	--default-release)	ARG="$ARG $1";;
+	--diff-only)		ARG="$ARG $1";;
+	--download-only|-d)	ARG="$ARG $1";;
+	--dry-run)		ARG="$ARG $1";;
+	--fix-broken|-f)	APT_FIXBROKEN=yes;;
+	--fix-missing|-m)	ARG="$ARG $1";;
+	--force-rpm)		RPM_FORCE=yes;;
+	--force-rpm-install)	RPM_FORCE_INSTALL=yes;;
+	--force-yes)		ARG="$ARG $1";;
+	--help)			help; exit;;
+	 -h)			usage;exit;;
+	--ignore-hold)		ARG="$ARG $1";;
+	--ignore-missing)	ARG="$ARG $1";;
+	--just-print)		ARG="$ARG $1";;
+	--list-cleanup)		ARG="$ARG $1";;
+	--no-act)		ARG="$ARG $1";;
+	--no-checksig)		RPM_CHECKSIG=no;;
+	--no-download)		ARG="$ARG $1";;
+	--no-list-cleanup)	ARG="$ARG $1";;
+	--no-remove)		ARG="$ARG $1";;
+	--no-upgrade)		ARG="$ARG $1";;
+	--only-source)		ARG="$ARG $1";;
+	--option|-o)		ARG="$ARG $1 $2"; shift;;
+	--print-uris)		ARG="$ARG $1";;
+	--purge)		ARG="$ARG $1";;
+	--quiet|-q)		ARG="$ARG $1";;
+	--recon)		ARG="$ARG $1";;
+	--reinstall)		ARG="$ARG $1";;
+	--remove)		ARG="$ARG $1";;
+	--show-upgraded)	ARG="$ARG $1";;
+	--simulate|-s)		ARG="$ARG $1";;
+	--sourceslist)		RPM_SRC_LIST=$2; shift;;
+	--tar-only)		ARG="$ARG $1";;
+	--target-release|-t)	ARG="$ARG $1";;
+	--test)			RPM_TEST=yes ;;
+	--trivial-only)		ARG="$ARG $1";;
+	--version)		echo "$PRGNAME version: 0.11"; exit;; # needed for help2man
+	--yes|-y)		ARG="$ARG $1";;
+	--)			shift; ARG="$ARG $@"; break;;
+	*)			echo "unknow argument \"$1\""; exit 1;;
+	esac
+	shift
+done
+
+[ -n "$RPM_CHECKSIG"      ] && ARG="-o rpm::checksig=$RPM_CHECKSIG $ARG"
+[ -n "$RPM_FORCE_INSTALL" ] && ARG="-o rpm::Install-Options::=--force $ARG"
+[ -n "$RPM_TEST"          ] && ARG="-o rpm::options::=--test $ARG"
+
+if [ "$RPM_FORCE" == "yes" ]; then
+	ARG="-o rpm::options::=--force $ARG"
+
+	if [ "$RPM_FORCE_INSTALL" == "yes" ]; then
+		echo -n "warning: it does not make sense to use "
+		echo "--force-rpm-install in combination"
+		echo "with --force-rpm."
+	fi
+fi
+
+if [ -n "$RPM_SRC_LIST" ]; then
+	DIR=$(apt-config dump  2>&1  | grep "Dir::Etc " | cut -d\" -f2)
+	if [ -f /$DIR/$RPM_SRC_LIST ]; then
+		ARG="-o dir::etc::sourcelist=$RPM_SRC_LIST $ARG"
+	else
+		echo "error: the provided sourceslist file does not exist" >&2
+		exit 1
+	fi
+fi
+
+if [ "$APT_FIXBROKEN" == "yes" ]; then
+  echo "warning: the argument --fix-broken (-f) is not needed normally."
+  echo "If you want to use this apt argument, use apt-get directly."
+  exit 1
+fi
+
+echo "$PRGNAME executing: apt-get $ARG" | tr -s " "
+echo
+apt-get $ARG
+
