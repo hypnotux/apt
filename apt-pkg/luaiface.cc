@@ -121,16 +121,15 @@ bool Lua::RunScripts(const char *ConfListKey, bool CacheChunks)
 	    lua_settop(L, OldTop);
 	    continue;
 	 }
-	 if (FileExists(Value) == true) {
-	    File = Value;
-	 } else {
-	    if (Value[0] != '/') {
-	       File = Dir+Value;
-	       if (FileExists(File) == false)
-		  continue;
-	    } else {
+	 if (Value[0] == '.' || Value[0] == '/') {
+	    if (FileExists(Value) == true)
+	       File = Value;
+	    else
 	       continue;
-	    }
+	 } else {
+	    File = Dir+Value;
+	    if (FileExists(File) == false)
+	       continue;
 	 }
 	 lua_pushstring(L, "script_filename");
 	 lua_pushstring(L, File.c_str());
