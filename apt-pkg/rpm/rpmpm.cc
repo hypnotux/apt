@@ -899,6 +899,10 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 #ifdef HAVE_RPM41
 	 else if (Opts->Value == "--repackage")
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
+#endif
+#if 0
+	 // --noconfigs is only in rpm >= 4.2 (or 4.1.1) 
+	 // which isn't detected currently
 	 else if (Opts->Value == "--noconfigs")
 	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
 #endif
