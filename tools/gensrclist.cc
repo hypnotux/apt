@@ -220,17 +220,8 @@ int main(int argc, char ** argv)
 	 srpmdir = string(prefix) + "/" + srpmdir;
    }
 #else
-   if (!flatStructure) {
+   if (!flatStructure)
       srpmdir = "../"+srpmdir;
-#ifndef REMOVE_THIS_SOMEDAY
-   /* This code is here just so that code in rpmsrcrecords.cc is able
-    * to detect if that's a "new" style SRPM directory scheme, or an
-    * old style. Someday, when most repositories were already rebuilt
-    * with that new gensrclist tool, this code may be safely removed. */
-   } else {
-      srpmdir = "./"+srpmdir;
-#endif
-   }
 #endif
    
    entry_no = scandir(buf, &dirEntries, selectDirent, alphasort);

@@ -110,6 +110,18 @@ pkgSrcRecords::Parser *pkgSrcRecords::Find(const char *Package,bool SrcOnly)
       if ((*Current)->Package() == Package)
 	 return *Current;
       
+
+      // CNC:2003-11-21
+      // Check for a files hit
+      vector<pkgSrcRecords::File> Files;
+      if ((*Current)->Files(Files) == true) {
+         vector<pkgSrcRecords::File>::const_iterator I = Files.begin();
+	 for (; I != Files.end(); I++) {
+            if (flNotDir(I->Path) == flNotDir(Package))
+	       return *Current;
+	 }
+      }
+      
       if (SrcOnly == true)
 	 continue;
       

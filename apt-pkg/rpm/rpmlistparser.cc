@@ -251,6 +251,10 @@ bool rpmListParser::NewVersion(pkgCache::VerIterator Ver)
    if (ParseProvides(Ver) == false)
        return false;
 
+   if (Handler->ProvideFileName() &&
+       NewProvides(Ver, Handler->FileName(), "") == false)
+	 return false;
+
    return true;
 }
 									/*}}}*/

@@ -170,7 +170,7 @@ bool rpmListIndex::Exists() const
    return FileExists(IndexPath());
 }
 									/*}}}*/
-// SrcListIndex::Size - Return the size of the index			/*{{{*/
+// rpmListIndex::Size - Return the size of the index			/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 unsigned long rpmListIndex::Size() const
@@ -498,6 +498,27 @@ unsigned long rpmSrcDirIndex::Size() const
    return Res;
 }
 
+// SinglePkgIndex::ArchiveURI - URI for the archive       	        /*{{{*/
+// ---------------------------------------------------------------------
+string rpmSinglePkgIndex::ArchiveURI(string File) const
+{
+   char *cwd = getcwd(NULL,0);
+   string URI = "file://"+flCombine(cwd, File);
+   free(cwd);
+   return URI;
+}
+									/*}}}*/
+// SinglePkgIndex::ArchiveURI - URI for the archive       	        /*{{{*/
+// ---------------------------------------------------------------------
+string rpmSingleSrcIndex::ArchiveURI(string File) const
+{
+   char *cwd = getcwd(NULL,0);
+   string URI = "file://"+flCombine(cwd, File);
+   free(cwd);
+   return URI;
+}
+									/*}}}*/
+
 // DatabaseIndex::rpmDatabaseIndex - Constructor			/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -773,6 +794,14 @@ const pkgIndexFile::Type *rpmSrcDirIndex::GetType() const
 const pkgIndexFile::Type *rpmPkgDirIndex::GetType() const
 {
    return &_apt_Pkg;
+}
+const pkgIndexFile::Type *rpmSinglePkgIndex::GetType() const
+{
+   return &_apt_Pkg;
+}
+const pkgIndexFile::Type *rpmSingleSrcIndex::GetType() const
+{
+   return &_apt_Src;
 }
 const pkgIndexFile::Type *rpmDatabaseIndex::GetType() const
 {

@@ -37,6 +37,8 @@ rpmRecordParser::rpmRecordParser(string File, pkgCache &Cache)
       struct stat Buf;
       if (stat(File.c_str(),&Buf) == 0 && S_ISDIR(Buf.st_mode))
 	 Handler = new RPMDirHandler(File);
+      else if (flExtension(File) == "rpm")
+	 Handler = new RPMSingleFileHandler(File);
       else
 	 Handler = new RPMFileHandler(File);
    }
@@ -172,6 +174,8 @@ string rpmRecordParser::LongDesc()
 /* */
 string rpmRecordParser::SourcePkg()
 {
+   // This must be the *package* name, not the *file* name. We have no
+   // current way to extract it safely from the file name.
    return "";
 }
 									/*}}}*/

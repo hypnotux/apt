@@ -45,6 +45,7 @@ class RPMHandler
    virtual string Directory() {return "";};
    virtual unsigned long FileSize() {return 1;};
    virtual string MD5Sum() {return "";};
+   virtual bool ProvideFileName() {return false;};
 
    RPMHandler() : iOffset(0), iSize(0), HeaderP(0) {};
    virtual ~RPMHandler() {};
@@ -53,6 +54,8 @@ class RPMHandler
 
 class RPMFileHandler : public RPMHandler
 {   
+   protected:
+
    FD_t FD;
 
    public:
@@ -72,9 +75,34 @@ class RPMFileHandler : public RPMHandler
    virtual ~RPMFileHandler();
 };
 
+class RPMSingleFileHandler : public RPMFileHandler
+{   
+   protected:
+
+   string sFilePath;
+
+   public:
+
+   virtual bool Skip();
+   virtual bool Jump(unsigned int Offset);
+   virtual void Rewind();
+
+   virtual string FileName() {return sFilePath;};
+   virtual string Directory() {return "";};
+   virtual unsigned long FileSize();
+   virtual string MD5Sum();
+   virtual bool ProvideFileName() {return true;};
+
+   RPMSingleFileHandler(string File) : RPMFileHandler(File), sFilePath(File) {};
+   virtual ~RPMSingleFileHandler() {};
+};
+
+
 
 class RPMDBHandler : public RPMHandler
 {
+   protected:
+
 #ifdef HAVE_RPM41
    rpmts Handler;
 #else
@@ -104,6 +132,7 @@ class RPMDBHandler : public RPMHandler
 
 class RPMDirHandler : public RPMHandler
 {   
+   protected:
 
    DIR *Dir;
    string sDirName;

@@ -1144,6 +1144,40 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
       pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
       ioprintf(c1out,_("Note, selecting %s instead of %s\n"),
 	       Tmp.Name(),Pkg.Name());
+      // CNC:2003-11-21 - Check if the current candidate is really
+      //                  providing that dependency
+      pkgCache::VerIterator Ver = Cache[Tmp].CandidateVerIter(Cache);
+      pkgCache::PrvIterator Prv = Ver.ProvidesList();
+      bool Found = false;
+      for (; Prv.end() == false; Prv++) {
+	 if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
+	    Found = true;
+	    break;
+	 }
+      }
+      if (Found == false) {
+	 // The current candidate doesn't provide the needed dependency.
+	 // Look for one that does.
+	 Ver = Tmp.VersionList();
+	 for (; Ver.end() == false; Ver++) {
+	    Prv = Ver.ProvidesList();
+	    Found = false;
+	    for (; Prv.end() == false; Prv++) {
+	       if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
+		  Found = true;
+		  break;
+	       }
+	    }
+	    if (Found) {
+	       Cache.SetCandidateVersion(Ver);
+	       break;
+	    }
+	 }
+	 if (Found == false) {
+	    ioprintf(c1out,_("Internal error. Package %s doesn't provide %s\n"),Tmp.Name(),Pkg.Name());
+	    return false;
+	 }
+      }
       Pkg = Tmp;
    }
    
@@ -2969,6 +3003,13 @@ int main(int argc,const char *argv[])
 	 
       _error->DumpErrors();
       return 100;
+   }
+
+   // CNC:2003-11-21
+   if (CmdL.FileSize() != 1)
+   {
+      for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+	 _config->Set("APT::Arguments::", *I);
    }
 
    // See if the help should be shown

@@ -18,6 +18,9 @@
 #include <apt-pkg/configuration.h>
 #include <apt-pkg/strutl.h>
 
+// CNC:2003-11-21
+#include <apt-pkg/pkgsystem.h>
+
 #include <apti18n.h>
 
 #include <fstream>
@@ -267,6 +270,8 @@ void pkgSourceList::Reset()
    for (const_iterator I = SrcList.begin(); I != SrcList.end(); I++)
       delete *I;
    SrcList.erase(SrcList.begin(),SrcList.end());
+   // CNC:2003-11-21
+   _system->AddSourceFiles(SrcList);
 }
 									/*}}}*/
 // CNC:2003-03-03 - Function moved to ReadAppend() and Reset().

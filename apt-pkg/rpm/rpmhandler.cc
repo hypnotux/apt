@@ -143,6 +143,63 @@ string RPMFileHandler::MD5Sum()
    return str;
 }
 
+bool RPMSingleFileHandler::Skip()
+{
+   if (FD == NULL)
+      return false;
+   if (HeaderP != NULL) {
+      headerFree(HeaderP);
+      HeaderP = NULL;
+      return false;
+   }
+#ifdef HAVE_RPM41
+   rpmts TS = rpmtsCreate();
+   int rc = rpmReadPackageFile(TS, FD, sFilePath.c_str(), &HeaderP);
+   rpmtsFree(TS);
+#else
+   int rc = rpmReadPackageHeader(FD, &HeaderP, 0, NULL, NULL);
+#endif
+   if (rc) {
+      _error->Error(_("Failed reading file %s"), sFilePath.c_str());
+      HeaderP = NULL;
+   }
+   return (HeaderP != NULL);
+}
+
+bool RPMSingleFileHandler::Jump(unsigned Offset)
+{
+   assert(Offset == 0);
+   Rewind();
+   return RPMFileHandler::Jump(Offset);
+}
+
+void RPMSingleFileHandler::Rewind()
+{
+   if (FD == NULL)
+      return;
+   if (HeaderP != NULL) {
+      HeaderP = NULL;
+      headerFree(HeaderP);
+   }
+   lseek(Fileno(FD),0,SEEK_SET);
+}
+
+unsigned long RPMSingleFileHandler::FileSize()
+{
+   struct stat S;
+   if (stat(sFilePath.c_str(),&S) != 0)
+      return 0;
+   return S.st_size;
+}
+
+string RPMSingleFileHandler::MD5Sum()
+{
+   MD5Summation MD5;
+   FileFd File(sFilePath, FileFd::ReadOnly);
+   MD5.AddFD(File.Fd(), File.Size());
+   File.Close();
+   return MD5.Result().Value();
+}
 
 RPMDirHandler::RPMDirHandler(string DirName)
    : sDirName(DirName)

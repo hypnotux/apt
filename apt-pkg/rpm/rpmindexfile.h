@@ -222,5 +222,56 @@ class rpmSrcDirIndex : public rpmSrcListIndex
       {};
 };
 
+class rpmSinglePkgIndex : public rpmPkgListIndex
+{
+   protected:
+
+   string FilePath;
+
+   virtual string MainType() const {return "pkg";}
+   virtual string IndexPath() const {return FilePath;}
+
+   public:
+
+   virtual bool GetReleases(pkgAcquire *Owner) const { return true; }
+   virtual bool GetIndexes(pkgAcquire *Owner) const { return true; }
+
+   // Creates a RPMHandler suitable for usage with this object
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMSingleFileHandler(IndexPath()); };
+
+   virtual string ArchiveURI(string File) const;
+
+   virtual const Type *GetType() const;
+   
+   rpmSinglePkgIndex(string File) :
+	   rpmPkgListIndex("", "", "", NULL), FilePath(File) {};
+};
+
+class rpmSingleSrcIndex : public rpmSrcListIndex
+{
+   protected:
+
+   string FilePath;
+
+   virtual string MainType() const {return "src";}
+   virtual string IndexPath() const {return FilePath;}
+
+   public:
+
+   virtual bool GetReleases(pkgAcquire *Owner) const { return true; }
+   virtual bool GetIndexes(pkgAcquire *Owner) const { return true; }
+
+   // Creates a RPMHandler suitable for usage with this object
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMSingleFileHandler(IndexPath()); };
+
+   virtual string ArchiveURI(string File) const;
+
+   virtual const Type *GetType() const;
+   
+   rpmSingleSrcIndex(string File) :
+	   rpmSrcListIndex("", "", "", NULL), FilePath(File) {};
+};
 
 #endif

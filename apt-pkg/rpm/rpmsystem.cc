@@ -217,6 +217,29 @@ bool rpmSystem::AddStatusFiles(vector<pkgIndexFile *> &List)
    return true;
 }
 									/*}}}*/
+// System::AddSourceFiles - Register aditional source files		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool rpmSystem::AddSourceFiles(vector<pkgIndexFile *> &List)
+{
+   const Configuration::Item *Top;
+   Top = _config->Tree("APT::Arguments");
+   if (Top != 0)
+   {
+      for (Top = Top->Child; Top != 0; Top = Top->Next) {
+	 const string &S = Top->Value;
+	 if (FileExists(S) && flExtension(S) == "rpm")
+	 {
+	    if (S.length() > 8 and string(S, S.length()-8) == ".src.rpm")
+	       List.push_back(new rpmSingleSrcIndex(S));
+	    else
+	       List.push_back(new rpmSinglePkgIndex(S));
+	 }
+      }
+   }
+   return true;
+}
+									/*}}}*/
 #ifdef OLD_FILEDEPS
 static void gatherFileDependencies(map<string,int> &filedeps, Header header)
 {
