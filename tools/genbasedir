@@ -22,7 +22,11 @@ Options:\n\
    --updateinfo=FILE  Update information file\n\
    --flat             Use flat repository, where SRPMS and RPMS are in\n\
                       the topdir (SRPMS are usually in 'topdir/..')\n\
+   --bloat            Do not strip the package file list, needed for some\n\
+                      distributions that use non-automatically generated\n\
+                      file dependencies\n\
    --meta=NAME        Create a meta repository named NAME\n\
+   -h, --help         Display this help\n\
 \n\
 Examples:\n\
 \n\
