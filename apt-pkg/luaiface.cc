@@ -1155,7 +1155,9 @@ static int AptLua_statkeep(lua_State *L)
    SPtr<pkgCache::PkgIterator> PkgI = AptAux_ToPkgIterator(L, 1);
    if (PkgI == NULL)
       return 0;
-   return AptAux_PushBool(L, (*DepCache)[*PkgI].Keep());
+   return AptAux_PushBool(L,
+	        (*DepCache)[*PkgI].Keep() &&
+		!((*DepCache)[*PkgI].iFlags & pkgDepCache::ReInstall));
 }
 
 static int AptLua_statinstall(lua_State *L)
@@ -1189,6 +1191,19 @@ static int AptLua_statnewinstall(lua_State *L)
    if (PkgI == NULL)
       return 0;
    return AptAux_PushBool(L, (*DepCache)[*PkgI].NewInstall());
+}
+
+static int AptLua_statreinstall(lua_State *L)
+{
+   pkgDepCache *DepCache = _lua->GetDepCache(L);
+   if (DepCache == NULL)
+      return 0;
+   SPtr<pkgCache::PkgIterator> PkgI = AptAux_ToPkgIterator(L, 1);
+   if (PkgI == NULL)
+      return 0;
+   return AptAux_PushBool(L,
+	        (*DepCache)[*PkgI].Keep() &&
+		((*DepCache)[*PkgI].iFlags & pkgDepCache::ReInstall));
 }
 
 static int AptLua_statupgrade(lua_State *L)
@@ -1273,6 +1288,12 @@ static int AptLua_statstr(lua_State *L)
       } else {
 	 lua_pushstring(L, "downgrade");
       }
+   } else if (S.Keep() && (S.iFlags & pkgDepCache::ReInstall)) {
+      if (S.NowBroken()) {
+	 lua_pushstring(L, "reinstall(broken)");
+      } else {
+	 lua_pushstring(L, "reinstall");
+      }
    } else if (S.Keep()) {
       if (S.NowBroken()) {
 	 lua_pushstring(L, "keep(broken)");
@@ -1356,6 +1377,7 @@ static const luaL_reg aptlib[] = {
    {"statinstall",	AptLua_statinstall},
    {"statremove",	AptLua_statremove},
    {"statnewinstall",	AptLua_statnewinstall},
+   {"statreinstall",	AptLua_statreinstall},
    {"statupgrade",	AptLua_statupgrade},
    {"statupgradable",	AptLua_statupgradable},
    {"statdowngrade",	AptLua_statdowngrade},
