@@ -69,8 +69,24 @@ class GlobalError
    Item *List;
    bool PendingFlag;
    void Insert(Item *I);
+
+   // CNC:2003-02-24 - Introduced a stack of errors. This allows one to
+   //		       delay error handling until a later time.
+   struct State
+   {
+      Item *List;
+      bool PendingFlag;
+      State *Next;
+   };
+
+   State *Stack;
    
    public:
+
+   // CNC:2003-02-24 - See above.
+   void PushState();
+   bool PopState();
+   bool PopBackState();
 
 #ifndef SWIG
    // Call to generate an error from a library call.
@@ -112,3 +128,5 @@ GlobalError *_GetErrorObj();
 #undef APT_MFORMAT2
 
 #endif
+
+// vim:sts=3:sw=3

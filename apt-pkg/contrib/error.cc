@@ -235,3 +235,59 @@ void GlobalError::Insert(Item *Itm)
    *End = Itm;
 }
 									/*}}}*/
+
+// CNC:2003-02-24
+// GlobalError::*State() - Functions allowing a given error state to be	/*}}}*/
+//			   saved and restored later on.
+// ---------------------------------------------------------------------
+/* */
+void GlobalError::PushState()
+{
+   State *New = new State;
+   New->List = List;
+   New->Next = Stack;
+   Stack = New;
+   List = 0;
+   PendingFlag = false;
+}
+
+bool GlobalError::PopState()
+{
+   if (Stack == 0)
+      return false;
+   Item **End = &List;
+   for (Item *I = List; I != 0; I = I->Next)
+      End = &I->Next;
+   State *Top = Stack;
+   *End = Top->List;
+   PendingFlag |= Top->PendingFlag;
+   Stack = Top->Next;
+   delete Top;
+   return true;
+}
+
+bool GlobalError::PopBackState()
+{
+   if (Stack == 0)
+      return false;
+   Item **End = &List;
+   for (Item *I = List; I != 0; I = I->Next)
+      End = &I->Next;
+   State *Bottom = Stack;
+   State *PreBottom = 0;
+   while (Bottom->Next != 0) {
+      PreBottom = Bottom;
+      Bottom = Bottom->Next;
+   }
+   *End = Bottom->List;
+   PendingFlag |= Bottom->PendingFlag;
+   delete Bottom;
+   if (PreBottom != 0)
+      PreBottom->Next = 0;
+   else
+      Stack = 0;
+   return true;
+}
+									/*}}}*/
+
+// vim:sts=3:sw=3
