@@ -188,7 +188,6 @@ msgid "%s %s for %s %s compiled on %s %s\n"
 msgstr "%s %s para %s %s compilado em %s %s\n"
 
 #: cmdline/apt-cache.cc:1832
-#, fuzzy
 msgid ""
 "Usage: apt-cache [options] command\n"
 "       apt-cache [options] add file1 [file2 ...]\n"
@@ -1314,7 +1313,7 @@ msgstr "Impossível rodar stat no cdrom"
 #: apt-pkg/contrib/cmndline.cc:80
 #, c-format
 msgid "Command line option '%c' [from %s] is not known."
-msgstr "Opção de linha de comando '%s' [de %s] é desconhecida."
+msgstr "Opção de linha de comando '%c' [de %s] é desconhecida."
 
 #: apt-pkg/contrib/cmndline.cc:106 apt-pkg/contrib/cmndline.cc:114
 #: apt-pkg/contrib/cmndline.cc:122
