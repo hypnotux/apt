@@ -687,6 +687,18 @@ static int AptLua_verstr(lua_State *L)
    return AptAux_PushCacheString(L, Ver->VerStr);
 }
 
+static int AptLua_verarch(lua_State *L)
+{
+   if (lua_gettop(L) != 1 || !lua_isuserdata(L, 1)) {
+      lua_pushstring(L, "verarch requires one version as argument");
+      lua_error(L);
+      return 0;
+   }
+   pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
+   return AptAux_PushCacheString(L, Ver->Arch);
+   
+}
+
 static int AptLua_verstrcmp(lua_State *L)
 {
    const char *Ver1, *Ver2;
@@ -940,6 +952,7 @@ static const luaL_reg aptlib[] = {
    {"pkgvercand",	AptLua_pkgvercand},
    {"pkgverlist",	AptLua_pkgverlist},
    {"verstr",		AptLua_verstr},
+   {"verarch",		AptLua_verarch},
    {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
    {"markinstall",	AptLua_markinstall},
