@@ -3,3 +3,4 @@
 - Implement apt-cache provides/whatprovides
 - Implement Minimize
 - Implement depends/provides support in Lua API.
+- Implement build options for source -b command.

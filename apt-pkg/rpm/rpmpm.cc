@@ -20,6 +20,7 @@
 #include <apt-pkg/error.h>
 #include <apt-pkg/configuration.h>
 #include <apt-pkg/luaiface.h>
+#include <apt-pkg/depcache.h>
 
 #include <apti18n.h>
 
@@ -523,10 +524,27 @@ bool pkgRPMPM::Go()
 	 break;
 
        case Item::Install:
-	 if (strchr(I->Pkg.Name(), '#') != NULL)
-	    install.push_back(I->File.c_str());
-	 else
+	 if (strchr(I->Pkg.Name(), '#') != NULL) {
+	    char *name = strdup(I->Pkg.Name());
+	    char *p = strchr(name, '#');
+	    *p = 0;
+	    PkgIterator Pkg = Cache.FindPkg(name);
+	    free(name);
+	    PrvIterator Prv = Pkg.ProvidesList();
+	    bool Installed = false;
+	    for (; Prv.end() == false; Prv++) {
+	       if (Prv.OwnerPkg().CurrentVer().end() == false) {
+		  Installed = true;
+		  break;
+	       }
+	    }
+	    if (Installed)
+	       install.push_back(I->File.c_str());
+	    else
+	       upgrade.push_back(I->File.c_str());
+	 } else {
 	    upgrade.push_back(I->File.c_str());
+	 }
 	 install_or_upgrade.push_back(I->File.c_str());
 	 pkgs_install.push_back(I->Pkg);
 	 break;
