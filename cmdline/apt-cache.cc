@@ -1877,6 +1877,10 @@ bool ShowHelp(CommandLine &Cmd)
       "   dotty - Generate package graphs for GraphVis\n"
       "   xvcg - Generate package graphs for xvcg\n"
       "   policy - Show policy settings\n"
+      // CNC:2003-03-16
+      );
+      _lua->RunScripts("Scripts::AptCache::Help::Command");
+      cout << _(
       "\n"
       "Options:\n"
       "  -h   This help text.\n"

@@ -4,6 +4,11 @@
 --
 -- Author: Gustavo Niemeyer <niemeyer@conectiva.com>
 
+if script_slot == "Scripts::AptCache::Help::Command" then
+    print(_("   list-nodeps - Show installed pkgs not required by other installed pkgs"))
+    return
+end
+
 if command_args[1] ~= "list-nodeps" then
 	return
 end
