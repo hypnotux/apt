@@ -319,7 +319,7 @@ bool pkgRPMPM::Go()
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
       _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::PM::Pre", false);
+      _lua->RunScripts("Scripts::PM::Pre");
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {
@@ -340,7 +340,7 @@ bool pkgRPMPM::Go()
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
       _lua->SetGlobal("transaction_success", Ret);
       _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::PM::Post", false);
+      _lua->RunScripts("Scripts::PM::Post");
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {

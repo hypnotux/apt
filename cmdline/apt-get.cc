@@ -1274,7 +1274,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	 _lua->SetGlobal("packages", GoodSolutions);
 	 _lua->SetGlobal("packagenames", GoodSolutionNames);
 	 _lua->SetGlobal("selected");
-	 _lua->RunScripts("Scripts::AptGet::Install::SelectPackage", false);
+	 _lua->RunScripts("Scripts::AptGet::Install::SelectPackage");
 	 pkgCache::Package *selected = _lua->GetGlobalPkg("selected");
 	 if (selected) {
 	    GoodSolutions.clear();
@@ -1282,8 +1282,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	 }
 	 else
 	 {
-	    vector<string> Tmp;
-	    _lua->GetGlobalVStr("packagenames", Tmp);
+	    vector<string> Tmp = _lua->GetGlobalStrList("packagenames");
 	    if (Tmp.size() == GoodSolutions.size())
 	       GoodSolutionNames = Tmp;
 	 }
@@ -1656,7 +1655,7 @@ bool DoUpdate(CommandLine &CmdL)
 // CNC:2003-03-19
 #ifdef WITH_LUA
    if (_lua->HasScripts("Scripts::AptGet::Update::Pre")) {
-      _lua->RunScripts("Scripts::AptGet::Update::Pre", false);
+      _lua->RunScripts("Scripts::AptGet::Update::Pre");
       LuaCacheControl *LuaCache = _lua->GetCacheControl();
       LuaCache->Close();
    }
@@ -1736,7 +1735,7 @@ bool DoUpdate(CommandLine &CmdL)
       return false;
 
 #ifdef WITH_LUA
-   _lua->RunScripts("Scripts::AptGet::Update::Post", false);
+   _lua->RunScripts("Scripts::AptGet::Update::Post");
 #endif
 #endif
    
@@ -1766,7 +1765,7 @@ bool DoUpgrade(CommandLine &CmdL)
 // CNC:2003-03-19
 #ifdef WITH_LUA
    _lua->SetDepCache(Cache);
-   _lua->RunScripts("Scripts::AptGet::Upgrade", false);
+   _lua->RunScripts("Scripts::AptGet::Upgrade");
    _lua->ResetCaches();
 #endif
 
@@ -1934,12 +1933,12 @@ bool DoInstall(CommandLine &CmdL)
 	    _lua->SetDontFix();
 	    _lua->SetGlobal("argument", OrigS);
 	    _lua->SetGlobal("translated", VS);
-	    _lua->RunScripts("Scripts::AptGet::Install::TranslateArg", false);
+	    _lua->RunScripts("Scripts::AptGet::Install::TranslateArg");
 	    const char *name = _lua->GetGlobalStr("translated");
 	    if (name != NULL) {
 	       VS.push_back(name);
 	    } else {
-	       _lua->GetGlobalVStr("translated", VS);
+	       VS = _lua->GetGlobalStrList("translated");
 	    }
 	    _lua->ResetGlobals();
 	    _lua->ResetCaches();
@@ -2022,7 +2021,7 @@ bool DoInstall(CommandLine &CmdL)
 #ifdef WITH_LUA
    _lua->SetDepCache(Cache);
    _lua->SetDontFix();
-   _lua->RunScripts("Scripts::AptGet::Install::PreResolve", false);
+   _lua->RunScripts("Scripts::AptGet::Install::PreResolve");
    _lua->ResetCaches();
 #endif
 
@@ -2051,7 +2050,7 @@ bool DoInstall(CommandLine &CmdL)
    if (Cache->BrokenCount() == 0) {
       _lua->SetDepCache(Cache);
       _lua->SetProblemResolver(&Fix);
-      _lua->RunScripts("Scripts::AptGet::Install::PostResolve", false);
+      _lua->RunScripts("Scripts::AptGet::Install::PostResolve");
       _lua->ResetCaches();
    }
 #endif
@@ -2218,7 +2217,7 @@ bool DoDistUpgrade(CommandLine &CmdL)
 // CNC:2003-03-19
 #ifdef WITH_LUA
    _lua->SetDepCache(Cache);
-   _lua->RunScripts("Scripts::AptGet::DistUpgrade", false);
+   _lua->RunScripts("Scripts::AptGet::DistUpgrade");
    _lua->ResetCaches();
 #endif
    
@@ -2934,7 +2933,7 @@ bool DoScript(CommandLine &CmdL)
       _config->Set("Scripts::AptGet::Script::", *I);
 
    _lua->SetGlobal("commit_ask", 1);
-   _lua->RunScripts("Scripts::AptGet::Script", false);
+   _lua->RunScripts("Scripts::AptGet::Script");
    double Ask = _lua->GetGlobalNum("commit_ask");
    _lua->ResetGlobals();
 
@@ -3219,7 +3218,7 @@ int main(int argc,const char *argv[])
       _lua->SetGlobal("commit_ask", 1);
       _lua->SetGlobal("command_args", CmdL.FileList);
       _lua->SetGlobal("command_consume", 0.0);
-      _lua->RunScripts("Scripts::AptGet::Command", false);
+      _lua->RunScripts("Scripts::AptGet::Command");
       Consume = _lua->GetGlobalNum("command_consume");
       double Ask = _lua->GetGlobalNum("commit_ask");
       _lua->ResetGlobals();

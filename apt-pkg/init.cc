@@ -161,7 +161,7 @@ bool pkgInitSystem(Configuration &Cnf,pkgSystem *&Sys)
    // CNC:2003-03-15
    bool Ret = Sys->Initialize(Cnf);
 #ifdef WITH_LUA
-   _lua->RunScripts("Scripts::Init", false);
+   _lua->RunScripts("Scripts::Init");
 #endif
    return Ret;
 }

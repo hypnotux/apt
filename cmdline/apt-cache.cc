@@ -87,7 +87,7 @@ bool Script(CommandLine &CmdL)
       _config->Set("Scripts::AptCache::Script::", *I);
 
    _lua->SetCache(GCache);
-   _lua->RunScripts("Scripts::AptCache::Script", false);
+   _lua->RunScripts("Scripts::AptCache::Script");
    _lua->ResetGlobals();
 
    return true;
@@ -2012,7 +2012,7 @@ int main(int argc,const char *argv[])
 	 {
 	    _lua->SetGlobal("command_args", CmdL.FileList);
 	    _lua->SetGlobal("command_consume", 0.0);
-	    _lua->RunScripts("Scripts::AptCache::Command", false);
+	    _lua->RunScripts("Scripts::AptCache::Command");
 	    Consume = _lua->GetGlobalNum("command_consume");
 	    _lua->ResetGlobals();
 	    _lua->ResetCaches();
