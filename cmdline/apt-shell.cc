@@ -1288,7 +1288,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
       pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
       // CNC:2003-11-21 - Check if the current candidate is really
       //                  providing that dependency
-      ioprintf(c1out,_("Selecting %s to represent %s\n"),
+      ioprintf(c1out,_("Selecting %s for '%s'\n"),
 	       Tmp.Name(),Pkg.Name());
       pkgCache::VerIterator Ver = Cache[Tmp].CandidateVerIter(Cache);
       pkgCache::PrvIterator Prv = Ver.ProvidesList();
@@ -1958,7 +1958,7 @@ bool DoInstall(CommandLine &CmdL)
 	       if (Pkg.end() == true)
 		  continue;
 
-	       ioprintf(c1out,_("Note, selecting %s for '%s'\n"),
+	       ioprintf(c1out,_("Selecting %s for '%s'\n"),
 			Pkg.Name(),OrigS);
 	    
 	       Hit |= TryToInstall(Pkg,Cache,Fix,Mode,BrokenFix,
@@ -1992,7 +1992,8 @@ bool DoInstall(CommandLine &CmdL)
 	    if (regexec(&Pattern,Pkg.Name(),0,0,0) != 0)
 	       continue;
 	    
-	    ioprintf(c1out,_("Note, selecting %s for regex '%s'\n"),
+	    // CNC:2003-11-23
+	    ioprintf(c1out,_("Selecting %s for '%s'\n"),
 		     Pkg.Name(),S);
 	    StateGuard->Ignore(Pkg);
 	    
