@@ -5,17 +5,30 @@
 --
 
 helper = confget("Dir::Bin::scripts/f").."/"..confget("Scripts::Groupinstall::Backend")
+helperopts = ""
+if confget("Scripts::Groupinstall::Recursive", "false") == "true" then
+	helperopts = helperopts.." -r"
+end
+if confget("Scripts::Groupinstall::Show-Hidden", "false") == "true" then
+	helperopts = helperopts.." -h"
+end
+if confget("Scripts::Groupinstall::All-Packages", "false") == "true" then
+	helperopts = helperopts.." -a"
+end
+if confexists("Scripts::Groupinstall::DataPath") then
+	helperopts = helperopts.." -p "..confget("Scripts::Groupinstall::DataPath")
+end
 
 if script_slot == "Scripts::AptCache::Help::Command" then
-	print(_("   showgroups - Show available groups"))
+	print(_("   groupnames - Show available groups"))
 	print(_("   showgroup <group> - Show group contents"))
 elseif script_slot == "Scripts::AptGet::Help::Command" then
 	print(_("   groupinstall <group> - Install packages in <group>"))
 	print(_("   groupremove <group> - Remove packages in <group>"))
 elseif script_slot == "Scripts::AptCache::Command" then
-	if command_args[1] == "showgroups" then
+	if command_args[1] == "groupnames" then
 		command_consume = 1
-		os.execute(helper.." showgroups")
+		os.execute(helper.." "..helperopts.." groupnames")
 	elseif command_args[1] == "showgroup" then
 		command_consume=1
 		numgroups = table.getn(command_args) - 1
@@ -27,7 +40,7 @@ elseif script_slot == "Scripts::AptCache::Command" then
 		for i = 1, numgroups do
 			group = group.." "..command_args[i+1]
 		end
-		os.execute(helper.." showgroup "..group)
+		os.execute(helper.." "..helperopts.." showgroup "..group)
 	end
 
 elseif script_slot == "Scripts::AptGet::Command" then
@@ -50,8 +63,9 @@ elseif script_slot == "Scripts::AptGet::Command" then
 	for i = 1, numgroups do
 		group = group.." "..command_args[i+1]
 	end
+
     print(_("Finding packages belonging to group(s) "..group.."..."))
-    pkgs = io.popen(helper.." grouppkgs "..group)
+    pkgs = io.popen(helper.." "..helperopts.." grouppkgs "..group)
     for name in pkgs:lines() do
 		pkg = pkgfind(name)
 		if pkg then
@@ -60,4 +74,4 @@ elseif script_slot == "Scripts::AptGet::Command" then
 	end
 end
 
--- vim:ts=4
+-- vim:ts=4:sw=4
