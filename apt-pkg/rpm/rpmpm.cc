@@ -338,7 +338,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
    bool FilesInArgs = true;
    char *ArgsFileName = NULL;
 #ifdef HAVE_RPM4
-   if (files.size() > 50) {
+   if (op != Item::RPMErase && files.size() > 50) {
       string FileName = _config->FindDir("Dir::Cache", "/tmp/") +
 			"filelist.XXXXXX";
       ArgsFileName = strdup(FileName.c_str());
