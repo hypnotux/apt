@@ -379,7 +379,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
       return;
    }
 #endif
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    RpmIter = rpmxxInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
    if (RpmIter == NULL) {
       _error->Error(_("could not create RPM database iterator"));
