@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: apt\n"
-"POT-Creation-Date: 2003-11-23 22:39-0200\n"
+"POT-Creation-Date: 2003-11-24 11:30-0200\n"
 "PO-Revision-Date: 2002-08-20 14:00+0200\n"
 "Last-Translator: Ralf Corsepius <corsepiu@faw.uni-ulm.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1335,7 +1335,7 @@ msgstr "Ausserstande auf Mount-Point %s zuzugreifen"
 msgid "Unable to change to %s"
 msgstr "Ausserstande nach %s zu wechseln"
 
-#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:734
+#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:735
 #: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:38 apt-pkg/sourcelist.cc:421
 #, c-format
 msgid "Unable to read %s"
@@ -1392,53 +1392,53 @@ msgstr "Sinn %s wird nicht verstanden, versuche true oder false."
 msgid "Invalid operation %s"
 msgstr "Ungülltige Operation %s"
 
-#: apt-pkg/contrib/configuration.cc:424
+#: apt-pkg/contrib/configuration.cc:425
 #, c-format
 msgid "Unrecognized type abbreviation: '%c'"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:482
+#: apt-pkg/contrib/configuration.cc:483
 #, c-format
 msgid "Opening configuration file %s"
 msgstr "Öffne Konfigurationsdatei %s"
 
-#: apt-pkg/contrib/configuration.cc:592
+#: apt-pkg/contrib/configuration.cc:593
 #, c-format
 msgid "Syntax error %s:%u: Block starts with no name."
 msgstr "Syntaxfehler %s:%u: Block beginnt ohne Namen."
 
-#: apt-pkg/contrib/configuration.cc:611
+#: apt-pkg/contrib/configuration.cc:612
 #, c-format
 msgid "Syntax error %s:%u: Malformed Tag"
 msgstr "Syntaxfehler %s:%u: Misgebildetes Tag"
 
-#: apt-pkg/contrib/configuration.cc:628
+#: apt-pkg/contrib/configuration.cc:629
 #, c-format
 msgid "Syntax error %s:%u: Extra junk after value"
 msgstr "Syntaxfehler %s:%u: Unnötiger Müll nach Wert"
 
-#: apt-pkg/contrib/configuration.cc:668
+#: apt-pkg/contrib/configuration.cc:669
 #, c-format
 msgid "Syntax error %s:%u: Directives can only be done at the top level"
 msgstr ""
 "Syntaxfehler %s:%u: Directiven können nur auf oberster Ebeneverwendet werden"
 
-#: apt-pkg/contrib/configuration.cc:675
+#: apt-pkg/contrib/configuration.cc:676
 #, c-format
 msgid "Syntax error %s:%u: Too many nested includes"
 msgstr "Syntaxfehler %s:%u: Zu viele geschachtelte includes"
 
-#: apt-pkg/contrib/configuration.cc:679 apt-pkg/contrib/configuration.cc:684
+#: apt-pkg/contrib/configuration.cc:680 apt-pkg/contrib/configuration.cc:685
 #, c-format
 msgid "Syntax error %s:%u: Included from here"
 msgstr "Syntaxfehler %s:%u: Includiert von hier"
 
-#: apt-pkg/contrib/configuration.cc:688
+#: apt-pkg/contrib/configuration.cc:689
 #, c-format
 msgid "Syntax error %s:%u: Unsupported directive '%s'"
 msgstr "Syntaxfehler %s:%u: Nicht-unterstützte Direktive '%s'"
 
-#: apt-pkg/contrib/configuration.cc:722
+#: apt-pkg/contrib/configuration.cc:723
 #, c-format
 msgid "Syntax error %s:%u: Extra junk at end of file"
 msgstr "Syntaxfehler %s:%u: Unnötiger Müll am Ende der Datei"

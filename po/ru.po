@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: apt-0.5.5cnc4.1-alt2\n"
-"POT-Creation-Date: 2003-11-23 22:39-0200\n"
+"POT-Creation-Date: 2003-11-24 11:30-0200\n"
 "PO-Revision-Date: 2003-03-13 00:48+1200\n"
 "Last-Translator: Anton V. Denisov <avd@altlinux.org>\n"
 "Language-Team: ALT Linux Team <devel@altlinux.org>\n"
@@ -1551,7 +1551,7 @@ msgstr "Не найдена точка монтирования %s диска"
 msgid "Unable to change to %s"
 msgstr "Невозможно перейти к %s"
 
-#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:734
+#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:735
 #: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:38 apt-pkg/sourcelist.cc:421
 #, c-format
 msgid "Unable to read %s"
@@ -1608,54 +1608,54 @@ msgstr "Нераспознаваемое значение %s, используйте true или false."
 msgid "Invalid operation %s"
 msgstr "Ошибочная операция %s"
 
-#: apt-pkg/contrib/configuration.cc:424
+#: apt-pkg/contrib/configuration.cc:425
 #, c-format
 msgid "Unrecognized type abbreviation: '%c'"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:482
+#: apt-pkg/contrib/configuration.cc:483
 #, c-format
 msgid "Opening configuration file %s"
 msgstr "Открытие конфигурационного файла %s"
 
-#: apt-pkg/contrib/configuration.cc:592
+#: apt-pkg/contrib/configuration.cc:593
 #, c-format
 msgid "Syntax error %s:%u: Block starts with no name."
 msgstr "Синтаксическая ошибка %s:%u: Начало блока без имени."
 
-#: apt-pkg/contrib/configuration.cc:611
+#: apt-pkg/contrib/configuration.cc:612
 #, c-format
 msgid "Syntax error %s:%u: Malformed Tag"
 msgstr "Синтаксическая ошибка %s:%u: Ошибочная метка."
 
-#: apt-pkg/contrib/configuration.cc:628
+#: apt-pkg/contrib/configuration.cc:629
 #, c-format
 msgid "Syntax error %s:%u: Extra junk after value"
 msgstr "Синтаксическая ошибка %s:%u: Лишние символы после значения."
 
-#: apt-pkg/contrib/configuration.cc:668
+#: apt-pkg/contrib/configuration.cc:669
 #, c-format
 msgid "Syntax error %s:%u: Directives can only be done at the top level"
 msgstr ""
 "Синтаксическая ошибка %s:%u: Директивы могут задаваться только на высшем "
 "уровне."
 
-#: apt-pkg/contrib/configuration.cc:675
+#: apt-pkg/contrib/configuration.cc:676
 #, c-format
 msgid "Syntax error %s:%u: Too many nested includes"
 msgstr "Синтаксическая ошибка %s:%u: Слишком много вложенных включений."
 
-#: apt-pkg/contrib/configuration.cc:679 apt-pkg/contrib/configuration.cc:684
+#: apt-pkg/contrib/configuration.cc:680 apt-pkg/contrib/configuration.cc:685
 #, c-format
 msgid "Syntax error %s:%u: Included from here"
 msgstr "Синтаксическая ошибка %s:%u: Включение из указанного места."
 
-#: apt-pkg/contrib/configuration.cc:688
+#: apt-pkg/contrib/configuration.cc:689
 #, c-format
 msgid "Syntax error %s:%u: Unsupported directive '%s'"
 msgstr "Синтаксическая ошибка %s:%u: Неизвестная директива '%s'."
 
-#: apt-pkg/contrib/configuration.cc:722
+#: apt-pkg/contrib/configuration.cc:723
 #, c-format
 msgid "Syntax error %s:%u: Extra junk at end of file"
 msgstr "Синтаксическая ошибка %s:%u: Лишние данные в конце файла."

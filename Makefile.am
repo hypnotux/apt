@@ -38,4 +38,6 @@ EXTRA_DIST = \
 		contrib/apt-groupinstall/apt-groupinstall.conf \
 		contrib/proxypasswd/README \
 		contrib/proxypasswd/proxypasswd.lua
-
+		contrib/guess/README \
+		contrib/guess/guess.lua \
+		contrib/guess/guess.conf

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: apt\n"
-"POT-Creation-Date: 2003-11-23 22:39-0200\n"
+"POT-Creation-Date: 2003-11-24 11:30-0200\n"
 "PO-Revision-Date: 2001-01-11 15:40-02:00\n"
 "Last-Translator: Jorge Carrasquilla Soares <jorge@conectiva.com.br>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1221,7 +1221,7 @@ msgstr "Imposible leer %s."
 msgid "Unable to change to %s"
 msgstr "Imposible alterar para %s"
 
-#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:734
+#: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:735
 #: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:38 apt-pkg/sourcelist.cc:421
 #, c-format
 msgid "Unable to read %s"
@@ -1278,52 +1278,52 @@ msgstr ""
 msgid "Invalid operation %s"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:424
+#: apt-pkg/contrib/configuration.cc:425
 #, c-format
 msgid "Unrecognized type abbreviation: '%c'"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:482
+#: apt-pkg/contrib/configuration.cc:483
 #, fuzzy, c-format
 msgid "Opening configuration file %s"
 msgstr "  -c=? Lee este archivo de configuración"
 
-#: apt-pkg/contrib/configuration.cc:592
+#: apt-pkg/contrib/configuration.cc:593
 #, c-format
 msgid "Syntax error %s:%u: Block starts with no name."
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:611
+#: apt-pkg/contrib/configuration.cc:612
 #, c-format
 msgid "Syntax error %s:%u: Malformed Tag"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:628
+#: apt-pkg/contrib/configuration.cc:629
 #, c-format
 msgid "Syntax error %s:%u: Extra junk after value"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:668
+#: apt-pkg/contrib/configuration.cc:669
 #, c-format
 msgid "Syntax error %s:%u: Directives can only be done at the top level"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:675
+#: apt-pkg/contrib/configuration.cc:676
 #, c-format
 msgid "Syntax error %s:%u: Too many nested includes"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:679 apt-pkg/contrib/configuration.cc:684
+#: apt-pkg/contrib/configuration.cc:680 apt-pkg/contrib/configuration.cc:685
 #, c-format
 msgid "Syntax error %s:%u: Included from here"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:688
+#: apt-pkg/contrib/configuration.cc:689
 #, c-format
 msgid "Syntax error %s:%u: Unsupported directive '%s'"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:722
+#: apt-pkg/contrib/configuration.cc:723
 #, c-format
 msgid "Syntax error %s:%u: Extra junk at end of file"
 msgstr ""
