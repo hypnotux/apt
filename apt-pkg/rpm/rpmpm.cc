@@ -905,6 +905,8 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_ALLFILES;
 	 else if (Opts->Value == "--justdb")
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
+	 else if (Opts->Value == "--test")
+	    *tsFlags |= RPMTRANS_FLAG_TEST;
 #if RPM_VERSION >= 0x040000
 	 else if (Opts->Value == "--nomd5")
 	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
