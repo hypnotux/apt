@@ -293,87 +293,81 @@ msgstr "Impossível ler a base de dados de cdrom %s"
 
 #: cmdline/apt-cdrom.cc:596
 msgid "Unmounting CD-ROM"
-msgstr ""
+msgstr "Desmontando o CD-ROM"
 
 #: cmdline/apt-cdrom.cc:600
-#, fuzzy
 msgid "Please insert a Disc in the drive and press enter"
-msgstr ""
-"Troca de Mídia: Por favor insira o disco nomeado\n"
-" '%s'\n"
-"no drive '%s' e pressione enter\n"
+msgstr "Por favor, insira um disco no drive e pressione enter"
 
 #: cmdline/apt-cdrom.cc:601 cmdline/apt-cdrom.cc:813
 msgid "Mounting CD-ROM"
-msgstr ""
+msgstr "Montando o CD-ROM"
 
 #: cmdline/apt-cdrom.cc:603 cmdline/apt-cdrom.cc:815
-#, fuzzy
 msgid "Failed to mount the cdrom."
-msgstr "Impossível rodar stat no cdrom"
+msgstr "Impossível montar o cdrom."
 
 #: cmdline/apt-cdrom.cc:607 cmdline/apt-cdrom.cc:818
 msgid "Identifying.. "
-msgstr ""
+msgstr "Identificando.. "
 
 #: cmdline/apt-cdrom.cc:627
 msgid "Scanning Disc for index files..  "
-msgstr ""
+msgstr "Procurando arquivos de índice no disco..  "
 
 #: cmdline/apt-cdrom.cc:644
 msgid "I found (binary):"
-msgstr ""
+msgstr "Encontrei (binário):"
 
 #: cmdline/apt-cdrom.cc:647
 msgid "I found (source):"
-msgstr ""
+msgstr "Encontrei (fonte):"
 
 #: cmdline/apt-cdrom.cc:662
 msgid "Found "
-msgstr ""
+msgstr "Encontrado(s) "
 
 #: cmdline/apt-cdrom.cc:662
-#, fuzzy
 msgid " package indexes and "
-msgstr "Nenhum pacote encontrado"
+msgstr " índices de pacotes e "
 
 #: cmdline/apt-cdrom.cc:663
 msgid " source indexes."
-msgstr ""
+msgstr " índices de fontes."
 
 #: cmdline/apt-cdrom.cc:670
 msgid ""
 "Unable to locate any package files, perhaps this is not an APT enabled disc"
 msgstr ""
+"Impossível localizar índices. Talvez esse não seja um disco preparado para o APT"
 
 #: cmdline/apt-cdrom.cc:694
 msgid "Found label '"
-msgstr ""
+msgstr "Encontrado label '"
 
 #: cmdline/apt-cdrom.cc:703
 msgid "Please provide a name for this Disc, such as 'Distribution Disk 1'"
-msgstr ""
+msgstr "Por favor, forneça um nome para o Disco, como 'Distribuição Disco 1'"
 
 #: cmdline/apt-cdrom.cc:712
 msgid "That is not a valid name, try again "
-msgstr ""
+msgstr "Esse nome não é válido, tente novamente "
 
 #: cmdline/apt-cdrom.cc:726
-#, fuzzy
 msgid "This Disc is called:"
-msgstr "mas %s está instalado"
+msgstr "Esse disco é chamado:"
 
 #: cmdline/apt-cdrom.cc:759
 msgid "Source List entries for this Disc are:"
-msgstr ""
+msgstr "Entradas Source List para esse disco são:"
 
 #: cmdline/apt-cdrom.cc:792
 msgid "Repeat this process for the rest of the CDs in your set."
-msgstr ""
+msgstr "Repita esse processo para os demais CDs no seu conjunto."
 
 #: cmdline/apt-cdrom.cc:837
 msgid "Stored Label: '"
-msgstr ""
+msgstr "Label armazenado: '"
 
 #: cmdline/apt-cdrom.cc:853
 msgid ""
