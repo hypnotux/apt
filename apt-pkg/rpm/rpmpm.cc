@@ -174,7 +174,7 @@ bool pkgRPMPM::RunScriptsWithPkgs(const char *Cnf)
       // Create the pipes
       int Pipes[2];
       if (pipe(Pipes) != 0)
-	 return _error->Errno("pipe","Failed to create IPC pipe to subprocess");
+	 return _error->Errno("pipe",_("Failed to create IPC pipe to subprocess"));
       SetCloseExec(Pipes[0],true);
       SetCloseExec(Pipes[1],true);
       
@@ -306,7 +306,7 @@ bool pkgRPMPM::Go()
 	 break;
 	  
        default:
-	 return _error->Error("Unknown pkgRPMPM operation.");
+	 return _error->Error(_("Unknown pkgRPMPM operation."));
       }
    }
 
@@ -580,7 +580,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       }
 
       execvp(Args[0],(char **)Args);
-      cerr << "Could not exec " << Args[0] << endl;
+      cerr << _("Could not exec ") << Args[0] << endl;
       _exit(100);
    }      
    
@@ -595,7 +595,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 	 unlink(ArgsFileName);
 	 free(ArgsFileName);
       }
-      return _error->Errno("waitpid","Couldn't wait for subprocess");
+      return _error->Errno("waitpid",_("Couldn't wait for subprocess"));
    }
    if (ArgsFileName) {
       unlink(ArgsFileName);
@@ -619,7 +619,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       
       return _error->Error(_("Sub-process %s exited unexpectedly"),Args[0]);
    }
-   cout << "Done." << endl;
+   cout << _("Done.") << endl;
 
    return true;
 }
@@ -863,7 +863,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       if (rc < 0)
 	 _error->Warning(_("Some errors occurred while running transaction"));
       else
-	 cout << "Done." << endl;
+	 cout << _("Done.") << endl;
    }
    rpmpsFree(probs);
 

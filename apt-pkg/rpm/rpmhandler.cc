@@ -322,7 +322,7 @@ unsigned long RPMDirHandler::FileSize()
       return 0;
    struct stat St;
    if (stat(sFilePath.c_str(),&St) != 0) {
-      _error->Errno("stat","Unable to determine the file size");
+      _error->Errno("stat",_("Unable to determine the file size"));
       return 0;
    }
    return St.st_size;

@@ -108,7 +108,7 @@ string rpmListParser::Package()
    
    if (headerGetEntry(header, RPMTAG_NAME, &type, (void**)&str, &count) != 1) 
    {
-      _error->Error("Corrupt pkglist: no RPMTAG_NAME in header entry");
+      _error->Error(_("Corrupt pkglist: no RPMTAG_NAME in header entry"));
       return "";
    } 
 
@@ -663,7 +663,7 @@ bool rpmListParser::LoadReleaseInfo(pkgCache::PkgFileIterator FileI,
    
    if (Section.FindFlag("NotAutomatic",FileI->Flags,
 			pkgCache::Flag::NotAutomatic) == false)
-       _error->Warning("Bad NotAutomatic flag");
+       _error->Warning(_("Bad NotAutomatic flag"));
    
    return !_error->PendingError();
 }

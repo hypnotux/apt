@@ -212,7 +212,7 @@ void rpmSrcRecordParser::BufCat(char *begin, char *end)
       char *tmp = (char*)realloc(Buffer, BufSize);
       if (tmp == NULL)
       {
-	 _error->Errno("realloc", "could not allocate buffer for record text");
+	 _error->Errno("realloc", _("Could not allocate buffer for record text"));
 	 return;
       }
       Buffer = tmp;

@@ -380,7 +380,7 @@ bool rpmPkgListIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
    if (stat(PackageFile.c_str(),&St) != 0) 
    {
       delete Handler;
-      return _error->Errno("stat","Failed to stat");
+      return _error->Errno("stat",_("Failed to stat %s"), PackageFile.c_str());
    }
    File->Size = St.st_size;
    File->mtime = St.st_mtime;
@@ -563,7 +563,7 @@ bool rpmDatabaseIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
    pkgCache::PkgFileIterator CFile = Gen.GetCurFile();
    struct stat St;
    if (stat(Handler->DataPath(false).c_str(),&St) != 0)
-      return _error->Errno("fstat","Failed to stat");
+      return _error->Errno("fstat",_("Failed to stat %s"), Handler->DataPath(false).c_str());
    CFile->Size = St.st_size;
    CFile->mtime = Handler->Mtime();
    

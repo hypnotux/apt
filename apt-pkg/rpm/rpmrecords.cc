@@ -23,6 +23,8 @@
 #include <apt-pkg/rpmhandler.h>
 #include <apt-pkg/rpmsystem.h>
 
+#include <apti18n.h>
+
 // RecordParser::rpmRecordParser - Constructor				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -196,7 +198,7 @@ void rpmRecordParser::BufCat(const char *begin, const char *end)
       char *tmp = (char*)realloc(Buffer, BufSize);
       if (tmp == NULL)
       {
-	 _error->Errno("realloc", "could not allocate buffer for record text");
+	 _error->Errno("realloc", _("Could not allocate buffer for record text"));
 	 return;
       }
       Buffer = tmp;
