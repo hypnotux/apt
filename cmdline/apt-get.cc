@@ -2643,7 +2643,9 @@ bool DoSource(CommandLine &CmdL)
 bool DoBuildDep(CommandLine &CmdL)
 {
    CacheFile Cache;
-   if (Cache.Open(true) == false)
+   // CNC:2004-04-06
+   if (Cache.OpenForInstall() == false || 
+       Cache.CheckDeps() == false)
       return false;
 
    if (CmdL.FileSize() <= 1)
