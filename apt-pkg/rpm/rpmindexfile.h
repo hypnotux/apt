@@ -34,6 +34,7 @@ class rpmIndexFile : public pkgIndexFile
    public:
 
    virtual RPMHandler *CreateHandler() const = 0;
+   virtual bool HasPackages() const {return false;};
 
 };
 
@@ -51,8 +52,8 @@ class rpmDatabaseIndex : public rpmIndexFile
    
    // Interface for the Cache Generator
    virtual bool Exists() const {return true;};
-   virtual bool HasPackages() const {return true;};
    virtual unsigned long Size() const;
+   virtual bool HasPackages() const {return true;};
    virtual bool Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const;
    virtual bool MergeFileProvides(pkgCacheGenerator &/*Gen*/,
 		   		  OpProgress &/*Prog*/) const;
@@ -85,8 +86,6 @@ class rpmListIndex : public rpmIndexFile
    public:
 
    virtual bool GetReleases(pkgAcquire *Owner) const;
-
-   virtual bool HasPackages() const {return true;};
 
    // Interface for the Cache Generator
    virtual bool Exists() const;
@@ -124,6 +123,7 @@ class rpmPkgListIndex : public rpmListIndex
    virtual bool GetIndexes(pkgAcquire *Owner) const;
    
    // Interface for the Cache Generator
+   virtual bool HasPackages() const {return true;};
    virtual bool Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const;
    virtual bool MergeFileProvides(pkgCacheGenerator &/*Gen*/,
 		   		  OpProgress &/*Prog*/) const;
