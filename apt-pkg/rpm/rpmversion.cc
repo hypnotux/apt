@@ -73,7 +73,12 @@ void rpmVersioningSystem::ParseVersion(const char *V, const char *VEnd,
       if (*epoch == '\0') epoch = "0";
    }
    else
+   {
+#ifdef HAVE_RPM41
+      epoch = "0";
+#endif
       version = evr;
+   }
 
 #define Xstrdup(a) (a) ? strdup(a) : NULL
    *Epoch = Xstrdup(epoch);
