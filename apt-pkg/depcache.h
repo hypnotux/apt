@@ -164,6 +164,10 @@ class pkgDepCache : protected pkgCache::Namespace
    
    public:
 
+   // CNC:2003-02-23 - See below.
+   class State;
+   friend class State;
+   
    // Legacy.. We look like a pkgCache
    inline operator pkgCache &() {return *Cache;};
    inline Header &Head() {return *Cache->HeaderP;};
@@ -207,6 +211,43 @@ class pkgDepCache : protected pkgCache::Namespace
    pkgDepCache(pkgCache *Cache,Policy *Plcy = 0);
    virtual ~pkgDepCache();
 };
+
+// CNC:2003-02-24 - Class to work on the state of a depcache.
+class pkgDepCache::State
+{
+   protected:
+
+   StateCache *PkgState;
+   unsigned char *DepState;
+   double iUsrSize;
+   double iDownloadSize;
+   unsigned long iInstCount;
+   unsigned long iDelCount;
+   unsigned long iKeepCount;
+   unsigned long iBrokenCount;
+   unsigned long iBadCount;
+   
+   bool *PkgIgnore;
+      
+   public:
+
+   void Save(pkgDepCache &Dep);
+   void Restore(pkgDepCache &Dep);
+   bool Changed(pkgDepCache &Dep);
+
+   void Ignore(PkgIterator const &I) {PkgIgnore[I->ID] = true;};
+
+   StateCache &operator [](pkgCache::PkgIterator const &I) {return PkgState[I->ID];};
+
+   State() : PkgState(0), DepState(0), PkgIgnore(0) {};
+   ~State()
+   {
+      delete [] PkgState;
+      delete [] DepState;
+      delete [] PkgIgnore;
+   };
+};
+
 
 /* This is an exact copy of the structure above, nested in pkgDepCache.
  * This is defined again here since SWIG doesn't know how to handle nested

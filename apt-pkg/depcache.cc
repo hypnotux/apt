@@ -1010,4 +1010,58 @@ bool pkgDepCache::Policy::IsImportantDep(DepIterator Dep)
    return Dep.IsCritical();
 }
 									/*}}}*/
+
+// CNC:2003-02-24
+// pkgDepCache::State::* - Routines to work on the state of a DepCache.	/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+void pkgDepCache::State::Save(pkgDepCache &Dep)
+{
+   delete [] PkgState;
+   delete [] DepState;
+   delete [] PkgIgnore;
+   int Size = Dep.Head().PackageCount;
+   PkgState = new StateCache[Size];
+   PkgIgnore = new bool[Size];
+   DepState = new unsigned char[Dep.Head().DependsCount];
+   memcpy(PkgState, Dep.PkgState, Size*sizeof(*PkgState));
+   memset(PkgIgnore, 0, Size*sizeof(*PkgIgnore));
+   memcpy(DepState, Dep.DepState, Dep.Head().DependsCount*sizeof(*DepState));
+   iUsrSize = Dep.iUsrSize;
+   iDownloadSize= Dep.iDownloadSize;
+   iInstCount = Dep.iInstCount;
+   iDelCount = Dep.iDelCount;
+   iKeepCount = Dep.iKeepCount;
+   iBrokenCount = Dep.iBrokenCount;
+   iBadCount = Dep.iBadCount;
+}
+
+void pkgDepCache::State::Restore(pkgDepCache &Dep)
+{
+   int Size = Dep.Head().PackageCount;
+   memcpy(Dep.PkgState, PkgState, Size*sizeof(*PkgState));
+   memcpy(Dep.DepState, DepState, Dep.Head().DependsCount*sizeof(*DepState));
+   Dep.iUsrSize = iUsrSize;
+   Dep.iDownloadSize= iDownloadSize;
+   Dep.iInstCount = iInstCount;
+   Dep.iDelCount = iDelCount;
+   Dep.iKeepCount = iKeepCount;
+   Dep.iBrokenCount = iBrokenCount;
+   Dep.iBadCount = iBadCount;
+}
+
+bool pkgDepCache::State::Changed(pkgDepCache &Dep)
+{
+   int Size = Dep.Head().PackageCount;
+   StateCache *NewPkgState = Dep.PkgState;
+   for (int i = 0; i != Size; i++) {
+      if (PkgIgnore[i] == false &&
+          ((PkgState[i].Status != NewPkgState[i].Status) ||
+          (PkgState[i].Mode != NewPkgState[i].Mode)))
+         return true;
+   }
+   return false;
+}
+									/*}}}*/
+
 // vim:sts=3:sw=3
