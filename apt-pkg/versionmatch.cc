@@ -126,18 +126,38 @@ pkgVersionMatch::pkgVersionMatch(string Data,MatchType Type,int Op) : VerOp(Op),
 /* */
 bool pkgVersionMatch::MatchVer(const char *A,string B,bool Prefix)
 {   
-   const char *Ab = A;
-   const char *Ae = Ab + strlen(A);
+   // CNC:2003-11-05 - Patch by ALT-Linux, which ignores the release
+   //                  if it was not provided, and the epoch.
+   string s(A), sc(A);
+   const char *Ab = s.c_str(), *Ac = sc.c_str();
+
+   for (string::iterator i = s.begin(), k = sc.begin(); i != s.end(); ++i,++k)
+   {
+      if (*i == ':')
+      {
+         Ab = &(*i) + 1;
+	 Ac = &(*k) + 1;
+      }
+      else if (*i == '-')
+      {
+         *i = 0;
+	 break;
+      }
+   }
+
+   const char *Ae = Ab + strlen(Ab);
+   const char *Af = Ac + strlen(Ac);
    
    // Strings are not a compatible size.
-   if ((unsigned)(Ae - Ab) != B.length() && Prefix == false ||
-       (unsigned)(Ae - Ab) < B.length())
-      return false;
-   
-   // Match (leading?)
-   if (stringcasecmp(B,Ab,Ab + B.length()) == 0)
-      return true;
-   
+   if (((unsigned)(Ae - Ab) == B.length() || Prefix == true) &&
+       (unsigned)(Ae - Ab) >= B.length() &&
+       stringcasecmp(B,Ab,Ab + B.length()) == 0)
+       return true;
+   else if (((unsigned)(Af - Ac) == B.length() || Prefix == true) &&
+       (unsigned)(Af - Ac) >= B.length() &&
+       stringcasecmp(B,Ac,Ac + B.length()) == 0)
+       return true;
+
    return false;
 }
 									/*}}}*/
