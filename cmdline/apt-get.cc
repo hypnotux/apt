@@ -599,6 +599,31 @@ void Stats(ostream &out,pkgDepCache &Dep)
 	       Dep.BadCount());
 }
 									/*}}}*/
+// CNC:2003-03-06
+// CheckOnly - Check if the cache has any changes to be applied		/*{{{*/
+// ---------------------------------------------------------------------
+/* Returns true if CheckOnly is active. */
+bool CheckOnly(CacheFile &Cache)
+{
+   if (_config->FindB("APT::Get::Check-Only", false) == false)
+      return false;
+   if (Cache->InstCount() != 0 || Cache->DelCount() != 0) {
+      if (_config->FindB("APT::Get::Show-Upgraded",true) == true)
+	 ShowUpgraded(c1out,Cache);
+      ShowDel(c1out,Cache);
+      ShowNew(c1out,Cache);
+      //ShowKept(c1out,Cache);
+      ShowHold(c1out,Cache);
+      ShowDowngraded(c1out,Cache);
+      ShowEssential(c1out,Cache);
+      Stats(c1out,Cache);
+      _error->Error(_("There are changes to be made"));
+   }
+
+   return true;
+}
+									/*}}}*/
+
 
 // CacheFile::NameComp - QSort compare by name				/*{{{*/
 // ---------------------------------------------------------------------
@@ -704,8 +729,8 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
    bool Essential = false;
    
    // Show all the various warning indicators
-   // CNC:2002-07-06
-   if (_config->FindB("APT::Get::Show-Upgraded",false) == true)
+   // CNC:2002-03-06 - Change Show-Upgraded default to true, and move upwards.
+   if (_config->FindB("apt::get::show-upgraded",true) == true)
       ShowUpgraded(c1out,Cache);
    ShowDel(c1out,Cache);
    ShowNew(c1out,Cache);
@@ -1382,6 +1407,10 @@ bool DoUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return _error->Error(_("Internal Error, AllUpgrade broke stuff"));
    }
+
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
    
    return InstallPackages(Cache,true);
 }
@@ -1584,6 +1613,10 @@ bool DoInstall(CommandLine &CmdL)
       ShowList(c1out,_("The following extra packages will be installed:"),List);
    }
 
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
+
    // See if we need to prompt
    if (Cache->InstCount() == ExpectedInst && Cache->DelCount() == 0)
       return InstallPackages(Cache,false,false);
@@ -1607,6 +1640,10 @@ bool DoDistUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return false;
    }
+   
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
    
    c0out << _("Done") << endl;
    
@@ -1683,6 +1720,10 @@ bool DoDSelectUpgrade(CommandLine &CmdL)
       ShowBroken(c1out,Cache,false);
       return _error->Error("Internal Error, problem resolver broke stuff");
    }
+
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
    
    return InstallPackages(Cache,false);
 }
@@ -2180,6 +2221,11 @@ bool DoBuildDep(CommandLine &CmdL)
   
    if (InstallPackages(Cache, false, true) == false)
       return _error->Error(_("Failed to process build dependencies"));
+
+   // CNC:2003-03-06
+   if (CheckOnly(Cache) == true)
+      return true;
+   
    return true;
 }
 									/*}}}*/
@@ -2364,6 +2410,7 @@ int main(int argc,const char *argv[])
       {0,"remove","APT::Get::Remove",0},
       {0,"only-source","APT::Get::Only-Source",0},
       {0,"arch-only","APT::Get::Arch-Only",0},
+      {0,"check-only","APT::Get::Check-Only",0}, // CNC:2003-03-06
       {'c',"config-file",0,CommandLine::ConfigFile},
       {'o',"option",0,CommandLine::ArbItem},
       {0,0,0,0}};
