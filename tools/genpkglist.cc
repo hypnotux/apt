@@ -31,7 +31,7 @@
 #define CRPMTAG_TIMESTAMP   1012345
 
 int tags[] =  {
-   RPMTAG_NAME, 
+       RPMTAG_NAME, 
        RPMTAG_EPOCH,
        RPMTAG_VERSION,
        RPMTAG_RELEASE,
@@ -44,6 +44,7 @@ int tags[] =  {
        
        RPMTAG_DESCRIPTION, 
        RPMTAG_SUMMARY, 
+       RPMTAG_HEADERI18NTABLE,
        
        RPMTAG_REQUIREFLAGS, 
        RPMTAG_REQUIRENAME,
@@ -216,6 +217,12 @@ bool loadUpdateInfo(char *path, map<string,UpdateInfo> &map)
 }
 
 
+extern "C" {
+// No prototype from rpm right now.
+int headerGetRawEntry(Header h, int_32 tag, int_32 * type,
+		      hPTR_t *p, int_32 *c);
+}
+
 
 bool copyFields(Header h, Header newHeader,
 		FILE *idxfile, char *filename, unsigned filesize,
@@ -229,13 +236,14 @@ bool copyFields(Header h, Header newHeader,
    // the std tags
    for (i = 0; i < numTags; i++) {
       int_32 type, count;
-      void *data;
+      const void *data;
       int res;
       
-      res = headerGetEntry(h, tags[i], &type, &data, &count);
-      if (res != 1) {
+      // Copy raw entry, so that internationalized strings
+      // will get copied correctly.
+      res = headerGetRawEntry(h, tags[i], &type, &data, &count);
+      if (res != 1)
 	 continue;
-      }
       headerAddEntry(newHeader, tags[i], type, data, count);
    }
  
@@ -450,7 +458,7 @@ int main(int argc, char ** argv)
    bool fullFileList = false;
    bool progressBar = false;
    
-   putenv("LC_ALL=");
+   putenv("LC_ALL="); // Is this necessary yet (after i18n was supported)?
    for (i = 1; i < argc; i++) {
       if (strcmp(argv[i], "--index") == 0) {
 	 i++;
