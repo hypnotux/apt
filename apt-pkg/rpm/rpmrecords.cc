@@ -27,10 +27,19 @@
 // ---------------------------------------------------------------------
 /* */
 rpmRecordParser::rpmRecordParser(string File, pkgCache &Cache)
-   : FileHandler(0), HeaderP(0), Buffer(0), BufSize(0), BufUsed(0)
+   : Handler(0), HeaderP(0), Buffer(0), BufSize(0), BufUsed(0)
 {
-   if (File != RPMDBHandler::DataPath(false))
-      FileHandler = new RPMFileHandler(File);
+   if (File == RPMDBHandler::DataPath(false)) {
+      IsDatabase = true;
+      Handler = rpmSys.GetDBHandler();
+   } else {
+      IsDatabase = false;
+      struct stat Buf;
+      if (stat(File.c_str(),&Buf) == 0 && S_ISDIR(Buf.st_mode))
+	 Handler = new RPMDirHandler(File);
+      else
+	 Handler = new RPMFileHandler(File);
+   }
 }
 									/*}}}*/
 // RecordParser::~rpmRecordParser - Destructor				/*{{{*/
@@ -38,7 +47,10 @@ rpmRecordParser::rpmRecordParser(string File, pkgCache &Cache)
 /* */
 rpmRecordParser::~rpmRecordParser()
 {
-   delete FileHandler;
+   // Can't use Handler->IsDatabase here, since the RPMDBHandler
+   // could already have been destroyed.
+   if (IsDatabase == false)
+      delete Handler;
    free(Buffer);
 }
 									/*}}}*/
@@ -47,13 +59,6 @@ rpmRecordParser::~rpmRecordParser()
 /* */
 bool rpmRecordParser::Jump(pkgCache::VerFileIterator const &Ver)
 {
-   RPMHandler *Handler = FileHandler;
-   if (Handler == NULL)
-   {
-      Handler = rpmSys.GetDBHandler();
-      if (Handler == NULL)
-	 return false;
-   }
    Handler->Jump(Ver->Offset);
    HeaderP = Handler->GetHeader();
    return (HeaderP != NULL);
@@ -64,12 +69,7 @@ bool rpmRecordParser::Jump(pkgCache::VerFileIterator const &Ver)
 /* */
 string rpmRecordParser::FileName()
 {
-   char *str;
-   int_32 count, type;
-   assert(HeaderP != NULL);
-   int rc = headerGetEntry(HeaderP, CRPMTAG_FILENAME,
-			   &type, (void**)&str, &count);
-   return string(rc?str:"");
+   return Handler->FileName();
 }
 									/*}}}*/
 // RecordParser::Name - Return the package name				/*{{{*/
@@ -90,12 +90,7 @@ string rpmRecordParser::Name()
 /* */
 string rpmRecordParser::MD5Hash()
 {
-   char *str;
-   int_32 count, type;
-   assert(HeaderP != NULL);
-   int rc = headerGetEntry(HeaderP, CRPMTAG_MD5,
-			   &type, (void**)&str, &count);
-   return string(rc?str:"");
+   return Handler->MD5Sum();
 }
 									/*}}}*/
 // RecordParser::Maintainer - Return the maintainer email		/*{{{*/
@@ -178,13 +173,13 @@ string rpmRecordParser::SourcePkg()
 }
 									/*}}}*/
 
-void rpmRecordParser::BufCat(char *text)
+void rpmRecordParser::BufCat(const char *text)
 {
    if (text != NULL)
       BufCat(text, text+strlen(text));
 }
 
-void rpmRecordParser::BufCat(char *begin, char *end)
+void rpmRecordParser::BufCat(const char *begin, const char *end)
 {
    unsigned len = end - begin;
     
@@ -204,16 +199,18 @@ void rpmRecordParser::BufCat(char *begin, char *end)
    BufUsed += len;
 }
 
-void rpmRecordParser::BufCatTag(char *tag, char *value)
+void rpmRecordParser::BufCatTag(const char *tag, const char *value)
 {
    BufCat(tag);
    BufCat(value);
 }
 
-void rpmRecordParser::BufCatDep(char *pkg, char *version, int flags)
+void rpmRecordParser::BufCatDep(const char *pkg,
+			        const char *version,
+				int flags)
 {
    char buf[16];
-   char *ptr = (char*)buf;
+   char *ptr = buf;
 
    BufCat(pkg);
    if (*version) 
@@ -247,9 +244,9 @@ void rpmRecordParser::BufCatDep(char *pkg, char *version, int flags)
    }
 }
 
-void rpmRecordParser::BufCatDescr(char *descr)
+void rpmRecordParser::BufCatDescr(const char *descr)
 {
-   char *begin = descr;
+   const char *begin = descr;
 
    while (*descr) 
    {
@@ -401,15 +398,12 @@ void rpmRecordParser::GetRec(const char *&Start,const char *&Stop)
    headerGetEntry(HeaderP, RPMTAG_ARCH, &type, (void **)&str, &count);
    BufCatTag("\nArchitecture: ", str);
    
-   headerGetEntry(HeaderP, CRPMTAG_FILESIZE, &type, (void **)&num, &count);
-   snprintf(buf, sizeof(buf), "%d", num);
+   snprintf(buf, sizeof(buf), "%d", Handler->FileSize());
    BufCatTag("\nSize: ", buf);
 
-   headerGetEntry(HeaderP, CRPMTAG_MD5, &type, (void **)&str, &count);
-   BufCatTag("\nMD5Sum: ", str);
+   BufCatTag("\nMD5Sum: ", Handler->MD5Sum().c_str());
 
-   headerGetEntry(HeaderP, CRPMTAG_FILENAME, &type, (void **)&str, &count);
-   BufCatTag("\nFilename: ", str);
+   BufCatTag("\nFilename: ", Handler->FileName().c_str());
 
    headerGetEntry(HeaderP, RPMTAG_SUMMARY, &type, (void **)&str, &count);
    BufCatTag("\nDescription: ", str);

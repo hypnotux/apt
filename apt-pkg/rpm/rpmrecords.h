@@ -24,11 +24,12 @@
 #include <rpm/rpmlib.h>
 
   
-class RPMFileHandler;
+class RPMHandler;
 
 class rpmRecordParser : public pkgRecords::Parser
 {
-   RPMFileHandler *FileHandler;
+   RPMHandler *Handler;
+   bool IsDatabase;
 
    Header HeaderP;
 
@@ -36,11 +37,11 @@ class rpmRecordParser : public pkgRecords::Parser
    unsigned BufSize;
    unsigned BufUsed;
 
-   void BufCat(char *text);
-   void BufCat(char *begin, char *end);
-   void BufCatTag(char *tag, char *value);
-   void BufCatDep(char *pkg, char *version, int flags);
-   void BufCatDescr(char *descr);
+   void BufCat(const char *text);
+   void BufCat(const char *begin, const char *end);
+   void BufCatTag(const char *tag, const char *value);
+   void BufCatDep(const char *pkg, const char *version, int flags);
+   void BufCatDescr(const char *descr);
 
    protected:
    

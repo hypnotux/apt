@@ -217,11 +217,7 @@ bool rpmListParser::NewVersion(pkgCache::VerIterator Ver)
    Ver->Arch = UniqFindTagWrite(RPMTAG_ARCH);
    
    // Archive Size
-   headerGetEntry(header, CRPMTAG_FILESIZE, &type, (void**)&num, &count);
-   if (count > 0)
-       Ver->Size = (unsigned)num[0];
-   else
-       Ver->Size = 1;
+   Ver->Size = Handler->FileSize();
    
    // Unpacked Size (in kbytes)
    headerGetEntry(header, RPMTAG_SIZE, &type, (void**)&num, &count);
