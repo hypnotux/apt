@@ -101,7 +101,6 @@ if test "$enable_scripts" != "no"; then
   AC_MSG_RESULT(no)
   AC_DEFINE(WITH_LUA, 1, 
 	    [Define if you want to enable the extension system.]) 
-  AC_CHECK_LIB(dl, dlopen)
 else
   AC_MSG_RESULT(yes)
 fi

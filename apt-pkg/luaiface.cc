@@ -20,6 +20,9 @@ extern "C" {
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
+#include "lposix.h"
+#include "lrexlib.h"
+#include "linit.h"
 
 // For the interactive interpreter.
 #define main lua_c_main
@@ -71,6 +74,9 @@ Lua::Lua()
       {"math", luaopen_math},
       {"debug", luaopen_debug},
       {"loadlib", luaopen_loadlib},
+      {"posix", luaopen_posix},
+      {"rex", luaopen_rex},
+      {"init", luaopen_init},
       {"apt", luaopen_apt},
       {NULL, NULL}
    };

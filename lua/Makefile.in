@@ -175,15 +175,24 @@ target_alias = @target_alias@
 
 EXTRA_DIST = COPYRIGHT HISTORY
 
-LDADD = liblua.la -lm
-INCLUDES = -I$(srcdir)/include
+LDADD = liblua.la
+INCLUDES = -I$(srcdir)/include -I$(srcdir)/local
 
 lua_lua_SOURCES = lua/lua.c
+lua_lua_CFLAGS = -DLUA_USERCONFIG='"$(srcdir)/local/userconfig.c"'
+#lua_lua_LDADD = $(LDADD) -lreadline -lhistory -lncurses
 luac_luac_SOURCES = luac/luac.c luac/print.c lopcodes.c
 luac_luac_CFLAGS = -DLUA_OPNAMES
 
-liblua_la_CFLAGS = -DUSE_DLOPEN
+liblua_la_CFLAGS = -DUSE_DLOPEN -DWITH_POSIX
+liblua_la_LIBADD = -lm -ldl
 liblua_la_SOURCES = \
+		local/linit.c \
+		local/linit.lch \
+		local/lposix.h \
+		local/lposix.c \
+		local/lrexlib.h \
+		local/lrexlib.c \
 		include/lauxlib.h \
 		include/lua.h \
 		include/lualib.h \
@@ -243,25 +252,27 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 
 liblua_la_LDFLAGS =
-liblua_la_LIBADD =
+liblua_la_DEPENDENCIES =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_liblua_la_OBJECTS = lib/liblua_la-lauxlib.lo \
-	lib/liblua_la-lbaselib.lo lib/liblua_la-ldblib.lo \
-	lib/liblua_la-liolib.lo lib/liblua_la-lmathlib.lo \
-	lib/liblua_la-loadlib.lo lib/liblua_la-lstrlib.lo \
-	lib/liblua_la-ltablib.lo liblua_la-lapi.lo liblua_la-lcode.lo \
-	liblua_la-ldebug.lo liblua_la-ldo.lo liblua_la-ldump.lo \
-	liblua_la-lfunc.lo liblua_la-lgc.lo liblua_la-llex.lo \
-	liblua_la-lmem.lo liblua_la-lobject.lo liblua_la-lopcodes.lo \
-	liblua_la-lparser.lo liblua_la-lstate.lo liblua_la-lstring.lo \
-	liblua_la-ltable.lo liblua_la-ltests.lo liblua_la-ltm.lo \
-	liblua_la-lundump.lo liblua_la-lvm.lo liblua_la-lzio.lo
+am_liblua_la_OBJECTS = local/liblua_la-linit.lo \
+	local/liblua_la-lposix.lo local/liblua_la-lrexlib.lo \
+	lib/liblua_la-lauxlib.lo lib/liblua_la-lbaselib.lo \
+	lib/liblua_la-ldblib.lo lib/liblua_la-liolib.lo \
+	lib/liblua_la-lmathlib.lo lib/liblua_la-loadlib.lo \
+	lib/liblua_la-lstrlib.lo lib/liblua_la-ltablib.lo \
+	liblua_la-lapi.lo liblua_la-lcode.lo liblua_la-ldebug.lo \
+	liblua_la-ldo.lo liblua_la-ldump.lo liblua_la-lfunc.lo \
+	liblua_la-lgc.lo liblua_la-llex.lo liblua_la-lmem.lo \
+	liblua_la-lobject.lo liblua_la-lopcodes.lo liblua_la-lparser.lo \
+	liblua_la-lstate.lo liblua_la-lstring.lo liblua_la-ltable.lo \
+	liblua_la-ltests.lo liblua_la-ltm.lo liblua_la-lundump.lo \
+	liblua_la-lvm.lo liblua_la-lzio.lo
 liblua_la_OBJECTS = $(am_liblua_la_OBJECTS)
 @WITH_LUA_TRUE@noinst_PROGRAMS = lua/lua$(EXEEXT) luac/luac$(EXEEXT)
 @WITH_LUA_FALSE@noinst_PROGRAMS =
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_lua_lua_OBJECTS = lua/lua.$(OBJEXT)
+am_lua_lua_OBJECTS = lua/lua_lua-lua.$(OBJEXT)
 lua_lua_OBJECTS = $(am_lua_lua_OBJECTS)
 lua_lua_LDADD = $(LDADD)
 lua_lua_DEPENDENCIES = liblua.la
@@ -305,7 +316,10 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-loadlib.Plo \
 @AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-lstrlib.Plo \
 @AMDEP_TRUE@	lib/$(DEPDIR)/liblua_la-ltablib.Plo \
-@AMDEP_TRUE@	lua/$(DEPDIR)/lua.Po \
+@AMDEP_TRUE@	local/$(DEPDIR)/liblua_la-linit.Plo \
+@AMDEP_TRUE@	local/$(DEPDIR)/liblua_la-lposix.Plo \
+@AMDEP_TRUE@	local/$(DEPDIR)/liblua_la-lrexlib.Plo \
+@AMDEP_TRUE@	lua/$(DEPDIR)/lua_lua-lua.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-luac.Po \
 @AMDEP_TRUE@	luac/$(DEPDIR)/luac_luac-print.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -338,6 +352,18 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+local/$(am__dirstamp):
+	@$(mkinstalldirs) local
+	@: > local/$(am__dirstamp)
+local/$(DEPDIR)/$(am__dirstamp):
+	@$(mkinstalldirs) local/$(DEPDIR)
+	@: > local/$(DEPDIR)/$(am__dirstamp)
+local/liblua_la-linit.lo: local/$(am__dirstamp) \
+	local/$(DEPDIR)/$(am__dirstamp)
+local/liblua_la-lposix.lo: local/$(am__dirstamp) \
+	local/$(DEPDIR)/$(am__dirstamp)
+local/liblua_la-lrexlib.lo: local/$(am__dirstamp) \
+	local/$(DEPDIR)/$(am__dirstamp)
 lib/$(am__dirstamp):
 	@$(mkinstalldirs) lib
 	@: > lib/$(am__dirstamp)
@@ -375,7 +401,8 @@ lua/$(am__dirstamp):
 lua/$(DEPDIR)/$(am__dirstamp):
 	@$(mkinstalldirs) lua/$(DEPDIR)
 	@: > lua/$(DEPDIR)/$(am__dirstamp)
-lua/lua.$(OBJEXT): lua/$(am__dirstamp) lua/$(DEPDIR)/$(am__dirstamp)
+lua/lua_lua-lua.$(OBJEXT): lua/$(am__dirstamp) \
+	lua/$(DEPDIR)/$(am__dirstamp)
 lua/lua$(EXEEXT): $(lua_lua_OBJECTS) $(lua_lua_DEPENDENCIES) lua/$(am__dirstamp)
 	@rm -f lua/lua$(EXEEXT)
 	$(LINK) $(lua_lua_LDFLAGS) $(lua_lua_OBJECTS) $(lua_lua_LDADD) $(LIBS)
@@ -411,7 +438,13 @@ mostlyclean-compile:
 	-rm -f lib/liblua_la-lstrlib.lo
 	-rm -f lib/liblua_la-ltablib.$(OBJEXT)
 	-rm -f lib/liblua_la-ltablib.lo
-	-rm -f lua/lua.$(OBJEXT)
+	-rm -f local/liblua_la-linit.$(OBJEXT)
+	-rm -f local/liblua_la-linit.lo
+	-rm -f local/liblua_la-lposix.$(OBJEXT)
+	-rm -f local/liblua_la-lposix.lo
+	-rm -f local/liblua_la-lrexlib.$(OBJEXT)
+	-rm -f local/liblua_la-lrexlib.lo
+	-rm -f lua/lua_lua-lua.$(OBJEXT)
 	-rm -f luac/luac_luac-luac.$(OBJEXT)
 	-rm -f luac/luac_luac-print.$(OBJEXT)
 
@@ -447,7 +480,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-loadlib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-lstrlib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@lib/$(DEPDIR)/liblua_la-ltablib.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@lua/$(DEPDIR)/lua.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@local/$(DEPDIR)/liblua_la-linit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@local/$(DEPDIR)/liblua_la-lposix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@local/$(DEPDIR)/liblua_la-lrexlib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@lua/$(DEPDIR)/lua_lua-lua.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@luac/$(DEPDIR)/luac_luac-luac.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@luac/$(DEPDIR)/luac_luac-print.Po@am__quote@
 
@@ -483,6 +519,105 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+
+local/liblua_la-linit.o: local/linit.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-linit.o -MD -MP -MF "local/$(DEPDIR)/liblua_la-linit.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-linit.o `test -f 'local/linit.c' || echo '$(srcdir)/'`local/linit.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-linit.Tpo" "local/$(DEPDIR)/liblua_la-linit.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-linit.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/linit.c' object='local/liblua_la-linit.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-linit.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-linit.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-linit.o `test -f 'local/linit.c' || echo '$(srcdir)/'`local/linit.c
+
+local/liblua_la-linit.obj: local/linit.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-linit.obj -MD -MP -MF "local/$(DEPDIR)/liblua_la-linit.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-linit.obj `if test -f 'local/linit.c'; then $(CYGPATH_W) 'local/linit.c'; else $(CYGPATH_W) '$(srcdir)/local/linit.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-linit.Tpo" "local/$(DEPDIR)/liblua_la-linit.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-linit.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/linit.c' object='local/liblua_la-linit.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-linit.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-linit.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-linit.obj `if test -f 'local/linit.c'; then $(CYGPATH_W) 'local/linit.c'; else $(CYGPATH_W) '$(srcdir)/local/linit.c'; fi`
+
+local/liblua_la-linit.lo: local/linit.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-linit.lo -MD -MP -MF "local/$(DEPDIR)/liblua_la-linit.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-linit.lo `test -f 'local/linit.c' || echo '$(srcdir)/'`local/linit.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-linit.Tpo" "local/$(DEPDIR)/liblua_la-linit.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-linit.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/linit.c' object='local/liblua_la-linit.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-linit.Plo' tmpdepfile='local/$(DEPDIR)/liblua_la-linit.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-linit.lo `test -f 'local/linit.c' || echo '$(srcdir)/'`local/linit.c
+
+local/liblua_la-lposix.o: local/lposix.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lposix.o -MD -MP -MF "local/$(DEPDIR)/liblua_la-lposix.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lposix.o `test -f 'local/lposix.c' || echo '$(srcdir)/'`local/lposix.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lposix.Tpo" "local/$(DEPDIR)/liblua_la-lposix.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lposix.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lposix.c' object='local/liblua_la-lposix.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lposix.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-lposix.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lposix.o `test -f 'local/lposix.c' || echo '$(srcdir)/'`local/lposix.c
+
+local/liblua_la-lposix.obj: local/lposix.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lposix.obj -MD -MP -MF "local/$(DEPDIR)/liblua_la-lposix.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lposix.obj `if test -f 'local/lposix.c'; then $(CYGPATH_W) 'local/lposix.c'; else $(CYGPATH_W) '$(srcdir)/local/lposix.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lposix.Tpo" "local/$(DEPDIR)/liblua_la-lposix.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lposix.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lposix.c' object='local/liblua_la-lposix.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lposix.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-lposix.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lposix.obj `if test -f 'local/lposix.c'; then $(CYGPATH_W) 'local/lposix.c'; else $(CYGPATH_W) '$(srcdir)/local/lposix.c'; fi`
+
+local/liblua_la-lposix.lo: local/lposix.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lposix.lo -MD -MP -MF "local/$(DEPDIR)/liblua_la-lposix.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lposix.lo `test -f 'local/lposix.c' || echo '$(srcdir)/'`local/lposix.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lposix.Tpo" "local/$(DEPDIR)/liblua_la-lposix.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lposix.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lposix.c' object='local/liblua_la-lposix.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lposix.Plo' tmpdepfile='local/$(DEPDIR)/liblua_la-lposix.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lposix.lo `test -f 'local/lposix.c' || echo '$(srcdir)/'`local/lposix.c
+
+local/liblua_la-lrexlib.o: local/lrexlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lrexlib.o -MD -MP -MF "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lrexlib.o `test -f 'local/lrexlib.c' || echo '$(srcdir)/'`local/lrexlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" "local/$(DEPDIR)/liblua_la-lrexlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lrexlib.c' object='local/liblua_la-lrexlib.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lrexlib.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-lrexlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lrexlib.o `test -f 'local/lrexlib.c' || echo '$(srcdir)/'`local/lrexlib.c
+
+local/liblua_la-lrexlib.obj: local/lrexlib.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lrexlib.obj -MD -MP -MF "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lrexlib.obj `if test -f 'local/lrexlib.c'; then $(CYGPATH_W) 'local/lrexlib.c'; else $(CYGPATH_W) '$(srcdir)/local/lrexlib.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" "local/$(DEPDIR)/liblua_la-lrexlib.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lrexlib.c' object='local/liblua_la-lrexlib.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lrexlib.Po' tmpdepfile='local/$(DEPDIR)/liblua_la-lrexlib.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lrexlib.obj `if test -f 'local/lrexlib.c'; then $(CYGPATH_W) 'local/lrexlib.c'; else $(CYGPATH_W) '$(srcdir)/local/lrexlib.c'; fi`
+
+local/liblua_la-lrexlib.lo: local/lrexlib.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT local/liblua_la-lrexlib.lo -MD -MP -MF "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o local/liblua_la-lrexlib.lo `test -f 'local/lrexlib.c' || echo '$(srcdir)/'`local/lrexlib.c; \
+@am__fastdepCC_TRUE@	then mv -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo" "local/$(DEPDIR)/liblua_la-lrexlib.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "local/$(DEPDIR)/liblua_la-lrexlib.Tpo"; exit 1; \
+@am__fastdepCC_TRUE@	fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='local/lrexlib.c' object='local/liblua_la-lrexlib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='local/$(DEPDIR)/liblua_la-lrexlib.Plo' tmpdepfile='local/$(DEPDIR)/liblua_la-lrexlib.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o local/liblua_la-lrexlib.lo `test -f 'local/lrexlib.c' || echo '$(srcdir)/'`local/lrexlib.c
 
 lib/liblua_la-lauxlib.o: lib/lauxlib.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -MT lib/liblua_la-lauxlib.o -MD -MP -MF "lib/$(DEPDIR)/liblua_la-lauxlib.Tpo" \
@@ -1408,38 +1543,38 @@ liblua_la-lzio.lo: lzio.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblua_la_CFLAGS) $(CFLAGS) -c -o liblua_la-lzio.lo `test -f 'lzio.c' || echo '$(srcdir)/'`lzio.c
 
-lua/lua.o: lua/lua.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lua/lua.o -MD -MP -MF "lua/$(DEPDIR)/lua.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lua/lua.o `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c; \
-@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua.Tpo" "lua/$(DEPDIR)/lua.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua.Tpo"; exit 1; \
+lua/lua_lua-lua.o: lua/lua.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -MT lua/lua_lua-lua.o -MD -MP -MF "lua/$(DEPDIR)/lua_lua-lua.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lua/lua_lua-lua.o `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c; \
+@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua_lua-lua.Tpo" "lua/$(DEPDIR)/lua_lua-lua.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua_lua-lua.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua.Po' tmpdepfile='lua/$(DEPDIR)/lua.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua_lua-lua.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua_lua-lua.Po' tmpdepfile='lua/$(DEPDIR)/lua_lua-lua.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lua/lua.o `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -c -o lua/lua_lua-lua.o `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c
 
-lua/lua.obj: lua/lua.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lua/lua.obj -MD -MP -MF "lua/$(DEPDIR)/lua.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lua/lua.obj `if test -f 'lua/lua.c'; then $(CYGPATH_W) 'lua/lua.c'; else $(CYGPATH_W) '$(srcdir)/lua/lua.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua.Tpo" "lua/$(DEPDIR)/lua.Po"; \
-@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua.Tpo"; exit 1; \
+lua/lua_lua-lua.obj: lua/lua.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -MT lua/lua_lua-lua.obj -MD -MP -MF "lua/$(DEPDIR)/lua_lua-lua.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lua/lua_lua-lua.obj `if test -f 'lua/lua.c'; then $(CYGPATH_W) 'lua/lua.c'; else $(CYGPATH_W) '$(srcdir)/lua/lua.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua_lua-lua.Tpo" "lua/$(DEPDIR)/lua_lua-lua.Po"; \
+@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua_lua-lua.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua.Po' tmpdepfile='lua/$(DEPDIR)/lua.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua_lua-lua.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua_lua-lua.Po' tmpdepfile='lua/$(DEPDIR)/lua_lua-lua.TPo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lua/lua.obj `if test -f 'lua/lua.c'; then $(CYGPATH_W) 'lua/lua.c'; else $(CYGPATH_W) '$(srcdir)/lua/lua.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -c -o lua/lua_lua-lua.obj `if test -f 'lua/lua.c'; then $(CYGPATH_W) 'lua/lua.c'; else $(CYGPATH_W) '$(srcdir)/lua/lua.c'; fi`
 
-lua/lua.lo: lua/lua.c
-@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT lua/lua.lo -MD -MP -MF "lua/$(DEPDIR)/lua.Tpo" \
-@am__fastdepCC_TRUE@	  -c -o lua/lua.lo `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c; \
-@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua.Tpo" "lua/$(DEPDIR)/lua.Plo"; \
-@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua.Tpo"; exit 1; \
+lua/lua_lua-lua.lo: lua/lua.c
+@am__fastdepCC_TRUE@	if $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -MT lua/lua_lua-lua.lo -MD -MP -MF "lua/$(DEPDIR)/lua_lua-lua.Tpo" \
+@am__fastdepCC_TRUE@	  -c -o lua/lua_lua-lua.lo `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c; \
+@am__fastdepCC_TRUE@	then mv -f "lua/$(DEPDIR)/lua_lua-lua.Tpo" "lua/$(DEPDIR)/lua_lua-lua.Plo"; \
+@am__fastdepCC_TRUE@	else rm -f "lua/$(DEPDIR)/lua_lua-lua.Tpo"; exit 1; \
 @am__fastdepCC_TRUE@	fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua.Plo' tmpdepfile='lua/$(DEPDIR)/lua.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lua/lua.c' object='lua/lua_lua-lua.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='lua/$(DEPDIR)/lua_lua-lua.Plo' tmpdepfile='lua/$(DEPDIR)/lua_lua-lua.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lua/lua.lo `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c
+@am__fastdepCC_FALSE@	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lua_lua_CFLAGS) $(CFLAGS) -c -o lua/lua_lua-lua.lo `test -f 'lua/lua.c' || echo '$(srcdir)/'`lua/lua.c
 
 luac/luac_luac-luac.o: luac/luac.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(luac_luac_CFLAGS) $(CFLAGS) -MT luac/luac_luac-luac.o -MD -MP -MF "luac/$(DEPDIR)/luac_luac-luac.Tpo" \
@@ -1546,6 +1681,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf lib/.libs lib/_libs
+	-rm -rf local/.libs local/_libs
 
 distclean-libtool:
 	-rm -f libtool
@@ -1662,6 +1798,8 @@ clean-generic:
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
 	-rm -f luac/$(DEPDIR)/$(am__dirstamp)
+	-rm -f local/$(DEPDIR)/$(am__dirstamp)
+	-rm -f local/$(am__dirstamp)
 	-rm -f lib/$(am__dirstamp)
 	-rm -f lib/$(DEPDIR)/$(am__dirstamp)
 	-rm -f luac/$(am__dirstamp)
@@ -1677,7 +1815,7 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) lib/$(DEPDIR) lua/$(DEPDIR) luac/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/$(DEPDIR) local/$(DEPDIR) lua/$(DEPDIR) luac/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-libtool distclean-tags
@@ -1701,7 +1839,7 @@ install-man:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) lib/$(DEPDIR) lua/$(DEPDIR) luac/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) lib/$(DEPDIR) local/$(DEPDIR) lua/$(DEPDIR) luac/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -1732,6 +1870,9 @@ uninstall-am: uninstall-info-am
 	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-info-am
 
+
+local/linit.lch: local/linit.lua
+	bin2c local/linit.lua > local/linit.lch
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -6,15 +6,24 @@ endif
 
 EXTRA_DIST = COPYRIGHT HISTORY
 
-LDADD = liblua.la -lm
-INCLUDES = -I$(srcdir)/include
+LDADD = liblua.la
+INCLUDES = -I$(srcdir)/include -I$(srcdir)/local
 
 lua_lua_SOURCES = lua/lua.c
+lua_lua_CFLAGS = -DLUA_USERCONFIG='"$(srcdir)/local/userconfig.c"'
+#lua_lua_LDADD = $(LDADD) -lreadline -lhistory -lncurses
 luac_luac_SOURCES = luac/luac.c luac/print.c lopcodes.c
 luac_luac_CFLAGS = -DLUA_OPNAMES
 
-liblua_la_CFLAGS = -DUSE_DLOPEN
+liblua_la_CFLAGS = -DUSE_DLOPEN -DWITH_POSIX
+liblua_la_LIBADD = -lm -ldl
 liblua_la_SOURCES = \
+		local/linit.c \
+		local/linit.lch \
+		local/lposix.h \
+		local/lposix.c \
+		local/lrexlib.h \
+		local/lrexlib.c \
 		include/lauxlib.h \
 		include/lua.h \
 		include/lualib.h \
@@ -65,3 +74,6 @@ liblua_la_SOURCES = \
 		lvm.h \
 		lzio.c \
 		lzio.h
+
+local/linit.lch: local/linit.lua
+	bin2c local/linit.lua > local/linit.lch
