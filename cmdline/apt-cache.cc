@@ -708,6 +708,21 @@ bool WhatDepends(CommandLine &CmdL)
 		  cout << "    " << D.DepType() << ": <" << Trg.Name() << ">" << endl;
 	       else
 		  cout << "    " << D.DepType() << ": " << Trg.Name() << endl;
+
+	       // Display all solutions
+	       SPtrArray<pkgCache::Version *> List = D.AllTargets();
+	       pkgPrioSortList(Cache,List);
+	       for (pkgCache::Version **I = List; *I != 0; I++)
+	       {
+		  pkgCache::VerIterator V(Cache,*I);
+		  if (V != Cache.VerP + V.ParentPkg()->VersionList ||
+		      V->ParentPkg == D->Package)
+		     continue;
+		  cout << "      " << V.ParentPkg().Name() << endl;
+		  
+		  if (Recurse == true)
+		     Colours[D.ParentPkg()->ID]++;
+	       }
 	    }
 	 }
 
@@ -775,6 +790,21 @@ bool WhatDepends(CommandLine &CmdL)
 		     cout << "    " << D.DepType() << ": <" << Trg.Name() << ">" << endl;
 		  else
 		     cout << "    " << D.DepType() << ": " << Trg.Name() << endl;
+
+		  // Display all solutions
+		  SPtrArray<pkgCache::Version *> List = D.AllTargets();
+		  pkgPrioSortList(Cache,List);
+		  for (pkgCache::Version **I = List; *I != 0; I++)
+		  {
+		     pkgCache::VerIterator V(Cache,*I);
+		     if (V != Cache.VerP + V.ParentPkg()->VersionList ||
+			 V->ParentPkg == D->Package)
+			continue;
+		     cout << "      " << V.ParentPkg().Name() << endl;
+		     
+		     if (Recurse == true)
+			Colours[D.ParentPkg()->ID]++;
+		  }
 	       }
 	    }
 	 }
