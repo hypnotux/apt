@@ -3774,7 +3774,7 @@ void CommandHelp(const char *Name)
 	 );
 	 break;
       default:
-	 _error->Error(_("No help for that"), Name);
+	 _error->Error(_("No help for that"));
    }
 }
 									/*}}}*/

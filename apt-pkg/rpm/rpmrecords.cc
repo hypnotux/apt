@@ -275,7 +275,6 @@ void rpmRecordParser::GetRec(const char *&Start,const char *&Stop)
    char *str;
    char **strv;
    char **strv2;
-   int num;
    int_32 *numv;
    char buf[32];
 

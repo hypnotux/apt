@@ -124,6 +124,7 @@ bool CDROMMethod::Copy(string Src, string Dest)
       To.OpFail();
       return _error->Errno("utime","Failed to set modification time");
    }
+   return true;
 }
 
 // CDROMMethod::Fetch - Fetch a file					/*{{{*/

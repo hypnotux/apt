@@ -42,22 +42,6 @@ string RPMIndexCopy::RipDirectory(string Path)
    return string(Path, 0, Path.rfind('/'));
 }
 
-
-static int strrcmp_(const char *a, const char *b)
-{
-   int la = strlen(a);
-   int lb = strlen(b);
-
-   if (la == 0 || lb == 0)
-       return 0;
-   
-   if (la > lb)
-       return strcmp(&a[la-lb], b);
-   else
-       return strcmp(&b[lb-la], a);
-}
-
-
 bool RPMIndexCopy::CopyPackages(string CDROM,string Name,vector<string> &List)
 {   
    OpTextProgress Progress;
