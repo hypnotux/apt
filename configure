@@ -865,6 +865,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-hashmap          use the c++ hash_map extension
   --with-cpus             The number of cpus to be used for building(see --with-procs, default 1)
   --with-getconf          Enable automagical buildtime configuration
   --with-proc-multiply    Multiply this * number of cpus for parallel making(default 2).
@@ -4853,6 +4854,29 @@ echo "${ECHO_T}$rpm_version" >&6
 CPPFLAGS="$SAVE_CPPFLAGS"
 LIBS="$SAVE_LIBS"
 
+
+# Check whether --with-hashmap or --without-hashmap was given.
+if test "${with_hashmap+set}" = set; then
+  withval="$with_hashmap"
+
+if test "$withval" != no
+then
+
+cat >>confdefs.h <<\_ACEOF
+#define WITH_HASH_MAP 1
+_ACEOF
+
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi;
 
 echo "$as_me:$LINENO: checking system architecture" >&5
 echo $ECHO_N "checking system architecture... $ECHO_C" >&6
