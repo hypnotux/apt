@@ -1,0 +1,42 @@
+#! /bin/sh
+
+# apt postinst, based liberally on James Troup's gpm postinst
+# Copyright (C) 1998, Ben Gertzfield <che@debian.org>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+set -e
+
+create_apt_conf ()
+{
+ echo "/etc/apt/sources.list does not exist; creating a default setup."
+
+ cp /usr/share/doc/apt/examples/sources.list /etc/apt/sources.list
+}
+ 
+check_apt_conf ()
+{
+ true
+ # this is for future expansion
+}
+
+#DEBHELPER#
+
+case "$1" in
+       configure)
+	       ldconfig
+	       #
+               # If there is no /etc/apt/sources.list then create a default
+	       #
+	       if [ ! -f /etc/apt/sources.list ]; then
+	         create_apt_conf
+		 echo
+		 echo "If you wish to change the default sites from which APT fetches Debian"
+		 echo "packages, please edit the file /etc/apt/sources.list."
+	       else
+	         check_apt_conf
+	       fi
+esac

@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: acquire-item.h,v 1.2 2003/01/29 13:04:48 niemeyer Exp $
+// $Id: acquire-item.h,v 1.26 2003/02/02 03:13:13 doogie Exp $
 /* ######################################################################
 
    Acquire Item - Item to acquire
@@ -101,7 +101,7 @@ class pkgAcqIndex : public pkgAcquire::Item
    virtual void Done(string Message,unsigned long Size,string Md5Hash,
 		     pkgAcquire::MethodConfig *Cnf);
    virtual string Custom600Headers();
-   virtual string DescURI() {return RealURI;};
+   virtual string DescURI() {return RealURI;}; // CNC:2003-02-14
 
    // CNC:2002-07-03
    pkgAcqIndex(pkgAcquire *Owner,pkgRepository *Repository,string URI,

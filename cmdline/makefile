@@ -41,6 +41,7 @@ LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-sortpkgs.cc
 include $(PROGRAM_H)
 
+# CNC:2003-02-14
 # The apt-extracttemplates program
 PROGRAM=apt-extracttemplates
 SLIBS = -lapt-pkg -lapt-inst

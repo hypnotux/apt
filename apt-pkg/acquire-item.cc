@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: acquire-item.cc,v 1.6 2003/01/29 14:03:40 niemeyer Exp $
+// $Id: acquire-item.cc,v 1.46 2003/02/02 22:19:17 jgg Exp $
 /* ######################################################################
 
    Acquire Item - Item to acquire
@@ -163,7 +163,6 @@ void pkgAcquire::Item::Rename(string From,string To)
    if (rename(From.c_str(),To.c_str()) != 0)
    {
       char S[300];
-      // CNC:2003-01-29 - Fix potential buffer overflow bug. */
       snprintf(S,sizeof(S),_("rename failed, %s (%s -> %s)."),strerror(errno),
 	      From.c_str(),To.c_str());
       Status = StatError;

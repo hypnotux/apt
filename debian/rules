@@ -2,7 +2,7 @@
 # Made with the aid of dh_make, by Craig Small
 # Sample debian/rules that uses debhelper. GNU copyright 1997 by Joey Hess.
 # Some lines taken from debmake, by Christoph Lameter.
-# $Id: rules,v 1.4 2003/01/29 18:43:48 niemeyer Exp $
+# $Id: rules,v 1.48 2003/02/12 14:31:41 doogie Exp $
 
 # LD_LIBRARY_PATH=pwd/debian/apt/usr/lib dh_shlibdeps -papt
 # dpkg: /home/jgg/work/apt2/debian/apt/usr/lib/libapt-pkg.so.2.9 not found.
@@ -88,6 +88,7 @@ debian/shlibs.local: apt-pkg/makefile
 	echo "libapt-inst$(GLIBC_VER)$(LIBSTDCPP_VER) $(LIBAPTINST_MAJOR) $(LIBAPTINST_PROVIDE)" >> $@
 
 build: build/build-stamp	
+build-doc: build/build-doc-stamp	
 
 # Note that this is unconditionally done first as part of loading environment.mak
 # The true is needed to force make to reload environment.mak after running
@@ -113,7 +114,12 @@ endif
 
 build/build-stamp: build/configure-stamp
 	# Add here commands to compile the package.
-	$(MAKE) -s
+	$(MAKE) binary
+	touch $@
+
+build/build-doc-stamp: build/configure-stamp
+	# Add here commands to compile the package.
+	$(MAKE) doc
 	touch $@
 
 clean:
@@ -127,9 +133,9 @@ clean:
 	# Add here commands to clean up after the build process.
 	dh_clean debian/copyright debian/shlibs.local debian/shlibs.local.apt debian/shlibs.local.apt-utils
 
-binary-indep: libapt-pkg-doc
+binary-indep: apt-doc libapt-pkg-doc
 # Build architecture-independent files here.
-libapt-pkg-doc: build debian/shlibs.local
+libapt-pkg-doc: build-doc debian/shlibs.local
 	dh_testdir -p$@
 	dh_testroot -p$@
 	dh_clean -p$@ -k
@@ -140,10 +146,6 @@ libapt-pkg-doc: build debian/shlibs.local
 	dh_installdocs -p$@ $(BLD)/docs/cache* $(BLD)/docs/design* $(BLD)/docs/dpkg-tech* \
                             $(BLD)/docs/files* $(BLD)/docs/method* \
 			    doc/libapt-pkg2_to_3.txt doc/style.txt
-
-	-cp -a debian/libapt-pkg-doc.dhelp debian/libapt-pkg-doc/usr/doc/libapt-pkg-doc/.dhelp
-	-cp -a debian/libapt-pkg-doc.dhelp debian/libapt-pkg-doc/usr/share/doc/libapt-pkg-doc/.dhelp
-
 	dh_installexamples -p$@
 #	dh_installmenu -p$@
 #	dh_installinit -p$@
@@ -161,6 +163,25 @@ libapt-pkg-doc: build debian/shlibs.local
 	dh_md5sums -p$@
 	dh_builddeb -p$@
 
+apt-doc: build-doc
+	dh_testdir -p$@
+	dh_testroot -p$@
+	dh_clean -p$@ -k
+#
+# apt-doc install
+#
+	# Copy the guides
+	dh_installdocs -p$@ $(BLD)/docs/guide*.text $(BLD)/docs/guide*.html \
+	               $(BLD)/docs/offline.text $(BLD)/docs/offline.html
+	dh_installchangelogs -p$@
+	dh_compress -p$@
+	dh_fixperms -p$@
+	dh_installdeb -p$@
+	dh_gencontrol -p$@
+	dh_md5sums -p$@
+	dh_builddeb -p$@
+
+
 
 # Build architecture-dependent files here.
 
@@ -169,7 +190,7 @@ apt: build debian/shlibs.local
 	dh_testdir -p$@
 	dh_testroot -p$@
 	dh_clean -p$@ -k
-	dh_installdirs -p$@
+	dh_installdirs -p$@ /usr/share
 #
 # apt install
 #
@@ -185,15 +206,7 @@ apt: build debian/shlibs.local
 	cp $(BLD)/bin/methods/* debian/apt/usr/lib/apt/methods/
 
 	cp $(BLD)/scripts/dselect/* debian/apt/usr/lib/dpkg/methods/apt/
-	cp -r $(BLD)/locale debian/apt/usr/
-
-	# Copy the guides
-	dh_installdocs -p$@ $(BLD)/docs/guide*.text $(BLD)/docs/guide*.html \
-	               $(BLD)/docs/offline.text $(BLD)/docs/offline.html
-
-	# One or the other..
-	-cp -a debian/dhelp debian/apt/usr/doc/apt/.dhelp
-	-cp -a debian/dhelp debian/apt/usr/share/doc/apt/.dhelp
+	cp -r $(BLD)/locale debian/apt/usr/share/
 
 #	head -n 500 ChangeLog > debian/ChangeLog
 
@@ -236,7 +249,7 @@ libapt-pkg-dev: build debian/shlibs.local
 	dh_fixperms -p$@
 #	dh_suidregister -p$@
 	dh_installdeb -p$@
-	dh_gencontrol -p$@ -u -Vlibapt-pkg:provides=$(LIBAPTPKG_PROVIDE)
+	dh_gencontrol -p$@ -u -Vlibapt-pkg:provides=$(LIBAPTPKG_PROVIDE) -Vlibapt-inst:provides=$(LIBAPTINST_PROVIDE)
 	dh_md5sums -p$@
 	dh_builddeb -p$@
 

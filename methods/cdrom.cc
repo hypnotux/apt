@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: cdrom.cc,v 1.3 2003/01/29 18:43:48 niemeyer Exp $
+// $Id: cdrom.cc,v 1.20 2003/02/10 07:34:41 doogie Exp $
 /* ######################################################################
 
    CDROM URI method for APT
@@ -8,6 +8,7 @@
    ##################################################################### */
 									/*}}}*/
 // Include Files							/*{{{*/
+#include <apti18n.h>
 #include <apt-pkg/acquire-method.h>
 #include <apt-pkg/cdromutl.h>
 #include <apt-pkg/error.h>
@@ -152,7 +153,7 @@ bool CDROMMethod::Fetch(FetchItem *Itm)
       if (FileExists(DFile) == true)
       {
 	 if (ReadConfigFile(Database,DFile) == false)
-	    return _error->Error("Unable to read the cdrom database %s",
+	    return _error->Error(_("Unable to read the cdrom database %s"),
 			  DFile.c_str());
       }
       DatabaseLoaded = true;
@@ -161,15 +162,15 @@ bool CDROMMethod::Fetch(FetchItem *Itm)
    // All non IMS queries for package files fail.
    if (Itm->IndexFile == true || GetID(Get.Host).empty() == true)
    {
-      Fail("Please use apt-cdrom to make this CD recognized by APT."
-	   " apt-get update cannot be used to add new CDs");
+      Fail(_("Please use apt-cdrom to make this CD recognized by APT."
+	   " apt-get update cannot be used to add new CDs"));
       return true;
    }
 
    // We already have a CD inserted, but it is the wrong one
    if (CurrentID.empty() == false && Database.Find("CD::" + CurrentID) != Get.Host)
    {
-      Fail("Wrong CD",true);
+      Fail(_("Wrong CD"),true);
       return true;
    }
    
@@ -202,12 +203,12 @@ bool CDROMMethod::Fetch(FetchItem *Itm)
 	 
       // I suppose this should prompt somehow?
       if (UnmountCdrom(CDROM) == false)
-	 return _error->Error("Unable to unmount the CD-ROM in %s, it may still be in use.",
+	 return _error->Error(_("Unable to unmount the CD-ROM in %s, it may still be in use."),
 			      CDROM.c_str());
       if (MediaFail(Get.Host,CDROM) == false)
       {
 	 CurrentID = "FAIL";
-	 Fail("Wrong CD",true);
+	 Fail(_("Wrong CD"),true);
 	 return true;
       }
    }
@@ -225,7 +226,7 @@ bool CDROMMethod::Fetch(FetchItem *Itm)
    
    struct stat Buf;
    if (stat(Res.Filename.c_str(),&Buf) != 0)
-      return _error->Error("File not found");
+      return _error->Error(_("File not found"));
    
    if (NewID.empty() == false)
       CurrentID = NewID;

@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: apt-get.cc,v 1.14 2003/01/29 18:43:48 niemeyer Exp $
+// $Id: apt-get.cc,v 1.126 2003/02/12 16:14:08 doogie Exp $
 /* ######################################################################
    
    apt-get - Cover for dpkg
@@ -156,6 +156,14 @@ bool ShowList(ostream &out,string Title,string List)
 {
    if (List.empty() == true)
       return true;
+   // trim trailing space
+   int NonSpace = List.find_last_not_of(' ');
+   if (NonSpace != -1)
+   {
+      List = List.erase(NonSpace + 1);
+      if (List.empty() == true)
+	 return true;
+   }
 
    // Acount for the leading space
    int ScreenWidth = ::ScreenWidth - 3;
@@ -2051,32 +2059,53 @@ bool DoBuildDep(CommandLine &CmdL)
       pkgProblemResolver Fix(Cache);
       for (D = BuildDeps.begin(); D != BuildDeps.end(); D++)
       {
-	 pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
-	 if (Pkg.end() == true)
-         {
-	    /* for a build-conflict; ignore unknown packages */
-	    if ((*D).Type == pkgSrcRecords::Parser::BuildConflict || 
-	        (*D).Type == pkgSrcRecords::Parser::BuildConflictIndep)
-		continue;
-
-	    return _error->Error(_("%s dependency on %s cannot be satisfied because the package %s cannot be found"),
-				 Last->BuildDepType((*D).Type),Src.c_str(),(*D).Package.c_str());
-         }
-	 pkgCache::VerIterator IV = (*Cache)[Pkg].InstVerIter(*Cache);
-	 
-	 if ((*D).Type == pkgSrcRecords::Parser::BuildConflict || 
+         if ((*D).Type == pkgSrcRecords::Parser::BuildConflict ||
 	     (*D).Type == pkgSrcRecords::Parser::BuildConflictIndep)
-	 {
-	    /* 
-	     * conflict; need to remove if we have an installed version 
-	     * that satisfies the version criterial 
-	     */
-	    if (IV.end() == false && 
-		Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
-	       TryToInstall(Pkg,Cache,Fix,true,false,ExpectedInst);
-	 } 
-	 else 
-	 {
+         {
+            pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
+            // Build-conflicts on unknown packages are silently ignored
+            if (Pkg.end() == true)
+               continue;
+
+            pkgCache::VerIterator IV = (*Cache)[Pkg].InstVerIter(*Cache);
+
+            /* 
+             * Remove if we have an installed version that satisfies the 
+             * version criteria
+             */
+            if (IV.end() == false && 
+                Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
+               TryToInstall(Pkg,Cache,Fix,true,false,ExpectedInst);
+         }
+	 else // BuildDep || BuildDepIndep
+         {
+	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
+	    if (Pkg.end() == true)
+            {
+               // Check if there are any alternatives
+               if (((*D).Op & pkgCache::Dep::Or) != pkgCache::Dep::Or)
+	          return _error->Error(_("%s dependency for %s cannot be satisfied "
+                                         "because the package %s cannot be found"),
+				         Last->BuildDepType((*D).Type),Src.c_str(),
+                                         (*D).Package.c_str());
+               // Try the next alternative
+               continue;
+            }
+
+            /*
+             * if there are alternatives, we've already picked one, so skip
+             * the rest
+             *
+             * TODO: this means that if there's a build-dep on A|B and B is
+             * installed, we'll still try to install A; more importantly,
+             * if A is currently broken, we cannot go back and try B. To fix 
+             * this would require we do a Resolve cycle for each package we 
+             * add to the install list. Ugh
+             */
+            while (D != BuildDeps.end() && 
+                   (((*D).Op & pkgCache::Dep::Or) == pkgCache::Dep::Or))
+               D++;
+                       
 	    /* 
 	     * If this is a virtual package, we need to check the list of
 	     * packages that provide it and see if any of those are
@@ -2086,22 +2115,35 @@ bool DoBuildDep(CommandLine &CmdL)
             for (; Prv.end() != true; Prv++)
 	       if ((*Cache)[Prv.OwnerPkg()].InstVerIter(*Cache).end() == false)
 	          break;
+            
+            // Get installed version and version we are going to install
+	    pkgCache::VerIterator IV = (*Cache)[Pkg].InstVerIter(*Cache);
+	    pkgCache::VerIterator CV = (*Cache)[Pkg].CandidateVerIter(*Cache);
 
-	    if (Prv.end() == true)
-	    {
-	       /* 
-		* depends; need to install or upgrade if we don't have the
-	        * package installed or if the version does not satisfy the
-	        * build dep. This is complicated by the fact that if we
-	        * depend on a version lower than what we already have 
-	        * installed it is not clear what should be done; in practice
-	        * this case should be rare though and right now nothing
-	        * is done about it :-( 
-		*/
-	       if (IV.end() == true ||
-	          Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == false)
-	             TryToInstall(Pkg,Cache,Fix,false,false,ExpectedInst);
-	    }
+            for (; CV.end() != true; CV++)
+            {
+               if (Cache->VS().CheckDep(CV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
+                  break;
+            }
+            if (CV.end() == true)
+	       return _error->Error(_("%s dependency for %s cannot be satisfied "
+                                      "because no available versions of package %s "
+                                      "can satisfy version requirements"),
+				      Last->BuildDepType((*D).Type),Src.c_str(),
+                                      (*D).Package.c_str());
+
+            /*
+	     * TODO: if we depend on a version lower than what we already have 
+	     * installed it is not clear what should be done; in practice
+	     * this case should be rare, and right now nothing is 
+             * done about it :-( 
+	     */
+	    if (Prv.end() == true && // Nothing provides it; and
+                (IV.end() == true || //  It is not installed, or
+	         Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == false))
+                                     //  the version installed doesn't 
+                                     //  satisfy constraints 
+	       TryToInstall(Pkg,Cache,Fix,false,false,ExpectedInst);
 	 }	       
       }
       

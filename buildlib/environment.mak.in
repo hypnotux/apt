@@ -33,13 +33,7 @@ DEBIANDOC_HTML = @DEBIANDOC_HTML@
 DEBIANDOC_TEXT = @DEBIANDOC_TEXT@
 
 # SGML for the man pages
-NSGMLS = @NSGMLS@
-SGMLSPL = @SGMLSPL@
-DOCBOOK2MAN := $(wildcard /usr/lib/perl5/sgmlspl-specs/docbook2man-spec.pl)
-# CNC:2003-02-14
-ifndef DOCBOOK2MAN
-DOCBOOK2MAN := $(wildcard /usr/share/sgml/docbook/utils-0.6.9/helpers/docbook2man-spec.pl)
-endif
+DOCBOOK2MAN := @DOCBOOK2MAN@
 
 # Gettext settings
 GMSGFMT = @GMSGFMT@
@@ -56,6 +50,7 @@ PYTHONPREFIX = @PYTHONPREFIX@
 PYTHONEXECPREFIX = @PYTHONEXECPREFIX@
 PYTHONINCLUDE = @PYTHONINCLUDE@
 DB2LIB = @DB2LIB@
+INTLLIBS = @INTLLIBS@
 
 # Shim Headerfile control
 HAVE_C9X = @HAVE_C9X@

@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: pkgcache.cc,v 1.2 2002/07/23 20:50:56 niemeyer Exp $
+// $Id: pkgcache.cc,v 1.37 2003/02/10 01:40:58 doogie Exp $
 /* ######################################################################
    
    Package Cache - Accessor code for the cache
@@ -144,7 +144,7 @@ bool pkgCache::ReMap()
    // Chcek the arhcitecture
    if (HeaderP->Architecture == 0 ||
        _config->Find("APT::Architecture") != StrP + HeaderP->Architecture)
-      return _error->Error(_("The package cache was build for a different architecture"));
+      return _error->Error(_("The package cache was built for a different architecture"));
    return true;
 }
 									/*}}}*/
