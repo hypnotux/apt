@@ -277,6 +277,8 @@ bool rpmListParser::UsePackage(pkgCache::PkgIterator Pkg,
       PkgName = PkgName.substr(0, HashPos);
    Ver->Priority = RpmData->VerPriority(PkgName);
    Pkg->Flags |= RpmData->PkgFlags(PkgName);
+   if (HashPos != string::npos && (Pkg->Flags & pkgCache::Flag::Essential))
+      Pkg->Flags = pkgCache::Flag::Important;
    if (ParseStatus(Pkg,Ver) == false)
        return false;
    return true;
