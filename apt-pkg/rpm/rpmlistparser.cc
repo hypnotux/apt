@@ -33,18 +33,24 @@
 #include <rpm/rpmds.h>
 #endif
 
+#define WITH_VERSION_CACHING 1
+
 // ListParser::rpmListParser - Constructor				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 rpmListParser::rpmListParser(RPMHandler *Handler)
-	: Handler(Handler)
+	: Handler(Handler), VI(0)
 {
    Handler->Rewind();
    header = NULL;
    if (Handler->IsDatabase() == true)
-       SeenPackages = new map<string,unsigned long>();
+#ifdef WITH_HASH_MAP
+      SeenPackages = new SeenPackagesType(517);
+#else
+      SeenPackages = new SeenPackagesType;
+#endif
    else
-       SeenPackages = NULL;
+      SeenPackages = NULL;
    RpmData = RPMPackageData::Singleton();
 }
                                                                         /*}}}*/
@@ -88,6 +94,13 @@ string rpmListParser::Package()
    if (CurrentName.empty() == false)
       return CurrentName;
 
+#ifdef WITH_VERSION_CACHING
+   if (VI != NULL) {
+      CurrentName = VI->ParentPkg().Name();
+      return CurrentName;
+   }
+#endif
+
    char *str;
    int type, count;
    
@@ -110,8 +123,7 @@ string rpmListParser::Package()
    if (RpmData->IsDupPackage(Name) == true)
       IsDup = true;
    else if (SeenPackages != NULL) {
-      if (SeenPackages->find(Name) != SeenPackages->end() &&
-	  (*SeenPackages)[Name] != Offset())
+      if (SeenPackages->find(Name.c_str()) != SeenPackages->end())
       {
 	 if (_config->FindB("RPM::Allow-Duplicated-Warning", true) == true)
 	    _error->Warning(
@@ -132,7 +144,6 @@ string rpmListParser::Package()
 	 VirtualizePackage(Name);
 	 IsDup = true;
       }
-      (*SeenPackages)[Name] = Offset();
    }
    if (IsDup == true)
    {
@@ -147,11 +158,16 @@ string rpmListParser::Package()
 // ---------------------------------------------------------------------
 string rpmListParser::Architecture()
 {
-    int type, count;
-    char *arch;
-    int res;
-    res = headerGetEntry(header, RPMTAG_ARCH, &type, (void **)&arch, &count);
-    return string(res?arch:"");
+#ifdef WITH_VERSION_CACHING
+   if (VI != NULL)
+      return VI->Arch();
+#endif
+
+   int type, count;
+   char *arch;
+   int res;
+   res = headerGetEntry(header, RPMTAG_ARCH, &type, (void **)&arch, &count);
+   return string(res?arch:"");
 }
                                                                         /*}}}*/
 // ListParser::Version - Return the version string			/*{{{*/
@@ -161,6 +177,11 @@ string rpmListParser::Architecture()
  entry is assumed to only describe package properties */
 string rpmListParser::Version()
 {
+#ifdef WITH_VERSION_CACHING
+   if (VI != NULL)
+      return VI->VerStr();
+#endif
+
    char *ver, *rel;
    int_32 *ser;
    bool has_epoch = false;
@@ -199,6 +220,11 @@ bool rpmListParser::NewVersion(pkgCache::VerIterator Ver)
 {
    int count, type;
    int_32 *num;
+
+#if WITH_VERSION_CACHING
+   // Cache it for future usage.
+   RpmData->SetVersion(Handler->GetID(), Offset(), Ver);
+#endif
    
    // Parse the section
    Ver->Section = UniqFindTagWrite(RPMTAG_GROUP);
@@ -212,8 +238,6 @@ bool rpmListParser::NewVersion(pkgCache::VerIterator Ver)
    Ver->InstalledSize = (unsigned)num[0];
      
    if (ParseDepends(Ver,pkgCache::Dep::Depends) == false)
-       return false;
-   if (ParseDepends(Ver,pkgCache::Dep::PreDepends) == false)
        return false;
    if (ParseDepends(Ver,pkgCache::Dep::Conflicts) == false)
        return false;
@@ -237,6 +261,8 @@ bool rpmListParser::NewVersion(pkgCache::VerIterator Ver)
 bool rpmListParser::UsePackage(pkgCache::PkgIterator Pkg,
 			       pkgCache::VerIterator Ver)
 {
+   if (SeenPackages != NULL)
+      (*SeenPackages)[Pkg.Name()] = true;
    if (Pkg->Section == 0)
       Pkg->Section = UniqFindTagWrite(RPMTAG_GROUP);
    if (_error->PendingError()) 
@@ -260,6 +286,11 @@ static int compare(const void *a, const void *b)
 
 unsigned short rpmListParser::VersionHash()
 {
+#ifdef WITH_VERSION_CACHING
+   if (VI != NULL)
+      return (*VI)->Hash;
+#endif
+      
    int Sections[] = {
 	  RPMTAG_VERSION,
 	  RPMTAG_RELEASE,
@@ -270,13 +301,10 @@ unsigned short rpmListParser::VersionHash()
 	  0
    };
    unsigned long Result = INIT_FCS;
-   char S[300];
-   char *I;
    
    for (const int *sec = Sections; *sec != 0; sec++)
    {
-      char *Start;
-      char *End;
+      char *Str;
       int Len;
       int type, count;
       int res;
@@ -289,46 +317,25 @@ unsigned short rpmListParser::VersionHash()
       switch (type) 
       {
       case RPM_STRING_ARRAY_TYPE:
-	 qsort(strings, count, sizeof(char*), compare);
-	 
+	 //qsort(strings, count, sizeof(char*), compare);
 	 while (count-- > 0) 
 	 {
-	    Start = strings[count];
-	    Len = strlen(Start);
-	    End = Start+Len;
-	    
-	    if (Len >= (signed)sizeof(S))
-	       continue;
+	    Str = strings[count];
+	    Len = strlen(Str);
 
 	    /* Suse patch.rpm hack. */
-	    if (*sec == RPMTAG_REQUIRENAME && Len == 17 && *Start == 'r' &&
-	        strcmp(Start, "rpmlib(PatchRPMs)") == 0)
+	    if (Len == 17 && *Str == 'r' && *sec == RPMTAG_REQUIRENAME &&
+	        strcmp(Str, "rpmlib(PatchRPMs)") == 0)
 	       continue;
 	    
-	    /* Strip out any spaces from the text */
-	    for (I = S; Start != End; Start++) 
-	       if (isspace(*Start) == 0)
-		  *I++ = *Start;
-	    
-	    Result = AddCRC16(Result,S,I - S);
+	    Result = AddCRC16(Result,Str,Len);
 	 }
 	 break;
 	 
-      case RPM_STRING_TYPE:	 
-	 Start = (char*)strings;
-	 Len = strlen(Start);
-	 End = Start+Len;
-	 
-	 if (Len >= (signed)sizeof(S))
-	    continue;
-	 
-	 /* Strip out any spaces from the text */
-	 for (I = S; Start != End; Start++) 
-	    if (isspace(*Start) == 0)
-	       *I++ = *Start;
-
-	 Result = AddCRC16(Result,S,I - S);
-	 
+      case RPM_STRING_TYPE:
+	 Str = (char*)strings;
+	 Len = strlen(Str);
+	 Result = AddCRC16(Result,Str,Len);
 	 break;
       }
    }
@@ -360,21 +367,22 @@ bool rpmListParser::ParseDepends(pkgCache::VerIterator Ver,
 				 char **namel, char **verl, int_32 *flagl,
 				 int count, unsigned int Type)
 {
-   int i;
+   int i = 0;
    unsigned int Op = 0;
+   bool DepMode = false;
+   if (Type == pkgCache::Dep::Depends)
+      DepMode = true;
    
-   for (i = 0; i < count; i++) 
+   for (; i < count; i++) 
    {
-      
-      if (Type == pkgCache::Dep::Depends) {
+      if (DepMode == true) {
 	 if (flagl[i] & RPMSENSE_PREREQ)
-	     continue;
-      } else if (Type == pkgCache::Dep::PreDepends) {
-	 if (!(flagl[i] & RPMSENSE_PREREQ))
-	     continue;
+	    Type = pkgCache::Dep::PreDepends;
+	 else
+	    Type = pkgCache::Dep::Depends;
       }
       
-      if (strncmp(namel[i], "rpmlib", 6) == 0) 
+      if (namel[i][0] == 'r' && strncmp(namel[i], "rpmlib", 6) == 0) 
       {
 #ifdef HAVE_RPM41	
 	 rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
@@ -416,13 +424,12 @@ bool rpmListParser::ParseDepends(pkgCache::VerIterator Ver,
 	    }
 	 }
 	 
-	 if (NewDepends(Ver,string(namel[i]),string(verl[i]),Op,Type) == false)
+	 if (NewDepends(Ver,namel[i],verl[i],Op,Type) == false)
 	     return false;
       } 
       else 
       {
-	 if (NewDepends(Ver,string(namel[i]),string(),pkgCache::Dep::NoOp,
-			Type) == false)
+	 if (NewDepends(Ver,namel[i],"",pkgCache::Dep::NoOp,Type) == false)
 	     return false;
       }
    }
@@ -444,7 +451,6 @@ bool rpmListParser::ParseDepends(pkgCache::VerIterator Ver,
    switch (Type) 
    {
    case pkgCache::Dep::Depends:
-   case pkgCache::Dep::PreDepends:
       res = headerGetEntry(header, RPMTAG_REQUIRENAME, &type, 
 			   (void **)&namel, &count);
       if (res != 1)
@@ -513,9 +519,24 @@ bool rpmListParser::CollectFileProvides(pkgCache &Cache,
 		     NULL, (void **) &names, &count);
    while (count--) 
    {
-      pkgCache::Package *P = Cache.FindPackage(names[count]);
-      if (P != NULL && !NewProvides(Ver, string(names[count]), string()))
-	 return false;
+      const char *FileName = names[count];
+      pkgCache::Package *P = Cache.FindPackage(FileName);
+      if (P != NULL) {
+	 // Check if it is not yet provided, since it could be a
+	 // requirement from the database, that the source cache was
+	 // already aware.
+	 for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
+	      Prv.end() == false; Prv++) {
+	    const char *PrvName = Prv.Name();
+	    if (PrvName[0] == '/' && strcmp(PrvName,FileName) == 0) {
+	       // Found.
+	       FileName = NULL;
+	       break;
+	    }
+	 }
+	 if (FileName && !NewProvides(Ver, string(names[count]), string()))
+	    return false;
+      }
    }
 
    return true;
@@ -530,7 +551,6 @@ bool rpmListParser::ParseProvides(pkgCache::VerIterator Ver)
    char **namel = NULL;
    char **verl = NULL;
    int res;
-   bool ok = true;
 
    if (Duplicated == true) 
    {
@@ -558,23 +578,17 @@ bool rpmListParser::ParseProvides(pkgCache::VerIterator Ver)
    {      
       if (verl && *verl[i]) 
       {
-	 if (NewProvides(Ver,string(namel[i]),string(verl[i])) == false) 
-	 {
-	    ok = false;
-	    break;
-	 }
+	 if (NewProvides(Ver,namel[i],verl[i]) == false) 
+	    return false;
       } 
       else 
       {
-	 if (NewProvides(Ver,string(namel[i]),string()) == false) 
-	 {
-	    ok = false;
-	    break;
-	 }
+	 if (NewProvides(Ver,namel[i],"") == false) 
+	    return false;
       }
    }
     
-   return ok;
+   return true;
 }
                                                                         /*}}}*/
 // ListParser::Step - Move to the next section in the file		/*{{{*/
@@ -584,10 +598,14 @@ bool rpmListParser::Step()
 {
    while (Handler->Skip() == true)
    {
-      /* See if this is the correct Architecture, if it isn't then we
-       drop the whole section. A missing arch tag can't happen to us */
       header = Handler->GetHeader();
       CurrentName = "";
+
+#ifdef WITH_VERSION_CACHING
+      VI = RpmData->GetVersion(Handler->GetID(), Offset());
+      if (VI != NULL)
+	 return true;
+#endif
       
       string RealName = Package();
       if (Duplicated == true)
@@ -606,12 +624,8 @@ bool rpmListParser::Step()
       if (Handler->IsDatabase() == true || archOk == true)
 	 return true;
 #else
-      if (Handler->IsDatabase() == true)
-	 return true;
-
-      string Arch = Architecture();
-      int Score = rpmMachineScore(RPM_MACHTABLE_INSTARCH, Arch.c_str());
-      if (Score > 0 && RpmData->AcceptArchScore(Score))
+      if (Handler->IsDatabase() == true ||
+	  RpmData->ArchScore(Architecture().c_str()) > 0)
 	 return true;
 #endif
    }
@@ -657,10 +671,8 @@ unsigned long rpmListParser::Size()
 {
    uint_32 *size;
    int type, count;
-      
    if (headerGetEntry(header, RPMTAG_SIZE, &type, (void **)&size, &count)!=1)
        return 1;
-      
    return (size[0]+512)/1024;
 }
 

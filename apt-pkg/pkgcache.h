@@ -197,7 +197,7 @@ struct pkgCache::Header
    DynamicMMap::Pool Pools[7];
    
    // Rapid package name lookup
-   map_ptrloc HashTable[2*1048];
+   map_ptrloc HashTable[8*1048];
 
    bool CheckSizes(Header &Against) const;
    Header();
@@ -312,7 +312,8 @@ inline unsigned long pkgCache::sHash(const char *Str) const
 {
    unsigned long Hash = 0;
    for (const char *I = Str; *I != 0; I++)
-      Hash = 5*Hash + tolower(*I);
+      //Hash = 5*Hash + tolower(*I);
+      Hash = 5*Hash + *I;
    return Hash % hash_count(HeaderP->HashTable);
 }
 #undef hash_count

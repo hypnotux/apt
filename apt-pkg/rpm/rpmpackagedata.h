@@ -1,42 +1,68 @@
-
-#ifndef _RPMPACKAGEDATA_H_
-#define _RPMPACKAGEDATA_H_
-
+#ifndef RPMPACKAGEDATA_H
+#define RPMPACKAGEDATA_H
 
 #include <apt-pkg/tagfile.h>
 #include <apt-pkg/pkgcache.h>
+#include <apt-pkg/rpmmisc.h>
 
 #include <map>
-#include <list>
+#include <vector>
 #include <regex.h>
 
 using namespace std;
+
+struct LessPred
+{
+   bool operator()(const char* s1, const char* s2) const
+     { return strcmp(s1, s2) < 0; }
+};
 
 class RPMPackageData 
 {
    protected:
 
+#ifdef WITH_HASH_MAP
+   hash_map<string,pkgCache::State::VerPriority,hash_string> Priorities;
+   hash_map<string,pkgCache::Flag::PkgFlags,hash_string> Flags;
+   hash_map<string,vector<string>*,hash_string> FakeProvides;
+   hash_map<string,int,hash_string> IgnorePackages;
+   hash_map<string,int,hash_string> DuplicatedPackages;
+   typedef map<string,pkgCache::VerIterator> VerMapValueType;
+   typedef hash_map<unsigned long,VerMapValueType> VerMapType;
+   typedef hash_map<const char*,int,
+		    hash<const char*>,cstr_eq_pred> ArchScoresType;
+#else
    map<string,pkgCache::State::VerPriority> Priorities;
    map<string,pkgCache::Flag::PkgFlags> Flags;
-   map<string,list<string>*> FakeProvides;
+   map<string,vector<string>*> FakeProvides;
    map<string,int> IgnorePackages;
-   list<regex_t*> HoldPackages;   
    map<string,int> DuplicatedPackages;
-   list<regex_t*> DuplicatedPatterns;
+   typedef map<string,pkgCache::VerIterator> VerMapValueType;
+   typedef map<unsigned long,VerMapValueType> VerMapType;
+   typedef map<const char*,int,cstr_lt_pred> ArchScoresType;
+#endif
+
+   vector<regex_t*> HoldPackages;   
+   vector<regex_t*> DuplicatedPatterns;
 
    struct Translate {
 	   regex_t Pattern;
 	   string Template;
    };
    
-   list<Translate*> BinaryTranslations;
-   list<Translate*> SourceTranslations;
-   list<Translate*> IndexTranslations;
+   vector<Translate*> BinaryTranslations;
+   vector<Translate*> SourceTranslations;
+   vector<Translate*> IndexTranslations;
 
-   void GenericTranslate(list<Translate*> &TList, string &FullURI,
+   VerMapType VerMap;
+
+   void GenericTranslate(vector<Translate*> &TList, string &FullURI,
 		   	 map<string,string> &Dict);
 
    int MinArchScore;
+
+   ArchScoresType ArchScores;
+   int RpmArchScore(const char *Arch);
 
    public:
 
@@ -65,8 +91,17 @@ class RPMPackageData
    bool HasIndexTranslation()
 	{return !IndexTranslations.empty();};
 
+   int ArchScore(const char *Arch)
+   {
+      ArchScoresType::const_iterator I = ArchScores.find(Arch);
+      if (I != ArchScores.end())
+	 return I->second;
+      int Ret = RpmArchScore(Arch);
+      // Must iterate and free when deallocating.
+      ArchScores[strdup(Arch)] = Ret;
+      return Ret;
+   }
    void InitMinArchScore();
-   bool AcceptArchScore(int Score) { return Score >= MinArchScore; }
 
    void SetDupPackage(string Name)
    	{DuplicatedPackages[Name] = 1;};
@@ -74,8 +109,25 @@ class RPMPackageData
 
    static RPMPackageData *Singleton();
 
+   void SetVersion(string ID, unsigned long Offset,
+		   pkgCache::VerIterator &Version)
+        {VerMap[Offset][ID] = Version;};
+   const pkgCache::VerIterator *GetVersion(string ID, unsigned long Offset)
+        {
+		VerMapType::const_iterator I1 = VerMap.find(Offset);
+		if (I1 != VerMap.end()) {
+			VerMapValueType::const_iterator I2 =
+				I1->second.find(ID);
+			if (I2 != I1->second.end())
+				return &I2->second;
+		}
+		return NULL;
+	};
+
    RPMPackageData();
 };
 
 
 #endif
+
+// vim:sts=3:sw=3

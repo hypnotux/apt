@@ -24,8 +24,13 @@ class RPMHandler
    unsigned int iOffset;
    unsigned int iSize;
    Header HeaderP;
+   string ID;
 
    public:
+
+   // Return a unique ID for that handler. Actually, implemented used
+   // the file/dir name.
+   virtual string GetID() { return ID; };
 
    virtual bool Skip() = 0;
    virtual bool Jump(unsigned int Offset) = 0;

@@ -36,6 +36,7 @@
 
 RPMFileHandler::RPMFileHandler(string File)
 {
+   ID = File;
    FD = Fopen(File.c_str(), "r");
    if (FD == NULL)
    {
@@ -135,6 +136,7 @@ string RPMFileHandler::MD5Sum()
 RPMDirHandler::RPMDirHandler(string DirName)
    : sDirName(DirName)
 {
+   ID = DirName;
    Dir = opendir(sDirName.c_str());
    if (Dir == NULL)
       return;
@@ -271,6 +273,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 {
    string Dir = _config->Find("RPM::RootDir");
    rpmReadConfigFiles(NULL, NULL);
+   ID = DataPath(false);
 
    RPMPackageData::Singleton()->InitMinArchScore();
 

@@ -106,6 +106,21 @@ AC_SUBST(RPMLIBS)
 CPPFLAGS="$SAVE_CPPFLAGS"
 LIBS="$SAVE_LIBS"
 
+dnl CNC:2003-03-03
+AC_MSG_CHECKING(for --with-hashmap)
+AC_ARG_WITH([hashmap],
+	    AC_HELP_STRING(--with-hashmap, use the c++ hash_map extension),
+[
+if test "$withval" != no
+then 
+  AC_DEFINE(WITH_HASH_MAP, 1, 
+	    [Define if you want to use the c++ hash_map extension.]) 
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+],
+[AC_MSG_RESULT(no)])
 
 dnl Converts the ARCH to be something singular for this general CPU family
 dnl This is often the dpkg architecture string.

@@ -52,3 +52,4 @@
 #undef HAVE_LOCALE_H
 #undef HAVE_LIBINTL_H
 #undef LOCALEDIR
+#undef WITH_HASH_MAP

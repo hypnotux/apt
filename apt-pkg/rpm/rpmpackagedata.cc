@@ -3,7 +3,6 @@
 
 #ifdef HAVE_RPM
 
-
 #include <apt-pkg/error.h>
 #include <apt-pkg/rpmpackagedata.h>
 #include <apt-pkg/fileutl.h>
@@ -17,6 +16,9 @@
 
 RPMPackageData::RPMPackageData()
    : MinArchScore(-1)
+#ifdef WITH_HASH_MAP
+   , ArchScores(31), VerMap(517)
+#endif
 {
    // Populate priorities
    string FileName = _config->FindFile("Dir::Etc::rpmpriorities");
@@ -38,11 +40,11 @@ RPMPackageData::RPMPackageData()
    
    for (int i = 0; i != 6; i++) 
    {
-      static const char *priorities[] = 
+      const char *priorities[] = 
       {
 	 "Essential", "Important", "Required", "Standard", "Optional", "Extra"
       };
-      static pkgCache::State::VerPriority states[] = {
+      pkgCache::State::VerPriority states[] = {
 	     pkgCache::State::Important,
 	     pkgCache::State::Important,
 	     pkgCache::State::Required,
@@ -50,7 +52,7 @@ RPMPackageData::RPMPackageData()
 	     pkgCache::State::Optional,
 	     pkgCache::State::Extra
       };
-      static pkgCache::Flag::PkgFlags flags[] = {
+      pkgCache::Flag::PkgFlags flags[] = {
 	     pkgCache::Flag::Essential,
 	     pkgCache::Flag::Important,
 	     pkgCache::Flag::Important,
@@ -59,7 +61,6 @@ RPMPackageData::RPMPackageData()
 	     (pkgCache::Flag::PkgFlags)0
       };
 
-      
       string Packages = Section.FindS(priorities[i]);
       if (Packages.empty()) 
 	 continue;
@@ -88,7 +89,7 @@ RPMPackageData::RPMPackageData()
 	 delete ptrn;
       }
       else
-	  HoldPackages.push_front(ptrn);
+	  HoldPackages.push_back(ptrn);
    }
 
    // Populate ignored packages
@@ -137,12 +138,12 @@ RPMPackageData::RPMPackageData()
 	 {
 	    // If it's NULL, it was provided with an empty version
 	    if (FakeProvides[Name] != NULL)
-	       FakeProvides[Name]->push_front(Version);
+	       FakeProvides[Name]->push_back(Version);
 	 }
 	 else
 	 {
-	    list<string> *VerList = new list<string>;
-	    VerList->push_front(Version);
+	    vector<string> *VerList = new vector<string>;
+	    VerList->push_back(Version);
 	    FakeProvides[Name] = VerList;
 	 }
       }
@@ -163,9 +164,9 @@ RPMPackageData::RPMPackageData()
    const char *TString[] = {"translate-binary",
 			    "translate-source",
 			    "translate-index"};
-   list<Translate*> *TList[] = {&BinaryTranslations,
-			        &SourceTranslations,
-			        &IndexTranslations};
+   vector<Translate*> *TList[] = {&BinaryTranslations,
+				  &SourceTranslations,
+				  &IndexTranslations};
    for (int i = 0; i != 3; i++)
    {
       Top = Cnf.Tree(TString[i]);
@@ -182,7 +183,7 @@ RPMPackageData::RPMPackageData()
 	 {
 	    Configuration Block(Top);
 	    t->Template = Block.Find("Template");
-	    TList[i]->push_front(t);
+	    TList[i]->push_back(t);
 	 }
       }
    }
@@ -190,7 +191,7 @@ RPMPackageData::RPMPackageData()
 
 bool RPMPackageData::HoldPackage(const char *name)
 {
-   for (list<regex_t*>::iterator I = HoldPackages.begin();
+   for (vector<regex_t*>::iterator I = HoldPackages.begin();
 	I != HoldPackages.end(); I++)
       if (regexec(*I,name,0,0,0) == 0)
 	 return true;
@@ -202,10 +203,10 @@ bool RPMPackageData::IgnoreDep(pkgVersioningSystem &VS,
 {
    const char *name = Dep.TargetPkg().Name();
    if (FakeProvides.find(name) != FakeProvides.end()) {
-      list<string> *VerList = FakeProvides[name];
+      vector<string> *VerList = FakeProvides[name];
       if (VerList == NULL)
 	 return true;
-      for (list<string>::iterator I = VerList->begin();
+      for (vector<string>::iterator I = VerList->begin();
 	   I != VerList->end(); I++)
       {
 	 if (VS.CheckDep(I->c_str(),Dep->CompareOp,Dep.TargetVer()) == true)
@@ -240,11 +241,12 @@ static void ParseTemplate(string &Template, map<string,string> &Dict)
    }
 }
 
-void RPMPackageData::GenericTranslate(list<Translate*> &TList, string &FullURI,
+void RPMPackageData::GenericTranslate(vector<Translate*> &TList,
+				      string &FullURI,
 				      map<string,string> &Dict)
 {
    const char *fulluri = FullURI.c_str();
-   for (list<Translate*>::iterator I = TList.begin(); I != TList.end(); I++)
+   for (vector<Translate*>::iterator I = TList.begin(); I != TList.end(); I++)
    {
       if (regexec(&(*I)->Pattern,fulluri,0,0,0) == 0)
       {
@@ -266,15 +268,26 @@ void RPMPackageData::InitMinArchScore()
       MinArchScore = 0;
 }
 
+int RPMPackageData::RpmArchScore(const char *Arch)
+{
+   int Score = rpmMachineScore(RPM_MACHTABLE_INSTARCH, Arch);
+   if (Score >= MinArchScore)
+      return Score;
+   return 0;
+}
+
 bool RPMPackageData::IsDupPackage(string Name)
 {
    if (DuplicatedPackages.find(Name) != DuplicatedPackages.end())
       return true;
    const char *name = Name.c_str();
-   for (list<regex_t*>::iterator I = DuplicatedPatterns.begin();
-	I != DuplicatedPatterns.end(); I++)
-      if (regexec(*I,name,0,0,0) == 0)
+   for (vector<regex_t*>::iterator I = DuplicatedPatterns.begin();
+	I != DuplicatedPatterns.end(); I++) {
+      if (regexec(*I,name,0,0,0) == 0) {
+	 SetDupPackage(Name);
 	 return true;
+      }
+   }
    return false;
 }
 

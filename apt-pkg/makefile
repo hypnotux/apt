@@ -63,7 +63,8 @@ SOURCE+= rpm/rpmhandler.cc rpm/rpmindexfile.cc rpm/rpmlistparser.cc \
 	 rpm/rpmpackagedata.cc rpm/rpmpm.cc rpm/rpmrecords.cc \
 	 rpm/rpmsrcrecords.cc rpm/rpmsystem.cc rpm/rpmversion.cc
 HEADERS+= rpmhandler.h rpmindexfile.h rpmlistparser.h rpmpackagedata.h \
-	  rpmpm.h rpmrecords.h rpmsrcrecords.h rpmsystem.h rpmversion.h
+	  rpmpm.h rpmrecords.h rpmsrcrecords.h rpmsystem.h rpmversion.h \
+	  rpmmisc.h
 
 HEADERS := $(addprefix apt-pkg/,$(HEADERS))
 
