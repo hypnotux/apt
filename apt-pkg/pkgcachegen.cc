@@ -704,6 +704,10 @@ static bool BuildCache(pkgCacheGenerator &Gen,
       CurrentSize = 0;
       for (I = Start; I != End; I++)
       {
+	 // CNC:2003-02-24
+	 if ((*I)->HasPackages() == false || (*I)->Exists() == false)
+	    continue;
+
 	 unsigned long Size = (*I)->Size();
 	 Progress.OverallProgress(CurrentSize,TotalSize,Size,_("Collecting File Provides"));
 	 CurrentSize += Size;
