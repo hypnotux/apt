@@ -23,17 +23,18 @@ def findgroup(grpname):
 			return group
 
 def grouppkgs(grpname):
-	if not findgroup(grpname):
-		print "No such group: %s" % grpname
-		return
 	group = findgroup(grpname)
-	if group:
+	if group and group.packages:
 		for pkg in comps.groups[group.name].packages:
 			print "%s" % pkg
+	else:
+		print "No such group: %s" % grpname
+		return
 
 def showgroups():
 	for group in comps.groups.values():
-		print "%s (%s)" % (group.id, group.name)
+		if group.packages:
+			print "%s (%s)" % (group.id, group.name)
 
 def showgroup(grpname):
 	group = findgroup(grpname)
@@ -61,3 +62,4 @@ if __name__ == "__main__":
 	else:
 		usage()
 	
+# vim:ts=4
