@@ -740,6 +740,32 @@ static int AptAux_mark(lua_State *L, int Kind)
    return 0;
 }
 
+static int AptAux_marksimple(lua_State *L, int Kind)
+{
+   pkgCache::Package *Pkg = AptAux_ToPackage(L, 1);
+   if (Pkg != NULL) {
+      pkgDepCache *DepCache = _lua->GetDepCache(L);
+      if (DepCache == NULL)
+	 return 0;
+      pkgCache::PkgIterator PkgI(DepCache->GetCache(), Pkg);
+      pkgDepCache::State state(DepCache);
+      switch (Kind) {
+	 case MARK_KEEP:
+	    DepCache->MarkKeep(PkgI);
+	    break;
+	 case MARK_INSTALL:
+	    DepCache->MarkInstall(PkgI, false);
+	    break;
+	 case MARK_REMOVE:
+	    DepCache->MarkDelete(PkgI);
+	    break;
+      }
+      if (DepCache->BrokenCount() > 0)
+	 state.Restore();
+   }
+   return 0;
+}
+
 static int AptLua_confget(lua_State *L)
 {
    const char *key = luaL_checkstring(L, 1);
@@ -1135,6 +1161,21 @@ static int AptLua_markremove(lua_State *L)
    return AptAux_mark(L, MARK_REMOVE);
 }
 
+static int AptLua_marksimplekeep(lua_State *L)
+{
+   return AptAux_marksimple(L, MARK_KEEP);
+}
+
+static int AptLua_marksimpleinstall(lua_State *L)
+{
+   return AptAux_marksimple(L, MARK_INSTALL);
+}
+
+static int AptLua_marksimpleremove(lua_State *L)
+{
+   return AptAux_marksimple(L, MARK_REMOVE);
+}
+
 static int AptLua_markdistupgrade(lua_State *L)
 {
    if (lua_gettop(L) != 0) {
@@ -1386,6 +1427,9 @@ static const luaL_reg aptlib[] = {
    {"markinstall",	AptLua_markinstall},
    {"markreinstall",	AptLua_markreinstall},
    {"markremove",	AptLua_markremove},
+   {"marksimplekeep",	AptLua_marksimpleinstall},
+   {"marksimpleinstall",AptLua_marksimpleinstall},
+   {"marksimpleremove",	AptLua_marksimpleinstall},
    {"markdistupgrade",  AptLua_markdistupgrade},
    {"markupgrade",	AptLua_markupgrade},
    {"statkeep",		AptLua_statkeep},
