@@ -82,6 +82,7 @@ class rpmListIndex : public rpmIndexFile
 
    virtual string MainType() const = 0;
    virtual string IndexPath() const {return IndexFile(MainType());};
+   virtual string ReleasePath() const {return IndexFile("release");};
 
    public:
 
@@ -174,6 +175,7 @@ class rpmPkgDirIndex : public rpmPkgListIndex
 
    virtual string MainType() const {return "pkgdir";}
    virtual string IndexPath() const;   
+   virtual string ReleasePath() const;
 
    public:
 
