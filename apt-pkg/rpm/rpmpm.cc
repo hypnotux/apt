@@ -236,14 +236,14 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 	 if (Interactive)
 	    operation = "-ivh";
 	 else
-	    operation = "-i";
+	    operation = "-iv";
 	 break;
 
       case Item::RPMUpgrade:
 	 if (Interactive)
 	    operation = "-Uvh";
 	 else
-	    operation = "-U";
+	    operation = "-Uv";
 	 break;
 
       case Item::RPMErase:
