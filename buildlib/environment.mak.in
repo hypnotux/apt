@@ -36,6 +36,10 @@ DEBIANDOC_TEXT = @DEBIANDOC_TEXT@
 NSGMLS = @NSGMLS@
 SGMLSPL = @SGMLSPL@
 DOCBOOK2MAN := $(wildcard /usr/lib/perl5/sgmlspl-specs/docbook2man-spec.pl)
+# CNC:2003-02-14
+ifndef DOCBOOK2MAN
+DOCBOOK2MAN := $(wildcard /usr/share/sgml/docbook/utils-0.6.9/helpers/docbook2man-spec.pl)
+endif
 
 # Gettext settings
 GMSGFMT = @GMSGFMT@
