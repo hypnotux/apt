@@ -1345,6 +1345,8 @@ pkgSrcRecords::Parser *FindSrc(const char *Name,pkgRecords &Recs,
 /* */
 bool DoUpdate(CommandLine &CmdL)
 {
+// CNC:2003-03-27
+#if 0
    if (CmdL.FileSize() != 1)
       return _error->Error(_("The update command takes no arguments"));
 
@@ -1352,6 +1354,32 @@ bool DoUpdate(CommandLine &CmdL)
    pkgSourceList List;
    if (List.ReadMainList() == false)
       return false;
+#else
+   bool Partial = false;
+   pkgSourceList List;
+
+   if (CmdL.FileSize() != 1)
+   {
+      for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+      {
+	 string Repo = _config->FindDir("Dir::Etc::sourceparts") + *I;
+	 if (FileExists(Repo) == false)
+	    Repo += ".list";
+	 if (FileExists(Repo) == true)
+	 {
+	    List.ReadVendors();
+	    if (List.ReadAppend(Repo) == true)
+	       Partial = true;
+	    else
+	       return _error->Error(_("Sources list %s could not be read"),Repo.c_str());
+	 }
+	 else
+	    return _error->Error(_("Sources list %s doesn't exist"),Repo.c_str());
+      }
+   }
+   else if (List.ReadMainList() == false)
+      return false;
+#endif
 
    // Lock the list directory
    FileFd Lock;
@@ -1427,8 +1455,8 @@ bool DoUpdate(CommandLine &CmdL)
       Failed = true;
    }
    
-   // Clean out any old list files
-   if (_config->FindB("APT::Get::List-Cleanup",true) == true)
+   // Clean out any old list files if not in partial update
+   if (Partial == false && _config->FindB("APT::Get::List-Cleanup",true) == true)
    {
       if (Fetcher.Clean(_config->FindDir("Dir::State::lists")) == false ||
 	  Fetcher.Clean(_config->FindDir("Dir::State::lists") + "partial/") == false)

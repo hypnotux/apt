@@ -1496,12 +1496,32 @@ pkgSrcRecords::Parser *FindSrc(const char *Name,pkgRecords &Recs,
 /* */
 bool DoUpdate(CommandLine &CmdL)
 {
-   if (CheckHelp(CmdL, 0) == true)
+   if (CheckHelp(CmdL) == true)
       return true;
 
-   // Get the source list
+   bool Partial = false;
    pkgSourceList List;
-   if (List.ReadMainList() == false)
+
+   if (CmdL.FileSize() != 1)
+   {
+      for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+      {
+	 string Repo = _config->FindDir("Dir::Etc::sourceparts") + *I;
+	 if (FileExists(Repo) == false)
+	    Repo += ".list";
+	 if (FileExists(Repo) == true)
+	 {
+	    List.ReadVendors();
+	    if (List.ReadAppend(Repo) == true)
+	       Partial = true;
+	    else
+	       return _error->Error(_("Sources list %s could not be read"),Repo.c_str());
+	 }
+	 else
+	    return _error->Error(_("Sources list %s doesn't exist"),Repo.c_str());
+      }
+   }
+   else if (List.ReadMainList() == false)
       return false;
 
    // Lock the list directory
