@@ -305,7 +305,8 @@ string Configuration::FindAny(const char *Name,const char *Default) const
       
       // bool
       case 'b': 
-      return FindB(key, Default) ? "true" : "false";
+      // CNC:2003-11-23
+      return FindB(key, StringToBool(Default)) ? "true" : "false";
       
       // int
       case 'i': 
