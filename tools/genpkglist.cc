@@ -604,14 +604,14 @@ int main(int argc, char ** argv)
       if (progressBar) {
          if (entry_cur)
             printf("\b\b\b\b\b\b\b\b\b\b");
-         printf("%04i/%04i ", entry_cur + 1, entry_no);
+         printf(" %04i/%04i", entry_cur + 1, entry_no);
          fflush(stdout);
       }
 
       if (stat(dirEntries[entry_cur]->d_name, &sb) < 0) {
-	    cerr << dirEntries[entry_cur] << ":";
-	    perror("stat");
-	    exit(1);
+	    cerr << "\nWarning: " << strerror(errno) << ": " << 
+		    dirEntries[entry_cur]->d_name << endl;
+	    continue;
       }
 
       {
@@ -621,9 +621,9 @@ int main(int argc, char ** argv)
 	 fd = fdOpen(dirEntries[entry_cur]->d_name, O_RDONLY, 0666);
 
 	 if (!fd) {
-	    cerr << dirEntries[entry_cur]->d_name << ":";
-	    perror("open");
-	    exit(1);
+	    cerr << "\nWarning: " << strerror(errno) << ": " << 
+		    dirEntries[entry_cur]->d_name << endl;
+	    continue;
 	 }
 	 
 #if RPM_VERSION >= 0x040100
@@ -650,6 +650,9 @@ int main(int argc, char ** argv)
 	    
 	    headerFree(newHeader);
 	    headerFree(h);
+	 } else {
+	    cerr << "\nWarning: Skipping malformed RPM: " << 
+		    dirEntries[entry_cur]->d_name << endl;
 	 }
 	 Fclose(fd);
       }
