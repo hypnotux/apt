@@ -20,6 +20,7 @@
 #include <apt-pkg/packagemanager.h>
 #include <apt-pkg/sourcelist.h>
 #include <apt-pkg/contrib/error.h>
+#include <apt-pkg/luaiface.h>
 
 #include <string>
 #include <time.h>
@@ -214,6 +215,9 @@ ItemsIter()
 %immutable _error;
 GlobalError *_error;
 
+%immutable _lua;
+Lua *_lua;
+
 /* Undefined reference!? */
 %ignore pkgCache::PkgIterator::TargetVer;
 
@@ -246,6 +250,7 @@ Py_END_ALLOW_THREADS
 %include <apt-pkg/packagemanager.h>
 %include <apt-pkg/sourcelist.h>
 %include <apt-pkg/contrib/error.h>
+%include <apt-pkg/luaiface.h>
 
 /* Create a dumb status class which can be instantiated. pkgAcquireStatus
  * has fully abstract methods. */
