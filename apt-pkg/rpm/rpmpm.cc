@@ -313,13 +313,13 @@ bool pkgRPMPM::Go()
    bool Ret = true;
 
 #ifdef WITH_LUA
-   if (_lua->HasScripts("Scripts::RPM::Pre") == true) {
+   if (_lua->HasScripts("Scripts::PM::Pre") == true) {
       _lua->SetGlobal("files_install", install_or_upgrade);
       _lua->SetGlobal("names_remove", uninstall);
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
       _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::RPM::Pre", false);
+      _lua->RunScripts("Scripts::PM::Pre", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {
@@ -333,13 +333,13 @@ bool pkgRPMPM::Go()
       Ret = false;
 
 #ifdef WITH_LUA
-   if (_lua->HasScripts("Scripts::RPM::Post") == true) {
+   if (_lua->HasScripts("Scripts::PM::Post") == true) {
       _lua->SetGlobal("files_install", install_or_upgrade);
       _lua->SetGlobal("names_remove", uninstall);
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
       _lua->SetDepCache(&Cache);
-      _lua->RunScripts("Scripts::RPM::Post", false);
+      _lua->RunScripts("Scripts::PM::Post", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
       if (_error->PendingError() == true) {
