@@ -301,7 +301,8 @@ bool pkgSourceList::ReadAppend(string File)
       delete *I;
    SrcList.erase(SrcList.begin(),SrcList.end());
 #endif
-   char Buffer[300];
+   // CNC:2003-12-10 - 300 is too short.
+   char Buffer[1024];
 
    int CurLine = 0;
    while (F.eof() == false)
