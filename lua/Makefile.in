@@ -1809,13 +1809,13 @@ clean-generic:
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
 	-rm -f luac/$(DEPDIR)/$(am__dirstamp)
-	-rm -f local/$(DEPDIR)/$(am__dirstamp)
-	-rm -f local/$(am__dirstamp)
-	-rm -f lib/$(am__dirstamp)
-	-rm -f lib/$(DEPDIR)/$(am__dirstamp)
 	-rm -f luac/$(am__dirstamp)
 	-rm -f lua/$(am__dirstamp)
 	-rm -f lua/$(DEPDIR)/$(am__dirstamp)
+	-rm -f local/$(am__dirstamp)
+	-rm -f local/$(DEPDIR)/$(am__dirstamp)
+	-rm -f lib/$(am__dirstamp)
+	-rm -f lib/$(DEPDIR)/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
