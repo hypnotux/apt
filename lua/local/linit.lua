@@ -1,7 +1,7 @@
 
 rex.new = rex.newPOSIX
 
-function rex.grep(filename, expr)
+function rex.grep(expr, filename)
 	if not posix.stat(filename, "mode") then
 		return nil
 	end
@@ -20,11 +20,11 @@ function rex.grep(filename, expr)
 	return lines
 end
 
-function rex.igrep(filename, expr)
-	return ipairs(rex.grep(filename, expr))
+function rex.igrep(expr, filename)
+	return ipairs(rex.grep(expr, filename))
 end
 
-function rex.bgrep(filename, expr)
+function rex.bgrep(expr, filename)
 	if not posix.stat(filename, "mode") then
 		return nil
 	end
