@@ -172,7 +172,6 @@ target_alias = @target_alias@
 EXTRA_DIST = \
 	     archtable \
 	     ostable \
-	     sizetable \
 	     config.h.in \
 	     gettext.h \
 	     inttypes.h \

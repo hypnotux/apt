@@ -4,7 +4,6 @@ all-local: copy-headers
 EXTRA_DIST = \
 	     archtable \
 	     ostable \
-	     sizetable \
 	     config.h.in \
 	     gettext.h \
 	     inttypes.h \
