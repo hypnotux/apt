@@ -768,7 +768,11 @@ static int AptLua_confset(lua_State *L)
 {
    const char *key = luaL_checkstring(L, 1);
    const char *val = luaL_checkstring(L, 2);
-   const int cnd = luaL_optint(L, 3, 0);
+   int cnd = 0;
+   if (lua_gettop(L) >= 3 && lua_isboolean(L, 3))
+      cnd = lua_toboolean(L, 3);
+   else
+      cnd = luaL_optint(L, 3, 0);
    if (key != NULL && val != NULL) {
       if (cnd != 0)
 	 _config->CndSet(key, val);
