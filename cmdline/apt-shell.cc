@@ -1858,7 +1858,7 @@ bool DoInstall(CommandLine &CmdL)
 	    if (eq)
 	    {
 	       if (lt && gt)
-		  return _error->Error(_("Couldn't parse name: %s"),S);
+		  return _error->Error(_("Couldn't parse name '%s'"),S);
 	       else if (lt)
 		  VerOp = pkgCache::Dep::LessEq;
 	       else if (gt)
@@ -1875,7 +1875,7 @@ bool DoInstall(CommandLine &CmdL)
 	       else if (gt)
 		  VerOp = pkgCache::Dep::Greater;
 	       else
-		  return _error->Error(_("Couldn't parse name: %s"),S);
+		  return _error->Error(_("Couldn't parse name '%s'"),S);
 	    }
 	    *sep = '\0';
 	    VerTag = p;
