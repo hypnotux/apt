@@ -37,6 +37,9 @@
 #include <rpm/rpmlib.h>
 #include <assert.h>
 									/*}}}*/
+#ifdef HAVE_RPM41
+extern int _rpmds_nopromote;
+#endif
 
 rpmSystem rpmSys;
 
@@ -176,6 +179,32 @@ bool rpmSystem::Initialize(Configuration &Cnf)
       if (Cnf.FindB("RPM::NoDeps",false))
 	 Cnf.Set("RPM::Options::", "--nodeps");
    }
+
+#ifdef HAVE_RPM41
+   const char *RPMOptions[] =
+   {
+      "RPM::Options",
+      "RPM::Install-Options",
+      "RPM::Erase-Options",
+      NULL,
+   };
+   int NoPromote = 1;
+   const char *Opt = *RPMOptions;
+   while (*Opt && NoPromote)
+   {
+      Top = _config->Tree(Opt);
+      if (Top != 0)
+      {
+	 for (Top = Top->Child; Top != 0; Top = Top->Next)
+	    if (Top->Value == "--promoteepoch") {
+	       NoPromote = 0;
+	       break;
+	    }
+      }
+      Opt++;
+   }
+   _rpmds_nopromote = NoPromote;
+#endif
 
    return true;
 }

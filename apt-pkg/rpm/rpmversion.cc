@@ -201,6 +201,8 @@ bool rpmVersioningSystem::CheckDep(const char *PkgVer,
 #ifdef HAVE_RPM41
    rpmds pds = rpmdsSingle(RPMTAG_PROVIDENAME, "", PkgVer, PkgFlags);
    rpmds dds = rpmdsSingle(RPMTAG_REQUIRENAME, "", DepVer, DepFlags);
+   rpmdsSetNoPromote(pds, _rpmds_nopromote);
+   rpmdsSetNoPromote(dds, _rpmds_nopromote);
    rc = rpmdsCompare(pds, dds);
    rpmdsFree(pds);
    rpmdsFree(dds);

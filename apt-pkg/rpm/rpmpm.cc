@@ -798,10 +798,10 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    packagesTotal = install.size()+upgrade.size();
 
 #ifdef HAVE_RPM41
-   if (rpmtsCheck(TS)) {
-      probs = rpmtsProblems(TS);
-      if (probs->numProblems > 0)
-	 rpmpsPrint(NULL, probs);
+   rc = rpmtsCheck(TS);
+   probs = rpmtsProblems(TS);
+   if (rc || probs->numProblems > 0) {
+      rpmpsPrint(NULL, probs);
       rpmpsFree(probs);
       _error->Error(_("Transaction set check failed"));
       goto exit;
