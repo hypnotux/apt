@@ -752,6 +752,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 #if RPM_VERSION >= 0x040100
    rpmps probs;
    TS = rpmtsCreate();
+   rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
    // 4.1 needs this always set even if NULL,
    // otherwise all scriptlets fail
    rpmtsSetRootDir(TS, Dir.c_str());

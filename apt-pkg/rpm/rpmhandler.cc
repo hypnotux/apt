@@ -154,6 +154,7 @@ bool RPMSingleFileHandler::Skip()
    }
 #if RPM_VERSION >= 0x040100
    rpmts TS = rpmtsCreate();
+   rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
    int rc = rpmReadPackageFile(TS, FD, sFilePath.c_str(), &HeaderP);
    if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY) {
       _error->Error(_("Failed reading file %s"), sFilePath.c_str());
@@ -218,6 +219,7 @@ RPMDirHandler::RPMDirHandler(string DirName)
    rewinddir(Dir);
 #if RPM_VERSION >= 0x040100
    TS = rpmtsCreate();
+   rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
 #endif
 }
 
@@ -362,6 +364,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 #endif
 #if RPM_VERSION >= 0x040100
    Handler = rpmtsCreate();
+   rpmtsSetVSFlags(Handler, (rpmVSFlags_e)-1);
    if (!Dir.empty())
       rpmtsSetRootDir(Handler, Dir.c_str());
    if (rpmtsOpenDB(Handler, WriteLock?O_RDWR:O_RDONLY) != 0)
