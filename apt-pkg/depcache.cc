@@ -107,6 +107,11 @@ bool pkgDepCache::Init(OpProgress *Prog)
    set to the package which was used to satisfy the dep. */
 bool pkgDepCache::CheckDep(DepIterator Dep,int Type,PkgIterator &Res)
 {
+// CNC:2003-02-17 - This function is the main path when checking
+//                  dependencies, so we must avoid as much overhead
+//                  as possible. It has several changes to improve
+//                  performance.
+#if 0
    Res = Dep.TargetPkg();
 
    /* Check simple depends. A depends -should- never self match but 
@@ -118,17 +123,19 @@ bool pkgDepCache::CheckDep(DepIterator Dep,int Type,PkgIterator &Res)
       PkgIterator Pkg = Dep.TargetPkg();
       // Check the base package
       if (Type == NowVersion && Pkg->CurrentVer != 0)
-	 if (VS().CheckDep(Pkg.CurrentVer().VerStr(),Dep) == true) // CNC:2002-07-10
+	 // CNC:2002-07-10 - RPM must check the dependency type to properly
+	 //                  define if it would be satisfied or not.
+	 if (VS().CheckDep(Pkg.CurrentVer().VerStr(),Dep) == true)
 	    return true;
       
       if (Type == InstallVersion && PkgState[Pkg->ID].InstallVer != 0)
 	 if (VS().CheckDep(PkgState[Pkg->ID].InstVerIter(*this).VerStr(),
-				 Dep) == true) // CNC:2002-07-10
+				 Dep) == true)
 	    return true;
       
       if (Type == CandidateVersion && PkgState[Pkg->ID].CandidateVer != 0)
 	 if (VS().CheckDep(PkgState[Pkg->ID].CandidateVerIter(*this).VerStr(),
-				 Dep) == true) // CNC:2002-07-10
+				 Dep) == true)
 	    return true;
    }
    
@@ -181,6 +188,113 @@ bool pkgDepCache::CheckDep(DepIterator Dep,int Type,PkgIterator &Res)
       return true;
    }
    
+#else
+
+   Res = Dep.TargetPkg();
+
+   // CNC:2003-02-17 - Res is currently not changed. If it happens to
+   //		       be changed in this function (besides when
+   //		       returning anyway), assign a new Dep.TargetPkg()
+   //		       to Dep_TargetPkg instead of using Res.
+   //
+   PkgIterator &Dep_TargetPkg = Res;
+   PkgIterator Dep_ParentPkg = Dep.ParentPkg();
+   pkgVersioningSystem &VS = this->VS();
+
+   /* Check simple depends. A depends -should- never self match but 
+      we allow it anyhow because dpkg does. Technically it is a packaging
+      bug. Conflicts may never self match */
+   if (Dep_TargetPkg != Dep_ParentPkg || 
+       (Dep->Type != Dep::Conflicts && Dep->Type != Dep::Obsoletes))
+   {
+      PkgIterator &Pkg = Dep_TargetPkg;
+
+      // Check the base package
+      switch (Type)
+      {
+	 case NowVersion:
+	    if (Pkg->CurrentVer != 0)
+	       // CNC:2002-07-10 - RPM must check the dependency type to
+	       //		   properly define if it would be satisfied
+	       //		   or not.
+	       if (VS.CheckDep(Pkg.CurrentVer().VerStr(),Dep) == true)
+		  return true;
+	    break;
+
+	 case InstallVersion:
+	    if (PkgState[Pkg->ID].InstallVer != 0)
+	       if (VS.CheckDep(PkgState[Pkg->ID].InstVerIter(*this).VerStr(),
+				       Dep) == true)
+		  return true;
+	    break;
+      
+	 case CandidateVersion:
+	    if (PkgState[Pkg->ID].CandidateVer != 0)
+	       if (VS.CheckDep(PkgState[Pkg->ID].CandidateVerIter(*this).VerStr(),
+				       Dep) == true)
+		  return true;
+	    break;
+      }
+
+      
+   }
+   
+   if (Dep->Type == Dep::Obsoletes)
+      return false;
+   
+   // Check the providing packages
+   PrvIterator P = Dep_TargetPkg.ProvidesList();
+   PkgIterator &Pkg = Dep_ParentPkg;
+   for (; P.end() != true; P++)
+   {
+      PkgIterator P_OwnerPkg = P.OwnerPkg();
+
+      /* Provides may never be applied against the same package if it is
+         a conflicts. See the comment above. */
+      if (P_OwnerPkg == Pkg && Dep->Type == Dep::Conflicts)
+	 continue;
+      
+      // Check if the provides is a hit
+      switch (Type)
+      {
+	 case NowVersion:
+	    {
+	       if (P_OwnerPkg.CurrentVer() != P.OwnerVer())
+		  continue;
+	       break;
+	    }
+	 case InstallVersion:
+	    {
+	       StateCache &State = PkgState[P_OwnerPkg->ID];
+	       if (State.InstallVer != (Version *)P.OwnerVer())
+		  continue;
+	       break;
+	    }
+	 case CandidateVersion:
+	    {
+	       StateCache &State = PkgState[P_OwnerPkg->ID];
+	       if (State.CandidateVer != (Version *)P.OwnerVer())
+		  continue;
+	       break;
+	    }
+      }
+      
+      // Compare the versions.
+      if (VS.CheckDep(P.ProvideVersion(),Dep) == true) // CNC:2002-07-10
+      {
+	 Res = P_OwnerPkg;
+	 return true;
+      }
+   }
+
+   // CNC:2002-07-05
+   if (_system->IgnoreDep(VS,Dep) == true)
+   {
+      Res = Dep_TargetPkg;
+      return true;
+   }
+#endif
+
    return false;
 }
 									/*}}}*/

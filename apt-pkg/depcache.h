@@ -256,3 +256,5 @@ class pkgDepCache : protected pkgCache::Namespace
 #endif
 
 #endif
+
+// vim:sts=3:sw=3
