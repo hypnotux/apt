@@ -106,11 +106,26 @@ bool pkgInitConfig(Configuration &Cnf)
    return true;
 }
 									/*}}}*/
+
+// CNC:2003-02-16 - We must do that to force a statically linked libapt-pkg
+// 		    library to include the package systems into the binary.
+#include <apt-pkg/rpmsystem.h>
+#include <apt-pkg/debsystem.h>
+void ForceLinkage()
+{
+	rpmSystem *rpmsys = &rpmSys;
+	rpmsys->ArchiveSupported("");
+	//debSystem *debsys = &debSys;
+	//depsys->ArchiveSupported("");
+}
+
 // pkgInitSystem - Initialize the _system calss				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 bool pkgInitSystem(Configuration &Cnf,pkgSystem *&Sys)
 {
+   ForceLinkage(); // CNC:2003-02-16 - See above.
+
    Sys = 0;
    string Label = Cnf.Find("Apt::System","");
    if (Label.empty() == false)

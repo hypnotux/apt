@@ -5,30 +5,34 @@ SUBDIR=cmdline
 # Bring in the default rules
 include ../buildlib/defaults.mak
 
+# CNC:2003-02-17 - Included $(RPMLIBS) in SLIBS for each program. We need
+# 		   that in case the program is going to be linked with the
+# 		   static libapt-pkg library.
+
 # The apt-cache program
 PROGRAM=apt-cache
-SLIBS = -lapt-pkg
+SLIBS = -lapt-pkg $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-cache.cc
 include $(PROGRAM_H)
 
 # The apt-get program
 PROGRAM=apt-get
-SLIBS = -lapt-pkg
+SLIBS = -lapt-pkg $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-get.cc acqprogress.cc
 include $(PROGRAM_H)
 
 # The apt-config program
 PROGRAM=apt-config
-SLIBS = -lapt-pkg
+SLIBS = -lapt-pkg $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-config.cc
 include $(PROGRAM_H)
 
 # The apt-cdrom program
 PROGRAM=apt-cdrom
-SLIBS = -lapt-pkg
+SLIBS = -lapt-pkg $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 # CNC:2002-07-11
 SOURCE = apt-cdrom.cc rpmindexcopy.cc
@@ -39,7 +43,7 @@ WITH_APT_SORTPKGS=no
 ifeq ($(WITH_APT_SORTPKGS),yes)
 # The apt-sortpkgs program
 PROGRAM=apt-sortpkgs
-SLIBS = -lapt-pkg
+SLIBS = -lapt-pkg $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-sortpkgs.cc
 include $(PROGRAM_H)
@@ -50,7 +54,7 @@ WITH_APT_EXTRACTTEMPLATES=no
 ifeq ($(WITH_APT_EXTRACTTEMPLATES),yes)
 # The apt-extracttemplates program
 PROGRAM=apt-extracttemplates
-SLIBS = -lapt-pkg -lapt-inst
+SLIBS = -lapt-pkg -lapt-inst $(RPMLIBS)
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-extracttemplates.cc 
 include $(PROGRAM_H)
