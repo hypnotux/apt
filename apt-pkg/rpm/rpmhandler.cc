@@ -155,14 +155,18 @@ bool RPMSingleFileHandler::Skip()
 #ifdef HAVE_RPM41
    rpmts TS = rpmtsCreate();
    int rc = rpmReadPackageFile(TS, FD, sFilePath.c_str(), &HeaderP);
+   if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY) {
+      _error->Error(_("Failed reading file %s"), sFilePath.c_str());
+      HeaderP = NULL;
+   }
    rpmtsFree(TS);
 #else
    int rc = rpmReadPackageHeader(FD, &HeaderP, 0, NULL, NULL);
-#endif
    if (rc) {
       _error->Error(_("Failed reading file %s"), sFilePath.c_str());
       HeaderP = NULL;
    }
+#endif
    return (HeaderP != NULL);
 }
 

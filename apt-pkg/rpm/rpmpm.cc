@@ -673,9 +673,13 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	       _error->Error(_("Failed opening %s"), *I);
 #ifdef HAVE_RPM41
             rc = rpmReadPackageFile(TS, fd, *I, &hdr);
+	    if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY)
+	       _error->Error(_("Failed reading file %s"), *I);
 	    rc = rpmtsAddInstallElement(TS, hdr, *I, upgrade, 0);
 #else
 	    rc = rpmReadPackageHeader(fd, &hdr, 0, NULL, NULL);
+	    if (rc)
+	       _error->Error(_("Failed reading file %s"), *I);
 	    rc = rpmtransAddPackage(TS, hdr, NULL, *I, upgrade, 0);
 #endif
 	    if (rc)
