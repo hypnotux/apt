@@ -276,7 +276,7 @@ int RPMPackageData::RpmArchScore(const char *Arch)
    return 0;
 }
 
-bool RPMPackageData::IsDupPackage(string Name)
+bool RPMPackageData::IsDupPackage(const string &Name)
 {
    if (DuplicatedPackages.find(Name) != DuplicatedPackages.end())
       return true;

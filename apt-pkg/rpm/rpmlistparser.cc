@@ -271,8 +271,12 @@ bool rpmListParser::UsePackage(pkgCache::PkgIterator Pkg,
       Pkg->Section = UniqFindTagWrite(RPMTAG_GROUP);
    if (_error->PendingError()) 
        return false;
-   Ver->Priority = RpmData->VerPriority(Pkg.Name());
-   Pkg->Flags |= RpmData->PkgFlags(Pkg.Name());
+   string PkgName = Pkg.Name();
+   string::size_type HashPos = PkgName.find('#');
+   if (HashPos != string::npos)
+      PkgName = PkgName.substr(0, HashPos);
+   Ver->Priority = RpmData->VerPriority(PkgName);
+   Pkg->Flags |= RpmData->PkgFlags(PkgName);
    if (ParseStatus(Pkg,Ver) == false)
        return false;
    return true;

@@ -66,17 +66,17 @@ class RPMPackageData
 
    public:
 
-   inline pkgCache::State::VerPriority VerPriority(string Package) 
+   inline pkgCache::State::VerPriority VerPriority(const string &Package) 
    {
       if (Priorities.find(Package) != Priorities.end())
 	 return Priorities[Package];
       return pkgCache::State::Standard;
    };
-   inline pkgCache::Flag::PkgFlags PkgFlags(string Package) 
+   inline pkgCache::Flag::PkgFlags PkgFlags(const string &Package) 
    	{return Flags[Package];};
 
    bool HoldPackage(const char *name);
-   bool IgnorePackage(string Name)
+   bool IgnorePackage(const string &Name)
    	{return IgnorePackages.find(Name) != IgnorePackages.end();};
 
    bool IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep);
@@ -107,9 +107,9 @@ class RPMPackageData
    }
    void InitMinArchScore();
 
-   void SetDupPackage(string Name)
+   void SetDupPackage(const string &Name)
    	{DuplicatedPackages[Name] = 1;};
-   bool IsDupPackage(string Name);
+   bool IsDupPackage(const string &Name);
 
    static RPMPackageData *Singleton();
 
