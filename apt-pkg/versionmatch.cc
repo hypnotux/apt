@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: versionmatch.cc,v 1.2 2003/01/29 18:43:48 niemeyer Exp $
+// $Id: versionmatch.cc,v 1.9 2003/05/19 17:58:26 doogie Exp $
 /* ######################################################################
 
    Version Matching 
@@ -208,11 +208,13 @@ bool pkgVersionMatch::FileMatch(pkgCache::PkgFileIterator File)
    
    if (Type == Origin)
    {
-      if (OrSite.empty() == false)
-	 if (File->Site == 0 ||
-	     OrSite != File.Site())
+      if (OrSite.empty() == false) {
+	 if (File->Site == 0 || OrSite != File.Site())
 	    return false;
-      return true;
+      } else // so we are talking about file:// or status file
+	 if (strcmp(File.Site(),"") == 0 && File->Archive != 0) // skip the status file
+	    return false;
+      return (OrSite == File.Site());		/* both strings match */
    }
    
    return false;

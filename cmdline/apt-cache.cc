@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: apt-cache.cc,v 1.61 2003/02/10 01:40:58 doogie Exp $
+// $Id: apt-cache.cc,v 1.67 2003/08/02 19:53:23 mdz Exp $
 /* ######################################################################
    
    apt-cache - Manages the cache files
@@ -547,6 +547,7 @@ bool Depends(CommandLine &CmdL)
    }
    
    bool Recurse = _config->FindB("APT::Cache::RecurseDepends",false);
+   bool Installed = _config->FindB("APT::Cache::Installed",false);
    bool DidSomething;
    do
    {
@@ -570,24 +571,31 @@ bool Depends(CommandLine &CmdL)
 	 
 	 for (pkgCache::DepIterator D = Ver.DependsList(); D.end() == false; D++)
 	 {
-	    if ((D->CompareOp & pkgCache::Dep::Or) == pkgCache::Dep::Or)
-	       cout << " |";
-	    else
-	       cout << "  ";
-	    
-	    // Show the package
+
 	    pkgCache::PkgIterator Trg = D.TargetPkg();
-	    if (Trg->VersionList == 0)
-	       cout << D.DepType() << ": <" << Trg.Name() << ">" << endl;
-	    // CNC:2003-03-03
-	    else if (D.TargetVer() == 0)
-	       cout << D.DepType() << ": " << Trg.Name() << endl;
-	    else
-	       cout << D.DepType() << ": " << Trg.Name()
-		    << " " << D.CompType() << " " << D.TargetVer() << endl;
+
+	    if((Installed && Trg->CurrentVer != 0) || !Installed)
+	      {
+
+		if ((D->CompareOp & pkgCache::Dep::Or) == pkgCache::Dep::Or)
+		  cout << " |";
+		else
+		  cout << "  ";
 	    
-	    if (Recurse == true)
-	       Colours[D.TargetPkg()->ID]++;
+		// Show the package
+	        if (Trg->VersionList == 0)
+	           cout << D.DepType() << ": <" << Trg.Name() << ">" << endl;
+	        // CNC:2003-03-03
+	        else if (D.TargetVer() == 0)
+	           cout << D.DepType() << ": " << Trg.Name() << endl;
+	        else
+	           cout << D.DepType() << ": " << Trg.Name()
+		        << " " << D.CompType() << " " << D.TargetVer() << endl;
+	    
+		if (Recurse == true)
+		  Colours[D.TargetPkg()->ID]++;
+
+	      }
 	    
 	    // Display all solutions
 	    SPtrArray<pkgCache::Version *> List = D.AllTargets();
@@ -612,6 +620,95 @@ bool Depends(CommandLine &CmdL)
    
    return true;
 }
+
+// RDepends - Print out a reverse dependency tree - mbc			/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool RDepends(CommandLine &CmdL)
+{
+   pkgCache &Cache = *GCache;
+   SPtrArray<unsigned> Colours = new unsigned[Cache.Head().PackageCount];
+   memset(Colours,0,sizeof(*Colours)*Cache.Head().PackageCount);
+   
+   for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+   {
+      pkgCache::PkgIterator Pkg = Cache.FindPkg(*I);
+      if (Pkg.end() == true)
+      {
+	 _error->Warning(_("Unable to locate package %s"),*I);
+	 continue;
+      }
+      Colours[Pkg->ID] = 1;
+   }
+   
+   bool Recurse = _config->FindB("APT::Cache::RecurseDepends",false);
+   bool Installed = _config->FindB("APT::Cache::Installed",false);
+   bool DidSomething;
+   do
+   {
+      DidSomething = false;
+      for (pkgCache::PkgIterator Pkg = Cache.PkgBegin(); Pkg.end() == false; Pkg++)
+      {
+	 if (Colours[Pkg->ID] != 1)
+	    continue;
+	 Colours[Pkg->ID] = 2;
+	 DidSomething = true;
+	 
+	 pkgCache::VerIterator Ver = Pkg.VersionList();
+	 if (Ver.end() == true)
+	 {
+	    cout << '<' << Pkg.Name() << '>' << endl;
+	    continue;
+	 }
+	 
+	 cout << Pkg.Name() << endl;
+	 
+	 cout << "Reverse Depends:" << endl;
+	 for (pkgCache::DepIterator D = Pkg.RevDependsList(); D.end() == false; D++)
+	 {	    
+	    // Show the package
+	    pkgCache::PkgIterator Trg = D.ParentPkg();
+
+	    if((Installed && Trg->CurrentVer != 0) || !Installed)
+	      {
+
+		if ((D->CompareOp & pkgCache::Dep::Or) == pkgCache::Dep::Or)
+		  cout << " |";
+		else
+		  cout << "  ";
+
+		if (Trg->VersionList == 0)
+		  cout << D.DepType() << ": <" << Trg.Name() << ">" << endl;
+		else
+		  cout << Trg.Name() << endl;
+
+		if (Recurse == true)
+		  Colours[D.ParentPkg()->ID]++;
+
+	      }
+	    
+	    // Display all solutions
+	    SPtrArray<pkgCache::Version *> List = D.AllTargets();
+	    pkgPrioSortList(Cache,List);
+	    for (pkgCache::Version **I = List; *I != 0; I++)
+	    {
+	       pkgCache::VerIterator V(Cache,*I);
+	       if (V != Cache.VerP + V.ParentPkg()->VersionList ||
+		   V->ParentPkg == D->Package)
+		  continue;
+	       cout << "    " << V.ParentPkg().Name() << endl;
+	       
+	       if (Recurse == true)
+		  Colours[D.ParentPkg()->ID]++;
+	    }
+	 }
+      }      
+   }   
+   while (DidSomething == true);
+   
+   return true;
+}
+
 									/*}}}*/
 // CNC:2003-02-19
 // WhatDepends - Print out a reverse dependency tree			/*{{{*/
@@ -822,6 +919,224 @@ bool WhatDepends(CommandLine &CmdL)
    return true;
 }
 									/*}}}*/
+
+// xvcg - Generate a graph for xvcg					/*{{{*/
+// ---------------------------------------------------------------------
+// Code contributed from Junichi Uekawa <dancer@debian.org> on 20 June 2002.
+
+bool XVcg(CommandLine &CmdL)
+{
+   pkgCache &Cache = *GCache;
+   bool GivenOnly = _config->FindB("APT::Cache::GivenOnly",false);
+   
+   /* Normal packages are boxes
+      Pure Provides are triangles
+      Mixed are diamonds
+      rhomb are missing packages*/
+   const char *Shapes[] = {"ellipse","triangle","box","rhomb"};
+   
+   /* Initialize the list of packages to show.
+      1 = To Show
+      2 = To Show no recurse
+      3 = Emitted no recurse
+      4 = Emitted
+      0 = None */
+   enum States {None=0, ToShow, ToShowNR, DoneNR, Done};
+   enum TheFlags {ForceNR=(1<<0)};
+   unsigned char *Show = new unsigned char[Cache.Head().PackageCount];
+   unsigned char *Flags = new unsigned char[Cache.Head().PackageCount];
+   unsigned char *ShapeMap = new unsigned char[Cache.Head().PackageCount];
+   
+   // Show everything if no arguments given
+   if (CmdL.FileList[1] == 0)
+      for (unsigned long I = 0; I != Cache.Head().PackageCount; I++)
+	 Show[I] = ToShow;
+   else
+      for (unsigned long I = 0; I != Cache.Head().PackageCount; I++)
+	 Show[I] = None;
+   memset(Flags,0,sizeof(*Flags)*Cache.Head().PackageCount);
+   
+   // Map the shapes
+   for (pkgCache::PkgIterator Pkg = Cache.PkgBegin(); Pkg.end() == false; Pkg++)
+   {   
+      if (Pkg->VersionList == 0)
+      {
+	 // Missing
+	 if (Pkg->ProvidesList == 0)
+	    ShapeMap[Pkg->ID] = 0;
+	 else
+	    ShapeMap[Pkg->ID] = 1;
+      }
+      else
+      {
+	 // Normal
+	 if (Pkg->ProvidesList == 0)
+	    ShapeMap[Pkg->ID] = 2;
+	 else
+	    ShapeMap[Pkg->ID] = 3;
+      }
+   }
+   
+   // Load the list of packages from the command line into the show list
+   for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+   {
+      // Process per-package flags
+      string P = *I;
+      bool Force = false;
+      if (P.length() > 3)
+      {
+	 if (P.end()[-1] == '^')
+	 {
+	    Force = true;
+	    P.erase(P.end()-1);
+	 }
+	 
+	 if (P.end()[-1] == ',')
+	    P.erase(P.end()-1);
+      }
+      
+      // Locate the package
+      pkgCache::PkgIterator Pkg = Cache.FindPkg(P);
+      if (Pkg.end() == true)
+      {
+	 _error->Warning(_("Unable to locate package %s"),*I);
+	 continue;
+      }
+      Show[Pkg->ID] = ToShow;
+      
+      if (Force == true)
+	 Flags[Pkg->ID] |= ForceNR;
+   }
+   
+   // Little header
+   cout << "graph: { title: \"packages\"" << endl <<
+     "xmax: 700 ymax: 700 x: 30 y: 30" << endl <<
+     "layout_downfactor: 8" << endl;
+
+   bool Act = true;
+   while (Act == true)
+   {
+      Act = false;
+      for (pkgCache::PkgIterator Pkg = Cache.PkgBegin(); Pkg.end() == false; Pkg++)
+      {
+	 // See we need to show this package
+	 if (Show[Pkg->ID] == None || Show[Pkg->ID] >= DoneNR)
+	    continue;
+
+	 //printf ("node: { title: \"%s\" label: \"%s\" }\n", Pkg.Name(), Pkg.Name());
+	 
+	 // Colour as done
+	 if (Show[Pkg->ID] == ToShowNR || (Flags[Pkg->ID] & ForceNR) == ForceNR)
+	 {
+	    // Pure Provides and missing packages have no deps!
+	    if (ShapeMap[Pkg->ID] == 0 || ShapeMap[Pkg->ID] == 1)
+	       Show[Pkg->ID] = Done;
+	    else
+	       Show[Pkg->ID] = DoneNR;
+	 }	 
+	 else
+	    Show[Pkg->ID] = Done;
+	 Act = true;
+
+	 // No deps to map out
+	 if (Pkg->VersionList == 0 || Show[Pkg->ID] == DoneNR)
+	    continue;
+	 
+	 pkgCache::VerIterator Ver = Pkg.VersionList();
+	 for (pkgCache::DepIterator D = Ver.DependsList(); D.end() == false; D++)
+	 {
+	    // See if anything can meet this dep
+	    // Walk along the actual package providing versions
+	    bool Hit = false;
+	    pkgCache::PkgIterator DPkg = D.TargetPkg();
+	    for (pkgCache::VerIterator I = DPkg.VersionList();
+		      I.end() == false && Hit == false; I++)
+	    {
+	       if (Cache.VS->CheckDep(I.VerStr(),D->CompareOp,D.TargetVer()) == true)
+		  Hit = true;
+	    }
+	    
+	    // Follow all provides
+	    for (pkgCache::PrvIterator I = DPkg.ProvidesList(); 
+		      I.end() == false && Hit == false; I++)
+	    {
+	       if (Cache.VS->CheckDep(I.ProvideVersion(),D->CompareOp,D.TargetVer()) == false)
+		  Hit = true;
+	    }
+	    
+
+	    // Only graph critical deps	    
+	    if (D.IsCritical() == true)
+	    {
+	       printf ("edge: { sourcename: \"%s\" targetname: \"%s\" class: 2 ",Pkg.Name(), D.TargetPkg().Name() );
+	       
+	       // Colour the node for recursion
+	       if (Show[D.TargetPkg()->ID] <= DoneNR)
+	       {
+		  /* If a conflicts does not meet anything in the database
+		     then show the relation but do not recurse */
+		  if (Hit == false && 
+		      (D->Type == pkgCache::Dep::Conflicts ||
+		       D->Type == pkgCache::Dep::Obsoletes))
+		  {
+		     if (Show[D.TargetPkg()->ID] == None && 
+			 Show[D.TargetPkg()->ID] != ToShow)
+			Show[D.TargetPkg()->ID] = ToShowNR;
+		  }		  
+		  else
+		  {
+		     if (GivenOnly == true && Show[D.TargetPkg()->ID] != ToShow)
+			Show[D.TargetPkg()->ID] = ToShowNR;
+		     else
+			Show[D.TargetPkg()->ID] = ToShow;
+		  }
+	       }
+	       
+	       // Edge colour
+	       switch(D->Type)
+	       {
+		  case pkgCache::Dep::Conflicts:
+		    printf("label: \"conflicts\" color: lightgreen }\n");
+		    break;
+		  case pkgCache::Dep::Obsoletes:
+		    printf("label: \"obsoletes\" color: lightgreen }\n");
+		    break;
+		  
+		  case pkgCache::Dep::PreDepends:
+		    printf("label: \"predepends\" color: blue }\n");
+		    break;
+		  
+		  default:
+		    printf("}\n");
+		  break;
+	       }	       
+	    }	    
+	 }
+      }
+   }   
+   
+   /* Draw the box colours after the fact since we can not tell what colour
+      they should be until everything is finished drawing */
+   for (pkgCache::PkgIterator Pkg = Cache.PkgBegin(); Pkg.end() == false; Pkg++)
+   {
+      if (Show[Pkg->ID] < DoneNR)
+	 continue;
+
+      if (Show[Pkg->ID] == DoneNR)
+	 printf("node: { title: \"%s\" label: \"%s\" color: orange shape: %s }\n", Pkg.Name(), Pkg.Name(),
+		Shapes[ShapeMap[Pkg->ID]]);
+      else
+	printf("node: { title: \"%s\" label: \"%s\" shape: %s }\n", Pkg.Name(), Pkg.Name(), 
+		Shapes[ShapeMap[Pkg->ID]]);
+      
+   }
+   
+   printf("}\n");
+   return true;
+}
+									/*}}}*/
+
+
 // Dotty - Generate a graph for Dotty					/*{{{*/
 // ---------------------------------------------------------------------
 /* Dotty is the graphvis program for generating graphs. It is a fairly
@@ -1123,7 +1438,7 @@ bool DisplayRecord(pkgCache::VerIterator V)
    Buffer[V.FileList()->Size] = '\n';
    if (PkgF.Seek(V.FileList()->Offset) == false ||
        PkgF.Read(Buffer,V.FileList()->Size) == false ||
-       write(STDOUT_FILENO,Buffer,V.FileList()->Size+1) != V.FileList()->Size+1)
+       fwrite(Buffer,1,V.FileList()->Size+1,stdout) < V.FileList()->Size+1)
    {
       delete [] Buffer;
       return false;
@@ -1273,6 +1588,8 @@ bool ShowPackage(CommandLine &CmdL)
 {   
    pkgCache &Cache = *GCache;
    pkgDepCache::Policy Plcy;
+
+   unsigned found = 0;
    
    for (const char **I = CmdL.FileList + 1; *I != 0; I++)
    {
@@ -1282,6 +1599,8 @@ bool ShowPackage(CommandLine &CmdL)
 	 _error->Warning(_("Unable to locate package %s"),*I);
 	 continue;
       }
+
+      ++found;
 
       // Find the proper version to use.
       if (_config->FindB("APT::Cache::AllVersions","true") == true)
@@ -1302,7 +1621,10 @@ bool ShowPackage(CommandLine &CmdL)
 	    return false;
       }      
    }
-   return true;
+
+   if (found > 0)
+        return true;
+   return _error->Error(_("No packages found"));
 }
 									/*}}}*/
 // ShowPkgNames - Show package names					/*{{{*/
@@ -1503,9 +1825,11 @@ bool ShowHelp(CommandLine &Cmd)
    ioprintf(cout,_("%s %s for %s %s compiled on %s %s\n"),PACKAGE,VERSION,
 	    COMMON_OS,COMMON_CPU,__DATE__,__TIME__);
    
+   if (_config->FindB("version") == true)
+     return true;
+
    cout << 
     _("Usage: apt-cache [options] command\n"
-// CNC:2003-02-20 - Use file2, not file1 twice.
       "       apt-cache [options] add file1 [file2 ...]\n"
       "       apt-cache [options] showpkg pkg1 [pkg2 ...]\n"
       "       apt-cache [options] showsrc pkg1 [pkg2 ...]\n"
@@ -1526,8 +1850,10 @@ bool ShowHelp(CommandLine &Cmd)
       "   show - Show a readable record for the package\n"
       "   depends - Show raw dependency information for a package\n"
       "   whatdepends - Show raw dependency information on a package\n"
+      // "   rdepends - Show reverse dependency information for a package\n"
       "   pkgnames - List the names of all packages\n"
       "   dotty - Generate package graphs for GraphVis\n"
+      "   xvcg - Generate package graphs for xvcg\n"
       "   policy - Show policy settings\n"
       "\n"
       "Options:\n"
@@ -1569,6 +1895,7 @@ int main(int argc,const char *argv[])
       {0,"recurse","APT::Cache::RecurseDepends",0},
       {'c',"config-file",0,CommandLine::ConfigFile},
       {'o',"option",0,CommandLine::ArbItem},
+      {'n',"installed","APT::Cache::Installed",0},
       {0,0,0,0}};
    CommandLine::Dispatch CmdsA[] = {{"help",&ShowHelp},
                                     {"add",&DoAdd},
@@ -1583,7 +1910,9 @@ int main(int argc,const char *argv[])
                                     {"search",&Search},
                                     {"depends",&Depends},
                                     {"whatdepends",&WhatDepends},
+                                    {"rdepends",&RDepends},
                                     {"dotty",&Dotty},
+                                    {"xvcg",&XVcg},
                                     {"show",&ShowPackage},
                                     {"pkgnames",&ShowPkgNames},
                                     {"policy",&Policy},

@@ -1,5 +1,5 @@
 // Description								/*{{{*/
-// $Id: dpkgpm.cc,v 1.2 2002/07/25 18:07:18 niemeyer Exp $
+// $Id: dpkgpm.cc,v 1.27 2003/07/26 00:25:44 mdz Exp $
 /* ######################################################################
 
    DPKG Package Manager - Provide an interface to dpkg
@@ -328,7 +328,7 @@ bool pkgDPkgPM::RunScriptsWithPkgs(const char *Cnf)
 bool pkgDPkgPM::Go()
 {
    unsigned int MaxArgs = _config->FindI("Dpkg::MaxArgs",350);   
-   unsigned int MaxArgBytes = _config->FindI("Dpkg::MaxArgBytes",1024);
+   unsigned int MaxArgBytes = _config->FindI("Dpkg::MaxArgBytes",8192);
 
    if (RunScripts("DPkg::Pre-Invoke") == false)
       return false;
@@ -447,7 +447,7 @@ bool pkgDPkgPM::Go()
 	 if (chdir(_config->FindDir("DPkg::Run-Directory","/").c_str()) != 0)
 	    _exit(100);
 	 
-	 if (_config->FindB("DPkg::FlushSTDIN",true) == true)
+	 if (_config->FindB("DPkg::FlushSTDIN",true) == true && isatty(STDIN_FILENO))
 	 {
 	    int Flags,dummy;
 	    if ((Flags = fcntl(STDIN_FILENO,F_GETFL,dummy)) < 0)

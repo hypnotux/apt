@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: apt-get.cc,v 1.126 2003/02/12 16:14:08 doogie Exp $
+// $Id: apt-get.cc,v 1.144 2003/10/29 17:56:31 mdz Exp $
 /* ######################################################################
    
    apt-get - Cover for dpkg
@@ -48,6 +48,7 @@
 // CNC:2003-02-14 - apti18n.h includes libintl.h which includes locale.h,
 // 		    as reported by Radu Greab.
 //#include <locale.h>
+#include <langinfo.h>
 #include <fstream>
 #include <termios.h>
 #include <sys/ioctl.h>
@@ -118,26 +119,37 @@ class CacheFile : public pkgCacheFile
 /* Returns true on a Yes.*/
 bool YnPrompt()
 {
-   // This needs to be a capital
-   const char *Yes = _("Y");
-			   
    if (_config->FindB("APT::Get::Assume-Yes",false) == true)
    {
-      c1out << Yes << endl;
+      c1out << _("Y") << endl;
       return true;
    }
-   
-   char C = 0;
-   char Jnk = 0;
-   if (read(STDIN_FILENO,&C,1) != 1)
+
+   char response[1024] = "";
+   cin.getline(response, sizeof(response));
+
+   if (!cin)
       return false;
-   while (C != '\n' && Jnk != '\n') 
-      if (read(STDIN_FILENO,&Jnk,1) != 1)
-	 return false;
+
+   if (strlen(response) == 0)
+      return true;
+
+   regex_t Pattern;
+   int Res;
+
+   Res = regcomp(&Pattern, nl_langinfo(YESEXPR),
+                 REG_EXTENDED|REG_ICASE|REG_NOSUB);
+
+   if (Res != 0) {
+      char Error[300];        
+      regerror(Res,&Pattern,Error,sizeof(Error));
+      return _error->Error(_("Regex compilation error - %s"),Error);
+   }
    
-   if (!(toupper(C) == *Yes || C == '\n' || C == '\r'))
-      return false;
-   return true;
+   Res = regexec(&Pattern, response, 0, NULL, 0);
+   if (Res == 0)
+      return true;
+   return false;
 }
 									/*}}}*/
 // AnalPrompt - Annoying Yes No Prompt.					/*{{{*/
@@ -156,7 +168,7 @@ bool AnalPrompt(const char *Text)
 // ---------------------------------------------------------------------
 /* This prints out a string of space separated words with a title and 
    a two space indent line wraped to the current screen width. */
-bool ShowList(ostream &out,string Title,string List)
+bool ShowList(ostream &out,string Title,string List,string VersionsList)
 {
    if (List.empty() == true)
       return true;
@@ -174,19 +186,41 @@ bool ShowList(ostream &out,string Title,string List)
       
    out << Title << endl;
    string::size_type Start = 0;
+   string::size_type VersionsStart = 0;
    while (Start < List.size())
    {
-      string::size_type End;
-      if (Start + ScreenWidth >= List.size())
-	 End = List.size();
-      else
-	 End = List.rfind(' ',Start+ScreenWidth);
+      if(_config->FindB("APT::Get::Show-Versions",false) == true &&
+         VersionsList.size() > 0) {
+         string::size_type End;
+         string::size_type VersionsEnd;
+         
+         End = List.find(' ',Start);
+         VersionsEnd = VersionsList.find('\n', VersionsStart);
 
-      if (End == string::npos || End < Start)
-	 End = Start + ScreenWidth;
-      out << "  " << string(List,Start,End - Start) << endl;
-      Start = End + 1;
+         out << "   " << string(List,Start,End - Start) << " (" << 
+            string(VersionsList,VersionsStart,VersionsEnd - VersionsStart) << 
+            ")" << endl;
+
+	 if (End == string::npos || End < Start)
+	    End = Start + ScreenWidth;
+
+         Start = End + 1;
+         VersionsStart = VersionsEnd + 1;
+      } else {
+         string::size_type End;
+
+         if (Start + ScreenWidth >= List.size())
+            End = List.size();
+         else
+            End = List.rfind(' ',Start+ScreenWidth);
+
+         if (End == string::npos || End < Start)
+            End = Start + ScreenWidth;
+         out << "  " << string(List,Start,End - Start) << endl;
+         Start = End + 1;
+      }
    }   
+
    return false;
 }
 									/*}}}*/
@@ -337,17 +371,20 @@ void ShowBroken(ostream &out,CacheFile &Cache,bool Now)
 /* */
 void ShowNew(ostream &out,CacheFile &Cache)
 {
-   /* Print out a list of packages that are going to be removed extra
+   /* Print out a list of packages that are going to be installed extra
       to what the user asked */
    string List;
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
-      if (Cache[I].NewInstall() == true)
-	 List += string(I.Name()) + " ";
+      if (Cache[I].NewInstall() == true) {
+         List += string(I.Name()) + " ";
+         VersionsList += string(Cache[I].CandVersion) + "\n";
+      }
    }
    
-   ShowList(out,_("The following NEW packages will be installed:"),List);
+   ShowList(out,_("The following NEW packages will be installed:"),List,VersionsList);
 }
 									/*}}}*/
 // ShowDel - Show packages to delete					/*{{{*/
@@ -358,6 +395,7 @@ void ShowDel(ostream &out,CacheFile &Cache)
    /* Print out a list of packages that are going to be removed extra
       to what the user asked */
    string List, RepList; // CNC:2002-07-25
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
@@ -391,12 +429,14 @@ void ShowDel(ostream &out,CacheFile &Cache)
 	    else
 	       List += string(I.Name()) + " ";
 	 }
+     
+     VersionsList += string(Cache[I].CandVersion)+ "\n";
       }
    }
    
    // CNC:2002-07-25
-   ShowList(out,_("The following packages will be REPLACED:"),RepList);
-   ShowList(out,_("The following packages will be REMOVED:"),List);
+   ShowList(out,_("The following packages will be REPLACED:"),RepList,VersionsList);
+   ShowList(out,_("The following packages will be REMOVED:"),List,VersionsList);
 }
 									/*}}}*/
 // ShowKept - Show kept packages					/*{{{*/
@@ -405,6 +445,7 @@ void ShowDel(ostream &out,CacheFile &Cache)
 void ShowKept(ostream &out,CacheFile &Cache)
 {
    string List;
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {	 
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
@@ -415,8 +456,9 @@ void ShowKept(ostream &out,CacheFile &Cache)
 	 continue;
       
       List += string(I.Name()) + " ";
+      VersionsList += string(Cache[I].CurVersion) + " => " + Cache[I].CandVersion + "\n";
    }
-   ShowList(out,_("The following packages have been kept back"),List);
+   ShowList(out,_("The following packages have been kept back"),List,VersionsList);
 }
 									/*}}}*/
 // ShowUpgraded - Show upgraded packages				/*{{{*/
@@ -425,6 +467,7 @@ void ShowKept(ostream &out,CacheFile &Cache)
 void ShowUpgraded(ostream &out,CacheFile &Cache)
 {
    string List;
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
@@ -434,8 +477,9 @@ void ShowUpgraded(ostream &out,CacheFile &Cache)
 	 continue;
       
       List += string(I.Name()) + " ";
+      VersionsList += string(Cache[I].CurVersion) + " => " + Cache[I].CandVersion + "\n";
    }
-   ShowList(out,_("The following packages will be upgraded"),List);
+   ShowList(out,_("The following packages will be upgraded"),List,VersionsList);
 }
 									/*}}}*/
 // ShowDowngraded - Show downgraded packages				/*{{{*/
@@ -444,6 +488,7 @@ void ShowUpgraded(ostream &out,CacheFile &Cache)
 bool ShowDowngraded(ostream &out,CacheFile &Cache)
 {
    string List;
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
@@ -453,8 +498,9 @@ bool ShowDowngraded(ostream &out,CacheFile &Cache)
 	 continue;
       
       List += string(I.Name()) + " ";
+      VersionsList += string(Cache[I].CurVersion) + " => " + Cache[I].CandVersion + "\n";
    }
-   return ShowList(out,_("The following packages will be DOWNGRADED"),List);
+   return ShowList(out,_("The following packages will be DOWNGRADED"),List,VersionsList);
 }
 									/*}}}*/
 // ShowHold - Show held but changed packages				/*{{{*/
@@ -463,15 +509,18 @@ bool ShowDowngraded(ostream &out,CacheFile &Cache)
 bool ShowHold(ostream &out,CacheFile &Cache)
 {
    string List;
+   string VersionsList;
    for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
    {
       pkgCache::PkgIterator I(Cache,Cache.List[J]);
       if (Cache[I].InstallVer != (pkgCache::Version *)I.CurrentVer() &&
-	  I->SelectedState == pkgCache::State::Hold)
-	 List += string(I.Name()) + " ";
+          I->SelectedState == pkgCache::State::Hold) {
+         List += string(I.Name()) + " ";
+		 VersionsList += string(Cache[I].CurVersion) + " => " + Cache[I].CandVersion + "\n";
+      }
    }
 
-   return ShowList(out,_("The following held packages will be changed:"),List);
+   return ShowList(out,_("The following held packages will be changed:"),List,VersionsList);
 }
 									/*}}}*/
 // ShowEssential - Show an essential package warning			/*{{{*/
@@ -482,6 +531,7 @@ bool ShowHold(ostream &out,CacheFile &Cache)
 bool ShowEssential(ostream &out,CacheFile &Cache)
 {
    string List;
+   string VersionsList;
    bool *Added = new bool[Cache->Head().PackageCount];
    for (unsigned int I = 0; I != Cache->Head().PackageCount; I++)
       Added[I] = false;
@@ -517,6 +567,7 @@ bool ShowEssential(ostream &out,CacheFile &Cache)
 	       Added[I->ID] = true;
 	       List += string(I.Name()) + " ";
 	    }
+        //VersionsList += string(Cache[I].CurVersion) + "\n"; ???
 	 }
       }
       
@@ -560,13 +611,14 @@ bool ShowEssential(ostream &out,CacheFile &Cache)
 	    char S[300];
 	    snprintf(S,sizeof(S),_("%s (due to %s) "),P.Name(),I.Name());
 	    List += S;
+        //VersionsList += "\n"; ???
 	 }	 
       }      
    }
    
    delete [] Added;
    return ShowList(out,_("WARNING: The following essential packages will be removed\n"
-			 "This should NOT be done unless you know exactly what you are doing!"),List);
+			 "This should NOT be done unless you know exactly what you are doing!"),List,VersionsList);
 }
 									/*}}}*/
 // Stats - Show some statistics						/*{{{*/
@@ -619,7 +671,7 @@ void Stats(ostream &out,pkgDepCache &Dep)
 	 ReInstall++;
    }   
 
-   ioprintf(out,_("%lu packages upgraded, %lu newly installed, "),
+   ioprintf(out,_("%lu upgraded, %lu newly installed, "),
 	    Upgrade,Install);
    
    if (ReInstall != 0)
@@ -635,7 +687,7 @@ void Stats(ostream &out,pkgDepCache &Dep)
 	    Remove,Dep.KeepCount());
    
    if (Dep.BadCount() != 0)
-      ioprintf(out,_("%lu packages not fully installed or removed.\n"),
+      ioprintf(out,_("%lu not fully installed or removed.\n"),
 	       Dep.BadCount());
 }
 									/*}}}*/
@@ -773,7 +825,7 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
    
    // Show all the various warning indicators
    // CNC:2002-03-06 - Change Show-Upgraded default to true, and move upwards.
-   if (_config->FindB("apt::get::show-upgraded",true) == true)
+   if (_config->FindB("APT::Get::Show-Upgraded",true) == true)
       ShowUpgraded(c1out,Cache);
    ShowDel(c1out,Cache);
    ShowNew(c1out,Cache);
@@ -781,7 +833,8 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       ShowKept(c1out,Cache);
    Fail |= !ShowHold(c1out,Cache);
    Fail |= !ShowDowngraded(c1out,Cache);
-   Essential = !ShowEssential(c1out,Cache);
+   if (_config->FindB("APT::Get::Download-Only",false) == false)
+        Essential = !ShowEssential(c1out,Cache);
    Fail |= Essential;
    Stats(c1out,Cache);
    
@@ -1156,6 +1209,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	   "of sources.list\n"),Pkg.Name());
 	 
 	 string List;
+	 string VersionsList;
 	 SPtrArray<bool> Seen = new bool[Cache.Head().PackageCount];
 	 memset(Seen,0,Cache.Head().PackageCount*sizeof(*Seen));
 	 pkgCache::DepIterator Dep = Pkg.RevDependsList();
@@ -1169,8 +1223,9 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	       continue;
 	    Seen[Dep.ParentPkg()->ID] = true;
 	    List += string(Dep.ParentPkg().Name()) + " ";
+        //VersionsList += string(Dep.ParentPkg().CurVersion) + "\n"; ???
 	 }	    
-	 ShowList(c1out,_("However the following packages replace it:"),List);
+	 ShowList(c1out,_("However the following packages replace it:"),List,VersionsList);
       }
       
       _error->Error(_("Package %s has no installation candidate"),Pkg.Name());
@@ -1562,14 +1617,14 @@ bool DoInstall(CommandLine &CmdL)
       while (Cache->FindPkg(S).end() == true)
       {
 	 // Handle an optional end tag indicating what to do
-	 if (S[Length - 1] == '-')
+	 if (Length >= 1 && S[Length - 1] == '-')
 	 {
 	    Remove = true;
 	    S[--Length] = 0;
 	    continue;
 	 }
 	 
-	 if (S[Length - 1] == '+')
+	 if (Length >= 1 && S[Length - 1] == '+')
 	 {
 	    Remove = false;
 	    S[--Length] = 0;
@@ -1762,6 +1817,7 @@ bool DoInstall(CommandLine &CmdL)
    if (Cache->InstCount() != ExpectedInst)
    {
       string List;
+      string VersionsList;
       for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
       {
 	 pkgCache::PkgIterator I(Cache,Cache.List[J]);
@@ -1773,11 +1829,95 @@ bool DoInstall(CommandLine &CmdL)
 	    if (strcmp(*J,I.Name()) == 0)
 		break;
 	 
-	 if (*J == 0)
+	 if (*J == 0) {
 	    List += string(I.Name()) + " ";
+        VersionsList += string(Cache[I].CandVersion) + "\n";
+     }
       }
       
-      ShowList(c1out,_("The following extra packages will be installed:"),List);
+      ShowList(c1out,_("The following extra packages will be installed:"),List,VersionsList);
+   }
+
+   /* Print out a list of suggested and recommended packages */
+   {
+      string SuggestsList, RecommendsList, List;
+      string SuggestsVersions, RecommendsVersions;
+      for (unsigned J = 0; J < Cache->Head().PackageCount; J++)
+      {
+	 pkgCache::PkgIterator I(Cache,Cache.List[J]);
+
+	 /* Just look at the ones we want to install */
+	 if ((*Cache)[I].Install() == false)
+	   continue;
+
+	 for (pkgCache::VerIterator V = I.VersionList(); V.end() == false; V++)
+	   {
+	     for (pkgCache::DepIterator D = V.DependsList(); D.end() == false; D++)
+	       {
+		 pkgCache::DepIterator Start;
+		 pkgCache::DepIterator End;
+		 D.GlobOr(Start,End);
+
+		 /* 
+		  * If this is a virtual package, we need to check the list of
+		  * packages that provide it and see if any of those are
+		  * installed
+		  */
+		 pkgCache::PrvIterator Prv = Start.TargetPkg().ProvidesList();
+		 bool providedBySomething = false;
+		 for (; Prv.end() != true; Prv++)
+		    if ((*Cache)[Prv.OwnerPkg()].InstVerIter(*Cache).end() == false) {
+		       providedBySomething = true;
+		       break;
+		    }
+
+		 if (providedBySomething) continue;
+            
+		 do
+		   {
+		     if (Start->Type == pkgCache::Dep::Suggests) {
+
+		       /* A suggests relations, let's see if we have it 
+			  installed already */
+
+		       string target = string(Start.TargetPkg().Name()) + " ";
+		       if ((*Start.TargetPkg()).SelectedState == pkgCache::State::Install || Cache[Start.TargetPkg()].Install())
+			 break;
+		       /* Does another package suggest it as well?  If so,
+			  don't print it twice */
+		       if (int(SuggestsList.find(target)) > -1)
+			 break; 
+		       SuggestsList += target;
+		       SuggestsVersions += string(Cache[Start.TargetPkg()].CandVersion) + "\n";
+		     }
+		     
+		     if (Start->Type == pkgCache::Dep::Recommends) {
+
+		       /* A recommends relation, let's see if we have it
+			  installed already */
+
+		       string target = string(Start.TargetPkg().Name()) + " ";
+		       if ((*Start.TargetPkg()).SelectedState == pkgCache::State::Install || Cache[Start.TargetPkg()].Install())
+			 break;
+		       
+		       /* Does another package recommend it as well?  If so,
+			  don't print it twice */
+
+		       if (int(RecommendsList.find(target)) > -1)
+			 break;
+		       RecommendsList += target;
+		       SuggestsVersions += string(Cache[Start.TargetPkg()].CandVersion) + "\n";
+		     }
+	      if (Start == End)
+		break;
+	      Start++;
+	    } while (1);
+	       }
+	   }
+      }
+      ShowList(c1out,_("Suggested packages:"),SuggestsList,SuggestsVersions);
+      ShowList(c1out,_("Recommended packages:"),RecommendsList,RecommendsVersions);
+
    }
 
    // CNC:2003-03-06
@@ -2280,7 +2420,7 @@ bool DoBuildDep(CommandLine &CmdL)
 	 rec.Package = Opts->Value;
 	 rec.Type = pkgSrcRecords::Parser::BuildDependIndep;
 	 rec.Op = 0;
-	 BuildDeps.insert(BuildDeps.begin(), rec);
+	 BuildDeps.push_back(rec);
       }
 
       if (BuildDeps.size() == 0)
@@ -2293,8 +2433,18 @@ bool DoBuildDep(CommandLine &CmdL)
       unsigned int ExpectedInst = 0;
       vector <pkgSrcRecords::Parser::BuildDepRec>::iterator D;
       pkgProblemResolver Fix(Cache);
+      bool skipAlternatives = false; // skip remaining alternatives in an or group
       for (D = BuildDeps.begin(); D != BuildDeps.end(); D++)
       {
+         bool hasAlternatives = (((*D).Op & pkgCache::Dep::Or) == pkgCache::Dep::Or);
+
+         if (skipAlternatives == true)
+         {
+            if (!hasAlternatives)
+               skipAlternatives = false; // end of or group
+            continue;
+         }
+
          if ((*D).Type == pkgSrcRecords::Parser::BuildConflict ||
 	     (*D).Type == pkgSrcRecords::Parser::BuildConflictIndep)
          {
@@ -2316,16 +2466,21 @@ bool DoBuildDep(CommandLine &CmdL)
 	 else // BuildDep || BuildDepIndep
          {
 	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
+            if (_config->FindB("Debug::BuildDeps",false) == true)
+                 cout << "Looking for " << (*D).Package << "...\n";
+
 	    if (Pkg.end() == true)
             {
-               // Check if there are any alternatives
-               if (((*D).Op & pkgCache::Dep::Or) != pkgCache::Dep::Or)
-	          return _error->Error(_("%s dependency for %s cannot be satisfied "
-                                         "because the package %s cannot be found"),
-				         Last->BuildDepType((*D).Type),Src.c_str(),
-                                         (*D).Package.c_str());
-               // Try the next alternative
-               continue;
+               if (_config->FindB("Debug::BuildDeps",false) == true)
+                    cout << " (not found)" << (*D).Package << endl;
+
+               if (hasAlternatives)
+                  continue;
+
+               return _error->Error(_("%s dependency for %s cannot be satisfied "
+                                      "because the package %s cannot be found"),
+                                    Last->BuildDepType((*D).Type),Src.c_str(),
+                                    (*D).Package.c_str());
             }
 
             /*
@@ -2338,9 +2493,6 @@ bool DoBuildDep(CommandLine &CmdL)
              * this would require we do a Resolve cycle for each package we 
              * add to the install list. Ugh
              */
-            while (D != BuildDeps.end() && 
-                   (((*D).Op & pkgCache::Dep::Or) == pkgCache::Dep::Or))
-               D++;
                        
 	    /* 
 	     * If this is a virtual package, we need to check the list of
@@ -2349,37 +2501,99 @@ bool DoBuildDep(CommandLine &CmdL)
 	     */
             pkgCache::PrvIterator Prv = Pkg.ProvidesList();
             for (; Prv.end() != true; Prv++)
+	    {
+               if (_config->FindB("Debug::BuildDeps",false) == true)
+                    cout << "  Checking provider " << Prv.OwnerPkg().Name() << endl;
+
 	       if ((*Cache)[Prv.OwnerPkg()].InstVerIter(*Cache).end() == false)
 	          break;
+            }
             
             // Get installed version and version we are going to install
 	    pkgCache::VerIterator IV = (*Cache)[Pkg].InstVerIter(*Cache);
-	    pkgCache::VerIterator CV = (*Cache)[Pkg].CandidateVerIter(*Cache);
 
-            for (; CV.end() != true; CV++)
-            {
-               if (Cache->VS().CheckDep(CV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
-                  break;
+            if ((*D).Version[0] != '\0') {
+                 // Versioned dependency
+
+                 pkgCache::VerIterator CV = (*Cache)[Pkg].CandidateVerIter(*Cache);
+
+                 for (; CV.end() != true; CV++)
+                 {
+                      if (Cache->VS().CheckDep(CV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
+                           break;
+                 }
+                 if (CV.end() == true)
+		   if (hasAlternatives)
+		   {
+		      continue;
+		   }
+		   else
+		   {
+                      return _error->Error(_("%s dependency for %s cannot be satisfied "
+                                             "because no available versions of package %s "
+                                             "can satisfy version requirements"),
+                                           Last->BuildDepType((*D).Type),Src.c_str(),
+                                           (*D).Package.c_str());
+		   }
             }
-            if (CV.end() == true)
-	       return _error->Error(_("%s dependency for %s cannot be satisfied "
-                                      "because no available versions of package %s "
-                                      "can satisfy version requirements"),
-				      Last->BuildDepType((*D).Type),Src.c_str(),
-                                      (*D).Package.c_str());
+            else
+            {
+               // Only consider virtual packages if there is no versioned dependency
+               if (Prv.end() == false)
+               {
+                  if (_config->FindB("Debug::BuildDeps",false) == true)
+                     cout << "  Is provided by installed package " << Prv.OwnerPkg().Name() << endl;
+                  skipAlternatives = hasAlternatives;
+                  continue;
+               }
+            }
 
-            /*
-	     * TODO: if we depend on a version lower than what we already have 
-	     * installed it is not clear what should be done; in practice
-	     * this case should be rare, and right now nothing is 
-             * done about it :-( 
-	     */
-	    if (Prv.end() == true && // Nothing provides it; and
-                (IV.end() == true || //  It is not installed, or
-	         Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == false))
-                                     //  the version installed doesn't 
-                                     //  satisfy constraints 
-	       TryToInstall(Pkg,Cache,Fix,false,false,ExpectedInst);
+            if (IV.end() == false)
+            {
+               if (_config->FindB("Debug::BuildDeps",false) == true)
+                  cout << "  Is installed\n";
+
+               if (Cache->VS().CheckDep(IV.VerStr(),(*D).Op,(*D).Version.c_str()) == true)
+               {
+                  skipAlternatives = hasAlternatives;
+                  continue;
+               }
+
+               if (_config->FindB("Debug::BuildDeps",false) == true)
+                  cout << "    ...but the installed version doesn't meet the version requirement\n";
+
+               if (((*D).Op & pkgCache::Dep::LessEq) == pkgCache::Dep::LessEq)
+               {
+                  return _error->Error(_("Failed to satisfy %s dependency for %s: Installed package %s is too new"),
+                                       Last->BuildDepType((*D).Type),
+                                       Src.c_str(),
+                                       Pkg.Name());
+               }
+            }
+
+
+            if (_config->FindB("Debug::BuildDeps",false) == true)
+               cout << "  Trying to install " << (*D).Package << endl;
+
+            if (TryToInstall(Pkg,Cache,Fix,false,false,ExpectedInst) == true)
+            {
+               // We successfully installed something; skip remaining alternatives
+               skipAlternatives = hasAlternatives;
+               continue;
+            }
+            else if (hasAlternatives)
+            {
+               if (_config->FindB("Debug::BuildDeps",false) == true)
+                  cout << "  Unsatisfiable, trying alternatives\n";
+               continue;
+            }
+            else
+            {
+               return _error->Error(_("Failed to satisfy %s dependency for %s: %s"),
+                                    Last->BuildDepType((*D).Type),
+                                    Src.c_str(),
+                                    (*D).Package.c_str());
+            }
 	 }	       
       }
       
@@ -2389,8 +2603,8 @@ bool DoBuildDep(CommandLine &CmdL)
       
       // Now we check the state of the packages,
       if (Cache->BrokenCount() != 0)
-	 return _error->Error(_("Some broken packages were found while trying to process build-dependencies.\n"
-				"You might want to run `apt-get -f install' to correct these."));
+	 return _error->Error(_("Some broken packages were found while trying to process build-dependencies for %s.\n"
+				"You might want to run `apt-get -f install' to correct these."),*I);
    }
   
    if (InstallPackages(Cache, false, true) == false)
@@ -2576,6 +2790,7 @@ bool ShowHelp(CommandLine &CmdL)
       "  -b  Build the source package after fetching it\n"
 // CNC:2002-08-02
       "  -D  When removing packages, remove dependencies as possible\n"
+      "  -V  Show verbose version numbers\n"
       "  -c=? Read this configuration file\n"
       "  -o=? Set an arbitary configuration option, eg -o dir::cache=/tmp\n"
       "See the apt-get(8), sources.list(5) and apt.conf(5) manual\n"
@@ -2619,6 +2834,7 @@ int main(int argc,const char *argv[])
    CommandLine::Args Args[] = {
       {'h',"help","help",0},
       {'v',"version","version",0},
+      {'V',"verbose-versions","APT::Get::Show-Versions",0},
       {'q',"quiet","quiet",CommandLine::IntLevel},
       {'q',"silent","quiet",CommandLine::IntLevel},
       {'d',"download-only","APT::Get::Download-Only",0},

@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: versiontest.cc,v 1.2 2002/07/25 18:07:19 niemeyer Exp $
+// $Id: versiontest.cc,v 1.5 2003/08/18 15:55:19 mdz Exp $
 /* ######################################################################
 
    Version Test - Simple program to run through a file and comare versions.
@@ -14,12 +14,14 @@
    
    ##################################################################### */
 									/*}}}*/
-#define APT_COMPATIBILITY 1
 #include <system.h>
 #include <apt-pkg/error.h>
 #include <apt-pkg/version.h>
+#include <apt-pkg/debversion.h>
 #include <iostream>
 #include <fstream>
+
+using namespace std;
 
   static int verrevcmp(const char *val, const char *ref) 
 {
@@ -132,7 +134,7 @@ static int verrevcmp(const char *val, const char *ref)
     
 bool RunTest(const char *File)
 {
-   ifstream F(File,ios::in | ios::nocreate);
+   ifstream F(File,ios::in);
    if (!F != 0)
       return false;
 
@@ -173,19 +175,32 @@ bool RunTest(const char *File)
       // Result
       I++;
       int Expected = atoi(I);
-      int Res = pkgVersionCompare(A.c_str(),B.c_str());
+      int Res = debVS.CmpVersion(A.c_str(), B.c_str());
       int Res2 = verrevcmp(A.c_str(),B.c_str());
       cout << "'" << A << "' ? '" << B << "' = " << Res << " (= " << Expected << ") " << Res2 << endl;
+
+      if (Res < 0)
+           Res = -1;
+      else if (Res > 0)
+           Res = 1;
+
       if (Res != Expected)
 	 _error->Error("Comparison failed on line %u. '%s' ? '%s' %i != %i",CurLine,A.c_str(),B.c_str(),Res,Expected);
 
       // Check the reverse as well
       Expected = -1*Expected;
-      Res = pkgVersionCompare(B.c_str(),A.c_str());
+      Res = debVS.CmpVersion(B.c_str(), A.c_str());
       Res2 = verrevcmp(B.c_str(),A.c_str());
+
       cout << "'" << B << "' ? '" << A << "' = " << Res << " (= " << Expected << ") " << Res2 << endl;
+
+      if (Res < 0)
+           Res = -1;
+      else if (Res > 0)
+           Res = 1;
+
       if (Res != Expected)
-	 _error->Error("Comparison failed on line %u. '%s' ? '%s' %i != %i",CurLine,A.c_str(),B.c_str(),Res,Expected);
+	 _error->Error("Comparison failed on line %u. '%s' ? '%s' %i != %i",CurLine,B.c_str(),A.c_str(),Res,Expected);
    }
 }
 

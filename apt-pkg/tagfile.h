@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: tagfile.h,v 1.2 2002/07/25 18:07:18 niemeyer Exp $
+// $Id: tagfile.h,v 1.20 2003/05/19 17:13:57 doogie Exp $
 /* ######################################################################
 
    Fast scanner for RFC-822 type header information

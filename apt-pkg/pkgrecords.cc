@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: pkgrecords.cc,v 1.2 2002/11/28 18:54:15 niemeyer Exp $
+// $Id: pkgrecords.cc,v 1.8 2003/09/02 04:52:16 mdz Exp $
 /* ######################################################################
    
    Package Records - Allows access to complete package description records

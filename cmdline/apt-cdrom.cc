@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: apt-cdrom.cc,v 1.42 2002/02/15 03:40:00 jgg Exp $
+// $Id: apt-cdrom.cc,v 1.44 2003/09/12 01:48:33 mdz Exp $
 /* ######################################################################
    
    APT CDROM - Tool for handling APT's CDROM database.
@@ -120,7 +120,8 @@ bool FindPackages(string CD,vector<string> &List,vector<string> &SList,
 	  strncmp(Dir->d_name,"doc",3) == 0)
 #else
 	  strcmp(Dir->d_name,"experimental") == 0 ||
-	  strcmp(Dir->d_name,"binary-all") == 0)
+	  strcmp(Dir->d_name,"binary-all") == 0 ||
+          strcmp(Dir->d_name,"debian-installer") == 0)
 #endif
 	 continue;
 
@@ -216,7 +217,7 @@ bool DropBinaryArch(vector<string> &List)
 // Score - We compute a 'score' for a path				/*{{{*/
 // ---------------------------------------------------------------------
 /* Paths are scored based on how close they come to what I consider
-   normal. That is ones that have 'dist' 'stable' 'frozen' will score
+   normal. That is ones that have 'dist' 'stable' 'testing' will score
    higher than ones without. */
 int Score(string Path)
 {
@@ -229,7 +230,7 @@ int Score(string Path)
       Res += 29;
    if (Path.find("/binary-") != string::npos)
       Res += 20;
-   if (Path.find("frozen/") != string::npos)
+   if (Path.find("testing/") != string::npos)
       Res += 28;
    if (Path.find("unstable/") != string::npos)
       Res += 27;

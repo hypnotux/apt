@@ -1,6 +1,6 @@
 // -*- mode: cpp; mode: fold -*-
 // Description								/*{{{*/
-// $Id: configuration.cc,v 1.4 2003/01/29 18:43:48 niemeyer Exp $
+// $Id: configuration.cc,v 1.27 2003/07/26 00:27:36 mdz Exp $
 /* ######################################################################
 
    Configuration Class
@@ -412,13 +412,17 @@ bool Configuration::ExistsAny(const char *Name) const
 {
    string key = Name;
 
-   if (key.size() > 2 && key.end()[-2] == '/' &&
-       key.find_first_of("fdbi",key.size()-1) < key.size())
-   {
-      key.resize(key.size() - 2);
-      if (Exists(key.c_str()))
-	 return true;
-   }
+   if (key.size() > 2 && key.end()[-2] == '/')
+      if (key.find_first_of("fdbi",key.size()-1) < key.size())
+      {
+         key.resize(key.size() - 2);
+         if (Exists(key.c_str()))
+            return true;
+      }
+      else
+      {
+         _error->Warning(_("Unrecognized type abbreviation: '%c'"), key.end()[-3]);
+      }
 
    return Exists(Name);
 }
