@@ -33,7 +33,7 @@ class pkgRepository
 
    string URI;
    string Dist;
-   const pkgSourceList::Vendor *Vendor;
+   string FingerPrint;
    string RootURI;
 
    bool Acquire;
@@ -41,14 +41,16 @@ class pkgRepository
    bool ParseRelease(string File);
    bool HasRelease() const { return GotRelease; }
 
-   bool IsAuthenticated() const { return Vendor != NULL; };
+   bool IsAuthenticated() const { return !FingerPrint.empty(); };
    bool FindChecksums(string URI,unsigned long &Size, string &MD5);
    
    pkgRepository(string URI,string Dist, const pkgSourceList::Vendor *Vendor,
 		 string RootURI)
-      : GotRelease(0), URI(URI), Dist(Dist), Vendor(Vendor), RootURI(RootURI),
+      : GotRelease(0), URI(URI), Dist(Dist), RootURI(RootURI),
    	Acquire(1)
-      {};
+   {
+      if (Vendor) FingerPrint = Vendor->FingerPrint;
+   };
 
 };
 

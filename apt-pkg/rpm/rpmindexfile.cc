@@ -644,10 +644,8 @@ class rpmSLTypeGen : public pkgSourceList::Type
       {
 	 if ((*iter)->URI == URI && (*iter)->Dist == Dist) 
 	 {	 
-	    // The registered object has no vendor, but the new one does
-	    // so, we make the previous one have the vendor too.
-	    if ((*iter)->Vendor == NULL && Vendor != NULL)
-	       (*iter)->Vendor = Vendor;
+	    if (Vendor != NULL)
+	       (*iter)->FingerPrint = Vendor->FingerPrint;
 	    return *iter;
 	 }
       }

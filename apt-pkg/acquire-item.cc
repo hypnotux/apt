@@ -477,11 +477,11 @@ void pkgAcqIndexRel::Done(string Message,unsigned long Size,string MD5,
 	 }
 
 	 // Match fingerprint of Release file
-	 if (Repository->Vendor->FingerPrint != FingerPrint)
+	 if (Repository->FingerPrint != FingerPrint)
 	 {
 	    Status = StatError;
 	    ErrorText = _("Signature fingerprint of Release file does not match (expected ")
-	       +Repository->Vendor->FingerPrint+_(", got ")+FingerPrint+")";
+	       +Repository->FingerPrint+_(", got ")+FingerPrint+")";
 	    return;
 	 }
       }
