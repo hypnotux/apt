@@ -25,7 +25,9 @@
 #include <vector>
 #include <algorithm>
 
-#include <locale.h>
+// CNC:2003-02-14 - apti18n.h includes libintl.h which includes locale.h,
+// 		    as reported by Radu Greab.
+//#include <locale.h>
 #include <unistd.h>
 									/*}}}*/
 

@@ -16,6 +16,9 @@
 # endif
 #else
 // apt will not use any gettext
+// CNC:2003-02-14
+# define bindtextdomain(a, b)
+# define textdomain(a)
 # define setlocale(a, b)
 # define _(x) x
 #endif

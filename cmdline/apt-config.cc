@@ -24,7 +24,9 @@
 #include <config.h>
 #include <apti18n.h>
 
-#include <locale.h>
+// CNC:2003-02-14 - apti18n.h includes libintl.h which includes locale.h,
+// 		    as reported by Radu Greab.
+//#include <locale.h>
 #include <iostream>
 #include <string>
 									/*}}}*/

@@ -45,7 +45,9 @@
 
 #include "acqprogress.h"
 
-#include <locale.h>
+// CNC:2003-02-14 - apti18n.h includes libintl.h which includes locale.h,
+// 		    as reported by Radu Greab.
+//#include <locale.h>
 #include <fstream>
 #include <termios.h>
 #include <sys/ioctl.h>
