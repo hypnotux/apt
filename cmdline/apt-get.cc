@@ -1160,6 +1160,44 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
    }   
 }
 									/*}}}*/
+// CNC:2003-12-02
+// DownloadPackages - Fetch packages					/*{{{*/
+// ---------------------------------------------------------------------
+/* Fetch packages */
+bool DownloadPackages(vector<string> &URLLst)
+{
+
+   // Create the download object
+   AcqTextStatus Stat(ScreenWidth,_config->FindI("quiet",0));   
+   pkgAcquire Fetcher(&Stat);
+
+   // Load the requestd sources into the fetcher
+   vector<string>::const_iterator I = URLLst.begin();
+   for (; I != URLLst.end(); I++)
+      new pkgAcqFile(&Fetcher,*I,"",0,*I,flNotDir(*I));
+   
+   // Run it
+   if (Fetcher.Run() == pkgAcquire::Failed)
+      return false;
+
+   // Print error messages
+   bool Failed = false;
+   for (pkgAcquire::ItemIterator I = Fetcher.ItemsBegin(); I != Fetcher.ItemsEnd(); I++)
+   {
+      if ((*I)->Status == pkgAcquire::Item::StatDone &&
+	  (*I)->Complete == true)
+	 continue;
+      
+      fprintf(stderr,_("Failed to fetch %s  %s\n"),(*I)->DescURI().c_str(),
+	      (*I)->ErrorText.c_str());
+      Failed = true;
+   }
+   if (Failed == true)
+      return _error->Error(_("Failed to fetch some archives."));
+
+   return true;
+}
+									/*}}}*/
 // TryToInstall - Try to install a single package			/*{{{*/
 // ---------------------------------------------------------------------
 /* This used to be inlined in DoInstall, but with the advent of regex package
@@ -3043,6 +3081,23 @@ int main(int argc,const char *argv[])
    // CNC:2003-11-21
    if (CmdL.FileSize() != 1)
    {
+      // CNC:2003-11-23
+      vector<string> URLLst;
+      for (const char **I = CmdL.FileList + 1; *I != 0; I++)
+      {
+	 if (strstr(*I, "://") != NULL)
+	 {
+	    URLLst.push_back(*I);
+	    *I = strrchr(*I, '/')+1;
+	 }
+      }
+
+      if (URLLst.empty() == false && DownloadPackages(URLLst) == false)
+      {
+	    _error->DumpErrors();
+	    return 100;
+      }
+
       for (const char **I = CmdL.FileList + 1; *I != 0; I++)
 	 _config->Set("APT::Arguments::", *I);
    }
