@@ -999,6 +999,9 @@ static int AptLua_verprovlist(lua_State *L)
    int i = 1;
    for (; PrvI.end() == false; PrvI++) {
       lua_newtable(L);
+      lua_pushstring(L, "pkg");
+      pushudata(pkgCache::Package*, PrvI.ParentPkg());
+      lua_settable(L, -3);
       lua_pushstring(L, "name");
       lua_pushstring(L, PrvI.Name());
       lua_settable(L, -3);
