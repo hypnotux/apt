@@ -41,12 +41,11 @@
    sources. <command/apt-cdrom/ takes care of determining the structure of 
    the disc as well as correcting for several possible mis-burns and 
    verifying the index files.   
-   <para>
+   </para><para>
    It is necessary to use <command/apt-cdrom/ to add CDs to the APT system, 
    it cannot be done by hand. Furthermore each disk in a multi-cd set must be
    inserted and scanned separately to account for possible mis-burns.
-
-   <para>
+   </para><para>
    Unless the <option/-h/, or <option/--help/ option is given one of the
    commands below must be present.
    
@@ -58,19 +57,21 @@
      scan it and copy the index files. If the disc does not have a proper
      <filename>.disk/</> directory you will be prompted for a descriptive 
      title.
-
-     <para>
+     </Para><Para>
      APT uses a CDROM ID to track which disc is currently in the drive and
      maintains a database of these IDs in 
      <filename>&statedir;/cdroms.list</>
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><Term>ident</Term>
      <ListItem><Para>
      A debugging tool to report the identity of the current disc as well
      as the stored file name
+     </Para></ListItem>
      </VarListEntry>
    </VariableList>
+   </para>
  </RefSect1>
 
  <RefSect1><Title>Options</>
@@ -82,6 +83,7 @@
      Mount point; specify the location to mount the cdrom. This mount 
      point must be listed in <filename>/etc/fstab</> and properly configured.
      Configuration Item: <literal/Acquire::cdrom::mount/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-r/</><term><option/--rename/</>
@@ -90,6 +92,7 @@
      given label. This option will cause <command/apt-cdrom/ to prompt for 
      a new label.
      Configuration Item: <literal/APT::CDROM::Rename/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-m/</><term><option/--no-mount/</>
@@ -97,6 +100,7 @@
      No mounting; prevent <command/apt-cdrom/ from mounting and unmounting 
      the mount point.
      Configuration Item: <literal/APT::CDROM::NoMount/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-f/</><term><option/--fast/</>
@@ -106,6 +110,7 @@
      <command/apt-cdrom/ has been run on this disc before and did not detect 
      any errors.
      Configuration Item: <literal/APT::CDROM::Fast/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-a/</><term><option/--thorough/</>
@@ -113,6 +118,7 @@
      Thorough Package Scan; This option may be needed with some old 
      Debian 1.1/1.2 discs that have Package files in strange places. It 
      takes much longer to scan the CD but will pick them all up.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-n/</>
@@ -123,6 +129,7 @@
      No Changes; Do not change the &sources-list; file and do not 
      write index files. Everything is still checked however.
      Configuration Item: <literal/APT::CDROM::NoAct/.
+     </Para></ListItem>
      </VarListEntry> 
  
      &apt-commonoptions;
@@ -133,11 +140,13 @@
  <RefSect1><Title>See Also</>
    <para>
    &apt-conf;, &apt-get;, &sources-list;
+   </para>
  </RefSect1>
 
  <RefSect1><Title>Diagnostics</>
    <para>
    <command/apt-cdrom/ returns zero on normal operation, decimal 100 on error.
+   </para>
  </RefSect1>
 
  &manbugs;

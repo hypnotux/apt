@@ -1,7 +1,7 @@
 
 MODULES = apt.py
 
-CC = gcc
+CC = g++
 SWIG = swig
 #SWIGFLAGS = -w312 -w315 -w508 -w509
 SWIGFLAGS = -w312 -w315 -w508
@@ -16,7 +16,7 @@ all: $(MODULES)
 $(MODULES): %.py: _%.so
 
 _%.so: %_wrap.cxx
-	$(CC) -shared -I.. $(PYTHONFLAGS) $(LUAFLAGS) -L../bin -L../build/bin -lapt-pkg -o $@ $<
+	$(CC) -fPIC -shared -I.. $(PYTHONFLAGS) $(LUAFLAGS) -L../bin -L../build/bin -lapt-pkg -o $@ $<
 
 apt_wrap.cxx: apt.i
 	$(SWIG) $(SWIGFLAGS) -c++ -I.. $(LUAFLAGS) -python $<

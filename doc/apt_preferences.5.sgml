@@ -248,6 +248,7 @@ or the installed version is more recent</simpara></listitem>
 <listitem><simpara>causes a version to be installed
 unless there is a version available belonging to some other
 distribution or the installed version is more recent</simpara></listitem>
+</varlistentry>
 <varlistentry>
 <term>0 &lt; P &lt;=100</term>
 <listitem><simpara>causes a version to be installed
@@ -502,6 +503,7 @@ again.
 <programlisting>
 apt-get install <replaceable>package</replaceable>/testing
 </programlisting>
+</para>
 </RefSect2>
 
  <RefSect2>

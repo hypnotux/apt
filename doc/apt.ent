@@ -113,11 +113,13 @@
      <VarListEntry><term><option/-h/</><term><option/--help/</>
      <ListItem><Para>
      Show a short usage summary.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-v/</><term><option/--version/</>
      <ListItem><Para>
      Show the program version.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-c/</><term><option/--config-file/</>
@@ -125,12 +127,14 @@
      Configuration File; Specify a configuration file to use. 
      The program will read the default configuration file and then this 
      configuration file. See &apt-conf; for syntax information.     
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/-o/</><term><option/--option/</>
      <ListItem><Para>
-     Set a Configuration Option; This will set an arbitary configuration 
+     Set a Configuration Option; This will set an arbitrary configuration 
      option. The syntax is <option>-o Foo::Bar=bar</>.
+     </Para></ListItem>
      </VarListEntry>
 ">
 

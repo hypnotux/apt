@@ -48,7 +48,7 @@
    considered the user's "back-end" to other tools using the APT
    library.  Several "front-end" interfaces exist, such as dselect(8),
    aptitude, synaptic, gnome-apt and wajig.
-   <para>
+   </para><para>
    Unless the <option/-h/, or <option/--help/ option is given, one of the
    commands below must be present.
    
@@ -64,6 +64,7 @@
      performed before an <literal/upgrade/ or <literal/dist-upgrade/. Please 
      be aware that the overall progress meter will be incorrect as the size 
      of the package files cannot be known in advance.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><Term>upgrade</Term>
@@ -78,6 +79,7 @@
      will be left at their current version. An <literal/update/ must be 
      performed first so that <command/apt-get/ knows that new versions of packages are 
      available.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>dselect-upgrade</Term>
@@ -89,6 +91,7 @@
      field of available packages, and performs the actions necessary to realize
      that state (for instance, the removal of old and the installation of new
      packages). 
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>dist-upgrade</Term>
@@ -102,6 +105,7 @@
      from which to retrieve desired package files.
      See also &apt-preferences; for a mechanism for
      overriding the general settings for individual packages.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>install</Term>
@@ -117,21 +121,21 @@
      installed. Similarly a plus sign can be used to designate a package to 
      install. These latter features may be used to override decisions made by 
      apt-get's conflict resolution system.
-     <para>
+     </para><para>
      A specific version of a package can be selected for installation by 
      following the package name with an equals and the version of the package 
      to select. This will cause that version to be located and selected for
      install. Alternatively a specific distribution can be selected by 
      following the package name with a slash and the version of the 
      distribution or the Archive name (stable, testing, unstable).
-     <para>
+     </para><para>
      Both of the version selection mechanisms can downgrade packages and must
      be used with care.
-     <para>
+     </para><para>
      Finally, the &apt-preferences; mechanism allows you to
      create an alternative installation policy for
      individual packages.
-     <para>
+     </para><para>
      If no package matches the given expression and the expression contains one
      of '.', '?' or '*' then it is assumed to be a POSIX regular expression,
      and it is applied
@@ -139,6 +143,7 @@
      removed). Note that matching is done by substring so 'lo.*' matches 'how-lo'
      and 'lowest'. If this is undesired, anchor the regular expression
      with a '^' or '$' character, or create a more specific regular expression.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>remove</Term>
@@ -147,6 +152,7 @@
      removed instead of installed. If a plus sign is appended to the package 
      name (with no intervening space), the identified package will be 
      installed instead of removed.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>source</Term>
@@ -161,29 +167,31 @@
      install. If the --compile options is specified then the package will be 
      compiled to a binary .deb using dpkg-buildpackage, if --download-only is 
      specified then the source package will not be unpacked.
-     <para>
+     </para><para>
      A specific source version can be retrieved by postfixing the source name
      with an equals and then the version to fetch, similar to the mechanism
      used for the package files. This enables exact matching of the source 
      package name and version, implicitly enabling the 
      <literal/APT::Get::Only-Source/ option.
-     
-     <para>
+     </para><para>
      Note that source packages are not tracked like binary packages, they 
      exist only in the current directory and are similar to downloading source
      tar balls.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>build-dep</Term>
      <ListItem><Para>   
      <literal/build-dep/ causes apt-get to install/remove packages in an 
      attempt to satisfy the build dependencies for a source package.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>check</Term>
      <ListItem><Para>   
      <literal/check/ is a diagnostic tool; it updates the package cache and checks 
      for broken dependencies.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>clean</Term>
@@ -195,6 +203,7 @@
      &dselect; method, <literal/clean/ is run automatically.
      Those who do not use dselect will likely want to run <literal/apt-get clean/
      from time to time to free up disk space.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><Term>autoclean</Term>
@@ -206,8 +215,10 @@
      it growing out of control. The configuration option 
      <literal/APT::Clean-Installed/ will prevent installed packages from being
      erased if it is set to off.
+     </Para></ListItem>
      </VarListEntry>
    </VariableList>
+   </para>
  </RefSect1>
  
  <RefSect1><Title>Options</>
@@ -218,6 +229,7 @@
      <ListItem><Para>
      Download only; package files are only retrieved, not unpacked or installed.
      Configuration Item: <literal/APT::Get::Download-Only/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-f/</><term><option/--fix-broken/</>
@@ -233,6 +245,7 @@
      the offending packages). Use of this option together with <option/-m/ may produce an
      error in some situations. 
      Configuration Item: <literal/APT::Get::Fix-Broken/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-m/</><term><option/--ignore-missing/</>
@@ -246,6 +259,7 @@
      command line) and it could not be downloaded then it will be silently 
      held back.
      Configuration Item: <literal/APT::Get::Fix-Missing/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--no-download/</>
@@ -254,6 +268,7 @@
      <option/--ignore-missing/ to force APT to use only the .debs it has 
      already downloaded.
      Configuration Item: <literal/APT::Get::Download/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-q/</><term><option/--quiet/</>
@@ -265,6 +280,7 @@
      without a no-action modifier such as -d, --print-uris or -s as APT may 
      decided to do something you did not expect.
      Configuration Item: <literal/quiet/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-s/</>
@@ -277,12 +293,13 @@
      No action; perform a simulation of events that would occur but do not
      actually change the system. 
      Configuration Item: <literal/APT::Get::Simulate/.
-     <para>
+     </para><para>
      Simulate prints out
      a series of lines each one representing a dpkg operation, Configure (Conf),
      Remove (Remv), Unpack (Inst). Square brackets indicate broken packages with
      and empty set of square brackets meaning breaks that are of no consequence
      (rare).
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-y/</><term><option/--yes/</>
@@ -293,6 +310,7 @@
      package or removing an essential package occurs then <literal/apt-get/ 
      will abort. 
      Configuration Item: <literal/APT::Get::Assume-Yes/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-u/</><term><option/--show-upgraded/</>
@@ -300,12 +318,14 @@
      Show upgraded packages; Print out a list of all packages that are to be
      upgraded. 
      Configuration Item: <literal/APT::Get::Show-Upgraded/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-V/</><term><option/--verbose-versions/</>
      <ListItem><Para>
      Show full versions for upgraded and installed packages.
      Configuration Item: <literal/APT::Get::Show-Versions/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-b/</><term><option/--compile/</>
@@ -313,6 +333,7 @@
      <ListItem><Para>
      Compile source packages after downloading them.
      Configuration Item: <literal/APT::Get::Compile/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--ignore-hold/</>
@@ -321,6 +342,7 @@
      placed on a package. This may be useful in conjunction with 
      <literal/dist-upgrade/ to override a large number of undesired holds. 
      Configuration Item: <literal/APT::Ignore-Hold/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--no-upgrade/</>
@@ -329,6 +351,7 @@
      <literal/no-upgrade/ will prevent packages listed from being upgraded
      if they are already installed. 
      Configuration Item: <literal/APT::Get::Upgrade/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--force-yes/</>
@@ -338,6 +361,7 @@
      should not be used except in very special situations. Using 
      <literal/force-yes/ can potentially destroy your system! 
      Configuration Item: <literal/APT::Get::force-yes/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--print-uris/</>
@@ -350,6 +374,7 @@
      <literal/update/ command the MD5 and size are not included, and it is
      up to the user to decompress any compressed files.
      Configuration Item: <literal/APT::Get::Print-URIs/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--purge/</>
@@ -358,12 +383,14 @@
      An asterisk ("*") will be displayed next to packages which are
      scheduled to be purged.
      Configuration Item: <literal/APT::Get::Purge/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--reinstall/</>
      <ListItem><Para>
      Re-Install packages that are already installed and at the newest version.
      Configuration Item: <literal/APT::Get::ReInstall/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--list-cleanup/</>
@@ -374,6 +401,7 @@
      The only  reason to turn it off is if you frequently change your source 
      list. 
      Configuration Item: <literal/APT::Get::List-Cleanup/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/-t/</>
@@ -388,6 +416,7 @@
      <option>-t '2.1*'</> or <option>-t unstable</>.
      Configuration Item: <literal/APT::Default-Release/;
      see also the &apt-preferences; manual page.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--trivial-only/</>
@@ -396,6 +425,7 @@
      related to <option/--assume-yes/, where <option/--assume-yes/ will answer 
      yes to any prompt, <option/--trivial-only/ will answer no. 
      Configuration Item: <literal/APT::Get::Trivial-Only/.
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--no-remove/</>
@@ -403,6 +433,7 @@
      If any packages are to be removed apt-get immediately aborts without
      prompting. 
      Configuration Item: <literal/APT::Get::Remove/
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--only-source/</>
@@ -414,6 +445,7 @@
      arguments, rather than accepting binary package names and looking
      up the corresponding source package.
      Configuration Item: <literal/APT::Get::Only-Source/
+     </Para></ListItem>
      </VarListEntry>
 
      <VarListEntry><term><option/--diff-only/</><term><option/--tar-only/</>
@@ -421,12 +453,14 @@
      Download only the diff or tar file of a source archive. 
      Configuration Item: <literal/APT::Get::Diff-Only/ and 
      <literal/APT::Get::Tar-Only/
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><option/--arch-only/</>
      <ListItem><Para>
      Only process architecture-dependent build-dependencies.
      Configuration Item: <literal/APT::Get::Arch-Only/ 
+     </Para></ListItem>
      </VarListEntry>
      
      &apt-commonoptions;
@@ -440,18 +474,21 @@
      <ListItem><Para>
      Locations to fetch packages from.
      Configuration Item: <literal/Dir::Etc::SourceList/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>/etc/apt/apt.conf</></term>
      <ListItem><Para>
      APT configuration file.
      Configuration Item: <literal/Dir::Etc::Main/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>/etc/apt/apt.conf.d/</></term>
      <ListItem><Para>
      APT configuration file fragments
      Configuration Item: <literal/Dir::Etc::Parts/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>/etc/apt/preferences</></term>
@@ -462,18 +499,21 @@
      from a separate source
      or from a different version of a distribution.
      Configuration Item: <literal/Dir::Etc::Preferences/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>&cachedir;/archives/</></term>
      <ListItem><Para>
      Storage area for retrieved package files.
      Configuration Item: <literal/Dir::Cache::Archives/.
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>&cachedir;/archives/partial/</></term>
      <ListItem><Para>
      Storage area for package files in transit.
      Configuration Item: <literal/Dir::Cache::Archives/ (implicit partial). 
+     </Para></ListItem>
      </VarListEntry>
      
      <VarListEntry><term><filename>&statedir;/lists/</></term>
@@ -481,12 +521,14 @@
      Storage area for state information for each package resource specified in
      &sources-list;
      Configuration Item: <literal/Dir::State::Lists/.
+     </Para></ListItem>
      </VarListEntry>
   
      <VarListEntry><term><filename>&statedir;/lists/partial/</></term>
      <ListItem><Para>
      Storage area for state information in transit.
      Configuration Item: <literal/Dir::State::Lists/ (implicit partial).
+     </Para></ListItem>
      </VarListEntry>     
    </variablelist>
  </RefSect1>
@@ -496,11 +538,13 @@
    &apt-cache;, &apt-cdrom;, &dpkg;, &dselect;, &sources-list;,
    &apt-conf;, &apt-config;,
    The APT User's guide in &docdir;, &apt-preferences;, the APT Howto.
+   </para>
  </RefSect1>
 
  <RefSect1><Title>Diagnostics</>
    <para>
    <command/apt-get/ returns zero on normal operation, decimal 100 on error.
+   </para>
  </RefSect1>
 
  &manbugs;
