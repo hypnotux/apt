@@ -2360,12 +2360,14 @@ bool WhatDepends(CommandLine &CmdL)
 	    for (pkgCache::DepIterator D = ParentVer.DependsList();
 	         D.end() == false; D++)
 	    {
-	       // Go on if it's the same package and version or
-	       // if it's the same package and has no versions
-	       // (a virtual package).
-	       if (D.TargetPkg() != Pkg ||
-	           Ver.end() == false &&
-		   Cache.VS->CheckDep(Ver.VerStr(),D) == false) {
+	       // If this is a virtual package, there's no provides.
+	       if (Ver.end() == true) {
+		  // If it's not the same package, and there's no provides
+		  // skip that package.
+		  if (D.TargetPkg() != Pkg)
+		     continue;
+	       } else if (D.TargetPkg() != Pkg ||
+			  Cache.VS->CheckDep(Ver.VerStr(),D) == false) {
 		  // Oops. Either it's not the same package, or the
 		  // version didn't match. Check virtual provides from
 		  // the queried package version and verify if this
@@ -2453,25 +2455,9 @@ bool WhatDepends(CommandLine &CmdL)
 		  // if it's the same package and has no versions
 		  // (a virtual package).
 		  if (D.TargetPkg() != RDPrv.ParentPkg() ||
-		      Ver.end() == false &&
-		      Cache.VS->CheckDep(Ver.VerStr(),D) == false) {
-		     // Oops. Either it's not the same package, or the
-		     // version didn't match. Check virtual provides from
-		     // the queried package version and verify if this
-		     // dependency matches one of those.
-		     bool Hit = false;
-		     for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
-			  Prv.end() == false; Prv++) {
-			if (Prv.ParentPkg() == D.TargetPkg() &&
-			    (Prv.ParentPkg()->VersionList == 0 ||
-			     Cache.VS->CheckDep(Prv.ProvideVersion(),D)) == false) {
-			   Hit = true;
-			   break;
-			}
-		     }
-		     if (Hit == false)
-			continue;
-		  }
+		      (RDPrv.ProvideVersion() != 0 &&
+		       Cache.VS->CheckDep(RDPrv.ProvideVersion(),D) == false))
+		     continue;
 
 		  // Bingo!
 		  pkgCache::PkgIterator Trg = D.TargetPkg();
