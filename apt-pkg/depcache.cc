@@ -1015,6 +1015,18 @@ bool pkgDepCache::Policy::IsImportantDep(DepIterator Dep)
 // pkgDepCache::State::* - Routines to work on the state of a DepCache.	/*{{{*/
 // ---------------------------------------------------------------------
 /* */
+pkgDepCache::State::State(const pkgDepCache::State &Copy)
+{
+   memcpy(this, &Copy, sizeof(*this));
+   int Size = Dep->Head().PackageCount;
+   PkgState = new StateCache[Size];
+   PkgIgnore = new bool[Size];
+   DepState = new unsigned char[Dep->Head().DependsCount];
+   memcpy(PkgState, Copy.PkgState, Size*sizeof(*PkgState));
+   memcpy(PkgIgnore, Copy.PkgIgnore, Size*sizeof(*PkgIgnore));
+   memcpy(DepState, Copy.DepState, Dep->Head().DependsCount*sizeof(*DepState));
+}
+
 void pkgDepCache::State::Save(pkgDepCache *dep)
 {
    Dep = dep;
@@ -1063,6 +1075,12 @@ bool pkgDepCache::State::Changed()
    }
    return false;
 }
+
+void pkgDepCache::State::UnIgnoreAll()
+{
+   memset(PkgIgnore, 0, Dep->Head().PackageCount*sizeof(*PkgIgnore));
+}
+
 									/*}}}*/
 
 // vim:sts=3:sw=3

@@ -244,6 +244,9 @@ class pkgDepCache::State
    bool Changed();
 
    void Ignore(PkgIterator const &I) {PkgIgnore[I->ID] = true;};
+   void UnIgnore(PkgIterator const &I) {PkgIgnore[I->ID] = false;};
+   bool Ignored(PkgIterator const &I) {return PkgIgnore[I->ID];};
+   void UnIgnoreAll();
 
    StateCache &operator [](pkgCache::PkgIterator const &I) {return PkgState[I->ID];};
 
@@ -256,6 +259,7 @@ class pkgDepCache::State
    inline unsigned long BrokenCount() {return iBrokenCount;};
    inline unsigned long BadCount() {return iBadCount;};
 
+   State(const State &Copy);
    State(pkgDepCache *Dep=NULL)
 	 : Dep(0), PkgState(0), DepState(0), PkgIgnore(0)
       { if (Dep != NULL) Save(Dep); };
