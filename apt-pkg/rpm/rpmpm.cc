@@ -494,7 +494,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       }	 
    }
 
-   if (_config->FindB("RPM::Order",false) == false)
+   if (_config->FindB("RPM::Order", false) == false)
       Args[n++] = "--noorder";
     
    bool FilesInArgs = true;
@@ -834,10 +834,10 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
    rc = 0;
 #if RPM_VERSION >= 0x040100
-   if (_config->FindB("RPM::Order", true) == true)
+   if (_config->FindB("RPM::Order", false) == true)
       rc = rpmtsOrder(TS);
 #else
-   if (_config->FindB("RPM::Order", true) == true)
+   if (_config->FindB("RPM::Order", false) == true)
       rc = rpmdepOrder(TS);
 #endif
 
