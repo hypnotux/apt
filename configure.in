@@ -122,6 +122,13 @@ fi
 ],
 [AC_MSG_RESULT(no)])
 
+dnl Check for apt-shell dependencies
+AC_CHECK_LIB(ncurses,tputs,
+  [AC_CHECK_HEADER(readline/readline.h,
+     [AC_CHECK_LIB(readline,readline,
+        [COMPILE_APTSHELL=yes],,[-lncurses])])])
+AC_SUBST(COMPILE_APTSHELL)
+
 dnl Converts the ARCH to be something singular for this general CPU family
 dnl This is often the dpkg architecture string.
 AC_MSG_CHECKING(system architecture)

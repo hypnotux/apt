@@ -1,1 +1,3 @@
 - Implement hashing in file method.
+- Build program to check for dependencies between repositories.
+- Implement apt-cache provides/whatprovides

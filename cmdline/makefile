@@ -23,6 +23,16 @@ LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-get.cc acqprogress.cc
 include $(PROGRAM_H)
 
+# CNC:2003-03-05
+ifdef COMPILE_APTSHELL
+# The apt-shell program
+PROGRAM=apt-shell
+SLIBS = -lapt-pkg -lreadline -lncurses $(RPMLIBS)
+LIB_MAKES = apt-pkg/makefile
+SOURCE = apt-shell.cc acqprogress.cc
+include $(PROGRAM_H)
+endif
+
 # The apt-config program
 PROGRAM=apt-config
 SLIBS = -lapt-pkg $(RPMLIBS)

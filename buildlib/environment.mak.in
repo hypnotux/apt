@@ -24,6 +24,9 @@ RANLIB:=@RANLIB@
 # RPM stuff
 RPMLIBS:= @RPMLIBS@
 
+# CNC:2003-03-05
+COMPILE_APTSHELL = @COMPILE_APTSHELL@
+
 # Dep generation - this only works for gnu stuff
 GCC3DEP = @GCC3DEP@
 INLINEDEPFLAG = -MD
