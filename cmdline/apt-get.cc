@@ -1750,6 +1750,8 @@ bool DoInstall(CommandLine &CmdL)
 		  pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
 		  if (Parse.HasFile(S)) {
 		     strcpy(S, Pkg.Name());
+		     // Confirm the translation.
+		     ExpectedInst += 1000;
 		     break;
 		  }
 	       }

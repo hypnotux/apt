@@ -4369,7 +4369,8 @@ int main(int argc,const char *argv[])
       }
 #endif
 
-      CmdL.DispatchArg(Cmds);
+      if (_error->PendingError() == false)
+	 CmdL.DispatchArg(Cmds);
       
       free(line);
    }
