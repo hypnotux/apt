@@ -37,12 +37,14 @@ extern "C" {
 #include <apt-pkg/error.h>
 #include <apt-pkg/pkgrecords.h>
 #include <apt-pkg/sptr.h>
+#include <apt-pkg/version.h>
+#include <apt-pkg/pkgsystem.h>
 
 #include <apt-pkg/luaiface.h>
 
 #include <apti18n.h>
 
-#include <limits>
+#include <limits.h>
 
 Lua *_GetLuaObj()
 {
@@ -50,24 +52,24 @@ Lua *_GetLuaObj()
    return Obj;
 }
 
-static int lua_aptlibopen(lua_State *L);
+static int luaopen_apt(lua_State *L);
 
-const double Lua::NoGlobalI = numeric_limits<double>::min();
+const double Lua::NoGlobalI = INT_MIN;
 
 Lua::Lua()
       : DepCache(0), Cache(0), Fix(0), DontFix(0)
 {
    _config->CndSet("Dir::Etc::Scripts", "scripts");
 
-   // Code copied from lua standalone interpreter.
    const luaL_reg lualibs[] = {
-      {"baselib", lua_baselibopen},
-      {"tablib", lua_tablibopen},
-      {"iolib", lua_iolibopen},
-      {"strlib", lua_strlibopen},
-      {"mathlib", lua_mathlibopen},
-      {"dblib", lua_dblibopen},
-      {"aptlib", lua_aptlibopen},
+      {"base", luaopen_base},
+      {"table", luaopen_table},
+      {"io", luaopen_io},
+      {"string", luaopen_string},
+      {"math", luaopen_math},
+      {"debug", luaopen_debug},
+      {"loadlib", luaopen_loadlib},
+      {"apt", luaopen_apt},
       {NULL, NULL}
    };
    L = lua_open();
@@ -177,7 +179,7 @@ void Lua::SetGlobal(const char *Name, const char **Value, int Total)
    lua_pushstring(L, Name);
    lua_newtable(L);
    if (Total == -1)
-      Total = numeric_limits<int>::max();
+      Total = INT_MAX;
    for (int i=0; i != Total && Value[i] != NULL; i++) {
       lua_pushstring(L, Value[i]);
       lua_rawseti(L, -2, i+1);
@@ -653,6 +655,42 @@ static int AptLua_verstr(lua_State *L)
    return AptAux_PushCacheString(L, Ver->VerStr);
 }
 
+static int AptLua_verstrcmp(lua_State *L)
+{
+   const char *Ver1, *Ver2;
+   const char *Arch1, *Arch2;
+   int Top = lua_gettop(L);
+   int Ret = -9999;
+   bool Error = false;
+   if (Top == 2) {
+      Ver1 = luaL_checkstring(L, 1);
+      Ver2 = luaL_checkstring(L, 2);
+      if (Ver1 == NULL || Ver2 == NULL)
+	 Error = true;
+      else
+	 Ret = _system->VS->CmpVersion(Ver1, Ver2);
+   } else if (Top == 4) {
+      Ver1 = luaL_checkstring(L, 1);
+      Arch1 = luaL_checkstring(L, 2);
+      Ver2 = luaL_checkstring(L, 3);
+      Arch2 = luaL_checkstring(L, 4);
+      if (Ver1 == NULL || Arch1 == NULL || Ver2 == NULL || Arch2 == NULL)
+	 Error = true;
+      else
+	 Ret = _system->VS->CmpVersionArch(Ver1, Arch1, Ver2, Arch2);
+   } else {
+      Error = true;
+   }
+   if (Error == true) {
+      lua_pushstring(L, "verstrcmp requires 2 or 4 string arguments");
+      lua_error(L);
+      return 0;
+   } else {
+      lua_pushnumber(L, Ret);
+      return 1;
+   }
+}
+
 static int AptLua_markkeep(lua_State *L)
 {
    return AptAux_mark(L, MARK_KEEP);
@@ -869,6 +907,7 @@ static const luaL_reg aptlib[] = {
    {"pkgvercand",	AptLua_pkgvercand},
    {"pkgverlist",	AptLua_pkgverlist},
    {"verstr",		AptLua_verstr},
+   {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
    {"markinstall",	AptLua_markinstall},
    {"markremove",	AptLua_markremove},
@@ -889,7 +928,7 @@ static const luaL_reg aptlib[] = {
    {NULL, NULL}
 };
 
-static int lua_aptlibopen(lua_State *L)
+static int luaopen_apt(lua_State *L)
 {
    lua_pushvalue(L, LUA_GLOBALSINDEX);
    luaL_openlib(L, NULL, aptlib, 0);
