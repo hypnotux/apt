@@ -78,6 +78,9 @@ static int luaopen_apt(lua_State *L);
 
 const double Lua::NoGlobalI = INT_MIN;
 
+static int AptLua_vercomp(lua_State *L);
+static int AptLua_pkgcomp(lua_State *L);
+
 Lua::Lua()
       : DepCache(0), Cache(0), CacheControl(0), Fix(0), DontFix(0)
 {
@@ -104,7 +107,13 @@ Lua::Lua()
       lua_settop(L, 0);  /* discard any results */
    }
    luaL_newmetatable(L, "pkgCache::Package*");
+   lua_pushstring(L, "__eq");
+   lua_pushcfunction(L, AptLua_pkgcomp);
+   lua_settable(L, -3);
    luaL_newmetatable(L, "pkgCache::Version*");
+   lua_pushstring(L, "__eq");
+   lua_pushcfunction(L, AptLua_vercomp);
+   lua_settable(L, -3);
    lua_pop(L, 2);
 }
 
@@ -664,6 +673,15 @@ static int AptLua_pkgname(lua_State *L)
    return AptAux_PushCacheString(L, Pkg->Name);
 }
 
+static int AptLua_pkgid(lua_State *L)
+{
+   pkgCache::Package *Pkg = AptAux_ToPackage(L, 1);
+   if (Pkg == NULL)
+      return 0;
+   lua_pushnumber(L, Pkg->ID);
+   return 1;
+}
+
 static int AptLua_pkgsummary(lua_State *L)
 {
    SPtr<pkgCache::PkgIterator> PkgI = AptAux_ToPkgIterator(L, 1);
@@ -768,22 +786,47 @@ static int AptLua_pkgverlist(lua_State *L)
    return 1;
 }
 
+static int AptLua_verpkg(lua_State *L)
+{
+   pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
+   if (VerI == NULL)
+      return 0;
+   pushudata(pkgCache::Package*, VerI->ParentPkg());
+   return 1;
+}
+
 static int AptLua_verstr(lua_State *L)
 {
    pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
+   if (Ver == NULL)
+      return 0;
    return AptAux_PushCacheString(L, Ver->VerStr);
 }
 
 static int AptLua_verarch(lua_State *L)
 {
    pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
+   if (Ver == NULL)
+      return 0;
    return AptAux_PushCacheString(L, Ver->Arch);
+   
+}
+
+static int AptLua_verid(lua_State *L)
+{
+   pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
+   if (Ver == NULL)
+      return 0;
+   lua_pushnumber(L, Ver->ID);
+   return 1;
    
 }
 
 static int AptLua_verisonline(lua_State *L)
 {
    pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
+   if (VerI == NULL)
+      return 0;
    return AptAux_PushBool(L, VerI->Downloadable());
 }
 
@@ -795,17 +838,70 @@ static int AptLua_verprovlist(lua_State *L)
    pkgCache::PrvIterator PrvI = VerI->ProvidesList();
    lua_newtable(L);
    int i = 1;
-   for (; PrvI.end() == false; PrvI++)
-   {
+   for (; PrvI.end() == false; PrvI++) {
       lua_newtable(L);
       lua_pushstring(L, "name");
       lua_pushstring(L, PrvI.Name());
       lua_settable(L, -3);
+#ifndef DEAD
       lua_pushstring(L, "version");
       if (PrvI.ProvideVersion())
          lua_pushstring(L, PrvI.ProvideVersion());
       else
          lua_pushstring(L, "");
+      lua_settable(L, -3);
+#endif
+      lua_pushstring(L, "verstr");
+      if (PrvI.ProvideVersion())
+         lua_pushstring(L, PrvI.ProvideVersion());
+      else
+         lua_pushstring(L, "");
+      lua_settable(L, -3);
+      lua_rawseti(L, -2, i++);
+   }
+   return 1;
+}
+
+static int AptLua_verdeplist(lua_State *L)
+{
+   const char *TypeStr[] = {
+      "", "depends", "predepends", "suggests", "recommends",
+      "conflicts", "replaces", "obsoletes"
+   };
+   pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
+   if (VerI == NULL)
+      return 0;
+   pkgCache::DepIterator DepI = VerI->DependsList();
+   lua_newtable(L);
+   int i = 1;
+   for (; DepI.end() == false; DepI++) {
+      lua_newtable(L);
+      lua_pushstring(L, "pkg");
+      pushudata(pkgCache::Package*, DepI.TargetPkg());
+      lua_settable(L, -3);
+      lua_pushstring(L, "name");
+      lua_pushstring(L, DepI.TargetPkg().Name());
+      lua_settable(L, -3);
+      lua_pushstring(L, "verstr");
+      if (DepI.TargetVer())
+         lua_pushstring(L, DepI.TargetVer());
+      else
+         lua_pushstring(L, "");
+      lua_settable(L, -3);
+      lua_pushstring(L, "operator");
+      lua_pushstring(L, DepI.CompType());
+      lua_settable(L, -3);
+      lua_pushstring(L, "type");
+      lua_pushstring(L, TypeStr[DepI->Type]);
+      lua_settable(L, -3);
+      lua_pushstring(L, "verlist");
+      lua_newtable(L);
+      pkgCache::Version **VerList = DepI.AllTargets();
+      for (int j = 0; VerList[j]; j++) {
+	 pushudata(pkgCache::Version*, VerList[j]);
+	 lua_rawseti(L, -2, j+1);
+      }
+      delete[] VerList;
       lua_settable(L, -3);
       lua_rawseti(L, -2, i++);
    }
@@ -1057,6 +1153,7 @@ static const luaL_reg aptlib[] = {
    {"pkgfind",		AptLua_pkgfind},
    {"pkglist",		AptLua_pkglist},
    {"pkgname",		AptLua_pkgname},
+   {"pkgid",		AptLua_pkgid},
    {"pkgsummary",	AptLua_pkgsummary},
    {"pkgdescr",		AptLua_pkgdescr},
    {"pkgisvirtual",	AptLua_pkgisvirtual},
@@ -1064,10 +1161,13 @@ static const luaL_reg aptlib[] = {
    {"pkgverinst",	AptLua_pkgverinst},
    {"pkgvercand",	AptLua_pkgvercand},
    {"pkgverlist",	AptLua_pkgverlist},
+   {"verpkg",		AptLua_verpkg},
    {"verstr",		AptLua_verstr},
    {"verarch",		AptLua_verarch},
+   {"verid",		AptLua_verid},
    {"verisonline",	AptLua_verisonline},
    {"verprovlist",   	AptLua_verprovlist},
+   {"verdeplist",   	AptLua_verdeplist},
    {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
    {"markinstall",	AptLua_markinstall},
@@ -1088,6 +1188,25 @@ static const luaL_reg aptlib[] = {
    {"aptwarning",	AptLua_aptwarning},
    {NULL, NULL}
 };
+
+static int AptLua_vercomp(lua_State *L)
+{
+   pkgCache::Version *v1, *v2;
+   checkudata(pkgCache::Version*, v1, 1);
+   checkudata(pkgCache::Version*, v2, 2);
+   lua_pushboolean(L, (!v1 || v1 != v2) ? 0 : 1);
+   return 1;
+}
+
+static int AptLua_pkgcomp(lua_State *L)
+{
+   pkgCache::Package *p1, *p2;
+   checkudata(pkgCache::Package*, p1, 1);
+   checkudata(pkgCache::Package*, p2, 2);
+   lua_pushboolean(L, (!p1 || p1 != p2) ? 0 : 1);
+   return 1;
+}
+
 
 static int luaopen_apt(lua_State *L)
 {
