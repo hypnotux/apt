@@ -4,7 +4,12 @@ noinst_LTLIBRARIES = liblua.la
 noinst_PROGRAMS = lua/lua luac/luac
 endif
 
-EXTRA_DIST = COPYRIGHT HISTORY
+EXTRA_DIST = \
+	COPYRIGHT \
+	HISTORY \
+	local/modemuncher.c \
+	local/userconfig.c \
+	local/linit.lua
 
 LDADD = liblua.la
 INCLUDES = -I$(srcdir)/include -I$(srcdir)/local
@@ -19,6 +24,7 @@ liblua_la_CFLAGS = -DUSE_DLOPEN -DWITH_POSIX
 liblua_la_LIBADD = -lm -ldl
 liblua_la_SOURCES = \
 		local/linit.c \
+		local/linit.h \
 		local/linit.lch \
 		local/lposix.h \
 		local/lposix.c \

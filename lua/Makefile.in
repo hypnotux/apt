@@ -173,7 +173,13 @@ target_alias = @target_alias@
 @WITH_LUA_TRUE@noinst_LTLIBRARIES = liblua.la
 @WITH_LUA_TRUE@noinst_PROGRAMS = lua/lua luac/luac
 
-EXTRA_DIST = COPYRIGHT HISTORY
+EXTRA_DIST = \
+	COPYRIGHT \
+	HISTORY \
+	local/modemuncher.c \
+	local/userconfig.c \
+	local/linit.lua
+
 
 LDADD = liblua.la
 INCLUDES = -I$(srcdir)/include -I$(srcdir)/local
@@ -188,6 +194,7 @@ liblua_la_CFLAGS = -DUSE_DLOPEN -DWITH_POSIX
 liblua_la_LIBADD = -lm -ldl
 liblua_la_SOURCES = \
 		local/linit.c \
+		local/linit.h \
 		local/linit.lch \
 		local/lposix.h \
 		local/lposix.c \
@@ -1746,6 +1753,7 @@ top_distdir = ..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
+	$(mkinstalldirs) $(distdir)/local
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
