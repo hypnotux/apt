@@ -8,6 +8,10 @@ configuration items set:
 Scripts::PM::Pre:: "gpg-check.lua";
 RPM::GPG-Check "true";
 
+As a workaround for certain commercial rpm's which break when signed afterwards
+you can specify packages not to be checked by adding them to
+RPM::GPG::Skip-Check:: list.
+
 A completely optional addon is the ability to automatically import GPG keys
 to rpmdb when running apt.
 To enable this you need the following configuration items set:

@@ -36,11 +36,22 @@ illegal = 0
 unsigned = 0
 errors = {}
 
+skiplist = confgetlist("RPM::GPG::Skip-Check", "")
+
 io.stdout.write(io.stdout, string.format("%-28s", _("Checking GPG signatures...")))
 if interactive == "false" then
 	io.stdout.write(io.stdout, '\n')
 end
 for i, file in ipairs(files_install) do
+    skipthis = false
+    for j, skip in ipairs(skiplist) do
+	start = string.find(pkgname(pkgs_install[i]), skip)
+	if start then
+	    skipthis = true
+	    print(_("Skipping GPG check on "..pkgname(pkgs_install[i])))
+	    break
+	end
+    end
     if quiet == 0 then
 	printhash(i, table.getn(files_install))
     end
