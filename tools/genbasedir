@@ -189,10 +189,10 @@ if [ $hashonly -ne 1 ]; then
 
 test -z "$TMPDIR" && TMPDIR=/tmp;
 srcidxdir=`mktemp -d $TMPDIR/genbasedir.XXXXXX 2>/dev/null`
-if [ -z "$srcidxdir" -o ! -d $srcidxdir ]; then
+if [ -z "$srcidxdir" -o ! -d "$srcidxdir" ]; then
 	srcidxdir=$basedir/.srcidxtmp.$$
 	mkdir -p $srcidxdir
-	if [ ! -d $srcidxdir ]; then
+	if [ ! -d "$srcidxdir" ]; then
 		echo "error: can't create temp dir" 1>&2
 		exit 1
 	fi
