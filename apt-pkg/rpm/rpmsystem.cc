@@ -33,6 +33,7 @@
     
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <dirent.h>
 #include <rpm/rpmlib.h>
 #include <assert.h>
@@ -505,6 +506,12 @@ static void HashString(unsigned long &Hash, const char *Str)
    for (const char *I = Str; *I != 0; I++)
       Hash = 5*Hash + *I;
 }
+static void HashEnv(unsigned long &Hash, const char *Name)
+{
+   const char *Value = getenv(Name);
+   if (Value)
+      HashString(Hash, Value);
+}
 static void HashOption(unsigned long &Hash, const char *Name)
 {
    const Configuration::Item *Top = _config->Tree(Name);
@@ -532,6 +539,9 @@ unsigned long rpmSystem::OptionsHash() const
    HashOptionTree(Hash, "RPM::Allow-Duplicated");
    HashOptionTree(Hash, "RPM::Ignore");
    HashOptionFile(Hash, "Dir::Etc::rpmpriorities");
+   HashEnv(Hash, "LANG");
+   HashEnv(Hash, "LC_ALL");
+   HashEnv(Hash, "LC_MESSAGES");
    return Hash;
 }
 									/*}}}*/
