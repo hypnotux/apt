@@ -2552,8 +2552,9 @@ bool DoSource(CommandLine &CmdL)
 	 if (_config->FindB("APT::Get::Compile",false) == true)
 	 {
 	    char S[500];
-	    snprintf(S,sizeof(S),"%s %s",
+	    snprintf(S,sizeof(S),"%s %s %s",
 		     _config->Find("RPM::Source::Build-Command","rpm --rebuild").c_str(),
+		     _config->Find("RPM::Source::Build-Options","").c_str(),
 		     Dsc[I].Dsc.c_str());
 	    if (system(S) != 0)
 	    {
