@@ -335,8 +335,35 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
    if (_config->FindB("RPM::Order",false) == false)
       Args[n++] = "--noorder";
     
-   for (vector<const char*>::iterator I = files.begin(); I != files.end(); I++)
-      Args[n++] = *I;
+   bool FilesInArgs = true;
+   char *ArgsFileName = NULL;
+#ifdef HAVE_RPM4
+   if (files.size() > 50) {
+      string FileName = _config->FindDir("Dir::Cache", "/tmp/") +
+			"filelist.XXXXXX";
+      ArgsFileName = strdup(FileName.c_str());
+      if (ArgsFileName) {
+	 int fd = mkstemp(ArgsFileName);
+	 if (fd != -1) {
+	    FileFd File(fd);
+	    for (vector<const char*>::iterator I = files.begin();
+		 I != files.end(); I++) {
+	       File.Write(*I, strlen(*I));
+	       File.Write("\n", 1);
+	    }
+	    File.Close();
+	    FilesInArgs = false;
+	    Args[n++] = ArgsFileName;
+	 }
+      }
+   }
+#endif
+
+   if (FilesInArgs == true) {
+      for (vector<const char*>::iterator I = files.begin();
+	   I != files.end(); I++)
+	 Args[n++] = *I;
+   }
    
    Args[n++] = 0;
 
@@ -345,6 +372,10 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       for (unsigned int k = 0; k < n; k++)
 	  clog << Args[k] << ' ';
       clog << endl;
+      if (ArgsFileName) {
+	 unlink(ArgsFileName);
+	 free(ArgsFileName);
+      }
       return true;
    }
 
@@ -399,7 +430,15 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
       if (errno == EINTR)
 	  continue;
       RunScripts("RPM::Post-Invoke");
+      if (ArgsFileName) {
+	 unlink(ArgsFileName);
+	 free(ArgsFileName);
+      }
       return _error->Errno("waitpid","Couldn't wait for subprocess");
+   }
+   if (ArgsFileName) {
+      unlink(ArgsFileName);
+      free(ArgsFileName);
    }
 
    // Restore sig int/quit
