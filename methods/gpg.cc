@@ -2,6 +2,7 @@
 #include <apt-pkg/error.h>
 #include <apt-pkg/acquire-method.h>
 #include <apt-pkg/strutl.h>
+#include <apt-pkg/fileutl.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -345,9 +346,9 @@ bool GPGMethod::Fetch(FetchItem *Itm)
    const char *SysTempDir;
 
    SysTempDir = getenv("TMPDIR");
-   if (SysTempDir == NULL) {
+   if (SysTempDir == NULL || !FileExists(SysTempDir)) {
       SysTempDir = getenv("TMP");
-      if (SysTempDir == NULL)
+      if (SysTempDir == NULL || !FileExists(SysTempDir))
          SysTempDir = "/tmp";
    }
    if (makeTmpDir(SysTempDir, TempDir) == false)

@@ -8,7 +8,6 @@
    ##################################################################### */
 									/*}}}*/
 // Include Files							/*{{{*/
-#include <apti18n.h>
 #include <apt-pkg/acquire-method.h>
 #include <apt-pkg/cdromutl.h>
 #include <apt-pkg/error.h>
@@ -19,6 +18,10 @@
 #include <unistd.h>
 
 #include <iostream>
+
+// CNC:2003-02-20 - Moved header to fix compilation error when
+// 		    --disable-nls is used.
+#include <apti18n.h>
 									/*}}}*/
 // CNC:2002-10-18
 #include <utime.h>  

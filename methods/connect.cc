@@ -11,7 +11,6 @@
    ##################################################################### */
 									/*}}}*/
 // Include Files							/*{{{*/
-#include <apti18n.h>
 #include "connect.h"
 #include <apt-pkg/error.h>
 #include <apt-pkg/fileutl.h>
@@ -25,6 +24,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
+// CNC:2003-02-20 - Moved header to fix compilation error when
+// 		    --disable-nls is used.
+#include <apti18n.h>
 
 #include "rfc2553emu.h"
 									/*}}}*/

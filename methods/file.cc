@@ -13,12 +13,15 @@
    ##################################################################### */
 									/*}}}*/
 // Include Files							/*{{{*/
-#include <apti18n.h>
 #include <apt-pkg/acquire-method.h>
 #include <apt-pkg/error.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
+
+// CNC:2003-02-20 - Moved header to fix compilation error when
+// 		    --disable-nls is used.
+#include <apti18n.h>
 									/*}}}*/
 
 class FileMethod : public pkgAcqMethod
