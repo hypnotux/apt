@@ -693,9 +693,10 @@ inline int AptAux_PushBool(lua_State *L, bool Value)
    return 0;
 }
 
-#define MARK_KEEP    0
-#define MARK_INSTALL 1
-#define MARK_REMOVE  2
+#define MARK_KEEP      0
+#define MARK_INSTALL   1
+#define MARK_REINSTALL 2
+#define MARK_REMOVE    3
 
 static int AptAux_mark(lua_State *L, int Kind)
 {
@@ -717,6 +718,9 @@ static int AptAux_mark(lua_State *L, int Kind)
 	    break;
 	 case MARK_INSTALL:
 	    DepCache->MarkInstall(PkgI);
+	    break;
+	 case MARK_REINSTALL:
+	    DepCache->SetReInstall(PkgI, true);
 	    break;
 	 case MARK_REMOVE:
 	    Fix->Remove(PkgI);
@@ -1120,6 +1124,12 @@ static int AptLua_markinstall(lua_State *L)
    return AptAux_mark(L, MARK_INSTALL);
 }
 
+static int AptLua_markreinstall(lua_State *L)
+{
+   _config->Set("Apt::Get::ReInstall", true);
+   return AptAux_mark(L, MARK_REINSTALL);
+}
+
 static int AptLua_markremove(lua_State *L)
 {
    return AptAux_mark(L, MARK_REMOVE);
@@ -1374,6 +1384,7 @@ static const luaL_reg aptlib[] = {
    {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
    {"markinstall",	AptLua_markinstall},
+   {"markreinstall",	AptLua_markreinstall},
    {"markremove",	AptLua_markremove},
    {"markdistupgrade",  AptLua_markdistupgrade},
    {"markupgrade",	AptLua_markupgrade},
