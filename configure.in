@@ -38,49 +38,58 @@ dnl if test "$PTHREADLIB" != "-lpthread"; then
 dnl   AC_MSG_ERROR(failed: I need posix threads, pthread)
 dnl fi
 
-dnl Check for rpm version
-AH_TEMPLATE(HAVE_RPM, [Define to 1 if RPM is available])
-AH_TEMPLATE(HAVE_RPM4, [Define to 1 if RPM >= 4 is available])
-AH_TEMPLATE(HAVE_RPM41, [Define to 1 if RPM >= 4.1 is available])
-AH_TEMPLATE(HAVE_RPM421, [Define to 1 if RPM >= 4.2.1 is available])
-rpm_version="none"
-AC_CHECK_HEADERS(db1/db.h)
-CPPFLAGS="$CPPFLAGS -I/usr/include/rpm"
-AC_CHECK_HEADER(rpm/rpmlib.h,
-[
-   AC_CHECK_LIB(rpmdb,rpmdbOpen,
-     [RPMDBLIBS="-lrpmdb"],
-     [RPMDBLIBS="-ldb-3.1"],
-     [-lrpm -lrpmio -lz -lbz2 -lpopt])
+dnl Check for RPM executable path
+AC_PATH_PROG(RPM_PATH,rpm,none)
+if test "$RPM_PATH" = "none"; then
+   AC_MSG_ERROR([RPM executable was not found in your system])
+else
+   AC_DEFINE_UNQUOTED([HAVE_RPM],1,[Define if RPM backend is available])
 
-   AC_CHECK_LIB(rpm,rpmdbGetIteratorOffset,
-     [AC_DEFINE_UNQUOTED(HAVE_RPM, 1)
-      AC_DEFINE_UNQUOTED(HAVE_RPM4, 1)
+   dnl Check for RPM version
+   AC_MSG_CHECKING(for RPM version)
+   RPM_VERSION_RAW=`LANG= LC_ALL= $RPM_PATH --version | sed 's/^RPM version //'`
+   RPM_VERSION_MAJOR=`echo $RPM_VERSION_RAW | cut -d. -f1`
+   RPM_VERSION_MINOR=`echo $RPM_VERSION_RAW | cut -d. -f2`
+   RPM_VERSION_MICRO=`echo $RPM_VERSION_RAW | cut -d. -f3`
+   if test -z "$RPM_VERSION_MAJOR" -o -z "$RPM_VERSION_MINOR"; then
+      AC_MSG_ERROR([can't parse RPM version])
+   fi
+   if test -z "$RPM_VERSION_MICRO"; then
+      RPM_VERSION_MICRO=0
+   fi
+   AC_DEFINE_UNQUOTED([RPM_VERSION_MAJOR],$RPM_VERSION_MAJOR,[RPM major version])
+   AC_DEFINE_UNQUOTED([RPM_VERSION_MINOR],$RPM_VERSION_MINOR,[RPM minor version])
+   AC_DEFINE_UNQUOTED([RPM_VERSION_MICRO],$RPM_VERSION_MICRO,[RPM micro version])
+   AC_DEFINE_UNQUOTED([RPM_VERSION],
+      [((RPM_VERSION_MAJOR<<16)|(RPM_VERSION_MINOR<<8)|RPM_VERSION_MICRO)],
+      [Define to the RPM version])
+   AC_DEFINE_UNQUOTED([RPM_VERSION_RAW],"$RPM_VERSION_RAW",[RPM raw version])
+   AC_MSG_RESULT($RPM_VERSION_RAW)
+
+   dnl Check for RPM libraries and headers
+
+   AC_CHECK_LIB(bz2,BZ2_bzopen, [],
+		[AC_MSG_ERROR([Can't find libbz2 library])])
+   AC_CHECK_LIB(z,gzopen, [],
+		[AC_MSG_ERROR([Can't find libz library])])
+   AC_CHECK_HEADERS(db1/db.h)
+
+   CPPFLAGS="$CPPFLAGS -I/usr/include/rpm"
+   AC_CHECK_HEADER(rpm/rpmlib.h, [],
+		   [AC_MSG_ERROR([Can't find rpmlib.h])])
+
+   if test $RPM_VERSION_MAJOR -lt 4; then
+      RPMLIBS="-lrpm -lz -lbz2 -lpopt"
+   else
+      AC_CHECK_LIB(rpmdb,rpmdbOpen,
+         [RPMDBLIBS="-lrpmdb"],
+         [RPMDBLIBS="-ldb-3.1"],
+         [-lrpm -lrpmio -lz -lbz2 -lpopt])
       RPMLIBS="-lrpm $RPMDBLIBS -lrpmio -lz -lbz2 -lpopt"
-      AC_CHECK_LIB(rpm, rpmtsUpdateDSI,
-     	      [AC_DEFINE_UNQUOTED(HAVE_RPM41, 1)
-     			AC_CHECK_LIB(rpm, rpmtsOp,
-	      			[AC_DEFINE_UNQUOTED(HAVE_RPM421, 1)
-	       			 rpm_version="4.2.1"],
-     	       			[rpm_version="4.1"])
-			],
-     	      [rpm_version="4.0.X"],
-	      [$RPMLIBS])
-     ],
-     [AC_CHECK_LIB(rpm,rpmdbFirstRecNum,
-              [AC_DEFINE_UNQUOTED(HAVE_RPM, 1) 
-               RPMLIBS="-lrpm -ldb1 -lz -lbz2 -lpopt"
-               rpm_version="3"],,
-	      [-ldb1 -lz -lbz2 -lpopt])
-     ],
-     [$RPMDBLIBS -lrpmio -lz -lbz2 -lpopt])
-
+   fi
+   AC_MSG_CHECKING(for RPM libraries)
+   AC_MSG_RESULT($RPMLIBS)
    AC_SUBST(RPMLIBS)
-])
-AC_MSG_CHECKING(for RPM version)
-AC_MSG_RESULT($rpm_version)
-if test "$rpm_version" = "none"; then
-   AC_MSG_ERROR([No RPM version for development was found in your system.])
 fi
 
 dnl Can we use g++ hash_map?

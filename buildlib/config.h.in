@@ -84,6 +84,12 @@
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
 
+/* Define to 1 if you have the `bz2' library (-lbz2). */
+#undef HAVE_LIBBZ2
+
+/* Define to 1 if you have the `z' library (-lz). */
+#undef HAVE_LIBZ
+
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
@@ -114,17 +120,8 @@
 /* Define to 1 if you have the `putenv' function. */
 #undef HAVE_PUTENV
 
-/* Define to 1 if RPM is available */
+/* Define if RPM backend is available */
 #undef HAVE_RPM
-
-/* Define to 1 if RPM >= 4 is available */
-#undef HAVE_RPM4
-
-/* Define to 1 if RPM >= 4.1 is available */
-#undef HAVE_RPM41
-
-/* Define to 1 if RPM >= 4.2.1 is available */
-#undef HAVE_RPM421
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
@@ -229,6 +226,21 @@
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 #undef PRI_MACROS_BROKEN
 
+/* Define to the RPM version */
+#undef RPM_VERSION
+
+/* RPM major version */
+#undef RPM_VERSION_MAJOR
+
+/* RPM micro version */
+#undef RPM_VERSION_MICRO
+
+/* RPM minor version */
+#undef RPM_VERSION_MINOR
+
+/* RPM raw version */
+#undef RPM_VERSION_RAW
+
 /* The size of a `char', as computed by sizeof. */
 #undef SIZEOF_CHAR
 
@@ -244,9 +256,9 @@
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
-        STACK_DIRECTION > 0 => grows toward higher addresses
-        STACK_DIRECTION < 0 => grows toward lower addresses
-        STACK_DIRECTION = 0 => direction of growth unknown */
+	STACK_DIRECTION > 0 => grows toward higher addresses
+	STACK_DIRECTION < 0 => grows toward lower addresses
+	STACK_DIRECTION = 0 => direction of growth unknown */
 #undef STACK_DIRECTION
 
 /* Define to 1 if you have the ANSI C header files. */
@@ -268,9 +280,11 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define as `__inline' if that's what the C compiler calls it, or to nothing
-   if it is not supported. */
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
 #undef inline
+#endif
 
 /* Define to `long' if <sys/types.h> does not define. */
 #undef off_t

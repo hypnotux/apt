@@ -37,7 +37,7 @@
 #include <rpm/rpmlib.h>
 #include <assert.h>
 									/*}}}*/
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040201
 extern int _rpmds_nopromote;
 #endif
 
@@ -180,7 +180,7 @@ bool rpmSystem::Initialize(Configuration &Cnf)
 	 Cnf.Set("RPM::Options::", "--nodeps");
    }
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040201
    const char *RPMOptions[] =
    {
       "RPM::Options",

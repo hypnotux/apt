@@ -29,7 +29,7 @@
 
 #include <rpm/rpmlib.h>
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmds.h>
 #endif
 
@@ -389,7 +389,7 @@ bool rpmListParser::ParseDepends(pkgCache::VerIterator Ver,
       
       if (namel[i][0] == 'r' && strncmp(namel[i], "rpmlib", 6) == 0) 
       {
-#ifdef HAVE_RPM41	
+#if RPM_VERSION >= 0x040100
 	 rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
 			        namel[i], verl?verl[i]:NULL, flagl[i]);
 	 int res = rpmCheckRpmlibProvides(ds);

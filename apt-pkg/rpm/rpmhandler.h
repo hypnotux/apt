@@ -103,12 +103,12 @@ class RPMDBHandler : public RPMHandler
 {
    protected:
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rpmts Handler;
 #else
    rpmdb Handler;
 #endif
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    rpmdbMatchIterator RpmIter;
 #endif
    bool WriteLock;
@@ -139,7 +139,7 @@ class RPMDirHandler : public RPMHandler
    string sFileName;
    string sFilePath;
 
-#ifdef HAVE_RPM41   
+#if RPM_VERSION >= 0x040100
    rpmts TS;
 #endif
 

@@ -12,10 +12,10 @@
 #define PKGLIB_rpmPM_H
 
 #include <rpm/rpmlib.h>
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
 #endif
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
 #include <rpm/rpmcli.h>
 #endif
 									/*}}}*/
@@ -85,7 +85,7 @@ class pkgRPMExtPM : public pkgRPMPM
 class pkgRPMLibPM : public pkgRPMPM
 {
    protected:
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rpmts TS;
 #else
    rpmTransactionSet TS;

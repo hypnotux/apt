@@ -27,7 +27,7 @@
 
 #include <apti18n.h>
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmds.h>
 #endif
 
@@ -436,7 +436,7 @@ bool rpmSrcRecordParser::BuildDepends(vector<pkgSrcRecords::Parser::BuildDepRec>
       {
 	 if (strncmp(namel[i], "rpmlib", 6) == 0) 
 	 {
-#ifdef HAVE_RPM41	
+#if RPM_VERSION >= 0x040100
 	    rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
 				   namel[i], verl?verl[i]:NULL, flagl[i]);
 	    int res = rpmCheckRpmlibProvides(ds);

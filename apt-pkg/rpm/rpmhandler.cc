@@ -27,7 +27,7 @@
 
 #include <apti18n.h>
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
 #include <rpm/rpmdb.h>
 #define rpmxxInitIterator(a,b,c,d) rpmtsInitIterator(a,(rpmTag)b,c,d)
@@ -152,7 +152,7 @@ bool RPMSingleFileHandler::Skip()
       HeaderP = NULL;
       return false;
    }
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rpmts TS = rpmtsCreate();
    int rc = rpmReadPackageFile(TS, FD, sFilePath.c_str(), &HeaderP);
    if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY) {
@@ -216,7 +216,7 @@ RPMDirHandler::RPMDirHandler(string DirName)
    while (nextFileName() != NULL)
       iSize += 1;
    rewinddir(Dir);
-#ifdef HAVE_RPM41   
+#if RPM_VERSION >= 0x040100
    TS = rpmtsCreate();
 #endif
 }
@@ -250,7 +250,7 @@ RPMDirHandler::~RPMDirHandler()
 {
    if (HeaderP != NULL)
       headerFree(HeaderP);
-#ifdef HAVE_RPM41	 
+#if RPM_VERSION >= 0x040100
    rpmtsFree(TS);
 #endif
    if (Dir != NULL)
@@ -274,7 +274,7 @@ bool RPMDirHandler::Skip()
       FD_t FD = Fopen(sFilePath.c_str(), "r");
       if (FD == NULL)
 	 continue;
-#ifdef HAVE_RPM41	 
+#if RPM_VERSION >= 0x040100
       int rc = rpmReadPackageFile(TS, FD, fname, &HeaderP);
       Fclose(FD);
       if (rc != RPMRC_OK
@@ -357,10 +357,10 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    stat(DataPath(false).c_str(), &St);
    DbFileMtime = St.st_mtime;
 
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    RpmIter = NULL;
 #endif
-#ifdef HAVE_RPM41   
+#if RPM_VERSION >= 0x040100
    Handler = rpmtsCreate();
    if (!Dir.empty())
       rpmtsSetRootDir(Handler, Dir.c_str());
@@ -411,7 +411,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 
 RPMDBHandler::~RPMDBHandler()
 {
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
       return;
    rpmdbFreeIterator(RpmIter);
@@ -421,7 +421,7 @@ RPMDBHandler::~RPMDBHandler()
        headerFree(HeaderP);
 #endif
 
-#ifdef HAVE_RPM41   
+#if RPM_VERSION >= 0x040100
    rpmtsFree(Handler);
 #else
    rpmdbClose(Handler);
@@ -443,7 +443,7 @@ string RPMDBHandler::DataPath(bool DirectoryOnly)
    string DBPath(_config->Find("RPM::RootDir")+tmp);
    free(tmp);
 
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (rpmExpandNumeric("%{_dbapi}") >= 3)
       File = "Packages";       
 #endif
@@ -455,7 +455,7 @@ string RPMDBHandler::DataPath(bool DirectoryOnly)
 
 bool RPMDBHandler::Skip()
 {
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
        return false;
    HeaderP = rpmdbNextIterator(RpmIter);
@@ -482,7 +482,7 @@ bool RPMDBHandler::Skip()
 bool RPMDBHandler::Jump(unsigned int Offset)
 {
    iOffset = Offset;
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
       return false;
    rpmdbFreeIterator(RpmIter);
@@ -500,7 +500,7 @@ bool RPMDBHandler::Jump(unsigned int Offset)
 
 void RPMDBHandler::Rewind()
 {
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
       return;
    rpmdbFreeIterator(RpmIter);   

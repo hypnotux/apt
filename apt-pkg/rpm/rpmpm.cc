@@ -34,14 +34,14 @@
 #include <stdio.h>
 #include <iostream>
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmdb.h>
 #define packagesTotal rpmcliPackagesTotal 
 #else
 #define rpmpsPrint(a,b) rpmProblemSetPrint(a,b)
 #define rpmpsFree(a) rpmProblemSetFree(a)
 #define rpmReadPackageFile(a,b,c,d) rpmReadPackageHeader(b,d,0,NULL,NULL)
-#ifndef HAVE_RPM4
+#if RPM_VERSION < 0x040000
 #define rpmtransFlags int
 #define rpmprobFilterFlags int
 #include "rpmshowprogress.h"
@@ -498,7 +498,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
     
    bool FilesInArgs = true;
    char *ArgsFileName = NULL;
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
    if (op != Item::RPMErase && files.size() > 50) {
       string FileName = _config->FindDir("Dir::Cache", "/tmp/") +
 			"filelist.XXXXXX";
@@ -671,7 +671,7 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	    fd = Fopen(*I, "r.ufdio");
 	    if (fd == NULL)
 	       _error->Error(_("Failed opening %s"), *I);
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
             rc = rpmReadPackageFile(TS, fd, *I, &hdr);
 	    if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY)
 	       _error->Error(_("Failed reading file %s"), *I);
@@ -690,9 +690,9 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	    break;
 
 	 case Item::RPMErase:
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
             rpmdbMatchIterator MI;
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 	    MI = rpmtsInitIterator(TS, (rpmTag)RPMDBI_LABEL, *I, 0);
 #else
 	    MI = rpmdbInitIterator(DB, RPMDBI_LABEL, *I, 0);
@@ -701,7 +701,7 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	    {
 	       unsigned int recOffset = rpmdbGetIteratorOffset(MI);
 	       if (recOffset) {
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 		  rc = rpmtsAddEraseElement(TS, hdr, recOffset);
 #else
 		  rc = rpmtransRemovePackage(TS, recOffset);
@@ -749,7 +749,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       ParseRpmOpts("RPM::Install-Options", &tsFlags, &probFilter);
    ParseRpmOpts("RPM::Options", &tsFlags, &probFilter);
 
-#ifdef HAVE_RPM41   
+#if RPM_VERSION >= 0x040100
    rpmps probs;
    TS = rpmtsCreate();
    // 4.1 needs this always set even if NULL,
@@ -797,7 +797,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    // Setup the gauge used by rpmShowProgress.
    packagesTotal = install.size()+upgrade.size();
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rc = rpmtsCheck(TS);
    probs = rpmtsProblems(TS);
    if (rc || probs->numProblems > 0) {
@@ -807,7 +807,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       goto exit;
    }
 #else
-#ifndef HAVE_RPM4
+#if RPM_VERSION < 0x040000
    rpmDependencyConflict *conflicts;
 #else
    rpmDependencyConflict conflicts;
@@ -826,7 +826,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 #endif
 
    rc = 0;
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    if (_config->FindB("RPM::Order", true) == true)
       rc = rpmtsOrder(TS);
 #else
@@ -841,7 +841,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
    cout << _("Committing changes...") << endl << flush;
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    probFilter |= rpmtsFilterFlags(TS);
    rpmtsSetFlags(TS, (rpmtransFlags)(rpmtsFlags(TS) | tsFlags));
    rpmtsClean(TS);
@@ -869,7 +869,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
 exit:
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rpmtsFree(TS);
 #else
    rpmdbClose(DB);
@@ -901,13 +901,13 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_ALLFILES;
 	 else if (Opts->Value == "--justdb")
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
 	 else if (Opts->Value == "--nomd5")
 	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
 	 else if (Opts->Value == "--repackage")
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 #endif
-#ifdef HAVE_RPM421
+#if RPM_VERSION >= 0x040201
 	 else if (Opts->Value == "--noconfigs" ||
 	          Opts->Value == "--excludeconfigs")
 	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
@@ -924,7 +924,7 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	 else if (Opts->Value == "--ignoresize")
 	 {
 	    *probFilter |= RPMPROB_FILTER_DISKSPACE;
-#ifdef HAVE_RPM4
+#if RPM_VERSION >= 0x040000
 	    *probFilter |= RPMPROB_FILTER_DISKNODES;
 #endif
 	 }

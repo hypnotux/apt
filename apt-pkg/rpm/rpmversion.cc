@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
 #include <rpm/rpmds.h>
 #endif
 
@@ -75,7 +75,7 @@ void rpmVersioningSystem::ParseVersion(const char *V, const char *VEnd,
    }
    else
    {
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
       epoch = "0";
 #endif
       version = evr;
@@ -198,7 +198,7 @@ bool rpmVersioningSystem::CheckDep(const char *PkgVer,
       break;
    }
 
-#ifdef HAVE_RPM41
+#if RPM_VERSION >= 0x040100
    rpmds pds = rpmdsSingle(RPMTAG_PROVIDENAME, "", PkgVer, PkgFlags);
    rpmds dds = rpmdsSingle(RPMTAG_REQUIRENAME, "", DepVer, DepFlags);
    rpmdsSetNoPromote(pds, _rpmds_nopromote);

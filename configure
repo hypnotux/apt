@@ -468,7 +468,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE LN_S ECHO RANLIB ac_ct_RANLIB CPP EGREP LIBTOOL CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE SOCKETLIBS PTHREADLIB RPMLIBS WITH_LUA_TRUE WITH_LUA_FALSE COMPILE_APTSHELL_TRUE COMPILE_APTSHELL_FALSE NEED_INTTYPES_H_TRUE NEED_INTTYPES_H_FALSE NEED_STATVFS_H_TRUE NEED_STATVFS_H_FALSE HAVE_TIMEGM NEED_SOCKLEN_T_DEFINE NEED_NETDB_H_TRUE NEED_NETDB_H_FALSE DOCBOOK2MAN COMPILE_MANPAGES_TRUE COMPILE_MANPAGES_FALSE MKINSTALLDIRS MSGFMT GMSGFMT XGETTEXT MSGMERGE ALLOCA GLIBC21 LIBICONV LTLIBICONV INTLBISON USE_NLS BUILD_INCLUDED_LIBINTL USE_INCLUDED_LIBINTL CATOBJEXT INTLOBJS DATADIRNAME INSTOBJEXT GENCAT INTL_LIBTOOL_SUFFIX_PREFIX INTLLIBS LIBINTL LTLIBINTL POSUB GLIBC_VER LIBSTDCPP_VER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE LN_S ECHO RANLIB ac_ct_RANLIB CPP EGREP LIBTOOL CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE SOCKETLIBS PTHREADLIB RPM_PATH RPMLIBS WITH_LUA_TRUE WITH_LUA_FALSE COMPILE_APTSHELL_TRUE COMPILE_APTSHELL_FALSE NEED_INTTYPES_H_TRUE NEED_INTTYPES_H_FALSE NEED_STATVFS_H_TRUE NEED_STATVFS_H_FALSE HAVE_TIMEGM NEED_SOCKLEN_T_DEFINE NEED_NETDB_H_TRUE NEED_NETDB_H_FALSE DOCBOOK2MAN COMPILE_MANPAGES_TRUE COMPILE_MANPAGES_FALSE MKINSTALLDIRS MSGFMT GMSGFMT XGETTEXT MSGMERGE ALLOCA GLIBC21 LIBICONV LTLIBICONV INTLBISON USE_NLS BUILD_INCLUDED_LIBINTL USE_INCLUDED_LIBINTL CATOBJEXT INTLOBJS DATADIRNAME INSTOBJEXT GENCAT INTL_LIBTOOL_SUFFIX_PREFIX INTLLIBS LIBINTL LTLIBINTL POSUB GLIBC_VER LIBSTDCPP_VER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -10020,13 +10020,256 @@ LIBS="$SAVE_LIBS"
 
 
 
+# Extract the first word of "rpm", so it can be a program name with args.
+set dummy rpm; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_RPM_PATH+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $RPM_PATH in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_RPM_PATH="$RPM_PATH" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_RPM_PATH="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_RPM_PATH" && ac_cv_path_RPM_PATH="none"
+  ;;
+esac
+fi
+RPM_PATH=$ac_cv_path_RPM_PATH
+
+if test -n "$RPM_PATH"; then
+  echo "$as_me:$LINENO: result: $RPM_PATH" >&5
+echo "${ECHO_T}$RPM_PATH" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test "$RPM_PATH" = "none"; then
+   { { echo "$as_me:$LINENO: error: RPM executable was not found in your system" >&5
+echo "$as_me: error: RPM executable was not found in your system" >&2;}
+   { (exit 1); exit 1; }; }
+else
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_RPM 1
+_ACEOF
+
+
+      echo "$as_me:$LINENO: checking for RPM version" >&5
+echo $ECHO_N "checking for RPM version... $ECHO_C" >&6
+   RPM_VERSION_RAW=`LANG= LC_ALL= $RPM_PATH --version | sed 's/^RPM version //'`
+   RPM_VERSION_MAJOR=`echo $RPM_VERSION_RAW | cut -d. -f1`
+   RPM_VERSION_MINOR=`echo $RPM_VERSION_RAW | cut -d. -f2`
+   RPM_VERSION_MICRO=`echo $RPM_VERSION_RAW | cut -d. -f3`
+   if test -z "$RPM_VERSION_MAJOR" -o -z "$RPM_VERSION_MINOR"; then
+      { { echo "$as_me:$LINENO: error: can't parse RPM version" >&5
+echo "$as_me: error: can't parse RPM version" >&2;}
+   { (exit 1); exit 1; }; }
+   fi
+   if test -z "$RPM_VERSION_MICRO"; then
+      RPM_VERSION_MICRO=0
+   fi
+
+cat >>confdefs.h <<_ACEOF
+#define RPM_VERSION_MAJOR $RPM_VERSION_MAJOR
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define RPM_VERSION_MINOR $RPM_VERSION_MINOR
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define RPM_VERSION_MICRO $RPM_VERSION_MICRO
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define RPM_VERSION ((RPM_VERSION_MAJOR<<16)|(RPM_VERSION_MINOR<<8)|RPM_VERSION_MICRO)
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define RPM_VERSION_RAW "$RPM_VERSION_RAW"
+_ACEOF
+
+   echo "$as_me:$LINENO: result: $RPM_VERSION_RAW" >&5
+echo "${ECHO_T}$RPM_VERSION_RAW" >&6
 
 
 
+echo "$as_me:$LINENO: checking for BZ2_bzopen in -lbz2" >&5
+echo $ECHO_N "checking for BZ2_bzopen in -lbz2... $ECHO_C" >&6
+if test "${ac_cv_lib_bz2_BZ2_bzopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lbz2  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char BZ2_bzopen ();
+int
+main ()
+{
+BZ2_bzopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_bz2_BZ2_bzopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_bz2_BZ2_bzopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_bz2_BZ2_bzopen" >&5
+echo "${ECHO_T}$ac_cv_lib_bz2_BZ2_bzopen" >&6
+if test $ac_cv_lib_bz2_BZ2_bzopen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBBZ2 1
+_ACEOF
+
+  LIBS="-lbz2 $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: Can't find libbz2 library" >&5
+echo "$as_me: error: Can't find libbz2 library" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
+echo "$as_me:$LINENO: checking for gzopen in -lz" >&5
+echo $ECHO_N "checking for gzopen in -lz... $ECHO_C" >&6
+if test "${ac_cv_lib_z_gzopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lz  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 
-rpm_version="none"
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char gzopen ();
+int
+main ()
+{
+gzopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_z_gzopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_z_gzopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_z_gzopen" >&5
+echo "${ECHO_T}$ac_cv_lib_z_gzopen" >&6
+if test $ac_cv_lib_z_gzopen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBZ 1
+_ACEOF
+
+  LIBS="-lz $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: Can't find libz library" >&5
+echo "$as_me: error: Can't find libz library" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 
 for ac_header in db1/db.h
 do
@@ -10177,8 +10420,9 @@ fi
 
 done
 
-CPPFLAGS="$CPPFLAGS -I/usr/include/rpm"
-if test "${ac_cv_header_rpm_rpmlib_h+set}" = set; then
+
+   CPPFLAGS="$CPPFLAGS -I/usr/include/rpm"
+   if test "${ac_cv_header_rpm_rpmlib_h+set}" = set; then
   echo "$as_me:$LINENO: checking for rpm/rpmlib.h" >&5
 echo $ECHO_N "checking for rpm/rpmlib.h... $ECHO_C" >&6
 if test "${ac_cv_header_rpm_rpmlib_h+set}" = set; then
@@ -10316,8 +10560,19 @@ echo "${ECHO_T}$ac_cv_header_rpm_rpmlib_h" >&6
 
 fi
 if test $ac_cv_header_rpm_rpmlib_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: Can't find rpmlib.h" >&5
+echo "$as_me: error: Can't find rpmlib.h" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
-   echo "$as_me:$LINENO: checking for rpmdbOpen in -lrpmdb" >&5
+
+
+   if test $RPM_VERSION_MAJOR -lt 4; then
+      RPMLIBS="-lrpm -lz -lbz2 -lpopt"
+   else
+      echo "$as_me:$LINENO: checking for rpmdbOpen in -lrpmdb" >&5
 echo $ECHO_N "checking for rpmdbOpen in -lrpmdb... $ECHO_C" >&6
 if test "${ac_cv_lib_rpmdb_rpmdbOpen+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10387,247 +10642,13 @@ else
   RPMDBLIBS="-ldb-3.1"
 fi
 
-
-   echo "$as_me:$LINENO: checking for rpmdbGetIteratorOffset in -lrpm" >&5
-echo $ECHO_N "checking for rpmdbGetIteratorOffset in -lrpm... $ECHO_C" >&6
-if test "${ac_cv_lib_rpm_rpmdbGetIteratorOffset+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lrpm $RPMDBLIBS -lrpmio -lz -lbz2 -lpopt $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char rpmdbGetIteratorOffset ();
-int
-main ()
-{
-rpmdbGetIteratorOffset ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_rpm_rpmdbGetIteratorOffset=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_rpm_rpmdbGetIteratorOffset=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_rpm_rpmdbGetIteratorOffset" >&5
-echo "${ECHO_T}$ac_cv_lib_rpm_rpmdbGetIteratorOffset" >&6
-if test $ac_cv_lib_rpm_rpmdbGetIteratorOffset = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_RPM 1
-_ACEOF
-
-      cat >>confdefs.h <<_ACEOF
-#define HAVE_RPM4 1
-_ACEOF
-
       RPMLIBS="-lrpm $RPMDBLIBS -lrpmio -lz -lbz2 -lpopt"
-      echo "$as_me:$LINENO: checking for rpmtsUpdateDSI in -lrpm" >&5
-echo $ECHO_N "checking for rpmtsUpdateDSI in -lrpm... $ECHO_C" >&6
-if test "${ac_cv_lib_rpm_rpmtsUpdateDSI+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lrpm $RPMLIBS $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
+   fi
+   echo "$as_me:$LINENO: checking for RPM libraries" >&5
+echo $ECHO_N "checking for RPM libraries... $ECHO_C" >&6
+   echo "$as_me:$LINENO: result: $RPMLIBS" >&5
+echo "${ECHO_T}$RPMLIBS" >&6
 
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char rpmtsUpdateDSI ();
-int
-main ()
-{
-rpmtsUpdateDSI ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_rpm_rpmtsUpdateDSI=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_rpm_rpmtsUpdateDSI=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_rpm_rpmtsUpdateDSI" >&5
-echo "${ECHO_T}$ac_cv_lib_rpm_rpmtsUpdateDSI" >&6
-if test $ac_cv_lib_rpm_rpmtsUpdateDSI = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_RPM41 1
-_ACEOF
-
-     	       rpm_version="4.1"
-else
-  rpm_version="4.0.X"
-fi
-
-
-else
-  echo "$as_me:$LINENO: checking for rpmdbFirstRecNum in -lrpm" >&5
-echo $ECHO_N "checking for rpmdbFirstRecNum in -lrpm... $ECHO_C" >&6
-if test "${ac_cv_lib_rpm_rpmdbFirstRecNum+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lrpm -ldb1 -lz -lbz2 -lpopt $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char rpmdbFirstRecNum ();
-int
-main ()
-{
-rpmdbFirstRecNum ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_rpm_rpmdbFirstRecNum=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_rpm_rpmdbFirstRecNum=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_rpm_rpmdbFirstRecNum" >&5
-echo "${ECHO_T}$ac_cv_lib_rpm_rpmdbFirstRecNum" >&6
-if test $ac_cv_lib_rpm_rpmdbFirstRecNum = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_RPM 1
-_ACEOF
-
-               RPMLIBS="-lrpm -ldb1 -lz -lbz2 -lpopt"
-               rpm_version="3"
-fi
-
-
-fi
-
-
-
-
-fi
-
-
-echo "$as_me:$LINENO: checking for RPM version" >&5
-echo $ECHO_N "checking for RPM version... $ECHO_C" >&6
-echo "$as_me:$LINENO: result: $rpm_version" >&5
-echo "${ECHO_T}$rpm_version" >&6
-if test "$rpm_version" = "none"; then
-   { { echo "$as_me:$LINENO: error: No RPM version for development was found in your system." >&5
-echo "$as_me: error: No RPM version for development was found in your system." >&2;}
-   { (exit 1); exit 1; }; }
 fi
 
 
@@ -18095,6 +18116,7 @@ s,@am__fastdepCXX_TRUE@,$am__fastdepCXX_TRUE,;t t
 s,@am__fastdepCXX_FALSE@,$am__fastdepCXX_FALSE,;t t
 s,@SOCKETLIBS@,$SOCKETLIBS,;t t
 s,@PTHREADLIB@,$PTHREADLIB,;t t
+s,@RPM_PATH@,$RPM_PATH,;t t
 s,@RPMLIBS@,$RPMLIBS,;t t
 s,@WITH_LUA_TRUE@,$WITH_LUA_TRUE,;t t
 s,@WITH_LUA_FALSE@,$WITH_LUA_FALSE,;t t
