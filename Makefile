@@ -11,12 +11,13 @@ default: startup all
 
 .PHONY: headers library clean veryclean all binary program doc
 all headers library clean veryclean binary program doc dirs:
+	# CNC:2003-02-15
 	$(MAKE) -C apt-pkg $@
-	$(MAKE) -C apt-inst $@
+	#$(MAKE) -C apt-inst $@
 	$(MAKE) -C methods $@
 	$(MAKE) -C cmdline $@
-	$(MAKE) -C ftparchive $@
-	$(MAKE) -C dselect $@
+	#$(MAKE) -C ftparchive $@
+	#$(MAKE) -C dselect $@
 	$(MAKE) -C doc $@
 	$(MAKE) -C po $@
 	$(MAKE) -C tools $@

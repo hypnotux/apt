@@ -34,17 +34,24 @@ LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-cdrom.cc rpmindexcopy.cc
 include $(PROGRAM_H)
 
+# CNC:2003-02-15
+WITH_APT_SORTPKGS=no
+ifeq ($(WITH_APT_SORTPKGS),yes)
 # The apt-sortpkgs program
 PROGRAM=apt-sortpkgs
 SLIBS = -lapt-pkg
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-sortpkgs.cc
 include $(PROGRAM_H)
+endif
 
-# CNC:2003-02-14
+# CNC:2003-02-15
+WITH_APT_EXTRACTTEMPLATES=no
+ifeq ($(WITH_APT_EXTRACTTEMPLATES),yes)
 # The apt-extracttemplates program
 PROGRAM=apt-extracttemplates
 SLIBS = -lapt-pkg -lapt-inst
 LIB_MAKES = apt-pkg/makefile
 SOURCE = apt-extracttemplates.cc 
 include $(PROGRAM_H)
+endif
