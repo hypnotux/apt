@@ -2114,12 +2114,13 @@ bool DoInstall(CommandLine &CmdL)
 	 if ((*Cache)[I].Install() == false)
 	    continue;
 
-	 const char **J;
-	 for (J = CmdL.FileList + 1; *J != 0; J++)
-	    if (strcmp(*J,I.Name()) == 0)
+	 // CNC:2004-06-15
+	 const char **K;
+	 for (K = CmdL.FileList + 1; *K != 0; K++)
+	    if (strcmp(*K,I.Name()) == 0)
 		break;
 	 
-	 if (*J == 0) {
+	 if (*K == 0) {
 	    List += string(I.Name()) + " ";
         VersionsList += string(Cache[I].CandVersion) + "\n";
      }
