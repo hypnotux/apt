@@ -3078,6 +3078,15 @@ int main(int argc,const char *argv[])
       return 100;
    }
 
+   // See if the help should be shown
+   if (_config->FindB("help") == true ||
+       _config->FindB("version") == true ||
+       CmdL.FileSize() == 0)
+   {
+      ShowHelp(CmdL);
+      return 0;
+   }
+   
    // CNC:2003-11-21
    if (CmdL.FileSize() != 1)
    {
@@ -3102,15 +3111,6 @@ int main(int argc,const char *argv[])
 	 _config->Set("APT::Arguments::", *I);
    }
 
-   // See if the help should be shown
-   if (_config->FindB("help") == true ||
-       _config->FindB("version") == true ||
-       CmdL.FileSize() == 0)
-   {
-      ShowHelp(CmdL);
-      return 0;
-   }
-   
    // Deal with stdout not being a tty
    if (ttyname(STDOUT_FILENO) == 0 && _config->FindI("quiet",0) < 1)
       _config->Set("quiet","1");
