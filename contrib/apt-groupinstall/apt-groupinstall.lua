@@ -5,7 +5,7 @@
 --
 
 helper = confget("Dir::Bin::scripts/f").."/"..confget("Scripts::Groupinstall::Backend")
-helperopts = ""
+helperopts = "-t"
 if confget("Scripts::Groupinstall::Recursive", "false") == "true" then
 	helperopts = helperopts.." -r"
 end
@@ -28,7 +28,7 @@ elseif script_slot == "Scripts::AptGet::Help::Command" then
 elseif script_slot == "Scripts::AptCache::Command" then
 	if command_args[1] == "groupnames" then
 		command_consume = 1
-		os.execute(helper.." "..helperopts.." groupnames")
+		os.execute(helper.." "..helperopts.." --list-tasks")
 	elseif command_args[1] == "showgroup" then
 		command_consume=1
 		numgroups = table.getn(command_args) - 1
@@ -36,11 +36,11 @@ elseif script_slot == "Scripts::AptCache::Command" then
 			apterror(_("No groupname given."))
 			return
 		end
-		group = ""
+		cmd = ""
 		for i = 1, numgroups do
-			group = group.." "..command_args[i+1]
+			cmd = cmd.." --task-desc "..command_args[i+1]
 		end
-		os.execute(helper.." "..helperopts.." showgroup "..group)
+		os.execute(helper.." "..helperopts.." "..cmd)
 	end
 
 elseif script_slot == "Scripts::AptGet::Command" then
@@ -59,13 +59,15 @@ elseif script_slot == "Scripts::AptGet::Command" then
 		apterror(_("No groupname given."))
 		return
 	end
+	cmd = ""
 	group = ""
 	for i = 1, numgroups do
+		cmd = cmd.." --task-packages "..command_args[i+1]
 		group = group.." "..command_args[i+1]
 	end
 
     print(_("Finding packages belonging to group(s) "..group.."..."))
-    pkgs = io.popen(helper.." "..helperopts.." grouppkgs "..group)
+    pkgs = io.popen(helper.." "..helperopts.." "..cmd)
     for name in pkgs:lines() do
 		pkg = pkgfind(name)
 		if pkg then
