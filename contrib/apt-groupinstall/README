@@ -31,6 +31,9 @@ The supplied groupinstall-backend-comps.py is known to work in RHL 8.0, 9,
 RHEL 3 and Fedora Core 1 and 2. Requires python, comps and
 rhpl packages to be installed.
 
+There's also a backend for SuSe called groupinstall-backend-suse by 
+Richard Bos which should work on any recent SuSe system with Yast.
+
 Groupinstall can be made to work on any system where package group
 data is available in some parseable format. You'll just need to write your
 own backend for it, providing the following three operations

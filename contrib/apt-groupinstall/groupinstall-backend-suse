@@ -1,0 +1,191 @@
+#!/bin/sh
+##################################################################
+#
+# Copyright (C) 2004 R Bos
+#
+# File:           $RCSfile: groupinstall-backend-suse,v $
+# Revision:       $Revision: 1.3 $
+# Last change:    $Date: 2004/06/24 19:48:42 $
+#
+# Send suggestions to: apt4rpm-devel@lists.sourceforge.net
+# Homepage: http://apt4rpm.sourceforge.net
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# For a copy of the GNU General Public License, visit
+# http://www.gnu.org or write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+##################################################################
+
+# This backend is to be used with apt.  The latter must be configured
+# for the apt options: groupnames, showgroup, groupinstall and groupremove.
+PATH=/bin:/usr/bin
+
+# Some more information about the *.sel files directory can be found in 
+# the suse package: yast2-packagemanager.
+# The file is src/inst/InstSrcManager.cc
+SEL_LOC=/var/adm/YaST/InstSrcManager/IS_CACHE_0x00000001/DATA/descr
+
+function get_summary
+{
+	FILE=$SEL_LOC/$1.sel
+	if [ -r $FILE ]; then
+		grep "^=Sum:" $SEL_LOC/$1.sel | cut -d: -f2 | sed 's,^ ,,'
+	fi
+}
+
+function get_req
+{
+	FILE=$SEL_LOC/$1.sel
+	if [ -r $FILE ]; then
+		awk '{
+			if ( $1 == "-Req:" ) prt = "no"
+			if ( prt == "yes" ) print $1
+			if ( $1 == "+Req:" ) prt = "yes"
+
+		}' $FILE
+	fi
+}
+
+function get_rec
+{
+	FILE=$SEL_LOC/$1.sel
+	if [ -r $FILE ]; then
+		awk '{
+			if ( $1 == "-Rec:" ) prt = "no"
+			if ( prt == "yes" ) print $1
+			if ( $1 == "+Rec:" ) prt = "yes"
+
+		}' $FILE
+	fi
+}
+
+function get_req_and_rec
+{
+	local GRP
+
+	for GRP in $@; do
+		FILE=$SEL_LOC/$GRP.sel
+		if [ -r $FILE ]; then
+			awk '{
+				if ( $1 == "-Req:" || $1 == "-Rec:" ) prt = "no"
+				if ( prt == "yes" ) print $1
+				if ( $1 == "+Req:" || $1 == "+Rec:" ) prt = "yes"
+
+			}' $FILE
+		fi
+	done
+}
+
+function get_pkgs
+{
+	local GRP
+
+	for GRP in $@; do
+		FILE=$SEL_LOC/$GRP.sel
+		if [ -r $FILE ]; then
+			awk '{
+				if ( $1 == "-Ins:" ) prt = "no"
+				if ( prt == "yes" ) print $1
+				if ( $1 == "+Ins:" ) prt = "yes"
+
+			}' $FILE
+		fi
+	done
+}
+
+function groupnames
+{
+ 	cd $SEL_LOC
+	GRPS=$(ls $SEL_LOC/*sel | sed -e 's,^.*/,,' -e s,\.sel$,,)
+	for GRP in $GRPS; do
+		SUMMARY=$(get_summary $GRP)
+		printf "%-18s %s\n" "$GRP" "$SUMMARY"
+	done
+}
+
+function showgroup
+{
+	typeset -i NUM
+	shift
+	GRPS=$@
+
+	local GRP
+	typeset -i NUM
+
+	NUM=1
+	for GRP in $GRPS; do
+		[ $NUM -gt 1 ] && echo
+		echo "Group: $GRP"
+		echo "Summary: $(get_summary $GRP)"
+		REQ=$(get_req $GRP)
+		if [[ -n "$REQ" ]]; then
+			echo "Required groups:"
+			echo "$REQ" | sed 's/^/  /'
+		fi
+		REC=$(get_rec $GRP)
+		if [[ -n "$REC" ]]; then
+			echo "Recommendend groups:"
+			echo "$REC" | sed 's/^/  /'
+		fi
+		echo "Packages:" 
+		get_pkgs $GRP | sed 's/^/  /'
+
+		NUM=$((NUM + 1))
+	done
+}
+
+function involved_groups
+{
+
+	shift
+	ALL_GRPS="$@"
+	REQUIRED_GRPS="$(get_req_and_rec $ALL_GRPS)"
+
+	ALL_GRPS="$ALL_GRPS $REQUIRED_GRPS"
+
+	# Use a recursive method to find all involved groups.
+	# NUM is used to prevent a runaway loop.  Normally the most
+	# extensive dependencies are resolved in 5 iterations.
+	typeset -i NUM=1
+	while [[ -n "$REQUIRED_GRPS" && $NUM -lt 7 ]]; do
+
+		unset LOOP_REQS
+		for GRP in $REQUIRED_GRPS; do
+			if [[ -z "$LOOP_REQS" ]]; then
+				LOOP_REQS="$(get_req_and_rec $GRP)"
+			else
+				LOOP_REQS="$LOOP_REQS $(get_req_and_rec $GRP)"
+			fi
+		done
+
+		ALL_GRPS="$ALL_GRPS $LOOP_REQS"
+		REQUIRED_GRPS="$LOOP_REQS"
+
+		NUM=$(($NUM + 1))
+	done
+
+	echo $ALL_GRPS | tr " " "\n" | sort -u
+}
+
+case $1 in
+groupnames)
+	groupnames 
+	;;
+showgroup)
+	showgroup $@
+	;;
+grouppkgs)
+	get_pkgs $(involved_groups $@)
+	;;
+esac
+
