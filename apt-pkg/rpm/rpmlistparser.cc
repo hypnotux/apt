@@ -130,13 +130,13 @@ string rpmListParser::Package()
    /*
     * If this package can have multiple versions installed at
     * the same time, then we make it so that the name of the
-    * package is NAME+"#"+VERSION+"@"+ARCH and also adds a provides
+    * package is NAME+"#"+VERSION and also adds a provides
     * with the original name and version, to satisfy the 
     * dependencies.
     */
    if (DupOk == true)
    {
-      Name += "#"+Version()+"@"+Architecture();
+      Name += "#"+Version();
       Duplicated = true;
    } 
    else if (DupPackages != NULL)
