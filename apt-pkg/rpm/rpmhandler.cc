@@ -424,9 +424,7 @@ RPMDBHandler::~RPMDBHandler()
 
    if (Handler != NULL) {
 #if RPM_VERSION >= 0x040100
-      // This is segfaulting APT on CTRL-C. RPM seems to return
-      // something invalid during rpmtsCreate() in this situation.
-      //rpmtsFree(Handler);
+      rpmtsFree(Handler);
 #else
       rpmdbClose(Handler);
 #endif
