@@ -508,6 +508,10 @@ bool pkgRPMPM::Go()
       _lua->RunScripts("Scripts::RPM::Pre", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
+      if (_error->PendingError() == true) {
+	 Ret = false;
+	 goto exit;
+      }
    }
 #endif
 
@@ -527,14 +531,20 @@ bool pkgRPMPM::Go()
       _lua->RunScripts("Scripts::RPM::Post", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
+      if (_error->PendingError() == true) {
+	 Ret = false;
+	 goto exit;
+      }
    }
 #endif
 
-   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
-      free(*I);
    
    if (Ret == true)
       Ret = RunScripts("RPM::Post-Invoke");
+
+exit:
+   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
+      free(*I);
 
    return Ret;
 }
