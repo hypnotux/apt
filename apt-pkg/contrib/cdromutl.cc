@@ -13,6 +13,11 @@
 #ifdef __GNUG__
 #pragma implementation "apt-pkg/cdromutl.h"
 #endif
+
+// CNC:2004-03-19
+#include <config.h>
+#include <apt-pkg/luaiface.h>
+
 #include <apt-pkg/cdromutl.h>
 #include <apt-pkg/error.h>
 #include <apt-pkg/md5.h>
@@ -65,6 +70,16 @@ bool IsMounted(string &Path)
    leave /etc/mtab inconsitant. We drop all messages this produces. */
 bool UnmountCdrom(string Path)
 {
+// CNC:2004-03-19
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::Cdrom::Umount")) {
+      _lua->SetGlobal("done", false);
+      _lua->RunScripts("Scripts::Cdrom::Umount");
+      if (_lua->GetGlobalBool("done") == true)
+         return true;
+   }
+#endif
+
    if (IsMounted(Path) == false)
       return true;
    
@@ -103,6 +118,16 @@ bool UnmountCdrom(string Path)
 /* We fork mount and drop all messages */
 bool MountCdrom(string Path)
 {
+// CNC:2004-03-19
+#ifdef WITH_LUA
+   if (_lua->HasScripts("Scripts::Cdrom::Mount")) {
+      _lua->SetGlobal("done", false);
+      _lua->RunScripts("Scripts::Cdrom::Mount");
+      if (_lua->GetGlobalBool("done") == true)
+         return true;
+   }
+#endif
+
    if (IsMounted(Path) == true)
       return true;
    
@@ -202,3 +227,4 @@ bool IdentCdrom(string CD,string &Res,unsigned int Version)
    return true;   
 }
 									/*}}}*/
+// vim:sts=3:sw=3

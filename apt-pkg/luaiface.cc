@@ -68,8 +68,6 @@ Lua *_GetLuaObj()
 
 static int luaopen_apt(lua_State *L);
 
-const double Lua::NoGlobalI = INT_MIN;
-
 static int AptLua_vercomp(lua_State *L);
 static int AptLua_pkgcomp(lua_State *L);
 
@@ -500,9 +498,18 @@ double Lua::GetGlobalNum(const char *Name)
 {
    lua_pushstring(L, Name);
    lua_rawget(L, LUA_GLOBALSINDEX);
-   double Ret = NoGlobalI;
+   double Ret = 0;
    if (lua_isnumber(L, -1))
       Ret = lua_tonumber(L, -1);
+   lua_remove(L, -1);
+   return Ret;
+}
+
+bool Lua::GetGlobalBool(const char *Name)
+{
+   lua_pushstring(L, Name);
+   lua_rawget(L, LUA_GLOBALSINDEX);
+   bool Ret = lua_toboolean(L, -1);
    lua_remove(L, -1);
    return Ret;
 }

@@ -11,9 +11,10 @@
 #include <map>
 #include <vector>
 
+#include <apt-pkg/pkgcache.h>
+
 using namespace std;
 
-class pkgCache;
 class pkgDepCache;
 class pkgProblemResolver;
 class lua_State;
@@ -86,11 +87,10 @@ class Lua {
    const char *GetGlobalStr(const char *Name);
    vector<string> GetGlobalStrList(const char *Name);
    double GetGlobalNum(const char *Name);
+   bool GetGlobalBool(const char *Name);
    void *GetGlobalPtr(const char *Name);
    pkgCache::Package *GetGlobalPkg(const char *Name);
    vector<pkgCache::Package*> GetGlobalPkgList(const char *Name);
-
-   static const double NoGlobalI;
 
    void SetDepCache(pkgDepCache *DepCache_);
    void SetCache(pkgCache *Cache_) { Cache = Cache_; };
