@@ -16,7 +16,7 @@ def findgroup(comps, grpname):
 def grouppkgs(comps, grpname, recursive = 0, showall = 0):
 	group = findgroup(comps, grpname)
 	pkgs = []
-	if recursive:
+	if group and recursive:
 		for grp in group.groups:
 			pkgs += grouppkgs(comps, grp, recursive, showall)
 	if group and group.packages:
