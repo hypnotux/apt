@@ -59,7 +59,7 @@ const double Lua::NoGlobalI = INT_MIN;
 Lua::Lua()
       : DepCache(0), Cache(0), Fix(0), DontFix(0)
 {
-   _config->CndSet("Dir::Etc::Scripts", "scripts");
+   _config->CndSet("Dir::Bin::scripts", "/usr/lib/apt/scripts");
 
    const luaL_reg lualibs[] = {
       {"base", luaopen_base},
@@ -101,7 +101,7 @@ bool Lua::RunScripts(const char *ConfListKey, bool CacheChunks)
 
    CacheData Data;
    if (ChunkCache.find(ConfListKey) == ChunkCache.end()) {
-      string File, Dir = _config->FindDir("Dir::Etc::Scripts", "");
+      string File, Dir = _config->FindDir("Dir::Bin::scripts", "");
       Data.Begin = lua_gettop(L)+1;
       const Configuration::Item *Top = _config->Tree(ConfListKey);
       for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next) {
