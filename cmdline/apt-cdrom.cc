@@ -399,7 +399,7 @@ bool WriteDatabase(Configuration &Cnf)
    
    rename(DFile.c_str(),string(DFile + '~').c_str());
    if (rename(NewFile.c_str(),DFile.c_str()) != 0)
-      return _error->Errno("rename","Failed to rename %s.new to %s",
+      return _error->Errno("rename",_("Failed to rename %s.new to %s"),
 			   DFile.c_str(),DFile.c_str());
 
    return true;
@@ -422,14 +422,14 @@ bool WriteSourceList(string Name,vector<string> &List,bool Source)
    ifstream F((FileExists(File)?File.c_str():"/dev/null"),
 	      ios::in );
    if (!F != 0)
-      return _error->Errno("ifstream::ifstream","Opening %s",File.c_str());
+      return _error->Errno("ifstream::ifstream",_("Opening %s"),File.c_str());
 
    string NewFile = File + ".new";
    unlink(NewFile.c_str());
    ofstream Out(NewFile.c_str());
    if (!Out)
       return _error->Errno("ofstream::ofstream",
-			   "Failed to open %s.new",File.c_str());
+			   _("Failed to open %s.new"),File.c_str());
 
    // Create a short uri without the path
    string ShortURI = "cdrom:[" + Name + "]/";   
@@ -523,7 +523,7 @@ bool WriteSourceList(string Name,vector<string> &List,bool Source)
 
    rename(File.c_str(),string(File + '~').c_str());
    if (rename(NewFile.c_str(),File.c_str()) != 0)
-      return _error->Errno("rename","Failed to rename %s.new to %s",
+      return _error->Errno("rename",_("Failed to rename %s.new to %s"),
 			   File.c_str(),File.c_str());
    
    return true;
@@ -568,7 +568,7 @@ bool DoAdd(CommandLine &)
    if (CDROM[0] == '.')
       CDROM= SafeGetCWD() + '/' + CDROM;
    
-   cout << "Using CD-ROM mount point " << CDROM << endl;
+   cout << _("Using CD-ROM mount point ") << CDROM << endl;
       
    // Read the database
    Configuration Database;
@@ -576,7 +576,7 @@ bool DoAdd(CommandLine &)
    if (FileExists(DFile) == true)
    {
       if (ReadConfigFile(Database,DFile) == false)
-	 return _error->Error("Unable to read the cdrom database %s",
+	 return _error->Error(_("Unable to read the cdrom database %s"),
 			      DFile.c_str());
    }
 
@@ -593,18 +593,18 @@ bool DoAdd(CommandLine &)
    if (PreFetch == false && _config->FindB("APT::CDROM::NoMount",false) == false)
    {
       Mounted = true;
-      cout << "Unmounting CD-ROM" << endl;
+      cout << _("Unmounting CD-ROM") << endl;
       UnmountCdrom(CDROM);
 
       // Mount the new CDROM
-      Prompt("Please insert a Disc in the drive and press enter");
-      cout << "Mounting CD-ROM" << endl;
+      Prompt(_("Please insert a Disc in the drive and press enter"));
+      cout << _("Mounting CD-ROM") << endl;
       if (MountCdrom(CDROM) == false)
-	 return _error->Error("Failed to mount the cdrom.");
+	 return _error->Error(_("Failed to mount the cdrom."));
    }
    
    // Hash the CD to get an ID
-   cout << "Identifying.. " << flush;
+   cout << _("Identifying.. ") << flush;
    // CNC:2002-10-29
    // string ID;
    if (ID.empty() == true && IdentCdrom(CDROM,ID) == false)
@@ -624,7 +624,7 @@ bool DoAdd(CommandLine &)
 
    cout << '[' << ID << ']' << endl;
 
-   cout << "Scanning Disc for index files..  " << flush;
+   cout << _("Scanning Disc for index files..  ") << flush;
    // Get the CD structure
    vector<string> List;
    vector<string> sList;
@@ -641,10 +641,10 @@ bool DoAdd(CommandLine &)
 
    if (_config->FindB("Debug::aptcdrom",false) == true)
    {
-      cout << "I found (binary):" << endl;
+      cout << _("I found (binary):") << endl;
       for (vector<string>::iterator I = List.begin(); I != List.end(); I++)
 	 cout << *I << endl;
-      cout << "I found (source):" << endl;
+      cout << _("I found (source):") << endl;
       for (vector<string>::iterator I = sList.begin(); I != sList.end(); I++)
 	 cout << *I << endl;
    }   
@@ -659,15 +659,15 @@ bool DoAdd(CommandLine &)
    DropRepeats(List,"Packages");
    DropRepeats(sList,"Sources");
 #endif
-   cout << "Found " << List.size() << " package indexes and " << sList.size() << 
-      " source indexes." << endl;
+   cout << _("Found ") << List.size() << _(" package indexes and ") << sList.size() << 
+      _(" source indexes.") << endl;
 
    // CNC:2002-07-11
    if (List.size() == 0 && sList.size() == 0)
    {
 	if (Mounted && _config->FindB("APT::CDROM::NoMount",false) == false)
 	     UnmountCdrom(CDROM);
-	return _error->Error("Unable to locate any package files, perhaps this is not an APT enabled disc");
+	return _error->Error(_("Unable to locate any package files, perhaps this is not an APT enabled disc"));
    
    }
    // Check if the CD is in the database
@@ -691,7 +691,7 @@ bool DoAdd(CommandLine &)
 	       if (*J == '"' || *J == ']' || *J == '[')
 		  *J = '_';
 	    
-	    cout << "Found label '" << Name << "'" << endl;
+	    cout << _("Found label '") << Name << "'" << endl;
 	    Database.Set("CD::" + ID + "::Label",Name);
 	 }	 
       }
@@ -699,12 +699,8 @@ bool DoAdd(CommandLine &)
       if (_config->FindB("APT::CDROM::Rename",false) == true ||
 	  Name.empty() == true)
       {
-// CNC:2002-07-11
-#ifdef HAVE_RPM
-	 cout << "Please provide a name for this Disc, such as 'Conectiva Disk 1'";
-#else
-	 cout << "Please provide a name for this Disc, such as 'Debian 2.1r1 Disk 1'";
-#endif
+	 // CNC:2003-11-25
+	 cout << _("Please provide a name for this Disc, such as 'Distribution Disk 1'");
 	 while (1)
 	 {
 	    Name = PromptLine("");
@@ -713,7 +709,7 @@ bool DoAdd(CommandLine &)
 		Name.find('[') == string::npos &&
 		Name.find(']') == string::npos)
 	       break;
-	    cout << "That is not a valid name, try again " << endl;
+	    cout << _("That is not a valid name, try again ") << endl;
 	 }	 
       }      
    }
@@ -727,7 +723,7 @@ bool DoAdd(CommandLine &)
 	 *J = '_';
    
    Database.Set("CD::" + ID,Name);
-   cout << "This Disc is called:" << endl << " '" << Name << "'" << endl;
+   cout << _("This Disc is called:") << endl << " '" << Name << "'" << endl;
    
    // Copy the package files to the state directory
 // CNC:2002-07-11
@@ -760,7 +756,7 @@ bool DoAdd(CommandLine &)
    }
 
    // Print the sourcelist entries
-   cout << "Source List entries for this Disc are:" << endl;
+   cout << _("Source List entries for this Disc are:") << endl;
    for (vector<string>::iterator I = List.begin(); I != List.end(); I++)
    {
       string::size_type Space = (*I).find(' ');
@@ -793,7 +789,7 @@ bool DoAdd(CommandLine &)
 #endif
    }
 
-   cout << "Repeat this process for the rest of the CDs in your set." << endl;
+   cout << _("Repeat this process for the rest of the CDs in your set.") << endl;
 
    // Unmount and finish
    // CNC:2002-10-29
@@ -813,13 +809,13 @@ bool DoIdent(CommandLine &)
    if (CDROM[0] == '.')
       CDROM= SafeGetCWD() + '/' + CDROM;
    
-   cout << "Using CD-ROM mount point " << CDROM << endl;
-   cout << "Mounting CD-ROM" << endl;
+   cout << _("Using CD-ROM mount point ") << CDROM << endl;
+   cout << _("Mounting CD-ROM") << endl;
    if (MountCdrom(CDROM) == false)
-      return _error->Error("Failed to mount the cdrom.");
+      return _error->Error(_("Failed to mount the cdrom."));
    
    // Hash the CD to get an ID
-   cout << "Identifying.. " << flush;
+   cout << _("Identifying.. ") << flush;
    string ID;
    if (IdentCdrom(CDROM,ID) == false)
    {
@@ -835,10 +831,10 @@ bool DoIdent(CommandLine &)
    if (FileExists(DFile) == true)
    {
       if (ReadConfigFile(Database,DFile) == false)
-	 return _error->Error("Unable to read the cdrom database %s",
+	 return _error->Error(_("Unable to read the cdrom database %s"),
 			      DFile.c_str());
    }
-   cout << "Stored Label: '" << Database.Find("CD::" + ID) << "'" << endl;
+   cout << _("Stored Label: '") << Database.Find("CD::" + ID) << "'" << endl;
    return true;
 }
 									/*}}}*/
