@@ -306,7 +306,7 @@ struct pkgCache::StringItem
 #include <apt-pkg/cacheiterators.h>
 
 // CNC:2003-02-16 - Inlined here.
-#include <apt-pkg/system.h>
+#include <system.h>
 #include <ctype.h>
 inline unsigned long pkgCache::sHash(const char *Str) const
 {
