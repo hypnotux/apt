@@ -3166,7 +3166,7 @@ int main(int argc,const char *argv[])
    }
    
    // CNC:2003-11-21
-   if (CmdL.FileSize() != 1)
+   if (CmdL.FileSize() > 1)
    {
       // CNC:2003-11-23
       vector<string> URLLst;
