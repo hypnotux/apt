@@ -1,6 +1,8 @@
 -- This script must be plugged into the APT script slot
 -- Scripts::AptGet::Install::TranslateArg
 --
+-- Author: Gustavo Niemeyer <niemeyer@conectiva.com>
+--
 -- Data sample:
 --   argument = "/usr/bin/python"
 --   contents = "/var/state/apt/Contents.gz"
