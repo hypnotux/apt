@@ -1,7 +1,18 @@
-Lua script to allow installing package groups as defined in comps.xml.
+Lua script to allow installing and viewing package groups as defined in 
+comps.xml found in RHL 8.0, 9 and Fedora Core 1.
 
-This script must be plugged into the APT script slot
+This script must be plugged into the following APT script slots:
 
-    Scripts::AptGet::Install::TranslateArg
+    Scripts::AptGet::Command 
+    Scripts::AptCache::Command
+
+Usage:
+    apt-cache showgroups - show all known groups
+    apt-cache showgroup <group> - show description and contents of group
+    apt-get groupinstall <group> - install all packages belonging to a group
+    apt-get groupremove <group> - remove all packages belonging to a group
+
+Known to work in RHL 8.0, 9 and Fedora Core 1. Requires python, comps and
+rhpl packages to be installed.
 
 Licensed under the GPL, by pmatilai@welho.com / 2003
