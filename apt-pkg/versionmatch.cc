@@ -195,16 +195,19 @@ pkgCache::VerIterator pkgVersionMatch::Find(pkgCache::PkgIterator Pkg)
    // CNC:2003-11-11 - Virtual package handling.
    if (Type == Version)
    {
+      bool HasRelease = (strchr(VerStr.c_str(), '-') != NULL);
       pkgCache::PrvIterator Prv = Pkg.ProvidesList();
       for (; Prv.end() == false; Prv++)
       {
-         // CNC:2003-11-05
-         if (VerPrefixMatch)
+	 const char *PrvVerStr = Prv.ProvideVersion();
+	 if (PrvVerStr == NULL || PrvVerStr[0] == 0)
+	    continue;
+         if (VerPrefixMatch || (HasRelease && strchr(PrvVerStr, '-') == NULL))
          {
-            if (MatchVer(Prv.ProvideVersion(),VerStr,VerPrefixMatch) == true)
+            if (MatchVer(PrvVerStr,VerStr,VerPrefixMatch) == true)
                return Prv.OwnerVer();
          } else {
-            if (VS->CheckDep(Prv.ProvideVersion(),VerOp,VerStr.c_str()) == true)
+            if (VS->CheckDep(PrvVerStr,VerOp,VerStr.c_str()) == true)
                return Prv.OwnerVer();
          }
       }
@@ -272,3 +275,5 @@ bool pkgVersionMatch::FileMatch(pkgCache::PkgFileIterator File)
    return false;
 }
 									/*}}}*/
+
+// vim:sts=3:sw=3
