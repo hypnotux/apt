@@ -204,8 +204,7 @@ bool RPMDirHandler::Skip()
       Fclose(FD);
       if (rc != RPMRC_OK
 	  && rc != RPMRC_NOTTRUSTED
-	  && rc != RPMRC_NOKEY
-	  && rc != RPMRC_BADSIZE)
+	  && rc != RPMRC_NOKEY)
 	 continue;
 #else
       int isSource;
