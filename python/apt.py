@@ -169,6 +169,9 @@ class pkgCacheHeader(_object):
     __swig_setmethods__["Dirty"] = _apt.pkgCacheHeader_Dirty_set
     __swig_getmethods__["Dirty"] = _apt.pkgCacheHeader_Dirty_get
     if _newclass:Dirty = property(_apt.pkgCacheHeader_Dirty_get,_apt.pkgCacheHeader_Dirty_set)
+    __swig_setmethods__["HasFileDeps"] = _apt.pkgCacheHeader_HasFileDeps_set
+    __swig_getmethods__["HasFileDeps"] = _apt.pkgCacheHeader_HasFileDeps_get
+    if _newclass:HasFileDeps = property(_apt.pkgCacheHeader_HasFileDeps_get,_apt.pkgCacheHeader_HasFileDeps_set)
     __swig_setmethods__["HeaderSz"] = _apt.pkgCacheHeader_HeaderSz_set
     __swig_getmethods__["HeaderSz"] = _apt.pkgCacheHeader_HeaderSz_get
     if _newclass:HeaderSz = property(_apt.pkgCacheHeader_HeaderSz_get,_apt.pkgCacheHeader_HeaderSz_set)
@@ -611,6 +614,7 @@ class pkgDepCache(_object):
     def GetCandidateVer(*args): return apply(_apt.pkgDepCache_GetCandidateVer,args)
     def IsImportantDep(*args): return apply(_apt.pkgDepCache_IsImportantDep,args)
     def GetPolicy(*args): return apply(_apt.pkgDepCache_GetPolicy,args)
+    def GetPkgPriority(*args): return apply(_apt.pkgDepCache_GetPkgPriority,args)
     def __getitem__(*args): return apply(_apt.pkgDepCache___getitem__,args)
     def MarkKeep(*args): return apply(_apt.pkgDepCache_MarkKeep,args)
     def MarkDelete(*args): return apply(_apt.pkgDepCache_MarkDelete,args)
@@ -1081,6 +1085,7 @@ class pkgCacheFile(_object):
     def GetCandidateVer(*args): return apply(_apt.pkgCacheFile_GetCandidateVer,args)
     def IsImportantDep(*args): return apply(_apt.pkgCacheFile_IsImportantDep,args)
     def GetPolicy(*args): return apply(_apt.pkgCacheFile_GetPolicy,args)
+    def GetPkgPriority(*args): return apply(_apt.pkgCacheFile_GetPkgPriority,args)
     def MarkKeep(*args): return apply(_apt.pkgCacheFile_MarkKeep,args)
     def MarkDelete(*args): return apply(_apt.pkgCacheFile_MarkDelete,args)
     def MarkInstall(*args): return apply(_apt.pkgCacheFile_MarkInstall,args)
@@ -1161,6 +1166,7 @@ class pkgSystem(_object):
     def Lock(*args): return apply(_apt.pkgSystem_Lock,args)
     def UnLock(*args): return apply(_apt.pkgSystem_UnLock,args)
     def LockRead(*args): return apply(_apt.pkgSystem_LockRead,args)
+    def CacheBuilt(*args): return apply(_apt.pkgSystem_CacheBuilt,args)
     def CreatePM(*args): return apply(_apt.pkgSystem_CreatePM,args)
     def Initialize(*args): return apply(_apt.pkgSystem_Initialize,args)
     def ArchiveSupported(*args): return apply(_apt.pkgSystem_ArchiveSupported,args)
@@ -1682,6 +1688,9 @@ class pkgSourceList(_object):
     def ReadMainList(*args): return apply(_apt.pkgSourceList_ReadMainList,args)
     def Read(*args): return apply(_apt.pkgSourceList_Read,args)
     def ReadVendors(*args): return apply(_apt.pkgSourceList_ReadVendors,args)
+    def Reset(*args): return apply(_apt.pkgSourceList_Reset,args)
+    def ReadAppend(*args): return apply(_apt.pkgSourceList_ReadAppend,args)
+    def ReadSourceDir(*args): return apply(_apt.pkgSourceList_ReadSourceDir,args)
     def begin(*args): return apply(_apt.pkgSourceList_begin,args)
     def end(*args): return apply(_apt.pkgSourceList_end,args)
     def size(*args): return apply(_apt.pkgSourceList_size,args)

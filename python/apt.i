@@ -220,6 +220,13 @@ GlobalError *_error;
 /* There's a struct and a function with the same name. */
 %ignore SubstVar;
 
+/* Allow threads to run while doing DoInstall() */
+%exception pkgPackageManager::DoInstall {
+Py_BEGIN_ALLOW_THREADS
+$function
+Py_END_ALLOW_THREADS
+}
+
 /* Preprocess string macros (note that we're %import'ing). */
 %import <apt-pkg/contrib/strutl.h>
 
