@@ -23,4 +23,11 @@ EXTRA_DIST = \
 		python/apt.py \
 		python/apt_wrap.cxx \
 		python/Makefile \
-		python/swig-1.3.16-cxx.patch
+		python/swig-1.3.16-cxx.patch \
+		contrib/apt-rpm/apt-rpm \
+		contrib/apt-rpm/apt-rpm.1 \
+		contrib/apt-files/README \
+		contrib/apt-files/apt-files.lua \
+		contrib/apt-files/apt-files.conf \
+		contrib/apt-files/convert.py
+
