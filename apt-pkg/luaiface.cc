@@ -726,6 +726,17 @@ static int AptLua_verarch(lua_State *L)
    
 }
 
+static int AptLua_verisonline(lua_State *L)
+{
+   if (lua_gettop(L) != 1 || !lua_isuserdata(L, 1)) {
+      lua_pushstring(L, "verisonline requires one version as argument");
+      lua_error(L);
+      return 0;
+   }
+   pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
+   return AptAux_PushBool(L, VerI->Downloadable());
+}
+
 static int AptLua_verprovlist(lua_State *L)
 {
    pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
@@ -1005,6 +1016,7 @@ static const luaL_reg aptlib[] = {
    {"pkgverlist",	AptLua_pkgverlist},
    {"verstr",		AptLua_verstr},
    {"verarch",		AptLua_verarch},
+   {"verisonline",	AptLua_verisonline},
    {"verprovlist",   	AptLua_verprovlist},
    {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
