@@ -370,10 +370,10 @@ int main(int argc, char ** argv)
 	    rpmFreeSignature(sigs);
 #endif
       }
-      fdClose(fd);
+      Fclose(fd);
    } 
    
-   fdClose(outfd);
+   Fclose(outfd);
 
 #ifdef HAVE_RPM41   
    ts = rpmtsFree(ts);
