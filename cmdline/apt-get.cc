@@ -2916,8 +2916,12 @@ bool DoBuildDep(CommandLine &CmdL)
       
       // Now we check the state of the packages,
       if (Cache->BrokenCount() != 0)
+      {
+         // CNC:2004-07-05
+         ShowBroken(c1out, Cache, false);
 	 return _error->Error(_("Some broken packages were found while trying to process build-dependencies for %s.\n"
 				"You might want to run `apt-get -f install' to correct these."),*I);
+      }
    }
   
    if (InstallPackages(Cache, false, true) == false)
