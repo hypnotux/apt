@@ -337,7 +337,16 @@ bool GPGMethod::Fetch(FetchItem *Itm)
    URIStart(Res);
    
    string TempDir;
-   if (makeTmpDir("/tmp", TempDir) == false)
+   string SysTempDir;
+
+   SysTempDir = getenv("TMPDIR");
+   if (SysTempDir == NULL) {
+      SysTempDir = getenv("TMP");
+         if (SysTempDir == NULL) {
+            SysTempDir = "/tmp";
+         }
+   }
+   if (makeTmpDir(SysTempDir, TempDir) == false)
       return false;
    
    int SigCount = 0;
