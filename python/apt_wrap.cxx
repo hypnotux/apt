@@ -863,18 +863,16 @@ inline bool pkgInit()
    return pkgInitConfig(*_config) && pkgInitSystem(*_config,_system);
 }
 
+
+#define pkgAcquire_Item_DestFile_get(x) ((x)->DestFile.c_str())
+#define pkgAcquire_Item_ErrorText_get(x) ((x)->ErrorText.c_str())
+
 extern char const *pkgVersion;
 extern char const *pkgLibVersion;
 extern char const *pkgOS;
 extern char const *pkgCPU;
 extern pkgSystem *_system;
 extern Configuration *_config;
-string pkgAcquire_Item_DestFile_get(pkgAcquire::Item *self,pkgAcquire::Item *item){
-	return item->DestFile;
-}
-string pkgAcquire_Item_ErrorText_get(pkgAcquire::Item *self,pkgAcquire::Item *item){
-	return item->ErrorText;
-}
 PyObject *pkgAcquire_ItemsList(pkgAcquire *self){
 	static swig_type_info *ItemDescr = NULL;
 	PyObject *list, *o;
@@ -15583,19 +15581,14 @@ static PyObject * pkgRecordsParser_swigregister(PyObject *self, PyObject *args) 
 static PyObject *_wrap_pkgAcquireItem_DestFile_get(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgAcquire::Item *arg1 = (pkgAcquire::Item *) 0 ;
-    pkgAcquire::Item *arg2 = (pkgAcquire::Item *) 0 ;
-    string result;
+    char *result;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgAcquireItem_DestFile_get",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgAcquireItem_DestFile_get",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgAcquire__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_pkgAcquire__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = pkgAcquire_Item_DestFile_get(arg1,arg2);
+    result = (char *)pkgAcquire_Item_DestFile_get(arg1);
     
-    {
-        resultobj = PyString_FromString((&result)->c_str());
-    }
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
     return resultobj;
     fail:
     return NULL;
@@ -15605,19 +15598,14 @@ static PyObject *_wrap_pkgAcquireItem_DestFile_get(PyObject *self, PyObject *arg
 static PyObject *_wrap_pkgAcquireItem_ErrorText_get(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     pkgAcquire::Item *arg1 = (pkgAcquire::Item *) 0 ;
-    pkgAcquire::Item *arg2 = (pkgAcquire::Item *) 0 ;
-    string result;
+    char *result;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgAcquireItem_ErrorText_get",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:pkgAcquireItem_ErrorText_get",&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgAcquire__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_pkgAcquire__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result = pkgAcquire_Item_ErrorText_get(arg1,arg2);
+    result = (char *)pkgAcquire_Item_ErrorText_get(arg1);
     
-    {
-        resultobj = PyString_FromString((&result)->c_str());
-    }
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
     return resultobj;
     fail:
     return NULL;

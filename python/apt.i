@@ -134,21 +134,18 @@ ItemsList()
 }
 }
 
+%immutable pkgAcquire::Item::DestFile;
+%immutable pkgAcquire::Item::ErrorText;
+%extend pkgAcquire::Item {
+	const char *DestFile;
+	const char *ErrorText;
+}
 %ignore pkgAcquire::Item::DestFile;
-%extend pkgAcquire::Item {
-string DestFile_get(pkgAcquire::Item *item)
-{
-	return item->DestFile;
-}
-}
-
 %ignore pkgAcquire::Item::ErrorText;
-%extend pkgAcquire::Item {
-string ErrorText_get(pkgAcquire::Item *item)
-{
-	return item->ErrorText;
-}
-}
+%{
+#define pkgAcquire_Item_DestFile_get(x) ((x)->DestFile.c_str())
+#define pkgAcquire_Item_ErrorText_get(x) ((x)->ErrorText.c_str())
+%}
 
 /* That should be enough for our usage, but _error is indeed an alias
  * for a function which returns an statically alocated GlobalError object. */

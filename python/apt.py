@@ -1358,8 +1358,10 @@ class pkgAcquireItem(_object):
     __setattr__ = lambda self, name, value: _swig_setattr(self, pkgAcquireItem, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, pkgAcquireItem, name)
-    def DestFile_get(*args): return apply(_apt.pkgAcquireItem_DestFile_get,args)
-    def ErrorText_get(*args): return apply(_apt.pkgAcquireItem_ErrorText_get,args)
+    __swig_getmethods__["DestFile"] = _apt.pkgAcquireItem_DestFile_get
+    if _newclass:DestFile = property(_apt.pkgAcquireItem_DestFile_get)
+    __swig_getmethods__["ErrorText"] = _apt.pkgAcquireItem_ErrorText_get
+    if _newclass:ErrorText = property(_apt.pkgAcquireItem_ErrorText_get)
     StatIdle = _apt.pkgAcquireItem_StatIdle
     StatFetching = _apt.pkgAcquireItem_StatFetching
     StatDone = _apt.pkgAcquireItem_StatDone
