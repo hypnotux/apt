@@ -1489,7 +1489,7 @@ msgstr "Não utilizando bloqueio para arquivo de bloqueio montado em nfs %s"
 #: apt-pkg/contrib/fileutl.cc:110
 #, c-format
 msgid "Could not get lock %s"
-msgstr "Impossível obter bloqueio %s"
+msgstr "Impossível bloquear %s"
 
 #: apt-pkg/contrib/fileutl.cc:361
 #, c-format
