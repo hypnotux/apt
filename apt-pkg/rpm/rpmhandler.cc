@@ -378,14 +378,18 @@ RPMDBHandler::~RPMDBHandler()
 string RPMDBHandler::DataPath(bool DirectoryOnly)
 {
    string File = "packages.rpm";
+   char *tmp = (char *) rpmExpand("%{_dbpath}", NULL);
+   string DBPath(_config->Find("RPM::RootDir")+tmp);
+   free(tmp);
+
 #ifdef HAVE_RPM4
    if (rpmExpandNumeric("%{_dbapi}") >= 3)
       File = "Packages";       
 #endif
    if (DirectoryOnly == true)
-       return _config->Find("RPM::RootDir")+"/var/lib/rpm";
+       return DBPath;
    else
-       return _config->Find("RPM::RootDir")+"/var/lib/rpm/"+File;
+       return DBPath+"/"+File;
 }
 
 bool RPMDBHandler::Skip()
