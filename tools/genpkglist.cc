@@ -348,15 +348,18 @@ int selectDirent(const struct dirent *ent)
 
 void usage()
 {
+   cerr << "genpkglist " << VERSION << endl;
    cerr << "usage: genpkglist [<options>] <dir> <suffix>" << endl;
    cerr << "options:" << endl;
    cerr << " --index <file>  file to write srpm index data to" << endl;
    cerr << " --info <file>   file to read update info from" << endl;
+   cerr << " --meta <suffix> create package file list with given suffix" << endl;
    cerr << " --bloat         do not strip the package file list. Needed for some" << endl;
    cerr << "                 distributions that use non-automatically generated" << endl;
    cerr << "                 file dependencies" << endl;
+   cerr << " --append        append to the package file list, don't overwrite" << endl;
    cerr << " --progress      show a progress bar" << endl;
-   cerr << " --cachedir=DIR use a custom directory for package md5sum cache"<<endl;
+   cerr << " --cachedir=DIR  use a custom directory for package md5sum cache"<<endl;
 }
 
 

@@ -119,13 +119,16 @@ bool readRPMTable(char *file, map<string, list<char*>* > &table)
 
 void usage()
 {
+   cerr << "gensrclist " << VERSION << endl;
    cerr << "usage: gensrclist [<options>] <dir> <suffix> <srpm index>" << endl;
    cerr << "options:" << endl;
 //   cerr << " --mapi         ???????????????????" << endl;
-   cerr << " --progress     show a progress bar" << endl;
-   cerr << " --flat         use a flat directory structure, where RPMS and SRPMS"<<endl;
-   cerr << "                are in the same directory level"<<endl;
-   cerr << " --cachedir=DIR use a custom directory for package md5sum cache"<<endl;
+   cerr << " --flat          use a flat directory structure, where RPMS and SRPMS"<<endl;
+   cerr << "                 are in the same directory level"<<endl;
+   cerr << " --meta <suffix> create source package file list with given suffix" << endl;
+   cerr << " --append        append to the source package file list, don't overwrite" << endl;
+   cerr << " --progress      show a progress bar" << endl;
+   cerr << " --cachedir=DIR  use a custom directory for package md5sum cache"<<endl;
 }
 
 #if RPM_VERSION >= 0x040000
