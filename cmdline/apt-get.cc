@@ -880,6 +880,9 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       after. */
    if (_config->FindB("APT::Get::Download-Only",false) == true)
       _system->UnLock();
+
+   // CNC:2003-02-24
+   bool Ret = true;
    
    // Run it
    while (1)
@@ -908,6 +911,9 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       
       if (Fetcher.Run() == pkgAcquire::Failed)
 	 return false;
+
+      // CNC:2003-02-24
+      _error->PopState();
       
       // Print out errors
       bool Failed = false;
@@ -971,21 +977,28 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
 	 _system->UnLock();
 	 pkgPackageManager::OrderResult Res = PM->DoInstall();
 	 if (Res == pkgPackageManager::Failed || _error->PendingError() == true)
-	    return false;
+	 {
+	    if (Transient == false)
+	       return false;
+	    Ret = false;
+	 }
 
 	 // CNC:2002-07-06
 	 if (Res == pkgPackageManager::Completed)
 	 {
 	    CommandLine *CmdL = NULL; // Watch out! If used will blow up!
-	    bool ret = true;
 	    if (_config->FindB("APT::Post-Install::Clean",false) == true) 
-	       ret = DoClean(*CmdL);
+	       Ret &= DoClean(*CmdL);
 	    else if (_config->FindB("APT::Post-Install::AutoClean",false) == true) 
-	       ret = DoAutoClean(*CmdL);
-	    return ret;
+	       Ret &= DoAutoClean(*CmdL);
+	    return Ret;
 	 }
+	 
 	 _system->Lock();
       }
+
+      // CNC:2003-02-24
+      _error->PushState();
       
       // Reload the fetcher object and loop again for media swapping
       Fetcher.Shutdown();
