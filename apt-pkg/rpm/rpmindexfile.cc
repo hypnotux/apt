@@ -401,7 +401,7 @@ bool rpmPkgListIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
    delete Handler;
 
    // Check the release file
-   string RelFile = IndexFile("release");
+   string RelFile = ReleasePath();
    if (FileExists(RelFile) == true)
    {
       FileFd Rel(RelFile,FileFd::ReadOnly);
@@ -464,9 +464,17 @@ pkgCache::PkgFileIterator rpmPkgListIndex::FindInCache(pkgCache &Cache) const
 // PkgDirIndex::Index* - Return the URI to the index files		/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-inline string rpmPkgDirIndex::IndexPath() const
+string rpmPkgDirIndex::IndexPath() const
 {
    return ::URI(ArchiveURI("")).Path;
+}
+									/*}}}*/
+// PkgDirIndex::Release* - Return the URI to the index files		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+string rpmPkgDirIndex::ReleasePath() const
+{
+   return ::URI(IndexURI("release")).Path;
 }
 									/*}}}*/
 // PkgDirIndex::Size - Return the size of the index			/*{{{*/
@@ -485,7 +493,7 @@ unsigned long rpmPkgDirIndex::Size() const
 // SrcDirIndex::Index* - Return the URI to the index files		/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-inline string rpmSrcDirIndex::IndexPath() const
+string rpmSrcDirIndex::IndexPath() const
 {
    return ::URI(ArchiveURI("")).Path;
 }
