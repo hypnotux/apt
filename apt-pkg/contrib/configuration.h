@@ -65,6 +65,9 @@ class Configuration
    {
       return ((Configuration *)this)->Lookup(Name,false);
    }  
+
+   // CNC:2003-02-23 - Helper for copy constructor.
+   void CopyChildren(Item *From, Item *To);
    
    public:
 
@@ -93,6 +96,9 @@ class Configuration
 
    inline void Dump() { Dump(std::clog); };
    void Dump(std::ostream& str);
+
+   // CNC:2003-02-23 - Copy constructor.
+   Configuration(Configuration &Conf);
 
    Configuration(const Item *Root);
    Configuration();
