@@ -29,5 +29,13 @@ EXTRA_DIST = \
 		contrib/apt-files/README \
 		contrib/apt-files/apt-files.lua \
 		contrib/apt-files/apt-files.conf \
-		contrib/apt-files/convert.py
+		contrib/apt-files/convert.py \
+		contrib/install-devel/README \
+		contrib/install-devel/install-devel.lua \
+		contrib/apt-groupinstall/README \
+		contrib/apt-groupinstall/apt-groupinstall.lua \
+		contrib/apt-groupinstall/apt-groupinstall.py \
+		contrib/apt-groupinstall/apt-groupinstall.conf \
+		contrib/proxypasswd/README \
+		contrib/proxypasswd/proxypasswd.lua
 
