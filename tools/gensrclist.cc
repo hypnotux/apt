@@ -150,6 +150,8 @@ int main(int argc, char ** argv)
    bool progressBar = false;
    bool flatStructure = false;
    char *arg_dir, *arg_suffix, *arg_srpmindex;
+   const char *srcListSuffix = NULL;
+   bool srcListAppend = false;
 
    putenv("LC_ALL="); // Is this necessary yet (after i18n was supported)?
    for (i = 1; i < argc; i++) {
@@ -159,6 +161,16 @@ int main(int argc, char ** argv)
 	 flatStructure = true;
       } else if (strcmp(argv[i], "--progress") == 0) {
 	 progressBar = true;
+      } else if (strcmp(argv[i], "--append") == 0) {
+	 srcListAppend = true;
+      } else if (strcmp(argv[i], "--meta") == 0) {
+	 i++;
+	 if (i < argc) {
+	    srcListSuffix = argv[i];
+	 } else {
+	    cout << "gensrclist: argument missing for option --meta"<<endl;
+	    exit(1);
+	 }
       } else {
 	 break;
       }
@@ -229,11 +241,17 @@ int main(int argc, char ** argv)
 
    chdir(buf);
    
-   sprintf(buf, "%s/srclist.%s", cwd, arg_suffix);
+   if (srcListSuffix != NULL)
+      sprintf(buf, "%s/srclist.%s", cwd, srcListSuffix);
+   else
+      sprintf(buf, "%s/srclist.%s", cwd, arg_suffix);
    
-   unlink(buf);
-   
-   outfd = fdOpen(buf, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+   if (srcListAppend == true && FileExists(buf)) {
+      outfd = fdOpen(buf, O_WRONLY|O_APPEND, 0644);
+   } else {
+      unlink(buf);
+      outfd = fdOpen(buf, O_WRONLY|O_TRUNC|O_CREAT, 0644);
+   }
    if (!outfd) {
       cerr << "gensrclist: error creating file" << buf << ":"
 	  << strerror(errno);

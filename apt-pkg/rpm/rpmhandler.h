@@ -42,6 +42,7 @@ class RPMHandler
    virtual bool IsDatabase() = 0;
 
    virtual string FileName() {return "";};
+   virtual string Directory() {return "";};
    virtual unsigned long FileSize() {return 1;};
    virtual string MD5Sum() {return "";};
 
@@ -62,6 +63,7 @@ class RPMFileHandler : public RPMHandler
    virtual inline bool IsDatabase() {return false;};
 
    virtual string FileName();
+   virtual string Directory();
    virtual unsigned long FileSize();
    virtual string MD5Sum();
 

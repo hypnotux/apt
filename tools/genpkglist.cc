@@ -225,8 +225,9 @@ int headerGetRawEntry(Header h, int_32 tag, int_32 * type,
 #endif
 
 bool copyFields(Header h, Header newHeader,
-		FILE *idxfile, char *filename, unsigned filesize,
-	        map<string,UpdateInfo> &updateInfo, bool fullFileList)
+		FILE *idxfile, const char *directory, char *filename,
+		unsigned filesize, map<string,UpdateInfo> &updateInfo,
+		bool fullFileList)
 {
    int i;
    int_32 size[1];
@@ -285,6 +286,8 @@ bool copyFields(Header h, Header newHeader,
       }
    }
    // our additional tags
+   headerAddEntry(newHeader, CRPMTAG_DIRECTORY, RPM_STRING_TYPE,
+		  directory, 1);
    headerAddEntry(newHeader, CRPMTAG_FILENAME, RPM_STRING_TYPE, 
 		  filename, 1);
    headerAddEntry(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE,
@@ -457,6 +460,8 @@ int main(int argc, char ** argv)
    int i;
    bool fullFileList = false;
    bool progressBar = false;
+   const char *pkgListSuffix = NULL;
+   bool pkgListAppend = false;
    
    putenv("LC_ALL="); // Is this necessary yet (after i18n was supported)?
    for (i = 1; i < argc; i++) {
@@ -480,6 +485,16 @@ int main(int argc, char ** argv)
 	 fullFileList = true;
       } else if (strcmp(argv[i], "--progress") == 0) {
 	 progressBar = true;
+      } else if (strcmp(argv[i], "--append") == 0) {
+	 pkgListAppend = true;
+      } else if (strcmp(argv[i], "--meta") == 0) {
+	 i++;
+	 if (i < argc) {
+	    pkgListSuffix = argv[i];
+	 } else {
+	    cout << "genpkglist: argument missing for option --meta"<<endl;
+	    exit(1);
+	 }
       } else {
 	 break;
       }
@@ -531,6 +546,8 @@ int main(int argc, char ** argv)
    pkglist_path = string(rpmsdir);
    rpmsdir = rpmsdir + "/RPMS." + string(op_suf);
 
+   string dirtag = "RPMS." + string(op_suf);
+
    entry_no = scandir(rpmsdir.c_str(), &dirEntries, selectDirent, alphasort);
    if (entry_no < 0) {
       cerr << "genpkglist: error opening directory " << rpmsdir << ":"
@@ -540,11 +557,18 @@ int main(int argc, char ** argv)
    
    chdir(rpmsdir.c_str());
    
-   pkglist_path = pkglist_path + "/base/pkglist." + op_suf;
+   if (pkgListSuffix != NULL)
+	   pkglist_path = pkglist_path + "/base/pkglist." + pkgListSuffix;
+   else
+	   pkglist_path = pkglist_path + "/base/pkglist." + op_suf;
    
-   unlink(pkglist_path.c_str());
    
-   outfd = fdOpen(pkglist_path.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0644);
+   if (pkgListAppend == true && FileExists(pkglist_path)) {
+      outfd = fdOpen(pkglist_path.c_str(), O_WRONLY|O_APPEND, 0644);
+   } else {
+      unlink(pkglist_path.c_str());
+      outfd = fdOpen(pkglist_path.c_str(), O_WRONLY|O_TRUNC|O_CREAT, 0644);
+   }
    if (!outfd) {
       cerr << "genpkglist: error creating file" << pkglist_path << ":"
 	  << strerror(errno);
@@ -600,7 +624,8 @@ int main(int argc, char ** argv)
 	    
 	    newHeader = headerNew();
 	    
-	    copyFields(h, newHeader, idxfile, dirEntries[entry_cur]->d_name,
+	    copyFields(h, newHeader, idxfile, dirtag.c_str(),
+		       dirEntries[entry_cur]->d_name,
 		       sb.st_size, updateInfo, fullFileList);
 
 	    md5cache->MD5ForFile(string(dirEntries[entry_cur]->d_name), 

@@ -111,6 +111,16 @@ string RPMFileHandler::FileName()
    return str;
 }
 
+string RPMFileHandler::Directory()
+{
+   char *str;
+   int_32 count, type;
+   assert(HeaderP != NULL);
+   int rc = headerGetEntry(HeaderP, CRPMTAG_DIRECTORY,
+			   &type, (void**)&str, &count);
+   return (rc?str:"");
+}
+
 unsigned long RPMFileHandler::FileSize()
 {
    int_32 count, type;

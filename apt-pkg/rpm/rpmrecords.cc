@@ -69,7 +69,10 @@ bool rpmRecordParser::Jump(pkgCache::VerFileIterator const &Ver)
 /* */
 string rpmRecordParser::FileName()
 {
-   return Handler->FileName();
+   string Dir = Handler->Directory();
+   if (Dir.empty() == true)
+      return Handler->FileName();
+   return flCombine(Dir, Handler->FileName());
 }
 									/*}}}*/
 // RecordParser::Name - Return the package name				/*{{{*/

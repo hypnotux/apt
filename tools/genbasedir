@@ -22,6 +22,7 @@ Options:\n\
    --updateinfo=FILE  Update information file\n\
    --flat             Use flat repository, where SRPMS and RPMS are in\n\
                       the topdir (SRPMS are usually in 'topdir/..')\n\
+   --meta=NAME        Create a meta repository named NAME\n\
 \n\
 Examples:\n\
 \n\
@@ -50,11 +51,14 @@ partial=0
 oldhashfile=0
 mapi=0
 bz2only=0
+meta=
+meta_opts=
 updateinfo=
 progress=
 flat=
 defaultkey=
 srcidxdir=
+
 
 # bloat is necessary for non-Conectiva distros, at least RH,
 # because they use file dependencies with a non-predictable
@@ -86,6 +90,13 @@ while test $# -gt 0 ; do
 	;;
     --bz2only)
         bz2only=1
+    ;;
+    --append)
+        append=1
+    ;;
+    --meta=*)
+        meta=`echo $1 | sed 's/^--meta=//'`
+        meta_opts="--append --meta $meta"
     ;;
     --updateinfo=*)
 		updateinfo=$1
@@ -189,6 +200,13 @@ fi
 
 echo -n "Processing pkglists..."
 
+# Save older pkglist outside loop, if creating a meta repository
+if [ -n "$meta" ]; then 
+	if [ -f $basedir/pkglist.$meta ]; then
+		mv -f $basedir/pkglist.$meta $basedir/pkglist.$meta.old
+	fi
+fi
+
 for comp in $components; do
 	if [ ! -d $topdir/RPMS.$comp ]; then
 		continue
@@ -196,18 +214,20 @@ for comp in $components; do
 
 	echo -n " $comp"
 
-    # Save older pkglist
-    if [ -f $basedir/pkglist.$comp ]; then
-        mv -f $basedir/pkglist.$comp $basedir/pkglist.$comp.old
-    fi
+    # Save older pkglist inside loop, if creating a normal repository
+	if [ -z "$meta" ]; then
+		if [ -f $basedir/pkglist.$comp ]; then
+			mv -f $basedir/pkglist.$comp $basedir/pkglist.$comp.old
+		fi
+	fi
 
     if test x$updateinfo = x; then
-    	(cd $basedir; genpkglist $progress $bloat --index $srcidxdir/srcidx.$comp $topdir $comp)
+    	(cd $basedir; genpkglist $progress $bloat $meta_opts --index $srcidxdir/srcidx.$comp $topdir $comp)
     else
-    	(cd $basedir; genpkglist $progress $bloat --index $srcidxdir/srcidx.$comp --info $updateinfo $topdir $comp)
+    	(cd $basedir; genpkglist $progress $bloat $meta_opts --index $srcidxdir/srcidx.$comp --info $updateinfo $topdir $comp)
     fi
 
-    if [ -f $basedir/pkglist.$comp ]; then
+    if [ -z "$meta" -a -f $basedir/pkglist.$comp ]; then
 
         # Compare with older pkglist.
         if [ -f $basedir/pkglist.$comp.old ]; then
@@ -237,9 +257,43 @@ for comp in $components; do
     cat $srcidxdir/srcidx.$comp >> $srcidxdir/srcidx
 
 done
-echo " done"
+
+if [ -n "$meta" -a -f $basedir/pkglist.$meta ]; then
+
+	# Compare with older pkglist.
+	if [ -f $basedir/pkglist.$meta.old ]; then
+		if cmp -s $basedir/pkglist.$meta.old $basedir/pkglist.$meta; then
+			mv -f $basedir/pkglist.$meta.old $basedir/pkglist.$meta
+		fi
+	fi
+
+	# Save older compressed pkglist
+	if [ -f $basedir/pkglist.$meta.bz2 ]; then
+		mv -f $basedir/pkglist.$meta.bz2 $basedir/pkglist.$meta.bz2.old
+	fi
+
+	bzip2 -c $basedir/pkglist.$meta > $basedir/pkglist.$meta.bz2
+
+	# Compare with older compressed pkglist.
+	if [ -f $basedir/pkglist.$meta.bz2.old ]; then
+		if cmp -s $basedir/pkglist.$meta.bz2.old $basedir/pkglist.$meta.bz2; then
+			mv -f $basedir/pkglist.$meta.bz2.old $basedir/pkglist.$meta.bz2
+		fi
+	fi
+
+	rm -f $basedir/pkglist.$meta.old
+	rm -f $basedir/pkglist.$meta.bz2.old
+fi
+
+echo " [done]"
 
 echo -n "Processing srclists..."
+
+if [ -n "$meta" ]; then 
+	if [ -f $basedir/srclist.$meta ]; then
+		mv -f $basedir/srclist.$meta $basedir/srclist.$meta.old
+	fi
+fi
 
 for comp in $components; do
 	if [ -z "$flat" ]; then
@@ -255,17 +309,17 @@ for comp in $components; do
 	echo -n " $comp"
 
     # Save older srclist
-    if [ -f $basedir/srclist.$comp ]; then
+    if [ -z "$meta" -a -f $basedir/srclist.$comp ]; then
         mv -f $basedir/srclist.$comp $basedir/srclist.$comp.old
     fi
 
     if [ $mapi -ne 0 ]; then
-        (cd $basedir; gensrclist $progress $flat --mapi $srctopdir $comp $srcidxdir/srcidx.$comp)
+        (cd $basedir; gensrclist $progress $flat $meta_opts --mapi $srctopdir $comp $srcidxdir/srcidx.$comp)
     else
-        (cd $basedir; gensrclist $progress $flat $srctopdir $comp $srcidxdir/srcidx)
+        (cd $basedir; gensrclist $progress $flat $meta_opts $srctopdir $comp $srcidxdir/srcidx)
     fi
 
-    if [ -f $basedir/srclist.$comp ]; then
+    if [ -z "$meta" -a -f $basedir/srclist.$comp ]; then
 
         # Compare with older srclist.
         if [ -f $basedir/srclist.$comp.old ]; then
@@ -294,11 +348,43 @@ for comp in $components; do
 
     rm -f $srcidxdir/srcidx.$comp
 done
-echo " done"
+
+if [ -n "$meta" -a -f $basedir/srclist.$meta ]; then
+
+	# Compare with older srclist.
+	if [ -f $basedir/srclist.$meta.old ]; then
+		if cmp -s $basedir/srclist.$meta.old $basedir/srclist.$meta; then
+			mv -f $basedir/srclist.$meta.old $basedir/srclist.$meta
+		fi
+	fi
+
+	# Save older compressed srclist
+	if [ -f $basedir/srclist.$meta.bz2 ]; then
+		mv -f $basedir/srclist.$meta.bz2 $basedir/srclist.$meta.bz2.old
+	fi
+
+	bzip2 -c $basedir/srclist.$meta > $basedir/srclist.$meta.bz2
+
+	# Compare with older compressed srclist.
+	if [ -f $basedir/srclist.$meta.bz2.old ]; then
+		if cmp -s $basedir/srclist.$meta.bz2.old $basedir/srclist.$meta.bz2; then
+			mv -f $basedir/srclist.$meta.bz2.old $basedir/srclist.$meta.bz2
+		fi
+	fi
+
+	rm -f $basedir/srclist.$meta.old
+	rm -f $basedir/srclist.$meta.bz2.old
+fi
+
+echo " [done]"
 
 fi
 
 rm -rf $srcidxdir
+
+if [ -n "$meta" ]; then
+	components=$meta
+fi
 
 if [ $listonly -ne 0 ]; then
 	if [ $bz2only -eq 1 -a -f $pkglist.$comp ]; then
@@ -324,7 +410,7 @@ else
 			echo "NotAutomatic: false"   >> $release.$comp
 		fi
 	done
-	echo " done"
+	echo " [done]"
 
 	# release file
 	# ------------
@@ -355,7 +441,7 @@ else
 				$release.pre > $release
 			rm -f $release.pre
 		fi
-		echo "done"
+		echo "[done]"
 	else
 		echo -n "Creating global release file... "
 		echo "Origin: Unknown"            >> $release
@@ -363,11 +449,11 @@ else
 		echo "Suite: Unknown"             >> $release
 		echo "Codename: Unknown"          >> $release
 		echo "Date: `date -R`"            >> $release
-		echo "Architectures: unknown"     >> $release
+		echo "Architectures: Unknown"     >> $release
 		echo "Components: $components"    >> $release
 		echo "Description: Not available" >> $release
 		echo "MD5Sum:"                    >> $release
-		echo "done"
+		echo "[done]"
 	fi
 
 	echo -n "Appending MD5Sum..."
@@ -396,7 +482,7 @@ else
 			phashstuff $release.$comp $release_.$comp >> $release
 		fi
 	done
-	echo " done"
+	echo " [done]"
 
 	echo >> $release
 
@@ -444,7 +530,7 @@ if [ $oldhashfile -ne 0 -a $listonly -eq 0 ]; then
 		echo -n "Creating legacy hashfile... "
 		echo "MD5SUM:" > $hf
 	fi
-	echo "done"
+	echo "[done]"
 
 	echo -n "Appending MD5Sum..."
 
@@ -467,7 +553,7 @@ if [ $oldhashfile -ne 0 -a $listonly -eq 0 ]; then
 			phashstuff $release.$comp $release_.$comp >> $hf
 		fi
 	done
-	echo " done"
+	echo " [done]"
 
 	echo >> $hf
 

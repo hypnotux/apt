@@ -237,9 +237,6 @@ string rpmSrcListIndex::ArchiveURI(string File) const
    else
       Res = URI + Dist;
    
-   /* This should be fixed to include only the filename in
-    * the parameter. Right now it includes the SRPMS.<sect> directory
-    * information as well. It was written that way to make --flat work. */
    Res += "/" + File;
 
    if (rpmdata->HasSourceTranslation() == true)
@@ -320,7 +317,10 @@ string rpmPkgListIndex::ArchiveURI(string File) const
    else
       Res = URI + Dist;
 
-   Res += "/RPMS."+Section + '/' + File;
+   if (File.find("/") != string::npos)
+      Res += '/' + File;
+   else
+      Res += "/RPMS."+Section + '/' + File;
 
    if (rpmdata->HasBinaryTranslation() == true)
    {
