@@ -454,6 +454,10 @@ unsigned char pkgDepCache::VersionState(DepIterator D,unsigned char Check,
 	 LastOR = (D->CompareOp & Dep::Or) == Dep::Or;
       }
 	
+      // CNC:2003-02-17 - IsImportantDep() currently calls IsCritical(), so
+      //		  these two are currently doing the same thing. Check
+      //		  comments in IsImportantDep() definition.
+#if 0
       // Minimum deps that must be satisfied to have a working package
       if (Start.IsCritical() == true)
 	 if ((State & Check) != Check)
@@ -463,6 +467,13 @@ unsigned char pkgDepCache::VersionState(DepIterator D,unsigned char Check,
       if (IsImportantDep(Start) == true && 
 	  (State & Check) != Check)
 	 Dep &= ~SetPolicy;
+#else
+      if (Start.IsCritical() == true)
+	 if ((State & Check) != Check) {
+	    Dep &= ~SetMin;
+	    Dep &= ~SetPolicy;
+	 }
+#endif
    }
 
    return Dep;
@@ -783,6 +794,10 @@ void pkgDepCache::MarkInstall(PkgIterator const &Pkg,bool AutoInst,
       if (Result == false)
 	 continue;
 
+      // CNC:2003-02-17 - IsImportantDep() currently calls IsCritical(), so
+      //		  these two are currently doing the same thing. Check
+      //		  comments in IsImportantDep() definition.
+#if 0
       /* Check if this dep should be consider for install. If it is a user
          defined important dep and we are installed a new package then 
 	 it will be installed. Otherwise we only worry about critical deps */
@@ -790,6 +805,10 @@ void pkgDepCache::MarkInstall(PkgIterator const &Pkg,bool AutoInst,
 	 continue;
       if (Pkg->CurrentVer != 0 && Start.IsCritical() == false)
 	 continue;
+#else
+      if (Start.IsCritical() == false)
+	 continue;
+#endif
       
       /* If we are in an or group locate the first or that can 
          succeed. We have already cached this.. */
@@ -984,6 +1003,11 @@ pkgCache::VerIterator pkgDepCache::Policy::GetCandidateVer(PkgIterator Pkg)
 /* */
 bool pkgDepCache::Policy::IsImportantDep(DepIterator Dep)
 {
+   // CNC:2002-03-17 - Every place that uses this function seems to
+   //		       currently check for IsCritical() as well. Since
+   //		       this is a virtual (heavy) function, we'll disable
+   //		       IsImportantDep() while it's not used.
+   _error->Error("IsImportantDep() was called! Report to the maintainer.");
    return Dep.IsCritical();
 }
 									/*}}}*/

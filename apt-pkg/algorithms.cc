@@ -142,9 +142,18 @@ bool pkgSimulate::Configure(PkgIterator iPkg)
       // Print out each package and the failed dependencies
       for (pkgCache::DepIterator D = Sim[Pkg].InstVerIter(Sim).DependsList(); D.end() == false; D++)
       {
+         // CNC:2003-02-17 - IsImportantDep() currently calls IsCritical(), so
+         //		     these two are currently doing the same thing. Check
+         //		     comments in IsImportantDep() definition.
+#if 0
 	 if (Sim.IsImportantDep(D) == false || 
 	     (Sim[D] & pkgDepCache::DepInstall) != 0)
 	    continue;
+#else
+	 if (D.IsCritical() == false || 
+	     (Sim[D] & pkgDepCache::DepInstall) != 0)
+	    continue;
+#endif
 	 
 	 if (D->Type == pkgCache::Dep::Obsoletes)
 	    cout << " Obsoletes:" << D.TargetPkg().Name();
