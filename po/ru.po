@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: apt-0.5.5cnc4.1-alt2\n"
-"POT-Creation-Date: 2003-12-02 15:49-0200\n"
+"POT-Creation-Date: 2003-12-23 18:04-0200\n"
 "PO-Revision-Date: 2003-03-13 00:48+1200\n"
 "Last-Translator: Anton V. Denisov <avd@altlinux.org>\n"
 "Language-Team: ALT Linux Team <devel@altlinux.org>\n"
@@ -1659,7 +1659,7 @@ msgid "Unable to change to %s"
 msgstr "Невозможно перейти к %s"
 
 #: apt-pkg/contrib/cdromutl.cc:153 apt-pkg/contrib/configuration.cc:735
-#: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:38 apt-pkg/sourcelist.cc:423
+#: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:38 apt-pkg/sourcelist.cc:424
 #, c-format
 msgid "Unable to read %s"
 msgstr "Невозможно прочитать %s"
@@ -1872,17 +1872,22 @@ msgstr "Строк, соответствующих %s, не найдено."
 msgid "could not rewind RPMFileHandler"
 msgstr "откат RPMFileHandler невозможен"
 
-#: apt-pkg/rpm/rpmhandler.cc:159 apt-pkg/rpm/rpmhandler.cc:166
+#: apt-pkg/rpm/rpmhandler.cc:160 apt-pkg/rpm/rpmhandler.cc:167
 #: apt-pkg/rpm/rpmpm.cc:677 apt-pkg/rpm/rpmpm.cc:682
 #, fuzzy, c-format
 msgid "Failed reading file %s"
 msgstr "Ошибка выполнения скрипта %s"
 
-#: apt-pkg/rpm/rpmhandler.cc:369 apt-pkg/rpm/rpmhandler.cc:378
+#: apt-pkg/rpm/rpmhandler.cc:327
+#, fuzzy
+msgid "Unable to determine the file size"
+msgstr "Невозможно определить имя удалённой системы"
+
+#: apt-pkg/rpm/rpmhandler.cc:372 apt-pkg/rpm/rpmhandler.cc:381
 msgid "could not open RPM database"
 msgstr "невозможно открыть базу данных RPM"
 
-#: apt-pkg/rpm/rpmhandler.cc:385
+#: apt-pkg/rpm/rpmhandler.cc:388
 msgid "could not create RPM database iterator"
 msgstr "невозможно создать итератор базы данных RPM"
 
@@ -1891,28 +1896,37 @@ msgstr "невозможно создать итератор базы данных RPM"
 msgid "Problem with SelectFile %s"
 msgstr "Ошибка SelectFile %s"
 
+#: apt-pkg/rpm/rpmindexfile.cc:383 apt-pkg/rpm/rpmindexfile.cc:570
+#, fuzzy, c-format
+msgid "Failed to stat %s"
+msgstr "Невозможно получить информацию"
+
 #: apt-pkg/rpm/rpmindexfile.cc:392 apt-pkg/rpm/rpmindexfile.cc:428
 #, c-format
 msgid "Problem opening %s"
 msgstr "Ошибка открытия %s"
 
-#: apt-pkg/rpm/rpmindexfile.cc:398 apt-pkg/rpm/rpmindexfile.cc:571
+#: apt-pkg/rpm/rpmindexfile.cc:398 apt-pkg/rpm/rpmindexfile.cc:575
 #, c-format
 msgid "Problem with MergeList %s"
 msgstr "Ошибка с MergeList %s"
 
-#: apt-pkg/rpm/rpmindexfile.cc:433 apt-pkg/rpm/rpmindexfile.cc:589
+#: apt-pkg/rpm/rpmindexfile.cc:433 apt-pkg/rpm/rpmindexfile.cc:593
 #, c-format
 msgid "Problem with MergeFileProvides %s"
 msgstr "Ошибка с MergeFileProvides %s"
 
-#: apt-pkg/rpm/rpmindexfile.cc:556 apt-pkg/rpm/rpmindexfile.cc:585
+#: apt-pkg/rpm/rpmindexfile.cc:560 apt-pkg/rpm/rpmindexfile.cc:589
 msgid "Problem opening RPM database"
 msgstr "Ошибка открытия базы данных RPM"
 
-#: apt-pkg/rpm/rpmindexfile.cc:560
+#: apt-pkg/rpm/rpmindexfile.cc:564
 msgid "Problem with SelectFile RPM Database"
 msgstr "Ошибка SelectFile базы данных RPM."
+
+#: apt-pkg/rpm/rpmlistparser.cc:111
+msgid "Corrupt pkglist: no RPMTAG_NAME in header entry"
+msgstr ""
 
 #: apt-pkg/rpm/rpmlistparser.cc:130
 #, c-format
@@ -1944,6 +1958,10 @@ msgstr ""
 "Чтобы полностью запретить это предупреждение, установите параметр:\n"
 "\n"
 "RPM::Allow-Duplicated-Warning \"false\";\n"
+
+#: apt-pkg/rpm/rpmlistparser.cc:666
+msgid "Bad NotAutomatic flag"
+msgstr ""
 
 #: apt-pkg/rpm/rpmpackagedata.cc:28
 #, c-format
@@ -1990,19 +2008,42 @@ msgstr "Ошибка выполнения скриптов %s '%s'"
 msgid "Sub-process returned an error code"
 msgstr "Подпроцесс завершился с ошибкой"
 
+#: apt-pkg/rpm/rpmpm.cc:177 methods/rsh.cc:94
+msgid "Failed to create IPC pipe to subprocess"
+msgstr "Невозможно создать IPC канал для подпроцесса"
+
 #: apt-pkg/rpm/rpmpm.cc:221 apt-pkg/rpm/rpmpm.cc:228
 #, c-format
 msgid "Failure running script %s"
 msgstr "Ошибка выполнения скрипта %s"
 
+#: apt-pkg/rpm/rpmpm.cc:309
+msgid "Unknown pkgRPMPM operation."
+msgstr ""
+
 #: apt-pkg/rpm/rpmpm.cc:543
 msgid "Executing RPM ("
 msgstr "Запуск RPM ("
+
+#: apt-pkg/rpm/rpmpm.cc:583
+#, fuzzy
+msgid "Could not exec "
+msgstr "Невозможно заблокировать %s"
+
+#: apt-pkg/rpm/rpmpm.cc:598
+#, fuzzy
+msgid "Couldn't wait for subprocess"
+msgstr "Невозможно открыть канал для %s."
 
 #: apt-pkg/rpm/rpmpm.cc:614
 #, c-format
 msgid "Sub-process %s recieved a segmentation fault."
 msgstr "Подпроцесс %s выполнил недопустимую операцию."
+
+#: apt-pkg/rpm/rpmpm.cc:622 apt-pkg/rpm/rpmpm.cc:867
+#, fuzzy
+msgid "Done."
+msgstr "Завершено"
 
 #: apt-pkg/rpm/rpmpm.cc:673
 #, fuzzy, c-format
@@ -2014,32 +2055,37 @@ msgstr "Ошибка открытия %s"
 msgid "Failed adding %s to transaction %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:760 apt-pkg/rpm/rpmpm.cc:770
+#: apt-pkg/rpm/rpmpm.cc:761 apt-pkg/rpm/rpmpm.cc:771
 #, fuzzy
 msgid "Could not open RPM database"
 msgstr "невозможно открыть базу данных RPM"
 
-#: apt-pkg/rpm/rpmpm.cc:806 apt-pkg/rpm/rpmpm.cc:819
+#: apt-pkg/rpm/rpmpm.cc:807 apt-pkg/rpm/rpmpm.cc:820
 msgid "Transaction set check failed"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:838
+#: apt-pkg/rpm/rpmpm.cc:839
 #, c-format
 msgid "Ordering failed for %d packages"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:842
+#: apt-pkg/rpm/rpmpm.cc:843
 msgid "Committing changes..."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:858
+#: apt-pkg/rpm/rpmpm.cc:859
 msgid "Error while running transaction"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:864
+#: apt-pkg/rpm/rpmpm.cc:865
 #, fuzzy
 msgid "Some errors occurred while running transaction"
 msgstr "При обработке %s (NewVersion1) возникла ошибка"
+
+#: apt-pkg/rpm/rpmrecords.cc:201 apt-pkg/rpm/rpmsrcrecords.cc:215
+#, fuzzy
+msgid "Could not allocate buffer for record text"
+msgstr "Невозможно выделить память"
 
 #: apt-pkg/rpm/rpmsrcrecords.cc:146 apt-pkg/rpm/rpmsrcrecords.cc:153
 #, c-format
@@ -2425,27 +2471,27 @@ msgstr ""
 msgid "Vendor block %s is invalid"
 msgstr "Неверный блок данных поставщика %s."
 
-#: apt-pkg/sourcelist.cc:313
+#: apt-pkg/sourcelist.cc:314
 #, c-format
 msgid "Line %u too long in source list %s."
 msgstr "Слишком длинная запись %u в списке источников %s."
 
-#: apt-pkg/sourcelist.cc:333
+#: apt-pkg/sourcelist.cc:334
 #, c-format
 msgid "Malformed line %u in source list %s (type)"
 msgstr "Ошибочная запись в строке %u в списке источников %s (тип источника)"
 
-#: apt-pkg/sourcelist.cc:337
+#: apt-pkg/sourcelist.cc:338
 #, c-format
 msgid "Type '%s' is not known in on line %u in source list %s"
 msgstr "Неизвестный тип '%s' в строке %u списка источников %s."
 
-#: apt-pkg/sourcelist.cc:346 apt-pkg/sourcelist.cc:349
+#: apt-pkg/sourcelist.cc:347 apt-pkg/sourcelist.cc:350
 #, c-format
 msgid "Malformed line %u in source list %s (vendor id)"
 msgstr "Неправильная строка %u в списке источников %s (ID поставщика)"
 
-#: apt-pkg/sourcelist.cc:363
+#: apt-pkg/sourcelist.cc:364
 #, c-format
 msgid "Unknown vendor ID '%s' in line %u of source list %s"
 msgstr "Неизвестный ID поставщика '%s' в строке %u списка источников %s."
@@ -2784,10 +2830,6 @@ msgstr "Соединение завершилось неудачно"
 #: methods/http.cc:1176
 msgid "Internal error"
 msgstr "Внутренняя ошибка"
-
-#: methods/rsh.cc:94
-msgid "Failed to create IPC pipe to subprocess"
-msgstr "Невозможно создать IPC канал для подпроцесса"
 
 #: methods/rsh.cc:267
 msgid "File Not Found"
