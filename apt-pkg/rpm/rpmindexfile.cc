@@ -527,7 +527,8 @@ bool rpmPkgListIndex::MergeFileProvides(pkgCacheGenerator &Gen,
       delete Handler;
       return _error->Error(_("Problem opening %s"),PackageFile.c_str());
    }
-   Prog.SubProgress(0,Info("pkglist"));
+   // We call SubProgress with Size(), since we won't call SelectFile() here.
+   Prog.SubProgress(Size(),Info("pkglist"));
    if (Gen.MergeFileProvides(Parser) == false)
       return _error->Error(_("Problem with MergeFileProvides %s"),
 			   PackageFile.c_str());
@@ -619,7 +620,8 @@ bool rpmDatabaseIndex::MergeFileProvides(pkgCacheGenerator &Gen,
    rpmListParser Parser(Handler);
    if (_error->PendingError() == true)
       return _error->Error(_("Problem opening RPM database"));
-   Prog.SubProgress(0,"RPM Database");
+   // We call SubProgress with Size(), since we won't call SelectFile() here.
+   Prog.SubProgress(Size(),"RPM Database");
    if (Gen.MergeFileProvides(Parser) == false)
       return _error->Error(_("Problem with MergeFileProvides %s"),
 			   Handler->DataPath(false).c_str());
