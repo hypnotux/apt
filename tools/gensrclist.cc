@@ -44,7 +44,7 @@ int tags[] =  {
        
        RPMTAG_DESCRIPTION, 
        RPMTAG_SUMMARY, 
-       RPMTAG_HEADERI18NTABLE,
+       /*RPMTAG_HEADERI18NTABLE*/ HEADER_I18NTABLE,
        
        RPMTAG_REQUIREFLAGS, 
        RPMTAG_REQUIRENAME,
@@ -125,11 +125,13 @@ void usage()
    cerr << "                are in the same directory level"<<endl;
 }
 
+#ifdef HAVE_RPM4
 extern "C" {
-// No prototype from rpm right now.
+// No prototype from rpm after 4.0.
 int headerGetRawEntry(Header h, int_32 tag, int_32 * type,
-		      hPTR_t *p, int_32 *c);
+		      void *p, int_32 *c);
 }
+#endif
 
 int main(int argc, char ** argv) 
 {
@@ -287,7 +289,7 @@ int main(int argc, char ** argv)
 	    // the std tags
 	    for (i = 0; i < numTags; i++) {
 	       int type, count;
-	       const void *data;
+	       void *data;
 	       int res;
 	       
 	       // Copy raw entry, so that internationalized strings
