@@ -2870,10 +2870,13 @@ bool DoList(CommandLine &CmdL)
    const char **PatternList = &CmdL.FileList[1];
    int NumPatterns = CmdL.FileSize()-1;
 
+   bool ShowVersion = _config->FindB("APT::Cache::ShowVersion", false);
+   bool ShowSummary = _config->FindB("APT::Cache::ShowSummary", false);
+
    const char *PkgName;
    int Matches[Cache->Head().PackageCount];
    int NumMatches = 0;
-   int Len, NameMaxLen = 0;
+   int Len, NameMaxLen = 0, VerMaxLen = 0;
    bool Matched;
    for (unsigned int J = 0; J < Cache->Head().PackageCount; J++)
    {
@@ -2900,33 +2903,41 @@ bool DoList(CommandLine &CmdL)
 	 Len = strlen(PkgName);
 	 if (Len > NameMaxLen)
 	    NameMaxLen = Len;
+	 if (ShowVersion == true && Pkg->CurrentVer != 0) {
+	    Len = strlen(Pkg.CurrentVer().VerStr());
+	    if (Len > VerMaxLen)
+	       VerMaxLen = Len;
+	 }
       }
    }
 
    if (NumMatches == 0)
       return true;
 
-   bool ShowVersions = _config->FindB("APT::Cache::ShowVersion", false);
-   bool ShowSummary = _config->FindB("APT::Cache::ShowSummary", false);
-
-   if (ShowVersions == true) {
-      unsigned int FirstColumn = NameMaxLen+2;
-      unsigned int ColumnLen = 20;
-
-      char BlankFirst[FirstColumn+1];
-      memset(BlankFirst,' ',FirstColumn);
-      BlankFirst[FirstColumn] = 0;
-
-      char BlankSecond[ColumnLen+1];
-      memset(BlankSecond,' ',ColumnLen);
-      BlankSecond[ColumnLen] = 0;
-
+   if (ShowVersion == true) {
       const char *NameLabel = _("Name");
       const char *InstalledLabel = _("Installed");
       const char *CandidateLabel = _("Candidate");
       int NameLen = strlen(NameLabel);
       int InstalledLen = strlen(InstalledLabel);
       int CandidateLen = strlen(CandidateLabel);
+
+      unsigned int FirstColumn = NameMaxLen+2;
+      if (FirstColumn < NameLen+2)
+	 FirstColumn = NameLen+2;
+
+      unsigned int SecondColumn = VerMaxLen+2;
+      if (SecondColumn < InstalledLen+2)
+	 SecondColumn = InstalledLen+2;
+
+      char BlankFirst[FirstColumn+1];
+      memset(BlankFirst,' ',FirstColumn);
+      BlankFirst[FirstColumn] = 0;
+
+      char BlankSecond[SecondColumn+1];
+      memset(BlankSecond,' ',SecondColumn);
+      BlankSecond[SecondColumn] = 0;
+
       char Bar[ScreenWidth+1];
       memset(Bar, '-', ScreenWidth);
       Bar[ScreenWidth] = 0;
@@ -2948,17 +2959,21 @@ bool DoList(CommandLine &CmdL)
 	 if (Pkg->CurrentVer != 0) {
 	    Str = Pkg.CurrentVer().VerStr();
 	    StrLen = strlen(Str);
-	    if (Len < ColumnLen-1)
+	    if (Len < SecondColumn-1)
 	       c2out << Str << BlankSecond+StrLen;
 	    else
 	       c2out << Str << " ";
 	 } else {
 	    c2out << "-" << BlankSecond+1;
 	 }
-	 if (Cache[Pkg].CandidateVer != 0)
-	    c2out << Cache[Pkg].CandidateVerIter(Cache).VerStr() << endl;
-	 else
-	    c2out << "-" << endl;
+	 Str = "-";
+	 if (Cache[Pkg].CandidateVer != 0) {
+	    Str = Cache[Pkg].CandidateVerIter(Cache).VerStr();
+	    if (Pkg->CurrentVer != 0 &&
+	        strcmp(Str, Pkg.CurrentVer().VerStr()) == 0)
+	       Str = "-";
+	 }
+	 c2out << Str << endl;
       }
    } else if (ShowSummary == true) {
       pkgRecords Recs(Cache);
