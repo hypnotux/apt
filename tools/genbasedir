@@ -413,10 +413,15 @@ else
 	# component release file
 	# ----------------------
 
-	echo -n "Creating component releases..."
+	echo -n "Updating component releases..."
 	for comp in $components; do
-		if [ ! -f $release.$comp ]; then
-			echo -n " $comp"
+		echo -n " $comp"
+		if [ -f $release.$comp ]; then
+			mv -f $release.$comp $release.$comp.old
+			sed -e "/\(Package\|Source\)Count:/d" \
+				$release.$comp.old > $release.$comp
+			rm -f $release.$comp.old
+		else
 			echo "Archive: Unknown"      >> $release.$comp
 			echo "Component: $comp"      >> $release.$comp
 			echo "Version: Unknown"      >> $release.$comp
@@ -424,6 +429,14 @@ else
 			echo "Label: Unknown"        >> $release.$comp
 			echo "Architecture: unknown" >> $release.$comp
 			echo "NotAutomatic: false"   >> $release.$comp
+		fi
+		if [ -f $pkglist.$comp ]; then
+			echo "PackageCount: `countpkglist $pkglist.$comp`" \
+				>> $release.$comp
+		fi
+		if [ -f $srclist.$comp ]; then
+			echo "SourceCount: `countpkglist $srclist.$comp`" \
+				>> $release.$comp
 		fi
 	done
 	echo " [done]"
