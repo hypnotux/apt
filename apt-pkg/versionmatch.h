@@ -45,6 +45,8 @@ class pkgVersionMatch
    // Version Matching
    string VerStr;
    bool VerPrefixMatch;
+   // CNC:2003-11-05
+   int VerOp;
 
    // Release Matching
    string RelVerStr;
@@ -66,7 +68,8 @@ class pkgVersionMatch
    bool FileMatch(pkgCache::PkgFileIterator File);
    pkgCache::VerIterator Find(pkgCache::PkgIterator Pkg);
 			       
-   pkgVersionMatch(string Data,MatchType Type);
+   // CNC:2003-11-05
+   pkgVersionMatch(string Data,MatchType Type,int Op = 0);
 };
 
 #endif
