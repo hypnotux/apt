@@ -21,8 +21,6 @@
 #include <apt-pkg/error.h>
 #include <apt-pkg/sptr.h>
 
-#include <apti18n.h>
-
 #include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
@@ -32,7 +30,12 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <errno.h>
+
+// CNC:2003-02-14 - Ralf Corsepius told RH8 with GCC 3.2.1 fails
+//                  compiling without moving this header to here.
+#include <apti18n.h>
 									/*}}}*/
+
 
 using namespace std;
 
