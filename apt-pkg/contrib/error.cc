@@ -66,7 +66,8 @@ using namespace std;
 // GlobalError::GlobalError - Constructor				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-GlobalError::GlobalError() : List(0), PendingFlag(false)
+// CNC:2003-02-26
+GlobalError::GlobalError() : List(0), PendingFlag(false), Stack(0)
 {
 }
 									/*}}}*/
@@ -255,11 +256,12 @@ bool GlobalError::PopState()
 {
    if (Stack == 0)
       return false;
-   Item **End = &List;
-   for (Item *I = List; I != 0; I = I->Next)
-      End = &I->Next;
    State *Top = Stack;
-   *End = Top->List;
+   Item **End = &Top->List;
+   for (Item *I = Top->List; I != 0; I = I->Next)
+      End = &I->Next;
+   *End = List;
+   List = Top->List;
    PendingFlag |= Top->PendingFlag;
    Stack = Top->Next;
    delete Top;
@@ -270,16 +272,17 @@ bool GlobalError::PopBackState()
 {
    if (Stack == 0)
       return false;
-   Item **End = &List;
-   for (Item *I = List; I != 0; I = I->Next)
-      End = &I->Next;
    State *Bottom = Stack;
    State *PreBottom = 0;
    while (Bottom->Next != 0) {
       PreBottom = Bottom;
       Bottom = Bottom->Next;
    }
-   *End = Bottom->List;
+   Item **End = &Bottom->List;
+   for (Item *I = Bottom->List; I != 0; I = I->Next)
+      End = &I->Next;
+   *End = List;
+   List = Bottom->List;
    PendingFlag |= Bottom->PendingFlag;
    delete Bottom;
    if (PreBottom != 0)
