@@ -371,7 +371,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
    {
       for (unsigned int k = 0; k < n; k++)
 	  clog << Args[k] << ' ';
-      clog << endl;
+      clog << endl << endl;
       if (ArgsFileName) {
 	 unlink(ArgsFileName);
 	 free(ArgsFileName);
