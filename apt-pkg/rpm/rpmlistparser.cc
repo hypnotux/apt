@@ -565,13 +565,6 @@ bool rpmListParser::ParseProvides(pkgCache::VerIterator Ver)
    char **verl = NULL;
    int res;
 
-   if (Duplicated == true) 
-   {
-      char *name;
-      headerGetEntry(header, RPMTAG_NAME, &type, (void **)&name, &count);
-      NewProvides(Ver, string(name), Version());
-   }
-
    res = headerGetEntry(header, RPMTAG_PROVIDENAME, &type,
 			(void **)&namel, &count);
    if (res != 1)
