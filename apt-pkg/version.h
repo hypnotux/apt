@@ -84,8 +84,10 @@ class pkgVersioningSystem
    virtual ~pkgVersioningSystem() {};
 };
 
+
 #ifdef APT_COMPATIBILITY
-#include <apt-pkg/debversion.h>
+// CNC:2003-02-21 - We're not compiling the deb subsystem.
+//#include <apt-pkg/debversion.h>
 #endif
 
 #endif

@@ -307,13 +307,15 @@ struct pkgCache::StringItem
 
 // CNC:2003-02-16 - Inlined here.
 #include <ctype.h>
+#define hash_count(a) (sizeof(a)/sizeof(a[0]))
 inline unsigned long pkgCache::sHash(const char *Str) const
 {
    unsigned long Hash = 0;
    for (const char *I = Str; *I != 0; I++)
       Hash = 5*Hash + tolower(*I);
-   return Hash % (sizeof(HeaderP->HashTable)/sizeof(HeaderP->HashTable/[0]));
+   return Hash % hash_count(HeaderP->HashTable);
 }
+#undef hash_count
 
 inline pkgCache::PkgIterator pkgCache::PkgBegin() 
        {return PkgIterator(*this);};
