@@ -250,6 +250,8 @@ bool pkgSourceList::ReadMainList()
       return false;
    
    Reset();
+   // CNC:2003-11-28 - Entries in sources.list have priority over
+   //                  entries in sources.list.d.
    string Main = _config->FindFile("Dir::Etc::sourcelist");
    if (FileExists(Main) == true)
       Res &= ReadAppend(Main);   
