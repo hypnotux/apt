@@ -305,6 +305,22 @@ void *Lua::GetGlobalP(const char *Name)
    return Ret;
 }
 
+void Lua::GetGlobalVS(const char *Name, vector<string> &VS)
+{
+   lua_pushstring(L, Name);
+   lua_rawget(L, LUA_GLOBALSINDEX);
+   int t = lua_gettop(L);
+   if (lua_istable(L, t)) {
+      lua_pushnil(L);
+      while (lua_next(L, t) != 0) {
+	 if (lua_isstring(L, -1))
+	    VS.push_back(lua_tostring(L, -1));
+	 lua_pop(L, 1);
+      }
+   }
+   lua_remove(L, -1);
+}
+
 void Lua::SetDepCache(pkgDepCache *DepCache_)
 {
    DepCache = DepCache_;

@@ -63,6 +63,7 @@ class Lua {
    const char *GetGlobal(const char *Name);
    double GetGlobalI(const char *Name);
    void *GetGlobalP(const char *Name);
+   void GetGlobalVS(const char *Name, vector<string> &VS);
 
    static const double NoGlobalI;
 

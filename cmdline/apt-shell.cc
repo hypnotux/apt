@@ -1750,8 +1750,53 @@ bool DoInstall(CommandLine &CmdL)
 	    if (*I == '?' || *I == '*' || *I == '|' ||
 	        *I == '[' || *I == '^' || *I == '$')
 	       break;
-	 if (*I == 0)
+
+	 // CNC:2003-05-15
+	 if (*I == 0) {
+#ifdef WITH_LUA
+	    vector<string> VS;
+	    _lua->SetDepCache(Cache);
+	    _lua->SetDontFix();
+	    _lua->SetGlobal("name", S);
+	    _lua->SetGlobal("translated", VS);
+	    _lua->RunScripts("Scripts::Apt::Install::TranslateName", false);
+	    const char *name = _lua->GetGlobal("translated");
+	    if (name != NULL) {
+	       VS.push_back(name);
+	    } else {
+	       _lua->GetGlobalVS("translated", VS);
+	    }
+	    _lua->ResetGlobals();
+	    _lua->ResetCaches();
+
+	    // Translations must always be confirmed
+	    ExpectedInst += 1000;
+
+	    // Run over the matches
+	    bool Hit = false;
+	    for (vector<string>::const_iterator I = VS.begin();
+	         I != VS.end(); I++) {
+
+	       Pkg = Cache->FindPkg(*I);
+	       if (Pkg.end() == true)
+		  continue;
+
+	       ioprintf(c1out,_("Note, selecting %s for '%s'\n"),
+			Pkg.Name(),S);
+	    
+	       if (VerTag != 0)
+		  if (TryToChangeVer(Pkg,Cache,VerTag,VerIsRel) == false)
+		     return false;
+	    
+	       Hit |= TryToInstall(Pkg,Cache,Fix,Remove,BrokenFix,
+				   ExpectedInst,true);
+	    }
+	 
+	    if (Hit == true)
+	       continue;
+#endif
 	    return _error->Error(_("Couldn't find package %s"),S);
+	 }
 
 	 // Regexs must always be confirmed
 	 ExpectedInst += 1000;
