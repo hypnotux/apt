@@ -275,9 +275,18 @@ bool pkgCacheGenerator::MergeFileProvides(ListParser &List)
 /* This creates a new package structure and adds it to the hash table */
 bool pkgCacheGenerator::NewPackage(pkgCache::PkgIterator &Pkg,string Name)
 {
+// CNC:2003-02-17 - Optimized.
+#if 0
    Pkg = Cache.FindPkg(Name);
    if (Pkg.end() == false)
       return true;
+#else
+   pkgCache::Package *P = Cache.FindPackage(Name.c_str());
+   if (P != NULL) {
+      Pkg = pkgCache::PkgIterator(Cache, P);
+      return true;
+   }
+#endif
        
    // Get a structure
    unsigned long Package = Map.Allocate(sizeof(pkgCache::Package));
