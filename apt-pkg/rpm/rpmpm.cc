@@ -827,7 +827,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
    rc = 0;
 #ifdef HAVE_RPM41
-   rpmtsClean(TS);
    if (_config->FindB("RPM::Order", true) == true)
       rc = rpmtsOrder(TS);
 #else
@@ -845,6 +844,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 #ifdef HAVE_RPM41
    probFilter |= rpmtsFilterFlags(TS);
    rpmtsSetFlags(TS, (rpmtransFlags)(rpmtsFlags(TS) | tsFlags));
+   rpmtsClean(TS);
    rc = rpmtsSetNotifyCallback(TS, rpmShowProgress, (void *)notifyFlags);
    rc = rpmtsRun(TS, NULL, (rpmprobFilterFlags)probFilter);
    probs = rpmtsProblems(TS);
