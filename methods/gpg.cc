@@ -247,8 +247,6 @@ char *getFileSigner(const char *file, const char *sigfile,
       if (!fgets(buffer, 1024, f))
 	 break;
       
-      fprintf(stderr, "LINE: %s", buffer);
-
       if (goodsig && keyid[0])
 	 continue;     
       
