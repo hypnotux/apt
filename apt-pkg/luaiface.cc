@@ -51,6 +51,23 @@ extern "C" {
 #include <unistd.h>
 #include <sys/types.h>
 
+#define pushudata(ctype, value) \
+   do { \
+      ctype *_tmp = (ctype *) lua_newuserdata(L, sizeof(ctype)); \
+      *_tmp = (ctype) value; \
+      luaL_getmetatable(L, #ctype); \
+      lua_setmetatable(L, -2); \
+   } while (0)
+
+#define checkudata(ctype, target, n) \
+   do { \
+      ctype *_tmp = (ctype *) luaL_checkudata(L, n, #ctype); \
+      if (_tmp != NULL) \
+	 target = *_tmp; \
+      else \
+	 target = NULL; \
+   } while (0)
+
 Lua *_GetLuaObj()
 {
    static Lua *Obj = new Lua;
@@ -86,6 +103,9 @@ Lua::Lua()
       lib->func(L);  /* open library */
       lua_settop(L, 0);  /* discard any results */
    }
+   luaL_newmetatable(L, "pkgCache::Package*");
+   luaL_newmetatable(L, "pkgCache::Version*");
+   lua_pop(L, 2);
 }
 
 Lua::~Lua()
@@ -235,7 +255,7 @@ void Lua::SetGlobal(const char *Name, vector<pkgCache::Package*> &Value,
    if (Total == -1 || Total > Value.size())
       Total = Value.size();
    for (int i=0; i != Total && Value[i] != NULL; i++) {
-      lua_pushlightuserdata(L, (void*)Value[i]);
+      pushudata(pkgCache::Package*, Value[i]);
       lua_rawseti(L, -2, i+1);
    }
    lua_rawset(L, LUA_GLOBALSINDEX);
@@ -375,7 +395,11 @@ inline pkgCache::Package *AptAux_ToPackage(lua_State *L, int n)
       const char *Name = lua_tostring(L, n);
       return (pkgCache::Package*)Cache->FindPackage(Name);
    } else {
-      return (pkgCache::Package*)lua_touserdata(L,n);
+      pkgCache::Package *Pkg;
+      checkudata(pkgCache::Package*, Pkg, n);
+      if (Pkg == NULL)
+	 luaL_argerror(L, n, "invalid package");
+      return Pkg;
    }
 }
 
@@ -392,7 +416,11 @@ static pkgCache::PkgIterator *AptAux_ToPkgIterator(lua_State *L, int n)
 
 inline pkgCache::Version *AptAux_ToVersion(lua_State *L, int n)
 {
-   return (pkgCache::Version*)lua_touserdata(L,n);
+   pkgCache::Version *Ver;
+   checkudata(pkgCache::Version*, Ver, n);
+   if (Ver == NULL)
+      luaL_argerror(L, n, "invalid version");
+   return Ver;
 }
 
 static pkgCache::VerIterator *AptAux_ToVerIterator(lua_State *L, int n)
@@ -409,7 +437,7 @@ static pkgCache::VerIterator *AptAux_ToVerIterator(lua_State *L, int n)
 inline int AptAux_PushPackage(lua_State *L, pkgCache::Package *Pkg)
 {
    if (Pkg != 0) {
-      lua_pushlightuserdata(L, (void*)Pkg);
+      pushudata(pkgCache::Package*, Pkg);
       return 1;
    }
    return 0;
@@ -418,7 +446,7 @@ inline int AptAux_PushPackage(lua_State *L, pkgCache::Package *Pkg)
 inline int AptAux_PushVersion(lua_State *L, pkgCache::Version *Ver)
 {
    if (Ver != 0) {
-      lua_pushlightuserdata(L, (void*)Ver);
+      pushudata(pkgCache::Version*, Ver);
       return 1;
    }
    return 0;
@@ -432,7 +460,7 @@ static int AptAux_PushVersion(lua_State *L, map_ptrloc Loc)
    if (Loc != 0) {
       pkgCache::Version *Ver = Cache->VerP+Loc;
       if (Ver != 0) {
-	 lua_pushlightuserdata(L, (void*)Ver);
+	 pushudata(pkgCache::Version*, Ver);
 	 return 1;
       }
    }
@@ -466,11 +494,6 @@ inline int AptAux_PushBool(lua_State *L, bool Value)
 
 static int AptAux_mark(lua_State *L, int Kind)
 {
-   if (lua_gettop(L) != 1 || !(lua_isstring(L, 1) || lua_isuserdata(L, 1))) {
-      lua_pushstring(L, "marking requires one string/package argument");
-      lua_error(L);
-      return 0;
-   }
    pkgCache::Package *Pkg = AptAux_ToPackage(L, 1);
    if (Pkg != NULL) {
       pkgDepCache *DepCache = _lua->GetDepCache(L);
@@ -591,7 +614,7 @@ static int AptLua_pkglist(lua_State *L)
    int i = 1;
    for (pkgCache::PkgIterator PkgI = Cache->PkgBegin();
         PkgI.end() == false; PkgI++) {
-      lua_pushlightuserdata(L, (void*)((pkgCache::Package*)PkgI));
+      pushudata(pkgCache::Package*, PkgI);
       lua_rawseti(L, -2, i++);
    }
    return 1;
@@ -703,7 +726,7 @@ static int AptLua_pkgverlist(lua_State *L)
    int i = 1;
    for (pkgCache::VerIterator Ver = (*PkgI).VersionList();
         Ver.end() == false; Ver++) {
-      lua_pushlightuserdata(L, (void*)((pkgCache::Version*)Ver));
+      pushudata(pkgCache::Version*, Ver);
       lua_rawseti(L, -2, i++);
    }
    return 1;
@@ -711,22 +734,12 @@ static int AptLua_pkgverlist(lua_State *L)
 
 static int AptLua_verstr(lua_State *L)
 {
-   if (lua_gettop(L) != 1 || !lua_isuserdata(L, 1)) {
-      lua_pushstring(L, "verstr requires one version as argument");
-      lua_error(L);
-      return 0;
-   }
    pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
    return AptAux_PushCacheString(L, Ver->VerStr);
 }
 
 static int AptLua_verarch(lua_State *L)
 {
-   if (lua_gettop(L) != 1 || !lua_isuserdata(L, 1)) {
-      lua_pushstring(L, "verarch requires one version as argument");
-      lua_error(L);
-      return 0;
-   }
    pkgCache::Version *Ver = AptAux_ToVersion(L, 1);
    return AptAux_PushCacheString(L, Ver->Arch);
    
@@ -734,11 +747,6 @@ static int AptLua_verarch(lua_State *L)
 
 static int AptLua_verisonline(lua_State *L)
 {
-   if (lua_gettop(L) != 1 || !lua_isuserdata(L, 1)) {
-      lua_pushstring(L, "verisonline requires one version as argument");
-      lua_error(L);
-      return 0;
-   }
    pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
    return AptAux_PushBool(L, VerI->Downloadable());
 }
