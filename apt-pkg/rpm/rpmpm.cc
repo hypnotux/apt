@@ -544,8 +544,7 @@ bool pkgRPMPM::Go()
       _lua->SetGlobal("names_remove", uninstall);
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
-      if (List.empty() == false)
-	 _lua->SetCache(List[0].Pkg.Cache());
+      _lua->SetDepCache(&Cache);
       _lua->RunScripts("Scripts::RPM::Pre", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
@@ -565,8 +564,7 @@ bool pkgRPMPM::Go()
       _lua->SetGlobal("names_remove", uninstall);
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
-      if (List.empty() == false)
-	 _lua->SetCache(List[0].Pkg.Cache());
+      _lua->SetDepCache(&Cache);
       _lua->RunScripts("Scripts::RPM::Post", false);
       _lua->ResetCaches();
       _lua->ResetGlobals();
