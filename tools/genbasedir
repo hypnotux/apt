@@ -26,6 +26,9 @@ Options:\n\
                       distributions that use non-automatically generated\n\
                       file dependencies\n\
    --meta=NAME        Create a meta repository named NAME\n\
+   --compresslevel=n  Set bzip2 compress level (1-9)\n\
+   --cachedir=DIR     Use a custom md5sum cache directory for package list\n\
+                      generation (useful for non-root users).\n\
    -h, --help         Display this help\n\
 \n\
 Examples:\n\
@@ -123,6 +126,15 @@ while test $# -gt 0 ; do
 	;;
 	--default-key=*)
 		defaultkey="\"$1\""
+	;;
+	--compresslevel=*)
+		bz2opts="-`echo $1 | sed 's/^--compresslevel=//'`"
+	;;
+	--cachedir=*)
+		cachedir="`echo $1 | sed 's/^--cachedir=//'`"
+		cacheopts="--cachedir $cachedir"
+		[ -d $cachedir/genpkglist ] || mkdir -p $cachedir/genpkglist
+		[ -d $cachedir/gensrclist ] || mkdir -p $cachedir/gensrclist
 	;;
     -*)
         echo -e "$usage" 1>&2
@@ -226,9 +238,9 @@ for comp in $components; do
 	fi
 
     if test x$updateinfo = x; then
-    	(cd $basedir; genpkglist $progress $bloat $meta_opts --index $srcidxdir/srcidx.$comp $topdir $comp)
+    	(cd $basedir; genpkglist $progress $bloat $meta_opts $cacheopts --index $srcidxdir/srcidx.$comp $topdir $comp)
     else
-    	(cd $basedir; genpkglist $progress $bloat $meta_opts --index $srcidxdir/srcidx.$comp --info $updateinfo $topdir $comp)
+    	(cd $basedir; genpkglist $progress $bloat $meta_opts $cacheopts --index $srcidxdir/srcidx.$comp --info $updateinfo $topdir $comp)
     fi
 
     if [ -z "$meta" -a -f $basedir/pkglist.$comp ]; then
@@ -245,7 +257,7 @@ for comp in $components; do
             mv -f $basedir/pkglist.$comp.bz2 $basedir/pkglist.$comp.bz2.old
         fi
 
-        bzip2 -c $basedir/pkglist.$comp > $basedir/pkglist.$comp.bz2
+        bzip2 $bz2opts -c $basedir/pkglist.$comp > $basedir/pkglist.$comp.bz2
 
         # Compare with older compressed pkglist.
         if [ -f $basedir/pkglist.$comp.bz2.old ]; then
@@ -276,7 +288,7 @@ if [ -n "$meta" -a -f $basedir/pkglist.$meta ]; then
 		mv -f $basedir/pkglist.$meta.bz2 $basedir/pkglist.$meta.bz2.old
 	fi
 
-	bzip2 -c $basedir/pkglist.$meta > $basedir/pkglist.$meta.bz2
+	bzip2 $bz2opts -c $basedir/pkglist.$meta > $basedir/pkglist.$meta.bz2
 
 	# Compare with older compressed pkglist.
 	if [ -f $basedir/pkglist.$meta.bz2.old ]; then
@@ -337,7 +349,7 @@ for comp in $components; do
             mv -f $basedir/srclist.$comp.bz2 $basedir/srclist.$comp.bz2.old
         fi
 
-        bzip2 -c $basedir/srclist.$comp > $basedir/srclist.$comp.bz2
+        bzip2 $bz2opts -c $basedir/srclist.$comp > $basedir/srclist.$comp.bz2
 
         # Compare with older compressed srclist.
         if [ -f $basedir/srclist.$comp.bz2.old ]; then
@@ -367,7 +379,7 @@ if [ -n "$meta" -a -f $basedir/srclist.$meta ]; then
 		mv -f $basedir/srclist.$meta.bz2 $basedir/srclist.$meta.bz2.old
 	fi
 
-	bzip2 -c $basedir/srclist.$meta > $basedir/srclist.$meta.bz2
+	bzip2 $bz2opts -c $basedir/srclist.$meta > $basedir/srclist.$meta.bz2
 
 	# Compare with older compressed srclist.
 	if [ -f $basedir/srclist.$meta.bz2.old ]; then

@@ -21,6 +21,7 @@
 #include <apt-pkg/error.h>
 #include <apt-pkg/tagfile.h>
 #include <apt-pkg/rpmhandler.h>
+#include <apt-pkg/configuration.h>
 
 #include "cached_md5.h"
 
@@ -124,6 +125,7 @@ void usage()
    cerr << " --progress     show a progress bar" << endl;
    cerr << " --flat         use a flat directory structure, where RPMS and SRPMS"<<endl;
    cerr << "                are in the same directory level"<<endl;
+   cerr << " --cachedir=DIR use a custom directory for package md5sum cache"<<endl;
 }
 
 #if RPM_VERSION >= 0x040000
@@ -170,6 +172,14 @@ int main(int argc, char ** argv)
 	    srcListSuffix = argv[i];
 	 } else {
 	    cout << "gensrclist: argument missing for option --meta"<<endl;
+	    exit(1);
+	 }
+      } else if (strcmp(argv[i], "--cachedir") == 0) {
+	 i++;
+	 if (i < argc) {
+            _config->Set("Dir::Cache", argv[i]);
+	 } else {
+            cout << "genpkglist: argument missing for option --cachedir"<<endl;
 	    exit(1);
 	 }
       } else {
