@@ -189,7 +189,8 @@ bool FTPConn::Login()
    
    // Setup the variables needed for authentication
    string User = "anonymous";
-   string Pass = "apt_get_ftp_2.1@debian.linux.user";
+   // CNC:2003-06-16
+   string Pass = "apt_get_ftp_2.1@rpm.linux.user";
 
    // Fill in the user/pass
    if (ServerName.User.empty() == false)
