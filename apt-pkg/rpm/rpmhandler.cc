@@ -343,9 +343,13 @@ string RPMDirHandler::MD5Sum()
 
 
 RPMDBHandler::RPMDBHandler(bool WriteLock)
-	: WriteLock(WriteLock)
+   : WriteLock(WriteLock), Handler(0)
 {
+#if RPM_VERSION >= 0x040000
+   RpmIter = NULL;
+#endif
    string Dir = _config->Find("RPM::RootDir");
+   
    rpmReadConfigFiles(NULL, NULL);
    ID = DataPath(false);
 
@@ -359,9 +363,6 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    stat(DataPath(false).c_str(), &St);
    DbFileMtime = St.st_mtime;
 
-#if RPM_VERSION >= 0x040000
-   RpmIter = NULL;
-#endif
 #if RPM_VERSION >= 0x040100
    Handler = rpmtsCreate();
    rpmtsSetVSFlags(Handler, (rpmVSFlags_e)-1);
@@ -395,7 +396,7 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    iSize = 0;
    rpmdbMatchIterator countIt;
    countIt = rpmxxInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
-   while(rpmdbNextIterator(countIt) != NULL)
+   while (rpmdbNextIterator(countIt) != NULL)
       iSize++;
    rpmdbFreeIterator(countIt);
 #else
@@ -414,20 +415,20 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 RPMDBHandler::~RPMDBHandler()
 {
 #if RPM_VERSION >= 0x040000
-   if (RpmIter == NULL)
-      return;
-   rpmdbFreeIterator(RpmIter);
-   RpmIter = NULL;
+   if (RpmIter != NULL)
+      rpmdbFreeIterator(RpmIter);
 #else
    if (HeaderP != NULL)
        headerFree(HeaderP);
 #endif
 
+   if (Handler != NULL) {
 #if RPM_VERSION >= 0x040100
-   rpmtsFree(Handler);
+      rpmtsFree(Handler);
 #else
-   rpmdbClose(Handler);
+      rpmdbClose(Handler);
 #endif
+   }
 
    // Restore just after opening the database, and just after closing.
    if (WriteLock) {

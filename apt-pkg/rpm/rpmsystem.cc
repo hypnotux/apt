@@ -71,6 +71,8 @@ RPMDBHandler *rpmSystem::GetDBHandler()
 bool rpmSystem::LockRead()
 {
    GetDBHandler();
+   if (_error->PendingError() == true)
+      return false;
    return true;
 }
 
