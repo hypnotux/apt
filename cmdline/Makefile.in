@@ -37,6 +37,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_triplet = @host@
 @COMPILE_APTSHELL_TRUE@am__append_1 = apt-shell
+@COMPILE_STATIC_TRUE@am__append_2 = apt-get-static apt-cache-static apt-cdrom-static
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -55,6 +56,8 @@ COMPILE_APTSHELL_FALSE = @COMPILE_APTSHELL_FALSE@
 COMPILE_APTSHELL_TRUE = @COMPILE_APTSHELL_TRUE@
 COMPILE_MANPAGES_FALSE = @COMPILE_MANPAGES_FALSE@
 COMPILE_MANPAGES_TRUE = @COMPILE_MANPAGES_TRUE@
+COMPILE_STATIC_FALSE = @COMPILE_STATIC_FALSE@
+COMPILE_STATIC_TRUE = @COMPILE_STATIC_TRUE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -172,29 +175,58 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
-bin_PROGRAMS = apt-get apt-cache apt-cdrom apt-config $(am__append_1)
-
 EXTRA_DIST = indexcopy.cc indexcopy.h
+
+bin_PROGRAMS = apt-get apt-cache apt-cdrom apt-config $(am__append_1) $(am__append_2)
 
 LDADD = ../apt-pkg/libapt-pkg.la $(RPMLIBS)
 
-apt_cache_SOURCES = apt-cache.cc
 apt_get_SOURCES = apt-get.cc acqprogress.cc acqprogress.h
+apt_cache_SOURCES = apt-cache.cc
 apt_shell_SOURCES = apt-shell.cc acqprogress.cc acqprogress.h
 apt_shell_LDADD = $(LDADD) -lreadline -lncurses
 apt_config_SOURCES = apt-config.cc
 apt_cdrom_SOURCES = apt-cdrom.cc rpmindexcopy.cc rpmindexcopy.h
+
+apt_get_static_SOURCES = $(apt_get_SOURCES)
+apt_get_static_LDFLAGS = -all-static
+apt_cache_static_SOURCES = $(apt_cache_SOURCES)
+apt_cache_static_LDFLAGS = -all-static
+apt_cdrom_static_SOURCES = $(apt_cdrom_SOURCES)
+apt_cdrom_static_LDFLAGS = -all-static
 subdir = cmdline
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/buildlib/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
-@COMPILE_APTSHELL_TRUE@bin_PROGRAMS = apt-get$(EXEEXT) \
-@COMPILE_APTSHELL_TRUE@	apt-cache$(EXEEXT) apt-cdrom$(EXEEXT) \
-@COMPILE_APTSHELL_TRUE@	apt-config$(EXEEXT) apt-shell$(EXEEXT)
-@COMPILE_APTSHELL_FALSE@bin_PROGRAMS = apt-get$(EXEEXT) \
-@COMPILE_APTSHELL_FALSE@	apt-cache$(EXEEXT) apt-cdrom$(EXEEXT) \
-@COMPILE_APTSHELL_FALSE@	apt-config$(EXEEXT)
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@bin_PROGRAMS = \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-get$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-cache$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-cdrom$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-config$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-get-static$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-cache-static$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_TRUE@	apt-cdrom-static$(EXEEXT)
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_FALSE@bin_PROGRAMS = \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_FALSE@	apt-get$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_FALSE@	apt-cache$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_FALSE@	apt-cdrom$(EXEEXT) \
+@COMPILE_APTSHELL_FALSE@@COMPILE_STATIC_FALSE@	apt-config$(EXEEXT)
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@bin_PROGRAMS = \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-get$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-cache$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-cdrom$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-config$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-shell$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-get-static$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-cache-static$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_TRUE@	apt-cdrom-static$(EXEEXT)
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@bin_PROGRAMS = \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@	apt-get$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@	apt-cache$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@	apt-cdrom$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@	apt-config$(EXEEXT) \
+@COMPILE_APTSHELL_TRUE@@COMPILE_STATIC_FALSE@	apt-shell$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
 am_apt_cache_OBJECTS = apt-cache.$(OBJEXT)
@@ -202,11 +234,21 @@ apt_cache_OBJECTS = $(am_apt_cache_OBJECTS)
 apt_cache_LDADD = $(LDADD)
 apt_cache_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 apt_cache_LDFLAGS =
+am__objects_1 = apt-cache.$(OBJEXT)
+am_apt_cache_static_OBJECTS = $(am__objects_1)
+apt_cache_static_OBJECTS = $(am_apt_cache_static_OBJECTS)
+apt_cache_static_LDADD = $(LDADD)
+apt_cache_static_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 am_apt_cdrom_OBJECTS = apt-cdrom.$(OBJEXT) rpmindexcopy.$(OBJEXT)
 apt_cdrom_OBJECTS = $(am_apt_cdrom_OBJECTS)
 apt_cdrom_LDADD = $(LDADD)
 apt_cdrom_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 apt_cdrom_LDFLAGS =
+am__objects_2 = apt-cdrom.$(OBJEXT) rpmindexcopy.$(OBJEXT)
+am_apt_cdrom_static_OBJECTS = $(am__objects_2)
+apt_cdrom_static_OBJECTS = $(am_apt_cdrom_static_OBJECTS)
+apt_cdrom_static_LDADD = $(LDADD)
+apt_cdrom_static_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 am_apt_config_OBJECTS = apt-config.$(OBJEXT)
 apt_config_OBJECTS = $(am_apt_config_OBJECTS)
 apt_config_LDADD = $(LDADD)
@@ -217,6 +259,11 @@ apt_get_OBJECTS = $(am_apt_get_OBJECTS)
 apt_get_LDADD = $(LDADD)
 apt_get_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 apt_get_LDFLAGS =
+am__objects_3 = apt-get.$(OBJEXT) acqprogress.$(OBJEXT)
+am_apt_get_static_OBJECTS = $(am__objects_3)
+apt_get_static_OBJECTS = $(am_apt_get_static_OBJECTS)
+apt_get_static_LDADD = $(LDADD)
+apt_get_static_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
 am_apt_shell_OBJECTS = apt-shell.$(OBJEXT) acqprogress.$(OBJEXT)
 apt_shell_OBJECTS = $(am_apt_shell_OBJECTS)
 apt_shell_DEPENDENCIES = ../apt-pkg/libapt-pkg.la
@@ -245,10 +292,12 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(apt_cache_SOURCES) $(apt_cdrom_SOURCES) \
-	$(apt_config_SOURCES) $(apt_get_SOURCES) $(apt_shell_SOURCES)
+DIST_SOURCES = $(apt_cache_SOURCES) $(apt_cache_static_SOURCES) \
+	$(apt_cdrom_SOURCES) $(apt_cdrom_static_SOURCES) \
+	$(apt_config_SOURCES) $(apt_get_SOURCES) \
+	$(apt_get_static_SOURCES) $(apt_shell_SOURCES)
 DIST_COMMON = $(srcdir)/Makefile.in Makefile.am
-SOURCES = $(apt_cache_SOURCES) $(apt_cdrom_SOURCES) $(apt_config_SOURCES) $(apt_get_SOURCES) $(apt_shell_SOURCES)
+SOURCES = $(apt_cache_SOURCES) $(apt_cache_static_SOURCES) $(apt_cdrom_SOURCES) $(apt_cdrom_static_SOURCES) $(apt_config_SOURCES) $(apt_get_SOURCES) $(apt_get_static_SOURCES) $(apt_shell_SOURCES)
 
 all: all-am
 
@@ -291,15 +340,24 @@ clean-binPROGRAMS:
 apt-cache$(EXEEXT): $(apt_cache_OBJECTS) $(apt_cache_DEPENDENCIES) 
 	@rm -f apt-cache$(EXEEXT)
 	$(CXXLINK) $(apt_cache_LDFLAGS) $(apt_cache_OBJECTS) $(apt_cache_LDADD) $(LIBS)
+apt-cache-static$(EXEEXT): $(apt_cache_static_OBJECTS) $(apt_cache_static_DEPENDENCIES) 
+	@rm -f apt-cache-static$(EXEEXT)
+	$(CXXLINK) $(apt_cache_static_LDFLAGS) $(apt_cache_static_OBJECTS) $(apt_cache_static_LDADD) $(LIBS)
 apt-cdrom$(EXEEXT): $(apt_cdrom_OBJECTS) $(apt_cdrom_DEPENDENCIES) 
 	@rm -f apt-cdrom$(EXEEXT)
 	$(CXXLINK) $(apt_cdrom_LDFLAGS) $(apt_cdrom_OBJECTS) $(apt_cdrom_LDADD) $(LIBS)
+apt-cdrom-static$(EXEEXT): $(apt_cdrom_static_OBJECTS) $(apt_cdrom_static_DEPENDENCIES) 
+	@rm -f apt-cdrom-static$(EXEEXT)
+	$(CXXLINK) $(apt_cdrom_static_LDFLAGS) $(apt_cdrom_static_OBJECTS) $(apt_cdrom_static_LDADD) $(LIBS)
 apt-config$(EXEEXT): $(apt_config_OBJECTS) $(apt_config_DEPENDENCIES) 
 	@rm -f apt-config$(EXEEXT)
 	$(CXXLINK) $(apt_config_LDFLAGS) $(apt_config_OBJECTS) $(apt_config_LDADD) $(LIBS)
 apt-get$(EXEEXT): $(apt_get_OBJECTS) $(apt_get_DEPENDENCIES) 
 	@rm -f apt-get$(EXEEXT)
 	$(CXXLINK) $(apt_get_LDFLAGS) $(apt_get_OBJECTS) $(apt_get_LDADD) $(LIBS)
+apt-get-static$(EXEEXT): $(apt_get_static_OBJECTS) $(apt_get_static_DEPENDENCIES) 
+	@rm -f apt-get-static$(EXEEXT)
+	$(CXXLINK) $(apt_get_static_LDFLAGS) $(apt_get_static_OBJECTS) $(apt_get_static_LDADD) $(LIBS)
 apt-shell$(EXEEXT): $(apt_shell_OBJECTS) $(apt_shell_DEPENDENCIES) 
 	@rm -f apt-shell$(EXEEXT)
 	$(CXXLINK) $(apt_shell_LDFLAGS) $(apt_shell_OBJECTS) $(apt_shell_LDADD) $(LIBS)
