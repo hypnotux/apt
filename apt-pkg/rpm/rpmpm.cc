@@ -737,6 +737,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 {
    int rc = 0;
    bool Success = false;
+   bool Interactive = _config->FindB("RPM::Interactive",true);
    int debug = _config->FindB("Debug::pkgRPMPM", false);
    string Dir = _config->Find("RPM::RootDir");
    rpmReadConfigFiles(NULL, NULL);
@@ -785,7 +786,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       probFilter |= RPMPROB_FILTER_REPLACENEWFILES;
    }
 
-   if (_config->FindB("RPM::Interactive", true))
+   if (Interactive)
        notifyFlags |= INSTALL_LABEL | INSTALL_HASH;
    else
        notifyFlags |= INSTALL_LABEL | INSTALL_PERCENT;
