@@ -1504,6 +1504,7 @@ bool DoUpdate(CommandLine &CmdL)
 
    if (CmdL.FileSize() != 1)
    {
+      List.ReadVendors();
       for (const char **I = CmdL.FileList + 1; *I != 0; I++)
       {
 	 string Repo = _config->FindDir("Dir::Etc::sourceparts") + *I;
@@ -1511,7 +1512,6 @@ bool DoUpdate(CommandLine &CmdL)
 	    Repo += ".list";
 	 if (FileExists(Repo) == true)
 	 {
-	    List.ReadVendors();
 	    if (List.ReadAppend(Repo) == true)
 	       Partial = true;
 	    else
