@@ -825,10 +825,10 @@ bool CacheFile::CheckDeps(bool AllowBroken)
    }
    else
    {
-      c1out << _("You might want to run `apt-get -f install' to correct these.") << endl;
+      c1out << _("You might want to run `apt-get --fix-broken install' to correct these.") << endl;
       ShowBroken(c1out,*this,true);
 
-      return _error->Error(_("Unmet dependencies. Try using -f."));
+      return _error->Error(_("Unmet dependencies. Try using --fix-broken."));
    }
       
    return true;
@@ -2058,10 +2058,10 @@ bool DoInstall(CommandLine &CmdL)
       packages */
    if (BrokenFix == true && Cache->BrokenCount() != 0)
    {
-      c1out << _("You might want to run `apt-get -f install' to correct these:") << endl;
+      c1out << _("You might want to run `apt-get --fix-broken install' to correct these:") << endl;
       ShowBroken(c1out,Cache,false);
 
-      return _error->Error(_("Unmet dependencies. Try 'apt-get -f install' with no packages (or specify a solution)."));
+      return _error->Error(_("Unmet dependencies. Try 'apt-get --fix-broken install' with no packages (or specify a solution)."));
    }
    
    // Call the scored problem resolver
@@ -2950,7 +2950,7 @@ bool DoBuildDep(CommandLine &CmdL)
          // CNC:2004-07-05
          ShowBroken(c1out, Cache, false);
 	 return _error->Error(_("Some broken packages were found while trying to process build-dependencies for %s.\n"
-				"You might want to run `apt-get -f install' to correct these."),*I);
+				"You might want to run `apt-get --fix-broken install' to correct these."),*I);
       }
    }
   

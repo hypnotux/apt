@@ -150,7 +150,7 @@ class AutoReOpenCache
 	 if ((*Cache)->CheckDeps(true) == false) {
 	    c1out << _("There are broken packages. ")
 		  << _("Run `check' to see them.") << endl;
-	    c1out << _("You can try to fix them automatically with `install -f'.") << endl;
+	    c1out << _("You can try to fix them automatically with `install --fix-broken'0.") << endl;
 	 }
       }
    };
@@ -930,10 +930,10 @@ bool CacheFile::CheckDeps(bool AllowBroken)
    }
    else
    {
-      c1out << _("You might want to run `install -f' to correct these.") << endl;
+      c1out << _("You might want to run `install --fix-broken' to correct these.") << endl;
       ShowBroken(c1out,*this,true);
 
-      return _error->Error(_("Unmet dependencies. Try using -f."));
+      return _error->Error(_("Unmet dependencies. Try using --fix-broken."));
    }
       
    return true;
@@ -2135,7 +2135,7 @@ bool DoInstall(CommandLine &CmdL)
       ConfirmChanges(Cache, StateGuard);
       c1out << _("There are still broken packages. ")
 	    << _("Run `check' to see them.") << endl;
-      c1out << _("You can try to fix them automatically with `install -f'.") << endl;
+      c1out << _("You can try to fix them automatically with `install --fix-broken'.") << endl;
       return true;
    }
 
@@ -2672,7 +2672,7 @@ bool DoBuildDep(CommandLine &CmdL)
       // Now we check the state of the packages,
       if (Cache->BrokenCount() != 0)
 	 return _error->Error(_("Some broken packages were found while trying to process build-dependencies for %s.\n"
-				"You might want to run `apt-get -f install' to correct these."),*I);
+				"You might want to run `apt-get --fix-broken install' to correct these."),*I);
    }
   
    ConfirmChanges(Cache, StateGuard);
@@ -4444,7 +4444,7 @@ int main(int argc,const char *argv[])
    if (GCache->CheckDeps(true) == false) {
       c1out << _("There are broken packages. ")
 	    << _("Run `check' to see them.") << endl;
-      c1out << _("You can try to fix them automatically with `install -f'.") << endl;
+      c1out << _("You can try to fix them automatically with `install --fix-broken'.") << endl;
    }
 
    // Make a copy of the configuration. Each command will modify its
