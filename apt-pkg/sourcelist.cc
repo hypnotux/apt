@@ -250,14 +250,14 @@ bool pkgSourceList::ReadMainList()
       return false;
    
    Reset();
-   string Parts = _config->FindDir("Dir::Etc::sourceparts");
-   if (FileExists(Parts) == true)
-      Res &= ReadSourceDir(Parts);
-   
    string Main = _config->FindFile("Dir::Etc::sourcelist");
    if (FileExists(Main) == true)
       Res &= ReadAppend(Main);   
 
+   string Parts = _config->FindDir("Dir::Etc::sourceparts");
+   if (FileExists(Parts) == true)
+      Res &= ReadSourceDir(Parts);
+   
    return Res;
 }
 									/*}}}*/
