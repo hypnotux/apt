@@ -239,7 +239,21 @@ class pkgDepCache::State
 
    StateCache &operator [](pkgCache::PkgIterator const &I) {return PkgState[I->ID];};
 
-   State() : PkgState(0), DepState(0), PkgIgnore(0) {};
+   // Size queries
+   inline double UsrSize() {return iUsrSize;};
+   inline double DebSize() {return iDownloadSize;};
+   inline unsigned long DelCount() {return iDelCount;};
+   inline unsigned long KeepCount() {return iKeepCount;};
+   inline unsigned long InstCount() {return iInstCount;};
+   inline unsigned long BrokenCount() {return iBrokenCount;};
+   inline unsigned long BadCount() {return iBadCount;};
+
+   State(pkgDepCache *Dep=NULL)
+      : PkgState(0), DepState(0), PkgIgnore(0)
+   {
+      if (Dep != NULL)
+	 Save(*Dep);
+   };
    ~State()
    {
       delete [] PkgState;
