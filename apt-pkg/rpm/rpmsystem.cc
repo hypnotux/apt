@@ -173,7 +173,7 @@ bool rpmSystem::Initialize(Configuration &Cnf)
       if (Cnf.FindB("RPM::Force",false))
 	 Cnf.Set("RPM::Options::", "--force");
    }
-   if (Cnf.Exists("RPM::Force"))
+   if (Cnf.Exists("RPM::NoDeps"))
    {
       _error->Warning("RPM::NoDeps is obsoleted. Add \"--nodeps\" to RPM::Options and RPM::Erase-Options instead.");
       if (Cnf.FindB("RPM::NoDeps",false))
@@ -189,10 +189,10 @@ bool rpmSystem::Initialize(Configuration &Cnf)
       NULL,
    };
    int NoPromote = 1;
-   const char *Opt = *RPMOptions;
+   const char **Opt = RPMOptions;
    while (*Opt && NoPromote)
    {
-      Top = _config->Tree(Opt);
+      Top = _config->Tree(*Opt);
       if (Top != 0)
       {
 	 for (Top = Top->Child; Top != 0; Top = Top->Next)
