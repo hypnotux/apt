@@ -904,7 +904,7 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	 else if (Opts->Value == "--nomd5")
 	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
 #endif
-#ifdef HAVE_RPM41
+#ifdef HAVE_RPM4
 	 else if (Opts->Value == "--repackage")
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 #endif
