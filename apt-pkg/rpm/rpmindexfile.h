@@ -60,7 +60,7 @@ class rpmDatabaseIndex : public rpmIndexFile
    rpmDatabaseIndex();
 };
 
-class rpmListIndex : public pkgIndexFile
+class rpmListIndex : public rpmIndexFile
 {
 
    protected:
