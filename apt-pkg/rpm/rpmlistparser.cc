@@ -33,8 +33,6 @@
 #include <rpm/rpmds.h>
 #endif
 
-#define WITH_VERSION_CACHING 1
-
 // ListParser::rpmListParser - Constructor				/*{{{*/
 // ---------------------------------------------------------------------
 /* */
