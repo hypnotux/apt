@@ -792,7 +792,7 @@ static void ScriptsAcquireDone(const char *ConfKey,
       _lua->SetGlobal("acquire_filename", StoreFilename.c_str());
       _lua->SetGlobal("acquire_error", (const char *)NULL);
       _lua->RunScripts(ConfKey, true);
-      const char *Error = _lua->GetGlobal("acquire_error");
+      const char *Error = _lua->GetGlobalStr("acquire_error");
       if (Error != NULL && *Error != 0) {
 	 Status = pkgAcquire::Item::StatError;
 	 ErrorText = Error;

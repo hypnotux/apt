@@ -1972,6 +1972,14 @@ int main(int argc,const char *argv[])
    if (ttyname(STDOUT_FILENO) == 0 && _config->FindI("quiet",0) < 1)
       _config->Set("quiet","1");
 
+   // CNC:2004-02-18
+   if (_system->LockRead() == false)
+   {
+      bool Errors = _error->PendingError();
+      _error->DumpErrors();
+      return Errors == true?100:0;
+   }
+
    if (CmdL.DispatchArg(CmdsA,false) == false && _error->PendingError() == false)
    { 
       MMap *Map = 0;
@@ -2005,7 +2013,7 @@ int main(int argc,const char *argv[])
 	    _lua->SetGlobal("command_args", CmdL.FileList);
 	    _lua->SetGlobal("command_consume", 0.0);
 	    _lua->RunScripts("Scripts::AptCache::Command", false);
-	    Consume = _lua->GetGlobalI("command_consume");
+	    Consume = _lua->GetGlobalNum("command_consume");
 	    _lua->ResetGlobals();
 	    _lua->ResetCaches();
 	 }

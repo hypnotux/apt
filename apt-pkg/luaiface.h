@@ -55,6 +55,7 @@ class Lua {
    bool RunScripts(const char *ConfListKey, bool CacheChunks);
    bool HasScripts(const char *ConfListKey);
 
+   void SetGlobal(const char *Name);
    void SetGlobal(const char *Name, const char *Value);
    void SetGlobal(const char *Name, double Value);
    void SetGlobal(const char *Name, void *Value);
@@ -73,10 +74,11 @@ class Lua {
 		  int Total=-1);
    void ResetGlobals();
 
-   const char *GetGlobal(const char *Name);
-   double GetGlobalI(const char *Name);
-   void *GetGlobalP(const char *Name);
-   void GetGlobalVS(const char *Name, vector<string> &VS);
+   const char *GetGlobalStr(const char *Name);
+   void GetGlobalVStr(const char *Name, vector<string> &VS);
+   double GetGlobalNum(const char *Name);
+   void *GetGlobalPtr(const char *Name);
+   pkgCache::Package *GetGlobalPkg(const char *Name);
 
    static const double NoGlobalI;
 

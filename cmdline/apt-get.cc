@@ -1206,49 +1206,118 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 		  pkgProblemResolver &Fix,bool Remove,bool BrokenFix,
 		  unsigned int &ExpectedInst,bool AllowFail = true)
 {
-   /* This is a pure virtual package and there is a single available 
-      provides */
-   if (Cache[Pkg].CandidateVer == 0 && Pkg->ProvidesList != 0 &&
-       Pkg.ProvidesList()->NextProvides == 0)
+   // CNC:2004-03-03 - Improved virtual package handling.
+   if (Cache[Pkg].CandidateVer == 0 && Pkg->ProvidesList != 0)
    {
-      pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
-      // CNC:2003-11-21 - Check if the current candidate is really
-      //                  providing that dependency
-      ioprintf(c1out,_("Selecting %s for '%s'\n"),
-	       Tmp.Name(),Pkg.Name());
-      pkgCache::VerIterator Ver = Cache[Tmp].CandidateVerIter(Cache);
-      pkgCache::PrvIterator Prv = Ver.ProvidesList();
-      bool Found = false;
-      for (; Prv.end() == false; Prv++) {
-	 if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
-	    Found = true;
-	    break;
-	 }
-      }
-      if (Found == false) {
-	 // The current candidate doesn't provide the needed dependency.
-	 // Look for one that does.
-	 Ver = Tmp.VersionList();
-	 for (; Ver.end() == false; Ver++) {
-	    Prv = Ver.ProvidesList();
-	    Found = false;
-	    for (; Prv.end() == false; Prv++) {
-	       if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
-		  Found = true;
-		  break;
-	       }
-	    }
-	    if (Found) {
-	       Cache.SetCandidateVersion(Ver);
+      vector<pkgCache::Package *> GoodSolutions;
+      for (pkgCache::PrvIterator Prv = Pkg.ProvidesList();
+	   Prv.end() == false; Prv++)
+      {
+	 pkgCache::PkgIterator PrvPkg = Prv.OwnerPkg();
+	 // Check if it's a different version of a package already
+	 // considered as a good solution.
+	 bool AlreadySeen = false;
+	 for (int i = 0; i != GoodSolutions.size(); i++)
+	 {
+	    pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[i]);
+	    if (PrvPkg == GoodPkg)
+	    {
+	       AlreadySeen = true;
 	       break;
 	    }
 	 }
-	 if (Found == false) {
-	    ioprintf(c1out,_("Internal error. Package %s doesn't provide %s\n"),Tmp.Name(),Pkg.Name());
-	    return false;
+	 if (AlreadySeen)
+	    continue;
+	 // Is the current version the provides owner?
+	 if (PrvPkg.CurrentVer() == Prv.OwnerVer())
+	 {
+	    // Already installed packages are good solutions, since
+	    // the user might try to install something he already has
+	    // without being aware.
+	    GoodSolutions.push_back(PrvPkg);
+	    continue;
+	 }
+	 pkgCache::VerIterator PrvPkgCandVer =
+				 Cache[PrvPkg].CandidateVerIter(Cache);
+	 if (PrvPkgCandVer.end() == true)
+	 {
+	    // Packages without a candidate version are not good solutions.
+	    continue;
+	 }
+	 // Is the provides pointing to the candidate version?
+	 if (PrvPkgCandVer == Prv.OwnerVer())
+	 {
+	    // Yes, it is. This is a good solution.
+	    GoodSolutions.push_back(PrvPkg);
+	    continue;
 	 }
       }
-      Pkg = Tmp;
+      vector<string> GoodSolutionNames;
+      for (int i = 0; i != GoodSolutions.size(); i++)
+      {
+	 pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[i]);
+	 GoodSolutionNames.push_back(GoodPkg.Name());
+      }
+#ifdef WITH_LUA
+      if (GoodSolutions.size() > 1)
+      {
+	 vector<string> VS;
+	 _lua->SetDepCache(&Cache);
+	 _lua->SetDontFix();
+	 _lua->SetGlobal("virtualname", Pkg.Name());
+	 _lua->SetGlobal("packages", GoodSolutions);
+	 _lua->SetGlobal("packagenames", GoodSolutionNames);
+	 _lua->SetGlobal("selected");
+	 _lua->RunScripts("Scripts::AptGet::Install::SelectPackage", false);
+	 pkgCache::Package *selected = _lua->GetGlobalPkg("selected");
+	 if (selected) {
+	    GoodSolutions.clear();
+	    GoodSolutions.push_back(selected);
+	 }
+	 else
+	 {
+	    vector<string> Tmp;
+	    _lua->GetGlobalVStr("packagenames", Tmp);
+	    if (Tmp.size() == GoodSolutions.size())
+	       GoodSolutionNames = Tmp;
+	 }
+	 _lua->ResetGlobals();
+	 _lua->ResetCaches();
+      }
+#endif
+      if (GoodSolutions.size() == 1)
+      {
+	 pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[0]);
+	 ioprintf(c1out,_("Selecting %s for '%s'\n"),
+		  GoodPkg.Name(), Pkg.Name());
+	 Pkg = GoodPkg;
+      }
+      else if (GoodSolutions.size() == 0)
+      {
+	 _error->Error(_("Package %s is a virtual package with no "
+			 "good providers.\n"), Pkg.Name());
+	 return false;
+      }
+      else
+      {
+	 ioprintf(c1out,_("Package %s is a virtual package provided by:\n"),
+		  Pkg.Name());
+	 for (int i = 0; i != GoodSolutions.size(); i++)
+	 {
+	    pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[i]);
+	    if (GoodPkg.CurrentVer().end() == false)
+	       c1out << "  " << GoodSolutionNames[i]
+		     << " "  << Cache[GoodPkg].CandVersion
+		     << _(" [Installed]") << endl;
+	    else
+	       c1out << "  " << GoodSolutionNames[i]
+		     << " "  << Cache[GoodPkg].CandVersion << endl;
+	 }
+	 c1out << _("You should explicitly select one to install.") << endl;
+	 _error->Error(_("Package %s is a virtual package with multiple "
+			 "good providers.\n"), Pkg.Name());
+	 return false;
+      }
    }
    
    // Handle the no-upgrade case
@@ -1283,6 +1352,8 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
       if (AllowFail == false)
 	 return false;
       
+// CNC:2004-03-03 - Improved virtual package handling.
+#if 0
       if (Pkg->ProvidesList != 0)
       {
 	 ioprintf(c1out,_("Package %s is a virtual package provided by:\n"),
@@ -1305,6 +1376,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	 c1out << _("You should explicitly select one to install.") << endl;
       }
       else
+#endif
       {
 	 ioprintf(c1out,
 	 _("Package %s has no available version, but exists in the database.\n"
@@ -1857,11 +1929,11 @@ bool DoInstall(CommandLine &CmdL)
 	    _lua->SetGlobal("argument", OrigS);
 	    _lua->SetGlobal("translated", VS);
 	    _lua->RunScripts("Scripts::AptGet::Install::TranslateArg", false);
-	    const char *name = _lua->GetGlobal("translated");
+	    const char *name = _lua->GetGlobalStr("translated");
 	    if (name != NULL) {
 	       VS.push_back(name);
 	    } else {
-	       _lua->GetGlobalVS("translated", VS);
+	       _lua->GetGlobalVStr("translated", VS);
 	    }
 	    _lua->ResetGlobals();
 	    _lua->ResetCaches();
@@ -2856,7 +2928,7 @@ bool DoScript(CommandLine &CmdL)
 
    _lua->SetGlobal("commit_ask", 1);
    _lua->RunScripts("Scripts::AptGet::Script", false);
-   double Ask = _lua->GetGlobalI("commit_ask");
+   double Ask = _lua->GetGlobalNum("commit_ask");
    _lua->ResetGlobals();
 
    AptGetLuaCache *LuaCache = (AptGetLuaCache*) _lua->GetCacheControl();
@@ -3141,8 +3213,8 @@ int main(int argc,const char *argv[])
       _lua->SetGlobal("command_args", CmdL.FileList);
       _lua->SetGlobal("command_consume", 0.0);
       _lua->RunScripts("Scripts::AptGet::Command", false);
-      Consume = _lua->GetGlobalI("command_consume");
-      double Ask = _lua->GetGlobalI("commit_ask");
+      Consume = _lua->GetGlobalNum("command_consume");
+      double Ask = _lua->GetGlobalNum("commit_ask");
       _lua->ResetGlobals();
       _lua->ResetCaches();
 

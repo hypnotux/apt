@@ -193,6 +193,14 @@ bool Lua::RunScripts(const char *ConfListKey, bool CacheChunks)
    return true;
 }
 
+void Lua::SetGlobal(const char *Name)
+{
+   lua_pushstring(L, Name);
+   lua_pushnil(L);
+   lua_rawset(L, LUA_GLOBALSINDEX);
+   Globals.push_back(Name);
+}
+
 void Lua::SetGlobal(const char *Name, const char *Value)
 {
    if (Value != NULL) {
@@ -311,7 +319,7 @@ void Lua::ResetGlobals()
    }
 }
 
-const char *Lua::GetGlobal(const char *Name)
+const char *Lua::GetGlobalStr(const char *Name)
 {
    lua_pushstring(L, Name);
    lua_rawget(L, LUA_GLOBALSINDEX);
@@ -322,29 +330,7 @@ const char *Lua::GetGlobal(const char *Name)
    return Ret;
 }
 
-double Lua::GetGlobalI(const char *Name)
-{
-   lua_pushstring(L, Name);
-   lua_rawget(L, LUA_GLOBALSINDEX);
-   double Ret = NoGlobalI;
-   if (lua_isnumber(L, -1))
-      Ret = lua_tonumber(L, -1);
-   lua_remove(L, -1);
-   return Ret;
-}
-
-void *Lua::GetGlobalP(const char *Name)
-{
-   lua_pushstring(L, Name);
-   lua_rawget(L, LUA_GLOBALSINDEX);
-   void *Ret = NULL;
-   if (lua_isuserdata(L, -1))
-      Ret = lua_touserdata(L, -1);
-   lua_remove(L, -1);
-   return Ret;
-}
-
-void Lua::GetGlobalVS(const char *Name, vector<string> &VS)
+void Lua::GetGlobalVStr(const char *Name, vector<string> &VS)
 {
    lua_pushstring(L, Name);
    lua_rawget(L, LUA_GLOBALSINDEX);
@@ -358,6 +344,38 @@ void Lua::GetGlobalVS(const char *Name, vector<string> &VS)
       }
    }
    lua_remove(L, -1);
+}
+
+double Lua::GetGlobalNum(const char *Name)
+{
+   lua_pushstring(L, Name);
+   lua_rawget(L, LUA_GLOBALSINDEX);
+   double Ret = NoGlobalI;
+   if (lua_isnumber(L, -1))
+      Ret = lua_tonumber(L, -1);
+   lua_remove(L, -1);
+   return Ret;
+}
+
+void *Lua::GetGlobalPtr(const char *Name)
+{
+   lua_pushstring(L, Name);
+   lua_rawget(L, LUA_GLOBALSINDEX);
+   void *Ret = NULL;
+   if (lua_isuserdata(L, -1))
+      Ret = lua_touserdata(L, -1);
+   lua_remove(L, -1);
+   return Ret;
+}
+
+pkgCache::Package *Lua::GetGlobalPkg(const char *Name)
+{
+   lua_pushstring(L, Name);
+   lua_rawget(L, LUA_GLOBALSINDEX);
+   pkgCache::Package *Ret;
+   checkudata(pkgCache::Package*, Ret, -1);
+   lua_remove(L, -1);
+   return Ret;
 }
 
 void Lua::SetDepCache(pkgDepCache *DepCache_)
