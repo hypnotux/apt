@@ -788,6 +788,9 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    if (upgrade.empty() == false)
        AddToTransaction(Item::RPMUpgrade, upgrade);
 
+   // Setup the gauge used by rpmShowProgress.
+   packagesTotal = install.size()+upgrade.size();
+
 #ifdef HAVE_RPM41
    if (rpmtsCheck(TS)) {
       probs = rpmtsProblems(TS);
