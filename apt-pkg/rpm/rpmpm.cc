@@ -497,6 +497,8 @@ bool pkgRPMPM::Go()
       }
    }
 
+   bool Ret = true;
+
 #ifdef WITH_LUA
    if (_lua->HasScripts("Scripts::RPM::Pre") == true) {
       _lua->SetGlobal("files_install", install_or_upgrade);
@@ -515,8 +517,6 @@ bool pkgRPMPM::Go()
    }
 #endif
 
-   bool Ret = true;
-   
    if (Process(install, upgrade, uninstall) == false)
       Ret = false;
 

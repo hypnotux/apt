@@ -1699,6 +1699,10 @@ bool DoInstall(CommandLine &CmdL)
 	 continue;
       strcpy(S,*I);
       
+      // CNC:2003-03-15
+      char OrigS[300];
+      strcpy(OrigS,S);
+      
       // See if we are removing and special indicators..
       int Mode = DefMode;
       char *VerTag = 0;
@@ -1757,9 +1761,9 @@ bool DoInstall(CommandLine &CmdL)
 	    vector<string> VS;
 	    _lua->SetDepCache(Cache);
 	    _lua->SetDontFix();
-	    _lua->SetGlobal("name", S);
+	    _lua->SetGlobal("argument", OrigS);
 	    _lua->SetGlobal("translated", VS);
-	    _lua->RunScripts("Scripts::Apt::Install::TranslateName", false);
+	    _lua->RunScripts("Scripts::Apt::Install::TranslateArg", false);
 	    const char *name = _lua->GetGlobal("translated");
 	    if (name != NULL) {
 	       VS.push_back(name);
@@ -1782,13 +1786,9 @@ bool DoInstall(CommandLine &CmdL)
 		  continue;
 
 	       ioprintf(c1out,_("Note, selecting %s for '%s'\n"),
-			Pkg.Name(),S);
+			Pkg.Name(),OrigS);
 	    
-	       if (VerTag != 0)
-		  if (TryToChangeVer(Pkg,Cache,VerTag,VerIsRel) == false)
-		     return false;
-	    
-	       Hit |= TryToInstall(Pkg,Cache,Fix,Remove,BrokenFix,
+	       Hit |= TryToInstall(Pkg,Cache,Fix,Mode,BrokenFix,
 				   ExpectedInst,true);
 	    }
 	 
