@@ -120,7 +120,7 @@ void * rpmShowProgress(const Header h,
 	if (flags & INSTALL_HASH)
 	    fprintf(stdout, "%-28s", _("Preparing..."));
 	else
-	    fprintf(stdout, "%s\n", _("Preparing packages for installation..."));
+	    fprintf(stdout, "%s\n", _("Preparing..."));
 	(void) fflush(stdout);
 	break;
 
