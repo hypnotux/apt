@@ -286,7 +286,8 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
    }
    else
    {
-      bool oldpackage = _config->FindB("RPM::OldPackage",true);
+      bool oldpackage = _config->FindB("RPM::OldPackage",
+				       (op == Item::RPMUpgrade));
       bool replacepkgs = _config->FindB("APT::Get::ReInstall",false);
       bool replacefiles = _config->FindB("APT::Get::ReInstall",false);
       Opts = _config->Tree("RPM::Install-Options");
