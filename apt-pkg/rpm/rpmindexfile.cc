@@ -265,8 +265,7 @@ string rpmSrcListIndex::ArchiveURI(string File) const
 /* */
 pkgSrcRecords::Parser *rpmSrcListIndex::CreateSrcParser() const
 {
-   return new rpmSrcRecordParser(_config->FindDir("Dir::State::lists") +
-				 IndexPath(), this);
+   return new rpmSrcRecordParser(IndexPath(), this);
 }
 									/*}}}*/
 // SrcListIndex::GetIndexes - Fetch the index files			/*{{{*/

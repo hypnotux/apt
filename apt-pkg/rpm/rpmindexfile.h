@@ -140,7 +140,7 @@ class rpmSrcListIndex : public rpmListIndex
 {
    protected:
 
-   virtual string MainType() const {return "pkglist";}
+   virtual string MainType() const {return "srclist";}
 
    public:
 
