@@ -1,5 +1,5 @@
 -- This script must be plugged into the APT script slot
--- Scripts::Apt::Install::TranslateArg
+-- Scripts::AptGet::Install::TranslateArg
 --
 -- Data sample:
 --   argument = "/usr/bin/python"

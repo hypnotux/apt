@@ -1,7 +1,7 @@
 -- Lua script to allow installing package groups as defined in comps.xml
 -- Licensed under the GPL, by pmatilai@welho.com / 2003
 -- This script must be plugged into the APT script slot
--- Scripts::Apt::Install::TranslateArg
+-- Scripts::AptGet::Install::TranslateArg
 --
 
 if string.sub(argument, 1, 6) == "group-" then

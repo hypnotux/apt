@@ -1,4 +1,13 @@
 
+Notice
+------
+
+APT-RPM supports translation of filenames to package names internally
+since version 0.5.15cnc3, but filenames must be in the pkglists for
+the internal version to work. It means that to access all files in the
+system pkglists must be built with --bloat, so using this script is
+still an option.
+
 What is apt-files?
 ------------------
 

@@ -2,6 +2,6 @@ Lua script to allow installing package groups as defined in comps.xml.
 
 This script must be plugged into the APT script slot
 
-    Scripts::Apt::Install::TranslateArg
+    Scripts::AptGet::Install::TranslateArg
 
 Licensed under the GPL, by pmatilai@welho.com / 2003
