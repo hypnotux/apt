@@ -191,7 +191,7 @@ pkgAcqIndex::pkgAcqIndex(pkgAcquire *Owner,pkgRepository *Repository,
 
    // Create the item
    // CNC:2002-07-03
-   Desc.URI = URI + ".bz2";
+   Desc.URI = URI + _config->Find("Acquire::ComprExtension", ".bz2");
    Desc.Description = URIDesc;
    Desc.Owner = this;
    Desc.ShortDesc = ShortDesc;
