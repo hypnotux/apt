@@ -76,7 +76,7 @@ bool pkgInitConfig(Configuration &Cnf)
    Cnf.Set("Dir::Etc::main","apt.conf");
    Cnf.Set("Dir::Etc::parts","apt.conf.d");
    Cnf.Set("Dir::Etc::preferences","preferences");
-   Cnf.Set("Dir::Bin::methods","/usr/lib/apt/methods");
+   Cnf.Set("Dir::Bin::methods",LIBDIR "/apt/methods");
 	      
    bool Res = true;
    
