@@ -601,7 +601,7 @@ bool rpmDatabaseIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
    if (stat(Handler->DataPath(false).c_str(),&St) != 0)
       return _error->Errno("fstat","Failed to stat");
    CFile->Size = St.st_size;
-   CFile->mtime = St.st_mtime;
+   CFile->mtime = Handler->Mtime();
    
    if (Gen.MergeList(Parser) == false)
       return _error->Error(_("Problem with MergeList %s"),

@@ -69,6 +69,8 @@ class RPMDBHandler : public RPMHandler
 #endif
    bool WriteLock;
 
+   time_t DbFileMtime;
+
    public:
 
    static string DataPath(bool DirectoryOnly=true);
@@ -77,6 +79,7 @@ class RPMDBHandler : public RPMHandler
    virtual void Rewind();
    virtual inline bool IsDatabase() {return true;};
    virtual bool HasWriteLock() {return WriteLock;};
+   virtual time_t Mtime() {return DbFileMtime;}
 
    RPMDBHandler(bool WriteLock=false);
    virtual ~RPMDBHandler();

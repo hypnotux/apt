@@ -12,6 +12,9 @@
 #ifdef HAVE_RPM
 
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <utime.h>
 #include <unistd.h>
 
 #include <apt-pkg/error.h>
@@ -97,6 +100,16 @@ void RPMFileHandler::Rewind()
 RPMDBHandler::RPMDBHandler(bool WriteLock)
 	: WriteLock(WriteLock)
 {
+   // Everytime we open a database for writing, it has its
+   // mtime changed, and kills our cache validity. As we never
+   // change any information in the database directly, we will
+   // restore the mtime and save our cache.
+   if (WriteLock) {
+      struct stat St;
+      stat(DataPath(false).c_str(), &St);
+      DbFileMtime = St.st_mtime;
+   }
+
    string Dir = _config->Find("RPM::RootDir");
    rpmReadConfigFiles(NULL, NULL);
 #ifdef HAVE_RPM4
@@ -127,7 +140,17 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
       _error->Error(_("could not create RPM database iterator"));
       return;
    }
-   iSize = rpmdbGetIteratorCount(RpmIter);
+   // iSize = rpmdbGetIteratorCount(RpmIter);
+   // This doesn't seem to work right now. Code in rpm (4.0.4, at least)
+   // returns a 0 from rpmdbGetIteratorCount() if rpmxxInitIterator() is
+   // called with RPMDBI_PACKAGES or with keyp == NULL. The algorithm
+   // below will be used until there's support for it.
+   iSize = 0;
+   rpmdbMatchIterator countIt;
+   countIt = rpmxxInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
+   while(rpmdbNextIterator(countIt) != NULL)
+      iSize++;
+   rpmdbFreeIterator(countIt);
 #else
    struct stat st;
    stat(DataPath(false).c_str(), &st);
@@ -152,6 +175,13 @@ RPMDBHandler::~RPMDBHandler()
 #else
    rpmdbClose(Handler);
 #endif
+
+   if (WriteLock) {
+      struct utimbuf Ut;
+      Ut.actime = DbFileMtime;
+      Ut.modtime = DbFileMtime;
+      utime(DataPath(false).c_str(), &Ut);
+   }
 }
 
 string RPMDBHandler::DataPath(bool DirectoryOnly)
