@@ -246,6 +246,8 @@ char *getFileSigner(const char *file, const char *sigfile,
       
       if (!fgets(buffer, 1024, f))
 	 break;
+      
+      fprintf(stderr, "LINE: %s", buffer);
 
       if (goodsig && keyid[0])
 	 continue;     
@@ -282,17 +284,17 @@ char *getFileSigner(const char *file, const char *sigfile,
    }
    else if (WEXITSTATUS(status) == 111) 
    {
-      return "could not execute gpg to verify signature";
+      return "Could not execute gpg to verify signature";
    }
    else 
    {
       if (badsig)
-	 return "file has bad signature, it might have been corrupted or tampered.";
+	 return "File has bad signature, it might have been corrupted or tampered.";
 
       if (!keyid[0] || !goodsig)
-	 return "file was not signed with a known key. Check if the proper gpg key was imported to your keyring.";
+	 return "File was not signed with a known key. Check if the proper gpg key was imported to your keyring.";
       
-      return "file could not be authenticated";
+      return "File could not be authenticated";
    }
 }
 
