@@ -247,6 +247,7 @@ void GlobalError::PushState()
    State *New = new State;
    New->List = List;
    New->Next = Stack;
+   New->PendingFlag = PendingFlag;
    Stack = New;
    List = 0;
    PendingFlag = false;
