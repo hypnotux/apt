@@ -210,6 +210,7 @@ RPMDirHandler::RPMDirHandler(string DirName)
    : sDirName(DirName)
 {
    ID = DirName;
+   TS = NULL;
    Dir = opendir(sDirName.c_str());
    if (Dir == NULL)
       return;
@@ -253,7 +254,8 @@ RPMDirHandler::~RPMDirHandler()
    if (HeaderP != NULL)
       headerFree(HeaderP);
 #if RPM_VERSION >= 0x040100
-   rpmtsFree(TS);
+   if (TS != NULL)
+      rpmtsFree(TS);
 #endif
    if (Dir != NULL)
       closedir(Dir);
