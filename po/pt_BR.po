@@ -1080,7 +1080,7 @@ msgstr ""
 "  -o=? Configurar uma opção arbitrária, ex. -o dir::cache=/tmp\n"
 "Veja os manuais do apt-get(8), sources.list(5) e apt.conf(5) para\n"
 "para maiores informações e opções.\n"
-"                         Esse APT têm Poderes da Super Vaca\n"
+"                         Esse APT tem Poderes da Super Vaca\n"
 
 #: cmdline/apt-shell.cc:151 cmdline/apt-shell.cc:4340
 msgid "There are broken packages. "
