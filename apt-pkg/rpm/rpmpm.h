@@ -92,7 +92,7 @@ class pkgRPMLibPM : public pkgRPMPM
    rpmdb DB;
 #endif
 
-   bool ParseRpmOpts(const char *Cnf, int *tsFlags);
+   bool ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter);
    bool AddToTransaction(Item::RPMOps op, vector<const char*> &files);
    virtual bool Process(vector<const char*> &install,
 		vector<const char*> &upgrade,

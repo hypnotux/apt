@@ -738,10 +738,10 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    int tsFlags = 0;
 
    if (uninstall.empty() == false)
-      ParseRpmOpts("RPM::Erase-Options", &tsFlags);
+      ParseRpmOpts("RPM::Erase-Options", &tsFlags, &probFilter);
    if (install.empty() == false || upgrade.empty() == false)
-      ParseRpmOpts("RPM::Install-Options", &tsFlags);
-   ParseRpmOpts("RPM::Options", &tsFlags);
+      ParseRpmOpts("RPM::Install-Options", &tsFlags, &probFilter);
+   ParseRpmOpts("RPM::Options", &tsFlags, &probFilter);
 
 #ifdef HAVE_RPM41   
    rpmps probs;
@@ -804,7 +804,9 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    rpmDependencyConflict conflicts;
 #endif
    int numConflicts;
-   if (rpmdepCheck(TS, &conflicts, &numConflicts)) {
+   if (_config->FindB("RPM::NoDeps", false) == false &&
+       rpmdepCheck(TS, &conflicts, &numConflicts)) 
+   {
       _error->Error(_("Transaction set check failed"));
       if (conflicts) {
 	 printDepProblems(stderr, conflicts, numConflicts);
@@ -814,11 +816,14 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    }
 #endif
 
+   rc = 0;
 #ifdef HAVE_RPM41
    rpmtsClean(TS);
-   rc = rpmtsOrder(TS);
+   if (_config->FindB("RPM::Order", true) == true)
+      rc = rpmtsOrder(TS);
 #else
-   rc = rpmdepOrder(TS);
+   if (_config->FindB("RPM::Order", true) == true)
+      rc = rpmdepOrder(TS);
 #endif
 
    if (rc > 0) {
@@ -862,7 +867,7 @@ exit:
    return Success;
 }
 
-bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags)
+bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 {
    Configuration::Item const *Opts = _config->Tree(Cnf);
    
@@ -884,7 +889,46 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags)
 	    *tsFlags |= RPMTRANS_FLAG_ALLFILES;
 	 else if (Opts->Value == "--justdb")
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
-	 // etc...
+#ifdef HAVE_RPM4
+	 else if (Opts->Value == "--nomd5")
+	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
+#endif
+#ifdef HAVE_RPM41
+	 else if (Opts->Value == "--repackage")
+	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
+	 else if (Opts->Value == "--noconfigs")
+	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
+#endif
+
+	 // Problem filter flags
+	 else if (Opts->Value == "--replacefiles")
+	 {
+	    *probFilter |= RPMPROB_FILTER_REPLACEOLDFILES;
+	    *probFilter |= RPMPROB_FILTER_REPLACENEWFILES;
+	 }
+	 else if (Opts->Value == "--replacepkgs")
+	    *probFilter |= RPMPROB_FILTER_REPLACEPKG;
+	 else if (Opts->Value == "--ignoresize")
+	 {
+	    *probFilter |= RPMPROB_FILTER_DISKSPACE;
+#ifndef HAVE_RPM4
+	    *probFilter |= RPMPROB_FILTER_DISKNODES;
+#endif
+	 }
+	 else if (Opts->Value == "--badreloc")
+	    *probFilter |= RPMPROB_FILTER_FORCERELOCATE;
+
+	 // Misc things having apt config counterparts
+	 else if (Opts->Value == "--force")
+	    _config->Set("APT::Get::ReInstall", true);
+	 else if (Opts->Value == "--oldpackage")
+	    _config->Set("RPM::OldPackage", true);
+	 else if (Opts->Value == "--nodeps")
+	    _config->Set("RPM::NoDeps", true);
+	 else if (Opts->Value == "--noorder")
+	    _config->Set("RPM::Order", false);
+	 // TODO: --root, --relocate, --prefix, --excludepath etc...
+
       }
    }
    return true;
