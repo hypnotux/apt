@@ -2803,46 +2803,10 @@ bool DoMoo(CommandLine &CmdL)
 }
 									/*}}}*/
 
-// * - Scripting stuff.							/*{{{*/
+// CNC:2003-03-18
+// DoScript - Scripting stuff.						/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-#if 0
-extern "C" {
-#include "lua.h"
-#include "lauxlib.h"
-}
-
-static int AptLua_commit(lua_State *L)
-{
-   int Ask = luaL_optint(L, 1, 1);
-   bool Ok = false;
-   CacheFile *Cache = (CacheFile*)_lua->GetGlobalP("_apt_cachefile");
-   if (Cache == NULL) {
-      lua_pushstring(L, "cache lost!?");
-      lua_error(L);
-      return 0;
-   }
-   if ((*Cache)->BrokenCount() != 0) {
-      ShowBroken(c1out,*Cache,false);
-   } else {
-      delete Cache;
-      Cache = new CacheFile;
-      if (Cache->OpenForInstall() == false || Cache->CheckDeps() == false) {
-	 lua_pushstring(L, "cache in inconsistent state after commit()");
-	 lua_error(L);
-	 return 0;
-      }
-      _lua->SetGlobal("_apt_cachefile", (void*)Cache);
-      _lua->SetCache(*Cache);
-   }
-   if (Ok == true)
-      lua_pushnumber(L, 1);
-   else
-      lua_pushnil(L);
-   return 1;
-}
-#endif
-
 #ifdef WITH_LUA
 bool DoScript(CommandLine &CmdL)
 {
@@ -3107,7 +3071,7 @@ int main(int argc,const char *argv[])
    signal(SIGWINCH,SigWinch);
    SigWinch(0);
 
-// CNC:2003-11-21
+// CNC:2003-11-23
 #ifdef WITH_LUA
    AptGetLuaCache LuaCache;
    _lua->SetCacheControl(&LuaCache);
@@ -3116,9 +3080,9 @@ int main(int argc,const char *argv[])
    if (argc > 1 && _lua->HasScripts("Scripts::Apt::Command") == true)
    {
       _lua->SetGlobal("commit_ask", 1);
-      _lua->SetGlobal("command_args", &argv[1]);
+      _lua->SetGlobal("command_args", CmdL.FileList);
       _lua->SetGlobal("command_consume", 0.0);
-      _lua->RunScripts("Scripts::Apt::Command", true);
+      _lua->RunScripts("Scripts::Apt::Command", false);
       Consume = _lua->GetGlobalI("command_consume");
       double Ask = _lua->GetGlobalI("commit_ask");
       _lua->ResetGlobals();

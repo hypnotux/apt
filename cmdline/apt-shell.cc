@@ -4433,7 +4433,7 @@ int main(int argc,const char *argv[])
 #ifdef WITH_LUA
       if (HasCmdScripts == true) {
 	 _lua->SetDepCache(*GCache);
-	 _lua->SetGlobal("command_args", &largv[1]);
+	 _lua->SetGlobal("command_args", CmdL.FileList);
 	 _lua->SetGlobal("command_consume", 0.0);
 	 _lua->RunScripts("Scripts::Apt::Command", true);
 	 double Consume = _lua->GetGlobalI("command_consume");

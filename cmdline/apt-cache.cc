@@ -39,6 +39,10 @@
 #include <errno.h>
 #include <regex.h>
 #include <stdio.h>
+
+// CNC:2003-11-23
+#include <apt-pkg/luaiface.h>
+    
 									/*}}}*/
 
 using namespace std;
@@ -71,6 +75,24 @@ void LocalitySort(pkgCache::VerFile **begin,
 {   
    qsort(begin,Count,Size,LocalityCompare);
 }
+									/*}}}*/
+// CNC:2003-11-23
+// Script - Scripting stuff.						/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+#ifdef WITH_LUA
+bool Script(CommandLine &CmdL)
+{
+   for (const char **I = CmdL.FileList+1; *I != 0; I++)
+      _config->Set("Scripts::AptCache::Script::", *I);
+
+   _lua->SetCache(GCache);
+   _lua->RunScripts("Scripts::AptCache::Script", false);
+   _lua->ResetGlobals();
+
+   return true;
+}
+#endif
 									/*}}}*/
 // UnMet - Show unmet dependencies					/*{{{*/
 // ---------------------------------------------------------------------
@@ -1916,6 +1938,10 @@ int main(int argc,const char *argv[])
                                     {"show",&ShowPackage},
                                     {"pkgnames",&ShowPkgNames},
                                     {"policy",&Policy},
+// CNC:2003-11-23
+#ifdef WITH_LUA
+				    {"script",&Script},
+#endif
                                     {0,0}};
 
    CacheInitialize();
@@ -1969,6 +1995,23 @@ int main(int argc,const char *argv[])
       {
 	 pkgCache Cache(Map);   
 	 GCache = &Cache;
+// CNC:2003-11-23
+#ifdef WITH_LUA
+	 _lua->SetCache(&Cache);
+	 double Consume = 0;
+	 if (argc > 1 && _error->PendingError() == false &&
+	     _lua->HasScripts("Scripts::AptCache::Command") == true)
+	 {
+	    _lua->SetGlobal("command_args", CmdL.FileList);
+	    _lua->SetGlobal("command_consume", 0.0);
+	    _lua->RunScripts("Scripts::AptCache::Command", false);
+	    Consume = _lua->GetGlobalI("command_consume");
+	    _lua->ResetGlobals();
+	    _lua->ResetCaches();
+	 }
+
+	 if (Consume == 0)
+#endif
 	 if (_error->PendingError() == false)
 	    CmdL.DispatchArg(CmdsB);
       }
