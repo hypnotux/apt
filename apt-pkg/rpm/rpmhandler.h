@@ -36,6 +36,10 @@ class RPMHandler
    inline Header GetHeader() {return HeaderP;};
    virtual bool IsDatabase() = 0;
 
+   virtual string FileName() {return "";};
+   virtual unsigned long FileSize() {return 1;};
+   virtual string MD5Sum() {return "";};
+
    RPMHandler() : iOffset(0), iSize(0), HeaderP(0) {};
    virtual ~RPMHandler() {};
 };
@@ -51,6 +55,10 @@ class RPMFileHandler : public RPMHandler
    virtual bool Jump(unsigned int Offset);
    virtual void Rewind();
    virtual inline bool IsDatabase() {return false;};
+
+   virtual string FileName();
+   virtual unsigned long FileSize();
+   virtual string MD5Sum();
 
    RPMFileHandler(FileFd *File);
    RPMFileHandler(string File);
@@ -87,8 +95,38 @@ class RPMDBHandler : public RPMHandler
    virtual ~RPMDBHandler();
 };
 
+class RPMDirHandler : public RPMHandler
+{   
 
-// Our Extra RPM tags
+   DIR *Dir;
+   string sDirName;
+   string sFileName;
+   string sFilePath;
+
+#ifdef HAVE_RPM41   
+   rpmts TS;
+#endif
+
+   const char *nextFileName();
+
+   public:
+
+   virtual bool Skip();
+   virtual bool Jump(unsigned int Offset);
+   virtual void Rewind();
+   virtual inline bool IsDatabase() {return false;};
+
+   virtual string FileName() {return (Dir == NULL)?"":sFileName;};
+   virtual unsigned long FileSize();
+   virtual string MD5Sum();
+
+   RPMDirHandler(string DirName);
+   virtual ~RPMDirHandler();
+};
+
+
+// Our Extra RPM tags. These should not be accessed directly. Use
+// the methods in RPMHandler instead.
 #define CRPMTAG_FILENAME          1000000
 #define CRPMTAG_FILESIZE          1000001
 #define CRPMTAG_MD5               1000005

@@ -19,6 +19,7 @@
 
 #include <apt-pkg/error.h>
 #include <apt-pkg/configuration.h>
+#include <apt-pkg/md5.h>
 
 #include <apt-pkg/rpmhandler.h>
 
@@ -96,6 +97,174 @@ void RPMFileHandler::Rewind()
    if (iOffset != 0)
       _error->Error(_("could not rewind RPMFileHandler"));
 }
+
+string RPMFileHandler::FileName()
+{
+   char *str;
+   int_32 count, type;
+   assert(HeaderP != NULL);
+   int rc = headerGetEntry(HeaderP, CRPMTAG_FILENAME,
+			   &type, (void**)&str, &count);
+   assert(rc != 0);
+   return str;
+}
+
+unsigned long RPMFileHandler::FileSize()
+{
+   int_32 count, type;
+   int_32 *num;
+   int rc = headerGetEntry(HeaderP, CRPMTAG_FILESIZE,
+			   &type, (void**)&num, &count);
+   assert(rc != 0);
+   return (unsigned long)num[0];
+}
+
+string RPMFileHandler::MD5Sum()
+{
+   char *str;
+   int_32 count, type;
+   assert(HeaderP != NULL);
+   int rc = headerGetEntry(HeaderP, CRPMTAG_MD5,
+			   &type, (void**)&str, &count);
+   assert(rc != 0);
+   return str;
+}
+
+
+RPMDirHandler::RPMDirHandler(string DirName)
+   : sDirName(DirName)
+{
+   Dir = opendir(sDirName.c_str());
+   if (Dir == NULL)
+      return;
+   iSize = 0;
+   while (nextFileName() != NULL)
+      iSize += 1;
+   rewinddir(Dir);
+#ifdef HAVE_RPM41   
+   TS = rpmtsCreate();
+#endif
+}
+
+const char *RPMDirHandler::nextFileName()
+{
+   for (struct dirent *Ent = readdir(Dir); Ent != 0; Ent = readdir(Dir))
+   {
+      const char *name = Ent->d_name;
+
+      if (name[0] == '.')
+	 continue;
+
+      if (flExtension(name) != "rpm")
+	 continue;
+
+      // Make sure it is a file and not something else
+      sFilePath = flCombine(sDirName,name);
+      struct stat St;
+      if (stat(sFilePath.c_str(),&St) != 0 || S_ISREG(St.st_mode) == 0)
+	 continue;
+
+      sFileName = name;
+      
+      return name;
+   } 
+   return NULL;
+}
+
+RPMDirHandler::~RPMDirHandler()
+{
+   if (HeaderP != NULL)
+      headerFree(HeaderP);
+#ifdef HAVE_RPM41	 
+   rpmtsFree(TS);
+#endif
+   if (Dir != NULL)
+      closedir(Dir);
+}
+
+bool RPMDirHandler::Skip()
+{
+   if (Dir == NULL)
+      return false;
+   if (HeaderP != NULL) {
+      headerFree(HeaderP);
+      HeaderP = NULL;
+   }
+   const char *fname = nextFileName();
+   bool Res = false;
+   for (; fname != NULL; fname = nextFileName()) {
+      iOffset++;
+      if (fname == NULL)
+	 break;
+      FD_t FD = Fopen(sFilePath.c_str(), "r");
+      if (FD == NULL)
+	 continue;
+#ifdef HAVE_RPM41	 
+      int rc = rpmReadPackageFile(TS, FD, fname, &HeaderP);
+      Fclose(FD);
+      if (rc != RPMRC_OK
+	  && rc != RPMRC_NOTTRUSTED
+	  && rc != RPMRC_NOKEY
+	  && rc != RPMRC_BADSIZE)
+	 continue;
+#else
+      int isSource;
+      int rc = rpmReadPackageHeader(FD, &HeaderP, &isSource, NULL, NULL);
+      Fclose(FD);
+      if (rc != 0)
+	 continue;
+#endif
+      Res = true;
+      break;
+   }
+   return Res;
+}
+
+bool RPMDirHandler::Jump(unsigned Offset)
+{
+   if (Dir == NULL)
+      return false;
+   rewinddir(Dir);
+   iOffset = 0;
+   while (1) {
+      if (iOffset+1 == Offset)
+	 return Skip();
+      if (nextFileName() == NULL)
+	 break;
+      iOffset++;
+   }
+   return false;
+}
+
+void RPMDirHandler::Rewind()
+{
+   rewinddir(Dir);
+   iOffset = 0;
+}
+
+unsigned long RPMDirHandler::FileSize()
+{
+   if (Dir == NULL)
+      return 0;
+   struct stat St;
+   if (stat(sFilePath.c_str(),&St) != 0) {
+      _error->Errno("stat","Unable to determine the file size");
+      return 0;
+   }
+   return St.st_size;
+}
+
+string RPMDirHandler::MD5Sum()
+{
+   if (Dir == NULL)
+      return "";
+   MD5Summation MD5;
+   FileFd File(sFilePath, FileFd::ReadOnly);
+   MD5.AddFD(File.Fd(), File.Size());
+   File.Close();
+   return MD5.Result().Value();
+}
+
 
 RPMDBHandler::RPMDBHandler(bool WriteLock)
 	: WriteLock(WriteLock)
