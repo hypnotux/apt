@@ -1286,8 +1286,42 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
        Pkg.ProvidesList()->NextProvides == 0)
    {
       pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
-      ioprintf(c1out,_("Note, selecting %s instead of %s\n"),
+      // CNC:2003-11-21 - Check if the current candidate is really
+      //                  providing that dependency
+      ioprintf(c1out,_("Selecting %s to represent %s\n"),
 	       Tmp.Name(),Pkg.Name());
+      pkgCache::VerIterator Ver = Cache[Tmp].CandidateVerIter(Cache);
+      pkgCache::PrvIterator Prv = Ver.ProvidesList();
+      bool Found = false;
+      for (; Prv.end() == false; Prv++) {
+	 if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
+	    Found = true;
+	    break;
+	 }
+      }
+      if (Found == false) {
+	 // The current candidate doesn't provide the needed dependency.
+	 // Look for one that does.
+	 Ver = Tmp.VersionList();
+	 for (; Ver.end() == false; Ver++) {
+	    Prv = Ver.ProvidesList();
+	    Found = false;
+	    for (; Prv.end() == false; Prv++) {
+	       if (strcmp(Prv.Name(), Pkg.Name()) == 0) {
+		  Found = true;
+		  break;
+	       }
+	    }
+	    if (Found) {
+	       Cache.SetCandidateVersion(Ver);
+	       break;
+	    }
+	 }
+	 if (Found == false) {
+	    ioprintf(c1out,_("Internal error. Package %s doesn't provide %s\n"),Tmp.Name(),Pkg.Name());
+	    return false;
+	 }
+      }
       Pkg = Tmp;
    }
    
@@ -1847,6 +1881,30 @@ bool DoInstall(CommandLine &CmdL)
 	    VerTag = p;
 	 }
 	 
+	 // CNC:2003-11-21 - Try to handle unknown file items.
+	 if (S[0] == '/')
+	 {
+	    pkgRecords Recs(Cache);
+	    if (_error->PendingError() == true)
+	       return false;
+	    pkgCache::PkgIterator Pkg = (*Cache).PkgBegin();
+	    for (; Pkg.end() == false; Pkg++)
+	    {
+	       // Should we try on all versions?
+	       pkgCache::VerIterator Ver = (*Cache)[Pkg].CandidateVerIter(*Cache);
+	       if (Ver.end() == false)
+	       {
+		  pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
+		  if (Parse.HasFile(S)) {
+		     strcpy(S, Pkg.Name());
+		     // Confirm the translation.
+		     ExpectedInst += 1000;
+		     break;
+		  }
+	       }
+	    }
+	 }
+
 	 char *Slash = strchr(S,'/');
 	 if (Slash != 0)
 	 {
@@ -2367,6 +2425,25 @@ bool DoBuildDep(CommandLine &CmdL)
                  cout << "Looking for " << (*D).Package << "...\n";
 
 	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
+
+	    // CNC:2003-11-21 - Try to handle unknown file deps.
+	    if (Pkg.end() == true && (*D).Package[0] == '/')
+	    {
+	       const char *File = (*D).Package.c_str();
+	       Pkg = (*Cache).PkgBegin();
+	       for (; Pkg.end() == false; Pkg++)
+	       {
+		  // Should we try on all versions?
+		  pkgCache::VerIterator Ver = (*Cache)[Pkg].CandidateVerIter(*Cache);
+		  if (Ver.end() == false)
+		  {
+		     pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
+		     if (Parse.HasFile(File))
+			break;
+		  }
+	       }
+	    }
+
 	    if (Pkg.end() == true)
             {
                if (_config->FindB("Debug::BuildDeps",false) == true)

@@ -1142,10 +1142,10 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
        Pkg.ProvidesList()->NextProvides == 0)
    {
       pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
-      ioprintf(c1out,_("Selecting %s to represent %s\n"),
-	       Tmp.Name(),Pkg.Name());
       // CNC:2003-11-21 - Check if the current candidate is really
       //                  providing that dependency
+      ioprintf(c1out,_("Selecting %s to represent %s\n"),
+	       Tmp.Name(),Pkg.Name());
       pkgCache::VerIterator Ver = Cache[Tmp].CandidateVerIter(Cache);
       pkgCache::PrvIterator Prv = Ver.ProvidesList();
       bool Found = false;
@@ -2586,9 +2586,10 @@ bool DoBuildDep(CommandLine &CmdL)
          }
 	 else // BuildDep || BuildDepIndep
          {
-	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
             if (_config->FindB("Debug::BuildDeps",false) == true)
                  cout << "Looking for " << (*D).Package << "...\n";
+
+	    pkgCache::PkgIterator Pkg = Cache->FindPkg((*D).Package);
 
 	    // CNC:2003-11-21 - Try to handle unknown file deps.
 	    if (Pkg.end() == true && (*D).Package[0] == '/')
