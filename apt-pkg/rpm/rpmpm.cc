@@ -783,6 +783,22 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    TS = rpmtransCreateSet(DB, Dir.c_str());
 #endif
 
+#if RPM_VERSION >= 0x040300
+   /* Initialize security context patterns for SELinux */
+   if (!(tsFlags & RPMTRANS_FLAG_NOCONTEXTS)) {
+      rpmsx sx = rpmtsREContext(TS);
+      if (sx == NULL) {
+         const char *fn = rpmGetPath("%{?_install_file_context_path}", NULL);
+         if (fn != NULL && *fn != '\0') {
+            sx = rpmsxNew(fn);
+            (void) rpmtsSetREContext(TS, sx);
+         }
+         fn = (const char *) _free(fn);
+      }
+      sx = rpmsxFree(sx);
+   }
+#endif
+
    if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
       probFilter |= RPMPROB_FILTER_OLDPACKAGE;
    }
@@ -918,13 +934,18 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 #if RPM_VERSION >= 0x040000
 	 else if (Opts->Value == "--nomd5")
 	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
-	 else if (Opts->Value == "--repackage")
+	 else if (Opts->Value == "--repackage" ||
+	          rpmExpandNumeric("%{?_repackage_all_erasures}"))
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 #endif
 #if RPM_VERSION >= 0x040200
 	 else if (Opts->Value == "--noconfigs" ||
 	          Opts->Value == "--excludeconfigs")
 	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
+#endif
+#if RPM_VERSION >= 0x040300
+	 else if (Opts->Value == "--nocontexts")
+            *tsFlags |= RPMTRANS_FLAG_NOCONTEXTS;
 #endif
 
 	 // Problem filter flags
