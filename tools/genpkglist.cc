@@ -579,8 +579,9 @@ int main(int argc, char ** argv)
    md5cache = new CachedMD5(string(op_dir) + string(op_suf), "genpkglist");
 
 #if RPM_VERSION >= 0x040100
-   rpmts ts = rpmtsCreate();
    rpmReadConfigFiles(NULL, NULL);
+   rpmts ts = rpmtsCreate();
+   rpmtsSetVSFlags(ts, (rpmVSFlags_e)-1);
 #else
    int isSource;
 #endif   
