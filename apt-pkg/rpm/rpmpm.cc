@@ -894,7 +894,8 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_NOSCRIPTS;
 	 else if (Opts->Value == "--notriggers")
 	    *tsFlags |= RPMTRANS_FLAG_NOTRIGGERS;
-	 else if (Opts->Value == "--excludedocs")
+	 else if (Opts->Value == "--nodocs" ||
+	          Opts->Value == "--excludedocs")
 	    *tsFlags |= RPMTRANS_FLAG_NODOCS;
 	 else if (Opts->Value == "--allfiles")
 	    *tsFlags |= RPMTRANS_FLAG_ALLFILES;
@@ -903,15 +904,12 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 #ifdef HAVE_RPM4
 	 else if (Opts->Value == "--nomd5")
 	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
-#endif
-#ifdef HAVE_RPM4
 	 else if (Opts->Value == "--repackage")
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 #endif
-#if 0
-	 // --noconfigs is only in rpm >= 4.2 (or 4.1.1) 
-	 // which isn't detected currently
-	 else if (Opts->Value == "--noconfigs")
+#ifdef HAVE_RPM421
+	 else if (Opts->Value == "--noconfigs" ||
+	          Opts->Value == "--excludeconfigs")
 	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
 #endif
 
@@ -926,7 +924,7 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	 else if (Opts->Value == "--ignoresize")
 	 {
 	    *probFilter |= RPMPROB_FILTER_DISKSPACE;
-#ifndef HAVE_RPM4
+#ifdef HAVE_RPM4
 	    *probFilter |= RPMPROB_FILTER_DISKNODES;
 #endif
 	 }
