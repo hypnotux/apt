@@ -9,7 +9,6 @@ Essential:
   fileutils
   glibc-base
   initscripts
-  kernel
   modutils
   mount
   pam
