@@ -22,6 +22,7 @@
 #include <apt-pkg/md5.h>
 
 #include <apt-pkg/rpmhandler.h>
+#include <apt-pkg/rpmpackagedata.h>
 
 #include <apti18n.h>
 
@@ -270,6 +271,8 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 {
    string Dir = _config->Find("RPM::RootDir");
    rpmReadConfigFiles(NULL, NULL);
+
+   RPMPackageData::Singleton()->InitMinArchScore();
 
    // Everytime we open a database for writing, it has its
    // mtime changed, and kills our cache validity. As we never

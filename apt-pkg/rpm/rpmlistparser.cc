@@ -622,8 +622,11 @@ bool rpmListParser::Step()
       if (Handler->IsDatabase() == true || archOk == true)
 	 return true;
 #else
-      if (Handler->IsDatabase() == true ||
-	  rpmMachineScore(RPM_MACHTABLE_INSTARCH, arch.c_str()) > 0)
+      if (Handler->IsDatabase() == true)
+	 return true;
+
+      int Score = rpmMachineScore(RPM_MACHTABLE_INSTARCH, arch.c_str());
+      if (Score > 0 && rpmdata->AcceptArchScore(Score))
 	 return true;
 #endif
    }

@@ -13,7 +13,10 @@
 
 #include <apti18n.h>
 
+#include <rpm/rpmlib.h>
+
 RPMPackageData::RPMPackageData()
+   : MinArchScore(-1)
 {
    // Populate priorities
    string FileName = _config->FindFile("Dir::Etc::rpmpriorities");
@@ -242,6 +245,17 @@ void RPMPackageData::GenericTranslate(list<Translate*> &TList, string &FullURI,
 	 break;
       }
    }
+}
+
+void RPMPackageData::InitMinArchScore()
+{
+   if (MinArchScore != -1)
+      return;
+   string Arch = _config->Find("RPM::Architecture", "");
+   if (Arch.empty() == false)
+      MinArchScore = rpmMachineScore(RPM_MACHTABLE_INSTARCH, Arch.c_str());
+   else
+      MinArchScore = 0;
 }
 
 RPMPackageData *RPMPackageData::Singleton()

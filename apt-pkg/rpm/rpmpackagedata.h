@@ -34,6 +34,8 @@ class RPMPackageData
    void GenericTranslate(list<Translate*> &TList, string &FullURI,
 		   	 map<string,string> &Dict);
 
+   int MinArchScore;
+
    public:
 
    inline pkgCache::State::VerPriority VerPriority(string Package) 
@@ -60,6 +62,9 @@ class RPMPackageData
 	{return !SourceTranslations.empty();};
    bool HasIndexTranslation()
 	{return !IndexTranslations.empty();};
+
+   void InitMinArchScore();
+   bool AcceptArchScore(int Score) { return Score >= MinArchScore; }
 
    RPMPackageData();
 };
