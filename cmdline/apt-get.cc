@@ -464,7 +464,8 @@ void ShowDel(ostream &out,CacheFile &Cache)
 	       List += string(I.Name()) + " ";
 	 }
      
-     VersionsList += string(Cache[I].CandVersion)+ "\n";
+     // CNC:2004-03-09 
+     VersionsList += string(I.CurrentVer().VerStr())+ "\n";
       }
    }
    
