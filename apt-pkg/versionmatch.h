@@ -69,7 +69,7 @@ class pkgVersionMatch
    pkgCache::VerIterator Find(pkgCache::PkgIterator Pkg);
 			       
    // CNC:2003-11-05
-   pkgVersionMatch(string Data,MatchType Type,int Op = 0);
+   pkgVersionMatch(string Data,MatchType Type,int Op=pkgCache::Dep::Equals);
 };
 
 #endif
