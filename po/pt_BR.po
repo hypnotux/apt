@@ -685,9 +685,8 @@ msgid ""
 "Unable to fetch some archives, maybe run apt-get update or try with --fix-"
 "missing?"
 msgstr ""
-"Impossível obter alguns arquivos, tentar talvez com --fix-missing?Impossível "
-"obter alguns arquivos, talvez rodar apt-get update ou tentar com --fix-"
-"missing?"
+"Impossível obter alguns arquivos, talvez rodar apt-get update ou tentar "
+"com --fix-missing?"
 
 #: cmdline/apt-get.cc:1121 cmdline/apt-shell.cc:1225
 msgid "--fix-missing and media swapping is not currently supported"
