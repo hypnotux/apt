@@ -45,6 +45,8 @@ extern "C" {
 #include <apti18n.h>
 
 #include <limits.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 Lua *_GetLuaObj()
 {
@@ -57,7 +59,7 @@ static int luaopen_apt(lua_State *L);
 const double Lua::NoGlobalI = INT_MIN;
 
 Lua::Lua()
-      : DepCache(0), Cache(0), Fix(0), DontFix(0)
+      : DepCache(0), Cache(0), CacheControl(0), Fix(0), DontFix(0)
 {
    _config->CndSet("Dir::Bin::scripts", "/usr/lib/apt/scripts");
 
@@ -82,6 +84,8 @@ Lua::Lua()
 
 Lua::~Lua()
 {
+   if (CacheControl)
+      CacheControl->Close();
    lua_close(L);
 }
 
@@ -323,11 +327,21 @@ void Lua::GetGlobalVS(const char *Name, vector<string> &VS)
 void Lua::SetDepCache(pkgDepCache *DepCache_)
 {
    DepCache = DepCache_;
-   Cache = &DepCache->GetCache();
+   if (DepCache != NULL)
+      Cache = &DepCache->GetCache();
+   else
+      Cache = NULL;
+}
+
+void Lua::SetCacheControl(LuaCacheControl *CacheControl_)
+{
+   CacheControl = CacheControl_;
 }
 
 pkgDepCache *Lua::GetDepCache(lua_State *L)
 {
+   if (DepCache == NULL && CacheControl)
+      SetDepCache(CacheControl->Open());
    if (DepCache == NULL && L != NULL) {
       lua_pushstring(L, "no depcache available at that point");
       lua_error(L);
@@ -337,6 +351,8 @@ pkgDepCache *Lua::GetDepCache(lua_State *L)
 
 pkgCache *Lua::GetCache(lua_State *L)
 {
+   if (Cache == NULL && CacheControl)
+      SetDepCache(CacheControl->Open());
    if (Cache == NULL && L != NULL) {
       lua_pushstring(L, "no cache available at that point");
       lua_error(L);
@@ -1015,6 +1031,14 @@ static int luaopen_apt(lua_State *L)
 {
    lua_pushvalue(L, LUA_GLOBALSINDEX);
    luaL_openlib(L, NULL, aptlib, 0);
+}
+
+pkgDepCache *LuaCacheControl::Open()
+{
+   if (geteuid() == 0)
+      return Open(true);
+   else
+      return Open(false);
 }
 
 #endif // WITH_LUA

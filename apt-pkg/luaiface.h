@@ -19,6 +19,16 @@ class pkgProblemResolver;
 class lua_State;
 typedef int (*lua_CFunction)(struct lua_State*);
 
+class LuaCacheControl {
+   public:
+
+   virtual pkgDepCache *Open();
+   virtual pkgDepCache *Open(bool Write) = 0;
+   virtual void Close() = 0;
+
+   virtual ~LuaCacheControl() {};
+};
+
 class Lua {
    protected:
 
@@ -34,6 +44,8 @@ class Lua {
 
    pkgDepCache *DepCache;
    pkgCache *Cache;
+
+   LuaCacheControl *CacheControl;
 
    pkgProblemResolver *Fix;
    bool DontFix;
@@ -69,6 +81,7 @@ class Lua {
 
    void SetDepCache(pkgDepCache *DepCache_);
    void SetCache(pkgCache *Cache_) { Cache = Cache_; };
+   void SetCacheControl(LuaCacheControl *CacheControl_);
    void SetProblemResolver(pkgProblemResolver *Fix_) { Fix = Fix_; };
    void SetDontFix() { DontFix = true; };
    void ResetCaches()
@@ -77,6 +90,7 @@ class Lua {
    // For API functions
    pkgDepCache *GetDepCache(lua_State *L=NULL);
    pkgCache *GetCache(lua_State *L=NULL);
+   LuaCacheControl *GetCacheControl() { return CacheControl; };
    pkgProblemResolver *GetProblemResolver() { return Fix; };
    bool GetDontFix() { return DontFix; };
 

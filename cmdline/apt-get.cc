@@ -114,6 +114,38 @@ class CacheFile : public pkgCacheFile
 };
 									/*}}}*/
 
+// CNC:2003-03-19
+#ifdef WITH_LUA
+class AptGetLuaCache : public LuaCacheControl
+{
+   public:
+
+   CacheFile *Cache;
+
+   virtual pkgDepCache *Open(bool Write)
+   {
+      if (Cache == NULL) {
+	 Cache = new CacheFile();
+	 if (Cache->Open(Write) == false)
+	    return NULL;
+	 if (Cache->CheckDeps() == false)
+	    return NULL;
+      }
+      return *Cache;
+   }
+
+   virtual void Close()
+   {
+      if (Cache) {
+	 delete Cache;
+	 Cache = NULL;
+      }
+   };
+
+   AptGetLuaCache() : Cache(0) {};
+};
+#endif
+
 // YnPrompt - Yes No Prompt.						/*{{{*/
 // ---------------------------------------------------------------------
 /* Returns true on a Yes.*/
@@ -1508,12 +1540,9 @@ bool DoUpdate(CommandLine &CmdL)
 // CNC:2003-03-19
 #ifdef WITH_LUA
    if (_lua->HasScripts("Scripts::Apt::Update::Pre")) {
-      CacheFile Cache;
-      if (Cache.Open() == true) {
-	 _lua->SetDepCache(Cache);
-	 _lua->RunScripts("Scripts::Apt::Update::Pre", false);
-	 _lua->ResetCaches();
-      }
+      _lua->RunScripts("Scripts::Apt::Update::Pre", false);
+      LuaCacheControl *LuaCache = _lua->GetCacheControl();
+      LuaCache->Close();
    }
 #endif
    
@@ -1591,9 +1620,7 @@ bool DoUpdate(CommandLine &CmdL)
       return false;
 
 #ifdef WITH_LUA
-   _lua->SetDepCache(Cache);
    _lua->RunScripts("Scripts::Apt::Update::Post", false);
-   _lua->ResetCaches();
 #endif
 #endif
    
@@ -2819,28 +2846,26 @@ static int AptLua_commit(lua_State *L)
 #ifdef WITH_LUA
 bool DoScript(CommandLine &CmdL)
 {
-   CacheFile Cache;
-   if (Cache.OpenForInstall() == false || Cache.CheckDeps() == false)
-      return false;
-
    for (const char **I = CmdL.FileList+1; *I != 0; I++)
       _config->Set("Scripts::Apt::Script::", *I);
 
    _lua->SetGlobal("commit_ask", 1);
-   _lua->SetDepCache(Cache);
    _lua->RunScripts("Scripts::Apt::Script", false);
    double Ask = _lua->GetGlobalI("commit_ask");
-   _lua->ResetCaches();
    _lua->ResetGlobals();
 
-   // CNC:2003-03-06
-   if (CheckOnly(Cache) == true)
-      return true;
-   
-   return InstallPackages(Cache, false, Ask);
+   AptGetLuaCache *LuaCache = (AptGetLuaCache*) _lua->GetCacheControl();
+   if (LuaCache && LuaCache->Cache) {
+      CacheFile &Cache = *LuaCache->Cache;
+      if (CheckOnly(Cache))
+	 return true;
+      if ((*Cache).InstCount() > 0 || (*Cache).DelCount() > 0)
+	 return InstallPackages(Cache, false, Ask);
+   }
+
+   return true;
 }
 #endif
-
 									/*}}}*/
 
 // ShowHelp - Show a help screen					/*{{{*/
@@ -3082,6 +3107,34 @@ int main(int argc,const char *argv[])
    signal(SIGWINCH,SigWinch);
    SigWinch(0);
 
+// CNC:2003-11-21
+#ifdef WITH_LUA
+   AptGetLuaCache LuaCache;
+   _lua->SetCacheControl(&LuaCache);
+   
+   double Consume = 0;
+   if (argc > 1 && _lua->HasScripts("Scripts::Apt::Command") == true)
+   {
+      _lua->SetGlobal("commit_ask", 1);
+      _lua->SetGlobal("command_args", &argv[1]);
+      _lua->SetGlobal("command_consume", 0.0);
+      _lua->RunScripts("Scripts::Apt::Command", true);
+      Consume = _lua->GetGlobalI("command_consume");
+      double Ask = _lua->GetGlobalI("commit_ask");
+      _lua->ResetGlobals();
+      _lua->ResetCaches();
+
+      if (Consume == 1 && LuaCache.Cache)
+      {
+	 CacheFile &Cache = *LuaCache.Cache;
+	 if (CheckOnly(Cache) == false &&
+	     (*Cache).InstCount() > 0 || (*Cache).DelCount() > 0)
+	    InstallPackages(Cache, false, Ask);
+      }
+   }
+
+   if (Consume == 0)
+#endif
    // Match the operation
    CmdL.DispatchArg(Cmds);
 

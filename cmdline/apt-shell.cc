@@ -4349,7 +4349,7 @@ int main(int argc,const char *argv[])
    _lua->SetDepCache(*GCache);
    _lua->RunScripts("Scripts::AptShell::Init", false);
    _lua->ResetCaches();
-   bool HasCmdScripts = _lua->HasScripts("Scripts::AptShell::Command");
+   bool HasCmdScripts = _lua->HasScripts("Scripts::Apt::Command");
 #endif
 
    int largc;
@@ -4435,7 +4435,7 @@ int main(int argc,const char *argv[])
 	 _lua->SetDepCache(*GCache);
 	 _lua->SetGlobal("command_args", &largv[1]);
 	 _lua->SetGlobal("command_consume", 0.0);
-	 _lua->RunScripts("Scripts::AptShell::Command", true);
+	 _lua->RunScripts("Scripts::Apt::Command", true);
 	 double Consume = _lua->GetGlobalI("command_consume");
 	 _lua->ResetGlobals();
 	 _lua->ResetCaches();
