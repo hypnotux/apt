@@ -1422,30 +1422,56 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 // TryToChangeVer - Try to change a candidate version			/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-bool TryToChangeVer(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
-		    const char *VerTag,bool IsRel)
+// CNC:2003-11-05 - Applied patch by ALT-Linux changing the way
+//                  versions are requested by the user.
+static const char *op2str(int op)
 {
+   switch (op & 0x0f)
+   {
+      case pkgCache::Dep::LessEq: return "<=";
+      case pkgCache::Dep::GreaterEq: return ">=";
+      case pkgCache::Dep::Less: return "<";
+      case pkgCache::Dep::Greater: return ">";
+      case pkgCache::Dep::Equals: return "=";
+      case pkgCache::Dep::NotEquals: return "!";
+      default: return "";
+   }
+}
+
+// CNC:2003-11-11
+bool TryToChangeVer(pkgCache::PkgIterator &Pkg,pkgDepCache &Cache,
+ 		    int VerOp,const char *VerTag,bool IsRel)
+{
+   // CNC:2003-11-05
    pkgVersionMatch Match(VerTag,(IsRel == true?pkgVersionMatch::Release : 
-				 pkgVersionMatch::Version));
+ 				 pkgVersionMatch::Version),VerOp);
    
    pkgCache::VerIterator Ver = Match.Find(Pkg);
 			 
    if (Ver.end() == true)
    {
+      // CNC:2003-11-05
       if (IsRel == true)
-	 return _error->Error(_("Release '%s' for '%s' was not found"),
-			      VerTag,Pkg.Name());
-      return _error->Error(_("Version '%s' for '%s' was not found"),
-			   VerTag,Pkg.Name());
+	 return _error->Error(_("Release %s'%s' for '%s' was not found"),
+			      op2str(VerOp),VerTag,Pkg.Name());
+      return _error->Error(_("Version %s'%s' for '%s' was not found"),
+			   op2str(VerOp),VerTag,Pkg.Name());
    }
    
    if (strcmp(VerTag,Ver.VerStr()) != 0)
    {
-      ioprintf(c1out,_("Selected version %s (%s) for %s\n"),
-	       Ver.VerStr(),Ver.RelStr().c_str(),Pkg.Name());
+      // CNC:2003-11-11
+      if (IsRel == true)
+	 ioprintf(c1out,_("Selected version %s (%s) for %s\n"),
+		  Ver.VerStr(),Ver.RelStr().c_str(),Pkg.Name());
+      else
+	 ioprintf(c1out,_("Selected version %s for %s\n"),
+		  Ver.VerStr(),Pkg.Name());
    }
    
    Cache.SetCandidateVersion(Ver);
+   // CNC:2003-11-11
+   Pkg = Ver.ParentPkg();
    return true;
 }
 									/*}}}*/
@@ -1761,6 +1787,8 @@ bool DoInstall(CommandLine &CmdL)
       int Mode = DefMode;
       char *VerTag = 0;
       bool VerIsRel = false;
+      // CNC:2003-11-05
+      int VerOp = 0;
       while (Cache->FindPkg(S).end() == true)
       {
 	 // Handle an optional end tag indicating what to do
@@ -1778,15 +1806,48 @@ bool DoInstall(CommandLine &CmdL)
 	    continue;
 	 }
 	 
-	 char *Slash = strchr(S,'=');
-	 if (Slash != 0)
+	 // CNC:2003-11-05
+	 char *sep = strpbrk(S,"=><");
+	 if (sep)
 	 {
+	    char *p;
+	    int eq = 0, gt = 0, lt = 0;
+
 	    VerIsRel = false;
-	    *Slash = 0;
-	    VerTag = Slash + 1;
+	    for (p = sep; *p && strchr("=><",*p); ++p)
+	       switch (*p)
+	       {
+		  case '=': eq = 1; break;
+		  case '>': gt = 1; break;
+		  case '<': lt = 1; break;
+	       }
+	    if (eq)
+	    {
+	       if (lt && gt)
+		  return _error->Error(_("Couldn't parse name: %s"),S);
+	       else if (lt)
+		  VerOp = pkgCache::Dep::LessEq;
+	       else if (gt)
+		  VerOp = pkgCache::Dep::GreaterEq;
+	       else
+		  VerOp = pkgCache::Dep::Equals;
+	    }
+	    else
+	    {
+	       if (lt && gt)
+		  VerOp = pkgCache::Dep::NotEquals;
+	       else if (lt)
+		  VerOp = pkgCache::Dep::Less;
+	       else if (gt)
+		  VerOp = pkgCache::Dep::Greater;
+	       else
+		  return _error->Error(_("Couldn't parse name: %s"),S);
+	    }
+	    *sep = '\0';
+	    VerTag = p;
 	 }
 	 
-	 Slash = strchr(S,'/');
+	 char *Slash = strchr(S,'/');
 	 if (Slash != 0)
 	 {
 	    VerIsRel = true;
@@ -1878,7 +1939,8 @@ bool DoInstall(CommandLine &CmdL)
 	    StateGuard->Ignore(Pkg);
 	    
 	    if (VerTag != 0)
-	       if (TryToChangeVer(Pkg,Cache,VerTag,VerIsRel) == false)
+	       // CNC:2003-11-05
+	       if (TryToChangeVer(Pkg,Cache,VerOp,VerTag,VerIsRel) == false)
 		  return false;
 	    
 	    Hit |= TryToInstall(Pkg,Cache,Fix,Mode,BrokenFix,
@@ -1892,7 +1954,8 @@ bool DoInstall(CommandLine &CmdL)
       else
       {
 	 if (VerTag != 0)
-	    if (TryToChangeVer(Pkg,Cache,VerTag,VerIsRel) == false)
+	    // CNC:2003-11-05
+	    if (TryToChangeVer(Pkg,Cache,VerOp,VerTag,VerIsRel) == false)
 	       return false;
 	 if (TryToInstall(Pkg,Cache,Fix,Mode,BrokenFix,ExpectedInst) == false)
 	    return false;
