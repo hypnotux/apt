@@ -1142,7 +1142,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
        Pkg.ProvidesList()->NextProvides == 0)
    {
       pkgCache::PkgIterator Tmp = Pkg.ProvidesList().OwnerPkg();
-      ioprintf(c1out,_("Note, selecting %s instead of %s\n"),
+      ioprintf(c1out,_("Selecting %s to represent %s\n"),
 	       Tmp.Name(),Pkg.Name());
       // CNC:2003-11-21 - Check if the current candidate is really
       //                  providing that dependency
