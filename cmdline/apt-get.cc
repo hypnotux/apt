@@ -105,7 +105,9 @@ class CacheFile : public pkgCacheFile
    };
    bool OpenForInstall()
    {
-      if (_config->FindB("APT::Get::Print-URIs") == true)
+      // CNC:2004-03-07 - dont take lock if in download mode
+      if (_config->FindB("APT::Get::Print-URIs") == true ||
+	  _config->FindB("APT::Get::Download-only") == true)
 	 return Open(false);
       else
 	 return Open(true);
@@ -1029,10 +1031,13 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       return true;
    }
 
+// CNC:2004-03-07 - lock not taken in download mode in the first place
+#if 0
    /* Unlock the dpkg lock if we are not going to be doing an install
       after. */
    if (_config->FindB("APT::Get::Download-Only",false) == true)
       _system->UnLock();
+#endif
 
    // CNC:2003-02-24
    bool Ret = true;
