@@ -808,6 +808,9 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 	 return false;
    }
 #else
+   // RPM can't have a separate sources cache. This happens because
+   // if a source cache is declared valid, it won't be checked for new
+   // file provides based on changes of the status cache.
    {
       TotalSize = ComputeSize(Files.begin(),Files.end());
       
