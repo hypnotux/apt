@@ -42,34 +42,16 @@ rpmListParser::rpmListParser(RPMHandler *Handler)
    Handler->Rewind();
    header = NULL;
    if (Handler->IsDatabase() == true)
-       DupPackages = new map<string,unsigned long>();
+       SeenPackages = new map<string,unsigned long>();
    else
-       DupPackages = NULL;
-   GetConfig();
+       SeenPackages = NULL;
+   RpmData = RPMPackageData::Singleton();
 }
                                                                         /*}}}*/
 
 rpmListParser::~rpmListParser()
 {
-   delete DupPackages;
-}
-
-bool rpmListParser::GetConfig()
-{
-   const Configuration::Item *Top = _config->Tree("RPM::Allow-Duplicated");
-   for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next)
-   {
-      regex_t *ptrn = new regex_t;
-      if (regcomp(ptrn,Top->Value.c_str(),REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0)
-      {
-	 _error->Warning(_("Bad regular expression '%s' in option RPM::Allow-Duplicated."),
-			 Top->Value.c_str());
-	 delete ptrn;
-      }
-      else
-	  AllowedDupPackages.push_back(ptrn);
-   }
-   return true;
+   delete SeenPackages;
 }
 
 // ListParser::UniqFindTagWrite - Find the tag and write a unq string	/*{{{*/
@@ -103,6 +85,9 @@ unsigned long rpmListParser::UniqFindTagWrite(int Tag)
 /* This is to return the name of the package this section describes */
 string rpmListParser::Package()
 {
+   if (CurrentName.empty() == false)
+      return CurrentName;
+
    char *str;
    int type, count;
    
@@ -111,52 +96,50 @@ string rpmListParser::Package()
    if (headerGetEntry(header, RPMTAG_NAME, &type, (void**)&str, &count) != 1) 
    {
       _error->Error("Corrupt pkglist: no RPMTAG_NAME in header entry");
-      return string();
+      return "";
    } 
 
-   bool DupOk = false;
+   bool IsDup = false;
    string Name = str;
    
-   for (vector<regex_t*>::iterator I = AllowedDupPackages.begin();
-	I != AllowedDupPackages.end(); I++)
-   {
-      if (regexec(*I,str,0,0,0) == 0)
+   // If this package can have multiple versions installed at
+   // the same time, then we make it so that the name of the
+   // package is NAME+"#"+VERSION and also add a provides
+   // with the original name and version, to satisfy the 
+   // dependencies.
+   if (RpmData->IsDupPackage(Name) == true)
+      IsDup = true;
+   else if (SeenPackages != NULL) {
+      if (SeenPackages->find(Name) != SeenPackages->end() &&
+	  (*SeenPackages)[Name] != Offset())
       {
-	 DupOk = true;
-	 break;
+	 if (_config->FindB("RPM::Allow-Duplicated-Warning", true) == true)
+	    _error->Warning(
+   _("There are multiple versions of \"%s\" in your system.\n"
+     "\n"
+     "This package won't be cleanly updated, unless you leave\n"
+     "only one version. To leave multiple versions installed,\n"
+     "you may remove that warning by setting the following\n"
+     "option in your configuration file:\n"
+     "\n"
+     "RPM::Allow-Duplicated { \"^%s$\"; };\n"
+     "\n"
+     "To disable these warnings completely set:\n"
+     "\n"
+     "RPM::Allow-Duplicated-Warning \"false\";\n")
+			      , Name.c_str(), Name.c_str());
+	 RpmData->SetDupPackage(Name);
+	 VirtualizePackage(Name);
+	 IsDup = true;
       }
+      (*SeenPackages)[Name] = Offset();
    }
-
-   /*
-    * If this package can have multiple versions installed at
-    * the same time, then we make it so that the name of the
-    * package is NAME+"#"+VERSION and also adds a provides
-    * with the original name and version, to satisfy the 
-    * dependencies.
-    */
-   if (DupOk == true)
+   if (IsDup == true)
    {
       Name += "#"+Version();
       Duplicated = true;
    } 
-   else if (DupPackages != NULL)
-   {
-      if (DupPackages->find(Name) != DupPackages->end() &&
-	  (*DupPackages)[Name] != Offset())
-      {
-	 _error->Error(_("There are two or more versions of the package '%s' installed in your "
-			 "system, which is a situation APT can't handle cleanly at the moment.\n"
-			 "Please do one of the following:\n"
-			 "1) Keep at most one version of the package in the system; or\n"
-			 "2) If you do want to keep multiple versions of that package, lookup "
-			 "RPM::Allow-Duplicated in the documentation.\n"), 
-		       Name.c_str());
-	 (*DupPackages)[Name] = Offset();
-	 return string();
-      }
-      else
-	 (*DupPackages)[Name] = Offset();
-   }
+   CurrentName = Name;
    return Name;
 }
                                                                         /*}}}*/
@@ -183,6 +166,7 @@ string rpmListParser::Version()
    bool has_epoch = false;
    int type, count;
    string str;
+   str.reserve(10);
 
    if (headerGetEntry(header, RPMTAG_EPOCH, &type, (void **)&ser, &count) == 1
        && count > 0) 
@@ -191,14 +175,20 @@ string rpmListParser::Version()
    headerGetEntry(header, RPMTAG_VERSION, &type, (void **)&ver, &count);
    headerGetEntry(header, RPMTAG_RELEASE, &type, (void **)&rel, &count);
 
-   if (has_epoch == true)
-   {
+   if (has_epoch == true) {
       char buf[32];
       snprintf(buf, sizeof(buf), "%i", ser[0]);
-      str = string(buf)+":"+string(ver)+"-"+string(rel);
+      str += buf;
+      str += ":";
+      str += ver;
+      str += "-";
+      str += rel;
    }
-   else 
-      str = string(ver)+"-"+string(rel);
+   else {
+      str += ver;
+      str += "-";
+      str += rel;
+   }
    return str;
 }
                                                                         /*}}}*/
@@ -249,12 +239,10 @@ bool rpmListParser::UsePackage(pkgCache::PkgIterator Pkg,
 {
    if (Pkg->Section == 0)
       Pkg->Section = UniqFindTagWrite(RPMTAG_GROUP);
-   RPMPackageData *rpmdata;
-   rpmdata = RPMPackageData::Singleton();
    if (_error->PendingError()) 
        return false;
-   Ver->Priority = rpmdata->VerPriority(Pkg.Name());
-   Pkg->Flags |= rpmdata->PkgFlags(Pkg.Name());
+   Ver->Priority = RpmData->VerPriority(Pkg.Name());
+   Pkg->Flags |= RpmData->PkgFlags(Pkg.Name());
    if (ParseStatus(Pkg,Ver) == false)
        return false;
    return true;
@@ -594,26 +582,22 @@ bool rpmListParser::ParseProvides(pkgCache::VerIterator Ver)
 /* This has to be carefull to only process the correct architecture */
 bool rpmListParser::Step()
 {
-   RPMPackageData *rpmdata = RPMPackageData::Singleton();
    while (Handler->Skip() == true)
    {
       /* See if this is the correct Architecture, if it isn't then we
        drop the whole section. A missing arch tag can't happen to us */
-      string arch, pkg, tmp;
- 
       header = Handler->GetHeader();
-      pkg = Package();
-      arch = Architecture();
- 
-      if (Duplicated == false)
-	 pkg = pkg+'#'+Version();
-
-      if (rpmdata->IgnorePackage(pkg.substr(0,pkg.find('#'))) == true)
+      CurrentName = "";
+      
+      string RealName = Package();
+      if (Duplicated == true)
+	 RealName = RealName.substr(0,RealName.find('#'));
+      if (RpmData->IgnorePackage(RealName) == true)
 	 continue;
  
 #if OLD_BESTARCH
       bool archOk = false;
-      tmp = rpmSys.BestArchForPackage(pkg);
+      string tmp = rpmSys.BestArchForPackage(RealName);
       if (tmp.empty() == true && // has packages for a single arch only
 	  rpmMachineScore(RPM_MACHTABLE_INSTARCH, arch.c_str()) > 0)
 	 archOk = true;
@@ -625,8 +609,9 @@ bool rpmListParser::Step()
       if (Handler->IsDatabase() == true)
 	 return true;
 
-      int Score = rpmMachineScore(RPM_MACHTABLE_INSTARCH, arch.c_str());
-      if (Score > 0 && rpmdata->AcceptArchScore(Score))
+      string Arch = Architecture();
+      int Score = rpmMachineScore(RPM_MACHTABLE_INSTARCH, Arch.c_str());
+      if (Score > 0 && RpmData->AcceptArchScore(Score))
 	 return true;
 #endif
    }
@@ -668,7 +653,6 @@ bool rpmListParser::LoadReleaseInfo(pkgCache::PkgFileIterator FileI,
 }
                                                                         /*}}}*/
 
-
 unsigned long rpmListParser::Size() 
 {
    uint_32 *size;
@@ -678,6 +662,79 @@ unsigned long rpmListParser::Size()
        return 1;
       
    return (size[0]+512)/1024;
+}
+
+// This is a slightly complex operation. It must take a package, and
+// move every version to new packages, named accordingly to
+// Allow-Duplicated rules.
+void rpmListParser::VirtualizePackage(string Name)
+{
+   pkgCache::PkgIterator FromPkgI = Owner->GetCache().FindPkg(Name);
+
+   // Should always be false
+   if (FromPkgI.end() == true)
+      return;
+
+   pkgCache::VerIterator FromVerI = FromPkgI.VersionList();
+   while (FromVerI.end() == false) {
+      string MangledName = Name+"#"+string(FromVerI.VerStr());
+
+      // Get the new package.
+      pkgCache::PkgIterator ToPkgI = Owner->GetCache().FindPkg(MangledName);
+      if (ToPkgI.end() == true) {
+	 // Theoretically, all packages virtualized should pass here at least
+	 // once for each new version in the list, since either the package was
+	 // already setup as Allow-Duplicated (and this method would never be
+	 // called), or the package doesn't exist before getting here. If
+	 // we discover that this assumption is false, then we must do
+	 // something to order the version list correctly, since the package
+	 // could already have some other version there.
+	 Owner->NewPackage(ToPkgI, MangledName);
+
+	 // Should it get the flags from the original package? Probably not,
+	 // or automatic Allow-Duplicated would work differently than
+	 // hardcoded ones.
+	 ToPkgI->Flags |= RpmData->PkgFlags(MangledName);
+	 ToPkgI->Section = FromPkgI->Section;
+      }
+      
+      // Move the version to the new package.
+      FromVerI->ParentPkg = ToPkgI.Index();
+
+      // Put it at the end of the version list (about ordering,
+      // read the comment above).
+      map_ptrloc *ToVerLast = &ToPkgI->VersionList;
+      for (pkgCache::VerIterator ToVerLastI = ToPkgI.VersionList();
+	   ToVerLastI.end() == false;
+	   ToVerLast = &ToVerLastI->NextVer, ToVerLast++);
+
+      *ToVerLast = FromVerI.Index();
+
+      // Provide the real package name with the current version.
+      NewProvides(FromVerI, Name, FromVerI.VerStr());
+
+      // Is this the current version of the old package? If yes, set it
+      // as the current version of the new package as well.
+      if (FromVerI == FromPkgI.CurrentVer()) {
+	 ToPkgI->CurrentVer = FromVerI.Index();
+	 ToPkgI->SelectedState = pkgCache::State::Install;
+	 ToPkgI->InstState = pkgCache::State::Ok;
+	 ToPkgI->CurrentState = pkgCache::State::Installed;
+      }
+
+      // Move the iterator before reseting the NextVer.
+      pkgCache::Version *FromVer = (pkgCache::Version*)FromVerI;
+      FromVerI++;
+      FromVer->NextVer = 0;
+   }
+
+   // Reset original package data.
+   FromPkgI->CurrentVer = 0;
+   FromPkgI->VersionList = 0;
+   FromPkgI->Section = 0;
+   FromPkgI->SelectedState = 0;
+   FromPkgI->InstState = 0;
+   FromPkgI->CurrentState = 0;
 }
 
 #endif /* HAVE_RPM */

@@ -96,6 +96,21 @@ RPMPackageData::RPMPackageData()
    for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next)
       IgnorePackages[Top->Value] = 1;
 
+   // Populate Allow-Duplicated packages.
+   Top = _config->Tree("RPM::Allow-Duplicated");
+   for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next)
+   {
+      regex_t *ptrn = new regex_t;
+      if (regcomp(ptrn,Top->Value.c_str(),REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0)
+      {
+	 _error->Warning(_("Bad regular expression '%s' in option RPM::Allow-Duplicated."),
+			 Top->Value.c_str());
+	 delete ptrn;
+      }
+      else
+	  DuplicatedPatterns.push_back(ptrn);
+   }
+
    // Populate fake provides
    Top = _config->Tree("RPM::Fake-Provides");
    for (Top = (Top == 0?0:Top->Child); Top != 0; Top = Top->Next)
@@ -182,13 +197,6 @@ bool RPMPackageData::HoldPackage(const char *name)
    return false;
 }
 
-bool RPMPackageData::IgnorePackage(string Name)
-{
-   if (IgnorePackages.find(Name) != IgnorePackages.end())
-      return true;
-   return false;
-}
-
 bool RPMPackageData::IgnoreDep(pkgVersioningSystem &VS,
 			       pkgCache::DepIterator &Dep)
 {
@@ -256,6 +264,18 @@ void RPMPackageData::InitMinArchScore()
       MinArchScore = rpmMachineScore(RPM_MACHTABLE_INSTARCH, Arch.c_str());
    else
       MinArchScore = 0;
+}
+
+bool RPMPackageData::IsDupPackage(string Name)
+{
+   if (DuplicatedPackages.find(Name) != DuplicatedPackages.end())
+      return true;
+   const char *name = Name.c_str();
+   for (list<regex_t*>::iterator I = DuplicatedPatterns.begin();
+	I != DuplicatedPatterns.end(); I++)
+      if (regexec(*I,name,0,0,0) == 0)
+	 return true;
+   return false;
 }
 
 RPMPackageData *RPMPackageData::Singleton()

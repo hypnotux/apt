@@ -21,6 +21,8 @@ class RPMPackageData
    map<string,list<string>*> FakeProvides;
    map<string,int> IgnorePackages;
    list<regex_t*> HoldPackages;   
+   map<string,int> DuplicatedPackages;
+   list<regex_t*> DuplicatedPatterns;
 
    struct Translate {
 	   regex_t Pattern;
@@ -44,10 +46,10 @@ class RPMPackageData
    	{return Flags[Package];};
 
    bool HoldPackage(const char *name);
-   bool IgnorePackage(string Name);
-   bool IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep);
+   bool IgnorePackage(string Name)
+   	{return IgnorePackages.find(Name) != IgnorePackages.end();};
 
-   static RPMPackageData *Singleton();
+   bool IgnoreDep(pkgVersioningSystem &VS,pkgCache::DepIterator &Dep);
 
    void TranslateBinary(string &FullURI, map<string,string> &Dict)
    	{return GenericTranslate(BinaryTranslations, FullURI, Dict);};
@@ -65,6 +67,12 @@ class RPMPackageData
 
    void InitMinArchScore();
    bool AcceptArchScore(int Score) { return Score >= MinArchScore; }
+
+   void SetDupPackage(string Name)
+   	{DuplicatedPackages[Name] = 1;};
+   bool IsDupPackage(string Name);
+
+   static RPMPackageData *Singleton();
 
    RPMPackageData();
 };

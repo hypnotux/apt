@@ -23,20 +23,21 @@
 using namespace std;
 
 class RPMHandler;
+class RPMPackageData;
 
 class rpmListParser : public pkgCacheGenerator::ListParser
 {
    RPMHandler *Handler;
+   RPMPackageData *RpmData;
    Header header;
+
+   string CurrentName;
    
-   map<string,unsigned long> *DupPackages;
+   map<string,unsigned long> *SeenPackages;
    vector<string> Essentials;
    vector<string> Importants;
    
-   vector<regex_t*> AllowedDupPackages;
    bool Duplicated;
-   
-   bool GetConfig();
    
    unsigned long UniqFindTagWrite(int Tag);
    bool ParseStatus(pkgCache::PkgIterator Pkg,pkgCache::VerIterator Ver);
@@ -75,6 +76,8 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    virtual bool Step();
    
    bool LoadReleaseInfo(pkgCache::PkgFileIterator FileI,FileFd &File);
+
+   void VirtualizePackage(string Name);
    
    rpmListParser(RPMHandler *Handler);
    ~rpmListParser();

@@ -53,11 +53,13 @@ class pkgCacheGenerator
    // Flag file dependencies
    bool FoundFileDeps;
    
-   bool NewPackage(pkgCache::PkgIterator &Pkg,string Pkg);
    bool NewFileVer(pkgCache::VerIterator &Ver,ListParser &List);
    unsigned long NewVersion(pkgCache::VerIterator &Ver,string VerStr,unsigned long Next);
 
    public:
+
+   // CNC:2003-02-27 - We need this in rpmListParser.
+   bool NewPackage(pkgCache::PkgIterator &Pkg,string Pkg);
 
    unsigned long WriteUniqString(const char *S,unsigned int Size);
    inline unsigned long WriteUniqString(string S) {return WriteUniqString(S.c_str(),S.length());};
@@ -80,9 +82,6 @@ class pkgCacheGenerator
 // This is the abstract package list parser class.
 class pkgCacheGenerator::ListParser
 {
-   pkgCacheGenerator *Owner;
-   friend class pkgCacheGenerator;
-   
    // Some cache items
    pkgCache::VerIterator OldDepVer;
    map_ptrloc *OldDepLast;
@@ -91,6 +90,10 @@ class pkgCacheGenerator::ListParser
    bool FoundFileDeps;
       
    protected:
+
+   // CNC:2003-02-27 - We need Owner in rpmListParser.
+   pkgCacheGenerator *Owner;
+   friend class pkgCacheGenerator;
 
    inline unsigned long WriteUniqString(string S) {return Owner->WriteUniqString(S);};
    inline unsigned long WriteUniqString(const char *S,unsigned int Size) {return Owner->WriteUniqString(S,Size);};
