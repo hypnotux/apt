@@ -64,6 +64,7 @@ class Lua {
 	 { SetGlobal(Name, (double)Value); };
    void SetGlobal(const char *Name, lua_CFunction Value);
    void SetGlobal(const char *Name, const char **Value, int Total=-1);
+   void SetGlobal(const char *Name, pkgCache::Package *Value);
    void SetGlobal(const char *Name, vector<const char *> &Value,
 		  int Total=-1);
    void SetGlobal(const char *Name, vector<string> &Value,

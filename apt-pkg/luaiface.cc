@@ -203,6 +203,16 @@ void Lua::SetGlobal(const char *Name, const char *Value)
    Globals.push_back(Name);
 }
 
+void Lua::SetGlobal(const char *Name, pkgCache::Package *Value)
+{
+   if (Value != NULL) {
+      lua_pushstring(L, Name);
+      pushudata(pkgCache::Package*, Value);
+      lua_rawset(L, LUA_GLOBALSINDEX);
+   }
+   Globals.push_back(Name);
+}
+
 void Lua::SetGlobal(const char *Name, const char **Value, int Total)
 {
    lua_pushstring(L, Name);
