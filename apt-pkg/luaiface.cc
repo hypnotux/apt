@@ -1296,6 +1296,22 @@ static int AptLua_aptwarning(lua_State *L)
    return 0;
 }
 
+static int AptLua_gettext(lua_State *L)
+{
+   const char *str = luaL_checkstring(L, 1);
+   if (str != NULL) {
+      lua_pushliteral(L, "TEXTDOMAIN");
+      lua_rawget(L, LUA_GLOBALSINDEX);
+      if (lua_isstring(L, -1))
+	 lua_pushstring(L, dgettext(lua_tostring(L, -1), str));
+      else
+	 lua_pushstring(L, gettext(str));
+      lua_remove(L, -2);
+      return 1;
+   }
+   return 0;
+}
+
 static const luaL_reg aptlib[] = {
    {"confget",		AptLua_confget},
    {"confgetlist",	AptLua_confgetlist},
@@ -1338,6 +1354,7 @@ static const luaL_reg aptlib[] = {
    {"statstr",		AptLua_statstr},
    {"apterror",		AptLua_apterror},
    {"aptwarning",	AptLua_aptwarning},
+   {"_",		AptLua_gettext},
    {NULL, NULL}
 };
 
@@ -1364,6 +1381,7 @@ static int luaopen_apt(lua_State *L)
 {
    lua_pushvalue(L, LUA_GLOBALSINDEX);
    luaL_openlib(L, NULL, aptlib, 0);
+   return 0;
 }
 
 pkgDepCache *LuaCacheControl::Open()
