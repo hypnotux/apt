@@ -259,12 +259,25 @@ class pkgDepCache::State
    inline unsigned long BrokenCount() {return iBrokenCount;};
    inline unsigned long BadCount() {return iBadCount;};
 
-   State(const State &Copy);
+   void Copy(State const &Other);
+   void operator =(State const &Other)
+      {
+	 delete[] PkgState;
+	 delete[] DepState;
+	 delete[] PkgIgnore;
+	 Copy(Other);
+      };
+   State(const State &Other)
+      { Copy(Other); };
    State(pkgDepCache *Dep=NULL)
 	 : Dep(0), PkgState(0), DepState(0), PkgIgnore(0)
       { if (Dep != NULL) Save(Dep); };
    ~State()
-      { delete[] PkgState; delete[] DepState; delete[] PkgIgnore; };
+      {
+	 delete[] PkgState;
+	 delete[] DepState;
+	 delete[] PkgIgnore;
+      };
 };
 
 

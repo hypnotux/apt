@@ -1015,31 +1015,33 @@ bool pkgDepCache::Policy::IsImportantDep(DepIterator Dep)
 // pkgDepCache::State::* - Routines to work on the state of a DepCache.	/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-pkgDepCache::State::State(const pkgDepCache::State &Copy)
+void pkgDepCache::State::Copy(pkgDepCache::State const &Other)
 {
-   memcpy(this, &Copy, sizeof(*this));
+   memcpy(this, &Other, sizeof(*this));
    int Size = Dep->Head().PackageCount;
+   int DepSize = Dep->Head().DependsCount;
    PkgState = new StateCache[Size];
    PkgIgnore = new bool[Size];
-   DepState = new unsigned char[Dep->Head().DependsCount];
-   memcpy(PkgState, Copy.PkgState, Size*sizeof(*PkgState));
-   memcpy(PkgIgnore, Copy.PkgIgnore, Size*sizeof(*PkgIgnore));
-   memcpy(DepState, Copy.DepState, Dep->Head().DependsCount*sizeof(*DepState));
+   DepState = new unsigned char[DepSize];
+   memcpy(PkgState, Other.PkgState, Size*sizeof(*PkgState));
+   memcpy(PkgIgnore, Other.PkgIgnore, Size*sizeof(*PkgIgnore));
+   memcpy(DepState, Other.DepState, DepSize*sizeof(*DepState));
 }
 
 void pkgDepCache::State::Save(pkgDepCache *dep)
 {
    Dep = dep;
-   delete [] PkgState;
-   delete [] DepState;
-   delete [] PkgIgnore;
+   delete[] PkgState;
+   delete[] DepState;
+   delete[] PkgIgnore;
    int Size = Dep->Head().PackageCount;
+   int DepSize = Dep->Head().DependsCount;
    PkgState = new StateCache[Size];
    PkgIgnore = new bool[Size];
-   DepState = new unsigned char[Dep->Head().DependsCount];
+   DepState = new unsigned char[DepSize];
    memcpy(PkgState, Dep->PkgState, Size*sizeof(*PkgState));
    memset(PkgIgnore, 0, Size*sizeof(*PkgIgnore));
-   memcpy(DepState, Dep->DepState, Dep->Head().DependsCount*sizeof(*DepState));
+   memcpy(DepState, Dep->DepState, DepSize*sizeof(*DepState));
    iUsrSize = Dep->iUsrSize;
    iDownloadSize= Dep->iDownloadSize;
    iInstCount = Dep->iInstCount;
@@ -1051,8 +1053,7 @@ void pkgDepCache::State::Save(pkgDepCache *dep)
 
 void pkgDepCache::State::Restore()
 {
-   int Size = Dep->Head().PackageCount;
-   memcpy(Dep->PkgState, PkgState, Size*sizeof(*PkgState));
+   memcpy(Dep->PkgState, PkgState, Dep->Head().PackageCount*sizeof(*PkgState));
    memcpy(Dep->DepState, DepState, Dep->Head().DependsCount*sizeof(*DepState));
    Dep->iUsrSize = iUsrSize;
    Dep->iDownloadSize= iDownloadSize;
