@@ -106,13 +106,96 @@ bool rpmListIndex::GetReleases(pkgAcquire *Owner) const
    return true;
 }
 									/*}}}*/
-// SrcListIndex::CreateHandler - Create a RPMHandler for this file	/*{{{*/
+// rpmListIndex::Info - One liner describing the index URI		/*{{{*/
 // ---------------------------------------------------------------------
-RPMHandler *rpmSrcListIndex::CreateHandler() const
+/* */
+string rpmListIndex::Info(string Type) const 
 {
-   return new RPMFileHandler(IndexFile("srclist"));
+   string Info = ::URI::SiteOnly(URI) + ' ';
+   if (Dist[Dist.size() - 1] == '/')
+   {
+      if (Dist != "/")
+	 Info += Dist;
+   }
+   else
+      Info += Dist + '/' + Section;   
+   Info += " ";
+   Info += Type;
+   return Info;
 }
 									/*}}}*/
+// rpmListIndex::Index* - Return the URI to the index files		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+inline string rpmListIndex::IndexFile(string Type) const
+{
+   return _config->FindDir("Dir::State::lists")+URItoFileName(IndexURI(Type));
+}
+
+
+string rpmListIndex::IndexURI(string Type) const
+{
+   RPMPackageData *rpmdata = RPMPackageData::Singleton();
+   string Res;
+   if (Dist[Dist.size() - 1] == '/')
+   {
+      if (Dist != "/")
+	 Res = URI + Dist;
+      else 
+	 Res = URI;
+   }
+   else
+      Res = URI + Dist + "/base/";
+   
+   Res += Type + '.' + Section;
+
+   if (rpmdata->HasIndexTranslation() == true)
+   {
+      map<string,string> Dict;
+      Dict["uri"] = URI;
+      Dict["dist"] = Dist; 
+      Dict["sect"] = Section;
+      Dict["type"] = Type;
+      rpmdata->TranslateIndex(Res, Dict);
+   }
+
+   return Res;
+}
+									/*}}}*/
+// rpmListIndex::Exists - Check if the index is available		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+bool rpmListIndex::Exists() const
+{
+   return FileExists(IndexPath());
+}
+									/*}}}*/
+// SrcListIndex::Size - Return the size of the index			/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+unsigned long rpmListIndex::Size() const
+{
+   struct stat S;
+   if (stat(IndexPath().c_str(),&S) != 0)
+      return 0;
+   return S.st_size;
+}
+									/*}}}*/
+// rpmListIndex::Describe - Give a descriptive path to the index	/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+string rpmListIndex::Describe(bool Short) const
+{
+   char S[300];
+   if (Short == true)
+      snprintf(S,sizeof(S),"%s",Info(MainType()).c_str());
+   else
+      snprintf(S,sizeof(S),"%s (%s)",Info(MainType()).c_str(),
+         IndexFile(MainType()).c_str());
+   return S;
+}
+									/*}}}*/
+
 // SrcListIndex::SourceInfo - Short 1 liner describing a source		/*{{{*/
 // ---------------------------------------------------------------------
 string rpmSrcListIndex::SourceInfo(pkgSrcRecords::Parser const &Record,
@@ -137,7 +220,6 @@ string rpmSrcListIndex::SourceInfo(pkgSrcRecords::Parser const &Record,
    return Res;
 }
 									/*}}}*/
-
 // SrcListIndex::ArchiveURI - URI for the archive       	        /*{{{*/
 // ---------------------------------------------------------------------
 string rpmSrcListIndex::ArchiveURI(string File) const
@@ -183,79 +265,8 @@ string rpmSrcListIndex::ArchiveURI(string File) const
 /* */
 pkgSrcRecords::Parser *rpmSrcListIndex::CreateSrcParser() const
 {
-   string SourcesURI;
-   SourcesURI = IndexFile("srclist");
    return new rpmSrcRecordParser(_config->FindDir("Dir::State::lists") +
-				 SourcesURI, this);
-}
-									/*}}}*/
-// SrcListIndex::Describe - Give a descriptive path to the index	/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-string rpmSrcListIndex::Describe(bool Short) const
-{
-   char S[300];
-   if (Short == true)
-      snprintf(S,sizeof(S),"%s",Info("pkglist").c_str());
-   else
-      snprintf(S,sizeof(S),"%s (%s)",Info("pkglist").c_str(),
-         IndexFile("srclist").c_str());
-   return S;
-}
-									/*}}}*/
-// SrcListIndex::Info - One liner describing the index URI		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-string rpmSrcListIndex::Info(string Type) const
-{
-   string Info = ::URI::SiteOnly(URI) + ' ';
-   if (Dist[Dist.size() - 1] == '/')
-   {
-      if (Dist != "/")
-	 Info += Dist;
-   }
-   else
-      Info += Dist + '/' + Section;   
-   Info += " ";
-   Info += Type;
-   return Info;
-}
-									/*}}}*/
-// SrcListIndex::Index* - Return the URI to the index files		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-inline string rpmSrcListIndex::IndexFile(string Type) const
-{
-   return URItoFileName(IndexURI(Type));
-}
-
-string rpmSrcListIndex::IndexURI(string Type) const
-{
-   RPMPackageData *rpmdata = RPMPackageData::Singleton();
-   string Res;
-   if (Dist[Dist.size() - 1] == '/')
-   {
-      if (Dist != "/")
-	 Res = URI + Dist;
-      else
-	 Res = URI;
-   }
-   else
-      Res = URI + Dist + "/base/";
-
-   Res += Type+'.'+Section;
-
-   if (rpmdata->HasIndexTranslation() == true)
-   {
-      map<string,string> Dict;
-      Dict["uri"] = URI;
-      Dict["dist"] = Dist; 
-      Dict["sect"] = Section;
-      Dict["type"] = Type;
-      rpmdata->TranslateIndex(Res, Dict);
-   }
-
-   return Res;
+				 IndexPath(), this);
 }
 									/*}}}*/
 // SrcListIndex::GetIndexes - Fetch the index files			/*{{{*/
@@ -272,33 +283,7 @@ bool rpmSrcListIndex::GetIndexes(pkgAcquire *Owner) const
    return true;
 }
 									/*}}}*/
-// SrcListIndex::Exists - Check if the index is available		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-bool rpmSrcListIndex::Exists() const
-{
-   return FileExists(IndexFile("srclist"));
-}
-									/*}}}*/
-// SrcListIndex::Size - Return the size of the index			/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-unsigned long rpmSrcListIndex::Size() const
-{
-   struct stat S;
-   if (stat(IndexFile("srclist").c_str(),&S) != 0)
-      return 0;
-   return S.st_size;
-}
-									/*}}}*/
 
-// PkgListIndex::CreateHandler - Create a RPMHandler for this file	/*{{{*/
-// ---------------------------------------------------------------------
-RPMHandler *rpmPkgListIndex::CreateHandler() const
-{
-   return new RPMFileHandler(IndexFile("pkglist"));
-}
-									/*}}}*/
 // PkgListIndex::ArchiveInfo - Short version of the archive url	        /*{{{*/
 // ---------------------------------------------------------------------
 /* This is a shorter version that is designed to be < 60 chars or so */
@@ -351,77 +336,6 @@ string rpmPkgListIndex::ArchiveURI(string File) const
    return Res;
 }
 									/*}}}*/
-// PkgListIndex::Describe - Give a descriptive path to the index	/*{{{*/
-// ---------------------------------------------------------------------
-/* This should help the user find the index in the sources.list and
-   in the filesystem for problem solving */
-string rpmPkgListIndex::Describe(bool Short) const
-{   
-   char S[300];
-   if (Short == true)
-      snprintf(S,sizeof(S),"%s",Info("pkglist").c_str());
-   else
-      snprintf(S,sizeof(S),"%s (%s)",Info("pkglist").c_str(),
-         IndexFile("pkglist").c_str());
-   return S;
-}
-									/*}}}*/
-// PkgListIndex::Info - One liner describing the index URI		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-string rpmPkgListIndex::Info(string Type) const 
-{
-   string Info = ::URI::SiteOnly(URI) + ' ';
-   if (Dist[Dist.size() - 1] == '/')
-   {
-      if (Dist != "/")
-	 Info += Dist;
-   }
-   else
-      Info += Dist + '/' + Section;   
-   Info += " ";
-   Info += Type;
-   return Info;
-}
-									/*}}}*/
-// PkgListIndex::Index* - Return the URI to the index files		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-inline string rpmPkgListIndex::IndexFile(string Type) const
-{
-   return _config->FindDir("Dir::State::lists")+URItoFileName(IndexURI(Type));
-}
-
-
-string rpmPkgListIndex::IndexURI(string Type) const
-{
-   RPMPackageData *rpmdata = RPMPackageData::Singleton();
-   string Res;
-   if (Dist[Dist.size() - 1] == '/')
-   {
-      if (Dist != "/")
-	 Res = URI + Dist;
-      else 
-	 Res = URI;
-   }
-   else
-      Res = URI + Dist + "/base/";
-   
-   Res += Type + '.' + Section;
-
-   if (rpmdata->HasIndexTranslation() == true)
-   {
-      map<string,string> Dict;
-      Dict["uri"] = URI;
-      Dict["dist"] = Dist; 
-      Dict["sect"] = Section;
-      Dict["type"] = Type;
-      rpmdata->TranslateIndex(Res, Dict);
-   }
-
-   return Res;
-}
-									/*}}}*/
 // PkgListIndex::GetIndexes - Fetch the index files			/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -438,34 +352,15 @@ bool rpmPkgListIndex::GetIndexes(pkgAcquire *Owner) const
    return true;
 }
 									/*}}}*/
-// PkgListIndex::Exists - Check if the index is available		/*{{{*/
-// ---------------------------------------------------------------------
-/* */
-bool rpmPkgListIndex::Exists() const
-{
-   return FileExists(IndexFile("pkglist"));
-}
-									/*}}}*/
-// PkgListIndex::Size - Return the size of the index			/*{{{*/
-// ---------------------------------------------------------------------
-/* This is really only used for progress reporting. */
-unsigned long rpmPkgListIndex::Size() const
-{
-   struct stat S;
-   if (stat(IndexFile("pkglist").c_str(),&S) != 0)
-      return 0;
-   return S.st_size;
-}
-									/*}}}*/
 // PkgListIndex::Merge - Load the index file into a cache		/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 bool rpmPkgListIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
 {
-   string PackageFile = IndexFile("pkglist");
+   string PackageFile = IndexPath();
    RPMHandler *Handler = CreateHandler();
 
-   Prog.SubProgress(0,Info("pkglist"));
+   Prog.SubProgress(0,Info(MainType()));
    ::URI Tmp(URI);
    if (Gen.SelectFile(PackageFile,Tmp.Host,*this) == false)
    {
@@ -519,11 +414,10 @@ bool rpmPkgListIndex::Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const
 bool rpmPkgListIndex::MergeFileProvides(pkgCacheGenerator &Gen,
 					OpProgress &Prog) const
 {
-   string PackageFile = IndexFile("pkglist");
+   string PackageFile = IndexPath();
    RPMHandler *Handler = CreateHandler();
    rpmListParser Parser(Handler);
-   if (_error->PendingError() == true) 
-   {
+   if (_error->PendingError() == true) {
       delete Handler;
       return _error->Error(_("Problem opening %s"),PackageFile.c_str());
    }
@@ -541,7 +435,7 @@ bool rpmPkgListIndex::MergeFileProvides(pkgCacheGenerator &Gen,
 /* */
 pkgCache::PkgFileIterator rpmPkgListIndex::FindInCache(pkgCache &Cache) const
 {
-   string FileName = IndexFile("pkglist");
+   string FileName = IndexPath();
    pkgCache::PkgFileIterator File = Cache.FileBegin();
    for (; File.end() == false; File++)
    {
@@ -551,6 +445,7 @@ pkgCache::PkgFileIterator rpmPkgListIndex::FindInCache(pkgCache &Cache) const
       struct stat St;
       if (stat(File.FileName(),&St) != 0)
 	 return pkgCache::PkgFileIterator(Cache);
+
       if ((unsigned)St.st_size != File->Size || St.st_mtime != File->mtime)
 	 return pkgCache::PkgFileIterator(Cache);
       return File;
@@ -560,7 +455,28 @@ pkgCache::PkgFileIterator rpmPkgListIndex::FindInCache(pkgCache &Cache) const
 }
 									/*}}}*/
 
-// DatabaseIndex::rpmDatabaseIndex - Constructor				/*{{{*/
+// PkgDirIndex::Index* - Return the URI to the index files		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+inline string rpmPkgDirIndex::IndexPath() const
+{
+   return ::URI(ArchiveURI("")).Path;
+}
+									/*}}}*/
+// PkgDirIndex::Size - Return the size of the index			/*{{{*/
+// ---------------------------------------------------------------------
+/* This is really only used for progress reporting. */
+unsigned long rpmPkgDirIndex::Size() const
+{
+   // XXX: Must optimize this somehow.
+   RPMHandler *Handler = CreateHandler();
+   unsigned long Res = Handler->Size();
+   delete Handler;
+   return Res;
+}
+									/*}}}*/
+
+// DatabaseIndex::rpmDatabaseIndex - Constructor			/*{{{*/
 // ---------------------------------------------------------------------
 /* */
 rpmDatabaseIndex::rpmDatabaseIndex()
@@ -744,8 +660,29 @@ class rpmSLTypeSrpm : public rpmSLTypeGen
    }   
 };
 
+class rpmSLTypeRpmDir : public rpmSLTypeGen
+{
+   public:
+
+   bool CreateItem(vector<pkgIndexFile *> &List,
+		   string URI, string Dist, string Section,
+		   pkgSourceList::Vendor const *Vendor) const 
+   {
+      pkgRepository *Rep = GetRepository(URI,Dist,Vendor);
+      List.push_back(new rpmPkgDirIndex(URI,Dist,Section,Rep));
+      return true;
+   };
+
+   rpmSLTypeRpmDir()
+   {
+      Name = "rpm-dir";
+      Label = "Local RPM directory tree";
+   }   
+};
+
 rpmSLTypeRpm _apt_rpmType;
 rpmSLTypeSrpm _apt_rpmSrcType;
+rpmSLTypeRpmDir _apt_rpmDirType;
 									/*}}}*/
 // Index File types for rpm						/*{{{*/
 class rpmIFTypeSrc : public pkgIndexFile::Type
@@ -783,6 +720,10 @@ const pkgIndexFile::Type *rpmSrcListIndex::GetType() const
    return &_apt_Src;
 }
 const pkgIndexFile::Type *rpmPkgListIndex::GetType() const
+{
+   return &_apt_Pkg;
+}
+const pkgIndexFile::Type *rpmPkgDirIndex::GetType() const
 {
    return &_apt_Pkg;
 }

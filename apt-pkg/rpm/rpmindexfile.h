@@ -22,6 +22,7 @@
 #endif
 
 #include <apt-pkg/indexfile.h>
+#include <apt-pkg/rpmhandler.h>
 
 class RPMHandler;
 class RPMDBHandler;
@@ -74,9 +75,25 @@ class rpmListIndex : public rpmIndexFile
    string ReleaseURI(string Type) const;   
    string ReleaseInfo(string Type) const;   
 
+   string Info(string Type) const;
+   string IndexFile(string Type) const;
+   string IndexURI(string Type) const;   
+
+   virtual string MainType() const = 0;
+   virtual string IndexPath() const {return IndexFile(MainType());};
+
    public:
 
-   bool GetReleases(pkgAcquire *Owner) const;
+   virtual bool GetReleases(pkgAcquire *Owner) const;
+
+   virtual bool HasPackages() const {return true;};
+
+   // Interface for the Cache Generator
+   virtual bool Exists() const;
+   virtual unsigned long Size() const;
+
+   // Interface for acquire
+   virtual string Describe(bool Short) const;   
 
    rpmListIndex(string URI,string Dist,string Section,
 		pkgRepository *Repository) :
@@ -87,29 +104,26 @@ class rpmListIndex : public rpmIndexFile
 
 class rpmPkgListIndex : public rpmListIndex
 {
-   string Info(string Type) const;
-   string IndexFile(string Type) const;
-   string IndexURI(string Type) const;   
-   
+   protected:
+
+   virtual string MainType() const {return "pkglist";}
+
    public:
 
    virtual const Type *GetType() const;
    
    // Creates a RPMHandler suitable for usage with this object
-   virtual RPMHandler *CreateHandler() const;
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMFileHandler(IndexPath()); };
 
    // Stuff for accessing files on remote items
    virtual string ArchiveInfo(pkgCache::VerIterator Ver) const;
    virtual string ArchiveURI(string File) const;
    
    // Interface for acquire
-   virtual string Describe(bool Short) const;   
    virtual bool GetIndexes(pkgAcquire *Owner) const;
    
    // Interface for the Cache Generator
-   virtual bool Exists() const;
-   virtual bool HasPackages() const {return true;};
-   virtual unsigned long Size() const;
    virtual bool Merge(pkgCacheGenerator &Gen,OpProgress &Prog) const;
    virtual bool MergeFileProvides(pkgCacheGenerator &/*Gen*/,
 		   		  OpProgress &/*Prog*/) const;
@@ -124,16 +138,17 @@ class rpmPkgListIndex : public rpmListIndex
 
 class rpmSrcListIndex : public rpmListIndex
 {
-   string Info(string Type) const;
-   string IndexFile(string Type) const;
-   string IndexURI(string Type) const;   
-   
+   protected:
+
+   virtual string MainType() const {return "pkglist";}
+
    public:
 
    virtual const Type *GetType() const;
 
    // Creates a RPMHandler suitable for usage with this object
-   virtual RPMHandler *CreateHandler() const;
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMFileHandler(IndexPath()); };
 
    // Stuff for accessing files on remote items
    virtual string SourceInfo(pkgSrcRecords::Parser const &Record,
@@ -141,21 +156,44 @@ class rpmSrcListIndex : public rpmListIndex
    virtual string ArchiveURI(string File) const;
    
    // Interface for acquire
-   virtual string Describe(bool Short) const;   
    virtual bool GetIndexes(pkgAcquire *Owner) const;
 
    // Interface for the record parsers
    virtual pkgSrcRecords::Parser *CreateSrcParser() const;
    
-   // Interface for the Cache Generator
-   virtual bool Exists() const;
-   virtual bool HasPackages() const {return false;};
-   virtual unsigned long Size() const;
 
    rpmSrcListIndex(string URI,string Dist,string Section,
 		   pkgRepository *Repository) :
 	   rpmListIndex(URI,Dist,Section,Repository)
       {};
 };
+
+class rpmPkgDirIndex : public rpmPkgListIndex
+{
+   protected:
+
+   virtual string MainType() const {return "pkgdir";}
+   virtual string IndexPath() const;   
+
+   public:
+
+   virtual bool GetReleases(pkgAcquire *Owner) const { return true; }
+   virtual bool GetIndexes(pkgAcquire *Owner) const { return true; }
+
+   // Creates a RPMHandler suitable for usage with this object
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMDirHandler(IndexPath()); };
+
+   virtual const Type *GetType() const;
+   
+   // Interface for the Cache Generator
+   virtual unsigned long Size() const;
+
+   rpmPkgDirIndex(string URI,string Dist,string Section,
+		   pkgRepository *Repository) :
+	   rpmPkgListIndex(URI,Dist,Section,Repository)
+      {};
+};
+
 
 #endif
