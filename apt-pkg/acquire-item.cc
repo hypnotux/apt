@@ -1009,6 +1009,13 @@ void pkgAcqFile::Done(string Message,unsigned long Size,string MD5,
       {
 	 if (S_ISLNK(St.st_mode) != 0)
 	    unlink(DestFile.c_str());
+	 // CNC:2003-12-11 - Check if FileName == DestFile
+	 else {
+	    struct stat St2;
+	    if (stat(FileName.c_str(), &St2) == 0
+	        && St.st_ino == St2.st_ino)
+	       return;
+	 }
       }
       
       // Symlink the file
