@@ -115,6 +115,7 @@ class pkgCache(_object):
     def Hash(*args): return apply(_apt.pkgCache_Hash,args)
     def Priority(*args): return apply(_apt.pkgCache_Priority,args)
     def FindPkg(*args): return apply(_apt.pkgCache_FindPkg,args)
+    def FindPackage(*args): return apply(_apt.pkgCache_FindPackage,args)
     def Head(*args): return apply(_apt.pkgCache_Head,args)
     def PkgBegin(*args): return apply(_apt.pkgCache_PkgBegin,args)
     def PkgEnd(*args): return apply(_apt.pkgCache_PkgEnd,args)
@@ -1215,6 +1216,44 @@ ReadConfigFile = _apt.ReadConfigFile
 
 ReadConfigDir = _apt.ReadConfigDir
 
+class ConfigurationItem(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ConfigurationItem, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ConfigurationItem, name)
+    __swig_setmethods__["Tag"] = _apt.ConfigurationItem_Tag_set
+    __swig_getmethods__["Tag"] = _apt.ConfigurationItem_Tag_get
+    if _newclass:Tag = property(_apt.ConfigurationItem_Tag_get,_apt.ConfigurationItem_Tag_set)
+    __swig_setmethods__["Value"] = _apt.ConfigurationItem_Value_set
+    __swig_getmethods__["Value"] = _apt.ConfigurationItem_Value_get
+    if _newclass:Value = property(_apt.ConfigurationItem_Value_get,_apt.ConfigurationItem_Value_set)
+    __swig_setmethods__["Parent"] = _apt.ConfigurationItem_Parent_set
+    __swig_getmethods__["Parent"] = _apt.ConfigurationItem_Parent_get
+    if _newclass:Parent = property(_apt.ConfigurationItem_Parent_get,_apt.ConfigurationItem_Parent_set)
+    __swig_setmethods__["Child"] = _apt.ConfigurationItem_Child_set
+    __swig_getmethods__["Child"] = _apt.ConfigurationItem_Child_get
+    if _newclass:Child = property(_apt.ConfigurationItem_Child_get,_apt.ConfigurationItem_Child_set)
+    __swig_setmethods__["Next"] = _apt.ConfigurationItem_Next_set
+    __swig_getmethods__["Next"] = _apt.ConfigurationItem_Next_get
+    if _newclass:Next = property(_apt.ConfigurationItem_Next_get,_apt.ConfigurationItem_Next_set)
+    def FullTag(*args): return apply(_apt.ConfigurationItem_FullTag,args)
+    def __init__(self,*args):
+        self.this = apply(_apt.new_ConfigurationItem,args)
+        self.thisown = 1
+    def __del__(self, destroy= _apt.delete_ConfigurationItem):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def __repr__(self):
+        return "<C ConfigurationItem instance at %s>" % (self.this,)
+
+class ConfigurationItemPtr(ConfigurationItem):
+    def __init__(self,this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = ConfigurationItem
+_apt.ConfigurationItem_swigregister(ConfigurationItemPtr)
+
 class OpProgress(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, OpProgress, name, value)
@@ -1662,6 +1701,9 @@ class GlobalError(_object):
     __setattr__ = lambda self, name, value: _swig_setattr(self, GlobalError, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, GlobalError, name)
+    def PushState(*args): return apply(_apt.GlobalError_PushState,args)
+    def PopState(*args): return apply(_apt.GlobalError_PopState,args)
+    def PopBackState(*args): return apply(_apt.GlobalError_PopBackState,args)
     def Errno(*args): return apply(_apt.GlobalError_Errno,args)
     def WarningE(*args): return apply(_apt.GlobalError_WarningE,args)
     def Error(*args): return apply(_apt.GlobalError_Error,args)

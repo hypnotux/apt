@@ -15,7 +15,7 @@ all: $(MODULES)
 $(MODULES): %.py: _%.so
 
 _%.so: %_wrap.cxx
-	$(CC) -shared -I.. $(PYTHONFLAGS) -lapt-pkg -o $@ $<
+	$(CC) -shared -I.. $(PYTHONFLAGS) -L../bin -L../build/bin -lapt-pkg -o $@ $<
 
 apt_wrap.cxx: apt.i
 	$(SWIG) $(SWIGFLAGS) -c++ -I.. -python $<

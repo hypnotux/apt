@@ -647,80 +647,81 @@ SWIG_InstallConstants(PyObject *d, swig_const_info constants[]) {
 
 #define  SWIGTYPE_p_PackageFile swig_types[0] 
 #define  SWIGTYPE_p_pkgCache__PackageFile swig_types[1] 
-#define  SWIGTYPE_p_pkgSourceList__const_iterator swig_types[2] 
-#define  SWIGTYPE_p_pkgAcquire__UriIterator swig_types[3] 
-#define  SWIGTYPE_p_pkgCache__VerFileIterator swig_types[4] 
-#define  SWIGTYPE_p_PkgFileIterator swig_types[5] 
-#define  SWIGTYPE_p_pkgCache__PrvIterator swig_types[6] 
-#define  SWIGTYPE_p_pkgCache__DepIterator swig_types[7] 
-#define  SWIGTYPE_p_VerFileIterator swig_types[8] 
-#define  SWIGTYPE_p_pkgCache__VerIterator swig_types[9] 
-#define  SWIGTYPE_p_PrvIterator swig_types[10] 
-#define  SWIGTYPE_p_pkgCache__PkgIterator swig_types[11] 
-#define  SWIGTYPE_p_pkgCache__PkgFileIterator swig_types[12] 
-#define  SWIGTYPE_p_VerIterator swig_types[13] 
-#define  SWIGTYPE_p_PkgIterator swig_types[14] 
-#define  SWIGTYPE_p_DepIterator swig_types[15] 
-#define  SWIGTYPE_p_pkgCache__Header swig_types[16] 
-#define  SWIGTYPE_p_Header swig_types[17] 
-#define  SWIGTYPE_p_pkgPolicy swig_types[18] 
-#define  SWIGTYPE_p_Policy swig_types[19] 
-#define  SWIGTYPE_p_Configuration swig_types[20] 
-#define  SWIGTYPE_p_pkgAcqIndexRel swig_types[21] 
-#define  SWIGTYPE_p_pkgAcquire swig_types[22] 
-#define  SWIGTYPE_p_map_ptrloc swig_types[23] 
-#define  SWIGTYPE_p_Dependency swig_types[24] 
-#define  SWIGTYPE_p_pkgCache__Dependency swig_types[25] 
-#define  SWIGTYPE_p_GlobalError swig_types[26] 
-#define  SWIGTYPE_p_pkgAcqIndex swig_types[27] 
-#define  SWIGTYPE_p_StateCache swig_types[28] 
-#define  SWIGTYPE_p_pkgDepCache__StateCache swig_types[29] 
-#define  SWIGTYPE_p_Item swig_types[30] 
-#define  SWIGTYPE_p_void swig_types[31] 
-#define  SWIGTYPE_p_pkgAcquire__Item swig_types[32] 
-#define  SWIGTYPE_p_MMap swig_types[33] 
-#define  SWIGTYPE_p_pkgRecords__Parser swig_types[34] 
-#define  SWIGTYPE_p_p_pkgCache__Version swig_types[35] 
-#define  SWIGTYPE_p_p_Version swig_types[36] 
-#define  SWIGTYPE_p_pkgCache__Version swig_types[37] 
-#define  SWIGTYPE_p_Version swig_types[38] 
-#define  SWIGTYPE_p_std__vectorTpkgIndexFile_p_t swig_types[39] 
-#define  SWIGTYPE_p_time_t swig_types[40] 
-#define  SWIGTYPE_p_p_pkgIndexFile swig_types[41] 
-#define  SWIGTYPE_p_pkgProblemResolver swig_types[42] 
-#define  SWIGTYPE_p_pkgAcqArchive swig_types[43] 
-#define  SWIGTYPE_p_p_char swig_types[44] 
-#define  SWIGTYPE_p_pkgAcquireStatusDumb swig_types[45] 
-#define  SWIGTYPE_p_pkgCacheFile swig_types[46] 
-#define  SWIGTYPE_p_pkgAcquire__ItemDesc swig_types[47] 
-#define  SWIGTYPE_p_pkgAcquireStatus swig_types[48] 
-#define  SWIGTYPE_p_pkgDepCache swig_types[49] 
-#define  SWIGTYPE_p_DynamicMMap__Pool swig_types[50] 
-#define  SWIGTYPE_p_pkgPackageManager swig_types[51] 
-#define  SWIGTYPE_p_OpTextProgress swig_types[52] 
-#define  SWIGTYPE_p_OpProgress swig_types[53] 
-#define  SWIGTYPE_p_Provides swig_types[54] 
-#define  SWIGTYPE_p_pkgCache__Provides swig_types[55] 
-#define  SWIGTYPE_p_pkgRepository swig_types[56] 
-#define  SWIGTYPE_p_std__ostream swig_types[57] 
-#define  SWIGTYPE_p_pkgAcqFile swig_types[58] 
-#define  SWIGTYPE_p_pkgSourceList swig_types[59] 
-#define  SWIGTYPE_p_string swig_types[60] 
-#define  SWIGTYPE_p_p_pkgVersioningSystem swig_types[61] 
-#define  SWIGTYPE_p_pkgSystem swig_types[62] 
-#define  SWIGTYPE_p_p_pkgSystem swig_types[63] 
-#define  SWIGTYPE_p_pkgVersioningSystem swig_types[64] 
-#define  SWIGTYPE_p_VerFile swig_types[65] 
-#define  SWIGTYPE_p_pkgCache__VerFile swig_types[66] 
-#define  SWIGTYPE_p_pkgAcquire__MethodConfig swig_types[67] 
-#define  SWIGTYPE_p_pkgCache__Package swig_types[68] 
-#define  SWIGTYPE_p_Package swig_types[69] 
-#define  SWIGTYPE_p_unsigned_char swig_types[70] 
-#define  SWIGTYPE_p_pkgRecords swig_types[71] 
-#define  SWIGTYPE_p_pkgAcquire__Worker swig_types[72] 
-#define  SWIGTYPE_p_pkgCache swig_types[73] 
-#define  SWIGTYPE_p_pkgCache__StringItem swig_types[74] 
-static swig_type_info *swig_types[76];
+#define  SWIGTYPE_p_pkgAcquire__UriIterator swig_types[2] 
+#define  SWIGTYPE_p_pkgCache__VerFileIterator swig_types[3] 
+#define  SWIGTYPE_p_PkgFileIterator swig_types[4] 
+#define  SWIGTYPE_p_pkgCache__PrvIterator swig_types[5] 
+#define  SWIGTYPE_p_pkgCache__DepIterator swig_types[6] 
+#define  SWIGTYPE_p_VerFileIterator swig_types[7] 
+#define  SWIGTYPE_p_pkgCache__VerIterator swig_types[8] 
+#define  SWIGTYPE_p_PrvIterator swig_types[9] 
+#define  SWIGTYPE_p_pkgCache__PkgIterator swig_types[10] 
+#define  SWIGTYPE_p_pkgCache__PkgFileIterator swig_types[11] 
+#define  SWIGTYPE_p_VerIterator swig_types[12] 
+#define  SWIGTYPE_p_PkgIterator swig_types[13] 
+#define  SWIGTYPE_p_DepIterator swig_types[14] 
+#define  SWIGTYPE_p_pkgSourceList__const_iterator swig_types[15] 
+#define  SWIGTYPE_p_Configuration__Item swig_types[16] 
+#define  SWIGTYPE_p_pkgCache__Header swig_types[17] 
+#define  SWIGTYPE_p_Header swig_types[18] 
+#define  SWIGTYPE_p_pkgPolicy swig_types[19] 
+#define  SWIGTYPE_p_Policy swig_types[20] 
+#define  SWIGTYPE_p_Configuration swig_types[21] 
+#define  SWIGTYPE_p_pkgAcqIndexRel swig_types[22] 
+#define  SWIGTYPE_p_pkgAcquire swig_types[23] 
+#define  SWIGTYPE_p_map_ptrloc swig_types[24] 
+#define  SWIGTYPE_p_Dependency swig_types[25] 
+#define  SWIGTYPE_p_pkgCache__Dependency swig_types[26] 
+#define  SWIGTYPE_p_GlobalError swig_types[27] 
+#define  SWIGTYPE_p_pkgAcqIndex swig_types[28] 
+#define  SWIGTYPE_p_StateCache swig_types[29] 
+#define  SWIGTYPE_p_pkgDepCache__StateCache swig_types[30] 
+#define  SWIGTYPE_p_Item swig_types[31] 
+#define  SWIGTYPE_p_void swig_types[32] 
+#define  SWIGTYPE_p_pkgAcquire__Item swig_types[33] 
+#define  SWIGTYPE_p_MMap swig_types[34] 
+#define  SWIGTYPE_p_pkgRecords__Parser swig_types[35] 
+#define  SWIGTYPE_p_p_pkgCache__Version swig_types[36] 
+#define  SWIGTYPE_p_p_Version swig_types[37] 
+#define  SWIGTYPE_p_pkgCache__Version swig_types[38] 
+#define  SWIGTYPE_p_Version swig_types[39] 
+#define  SWIGTYPE_p_std__vectorTpkgIndexFile_p_t swig_types[40] 
+#define  SWIGTYPE_p_time_t swig_types[41] 
+#define  SWIGTYPE_p_p_pkgIndexFile swig_types[42] 
+#define  SWIGTYPE_p_pkgProblemResolver swig_types[43] 
+#define  SWIGTYPE_p_pkgAcqArchive swig_types[44] 
+#define  SWIGTYPE_p_p_char swig_types[45] 
+#define  SWIGTYPE_p_pkgAcquireStatusDumb swig_types[46] 
+#define  SWIGTYPE_p_pkgCacheFile swig_types[47] 
+#define  SWIGTYPE_p_pkgAcquire__ItemDesc swig_types[48] 
+#define  SWIGTYPE_p_pkgAcquireStatus swig_types[49] 
+#define  SWIGTYPE_p_pkgDepCache swig_types[50] 
+#define  SWIGTYPE_p_DynamicMMap__Pool swig_types[51] 
+#define  SWIGTYPE_p_pkgPackageManager swig_types[52] 
+#define  SWIGTYPE_p_OpTextProgress swig_types[53] 
+#define  SWIGTYPE_p_OpProgress swig_types[54] 
+#define  SWIGTYPE_p_Provides swig_types[55] 
+#define  SWIGTYPE_p_pkgCache__Provides swig_types[56] 
+#define  SWIGTYPE_p_pkgRepository swig_types[57] 
+#define  SWIGTYPE_p_std__ostream swig_types[58] 
+#define  SWIGTYPE_p_pkgAcqFile swig_types[59] 
+#define  SWIGTYPE_p_pkgSourceList swig_types[60] 
+#define  SWIGTYPE_p_string swig_types[61] 
+#define  SWIGTYPE_p_p_pkgVersioningSystem swig_types[62] 
+#define  SWIGTYPE_p_pkgSystem swig_types[63] 
+#define  SWIGTYPE_p_p_pkgSystem swig_types[64] 
+#define  SWIGTYPE_p_pkgVersioningSystem swig_types[65] 
+#define  SWIGTYPE_p_VerFile swig_types[66] 
+#define  SWIGTYPE_p_pkgCache__VerFile swig_types[67] 
+#define  SWIGTYPE_p_pkgAcquire__MethodConfig swig_types[68] 
+#define  SWIGTYPE_p_pkgCache__Package swig_types[69] 
+#define  SWIGTYPE_p_Package swig_types[70] 
+#define  SWIGTYPE_p_unsigned_char swig_types[71] 
+#define  SWIGTYPE_p_pkgRecords swig_types[72] 
+#define  SWIGTYPE_p_pkgAcquire__Worker swig_types[73] 
+#define  SWIGTYPE_p_pkgCache swig_types[74] 
+#define  SWIGTYPE_p_pkgCache__StringItem swig_types[75] 
+static swig_type_info *swig_types[77];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -866,6 +867,12 @@ inline bool pkgInit()
 
 #define pkgAcquire_Item_DestFile_get(x) ((x)->DestFile.c_str())
 #define pkgAcquire_Item_ErrorText_get(x) ((x)->ErrorText.c_str())
+
+
+#define Configuration_Item_Tag_get(x) ((x)->Tag.c_str())
+#define Configuration_Item_Value_get(x) ((x)->Value.c_str())
+#define Configuration_Item_Tag_set(x,y) ((x)->Tag = (y))
+#define Configuration_Item_Value_set(x,y) ((x)->Value = (y))
 
 extern char const *pkgVersion;
 extern char const *pkgLibVersion;
@@ -1563,6 +1570,24 @@ static PyObject *_wrap_pkgCache_FindPkg(PyObject *self, PyObject *args) {
         resultptr = new pkgCache::PkgIterator((pkgCache::PkgIterator &) result);
         resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_pkgCache__PkgIterator, 1);
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_pkgCache_FindPackage(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    pkgCache *arg1 = (pkgCache *) 0 ;
+    char *arg2 ;
+    pkgCache::Package *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Os:pkgCache_FindPackage",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (pkgCache::Package *)(arg1)->FindPackage((char const *)arg2);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_pkgCache__Package, 0);
     return resultobj;
     fail:
     return NULL;
@@ -2436,14 +2461,10 @@ static PyObject *_wrap_pkgCacheHeader_FileList_set(PyObject *self, PyObject *arg
     PyObject *resultobj;
     pkgCache::Header *arg1 = (pkgCache::Header *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheHeader_FileList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheHeader_FileList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->FileList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2463,11 +2484,7 @@ static PyObject *_wrap_pkgCacheHeader_FileList_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->FileList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2478,14 +2495,10 @@ static PyObject *_wrap_pkgCacheHeader_StringList_set(PyObject *self, PyObject *a
     PyObject *resultobj;
     pkgCache::Header *arg1 = (pkgCache::Header *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheHeader_StringList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheHeader_StringList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->StringList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2505,11 +2518,7 @@ static PyObject *_wrap_pkgCacheHeader_StringList_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->StringList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2520,14 +2529,10 @@ static PyObject *_wrap_pkgCacheHeader_VerSysName_set(PyObject *self, PyObject *a
     PyObject *resultobj;
     pkgCache::Header *arg1 = (pkgCache::Header *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheHeader_VerSysName_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheHeader_VerSysName_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->VerSysName = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2547,11 +2552,7 @@ static PyObject *_wrap_pkgCacheHeader_VerSysName_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->VerSysName);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2562,14 +2563,10 @@ static PyObject *_wrap_pkgCacheHeader_Architecture_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::Header *arg1 = (pkgCache::Header *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheHeader_Architecture_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheHeader_Architecture_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Architecture = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2589,11 +2586,7 @@ static PyObject *_wrap_pkgCacheHeader_Architecture_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Header,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Architecture);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2776,14 +2769,10 @@ static PyObject *_wrap_pkgCachePackage_Name_set(PyObject *self, PyObject *args) 
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_Name_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_Name_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Name = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2803,11 +2792,7 @@ static PyObject *_wrap_pkgCachePackage_Name_get(PyObject *self, PyObject *args) 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Name);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2818,14 +2803,10 @@ static PyObject *_wrap_pkgCachePackage_VersionList_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_VersionList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_VersionList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->VersionList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2845,11 +2826,7 @@ static PyObject *_wrap_pkgCachePackage_VersionList_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->VersionList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2860,14 +2837,10 @@ static PyObject *_wrap_pkgCachePackage_CurrentVer_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_CurrentVer_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_CurrentVer_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->CurrentVer = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2887,11 +2860,7 @@ static PyObject *_wrap_pkgCachePackage_CurrentVer_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->CurrentVer);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2902,14 +2871,10 @@ static PyObject *_wrap_pkgCachePackage_Section_set(PyObject *self, PyObject *arg
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_Section_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_Section_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Section = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2929,11 +2894,7 @@ static PyObject *_wrap_pkgCachePackage_Section_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Section);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2944,14 +2905,10 @@ static PyObject *_wrap_pkgCachePackage_NextPackage_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_NextPackage_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_NextPackage_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextPackage = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -2971,11 +2928,7 @@ static PyObject *_wrap_pkgCachePackage_NextPackage_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextPackage);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -2986,14 +2939,10 @@ static PyObject *_wrap_pkgCachePackage_RevDepends_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_RevDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_RevDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->RevDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3013,11 +2962,7 @@ static PyObject *_wrap_pkgCachePackage_RevDepends_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->RevDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3028,14 +2973,10 @@ static PyObject *_wrap_pkgCachePackage_ProvidesList_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::Package *arg1 = (pkgCache::Package *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackage_ProvidesList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackage_ProvidesList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ProvidesList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3055,11 +2996,7 @@ static PyObject *_wrap_pkgCachePackage_ProvidesList_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Package,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ProvidesList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3292,14 +3229,10 @@ static PyObject *_wrap_pkgCachePackageFile_FileName_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_FileName_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_FileName_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->FileName = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3319,11 +3252,7 @@ static PyObject *_wrap_pkgCachePackageFile_FileName_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->FileName);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3334,14 +3263,10 @@ static PyObject *_wrap_pkgCachePackageFile_Archive_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Archive_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Archive_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Archive = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3361,11 +3286,7 @@ static PyObject *_wrap_pkgCachePackageFile_Archive_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Archive);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3376,14 +3297,10 @@ static PyObject *_wrap_pkgCachePackageFile_Component_set(PyObject *self, PyObjec
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Component_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Component_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Component = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3403,11 +3320,7 @@ static PyObject *_wrap_pkgCachePackageFile_Component_get(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Component);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3418,14 +3331,10 @@ static PyObject *_wrap_pkgCachePackageFile_Version_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Version_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Version_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Version = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3445,11 +3354,7 @@ static PyObject *_wrap_pkgCachePackageFile_Version_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Version);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3460,14 +3365,10 @@ static PyObject *_wrap_pkgCachePackageFile_Origin_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Origin_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Origin_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Origin = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3487,11 +3388,7 @@ static PyObject *_wrap_pkgCachePackageFile_Origin_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Origin);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3502,14 +3399,10 @@ static PyObject *_wrap_pkgCachePackageFile_Label_set(PyObject *self, PyObject *a
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Label_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Label_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Label = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3529,11 +3422,7 @@ static PyObject *_wrap_pkgCachePackageFile_Label_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Label);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3544,14 +3433,10 @@ static PyObject *_wrap_pkgCachePackageFile_Architecture_set(PyObject *self, PyOb
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Architecture_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Architecture_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Architecture = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3571,11 +3456,7 @@ static PyObject *_wrap_pkgCachePackageFile_Architecture_get(PyObject *self, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Architecture);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3586,14 +3467,10 @@ static PyObject *_wrap_pkgCachePackageFile_Site_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_Site_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_Site_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Site = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3613,11 +3490,7 @@ static PyObject *_wrap_pkgCachePackageFile_Site_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Site);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3628,14 +3501,10 @@ static PyObject *_wrap_pkgCachePackageFile_IndexType_set(PyObject *self, PyObjec
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_IndexType_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_IndexType_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->IndexType = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3655,11 +3524,7 @@ static PyObject *_wrap_pkgCachePackageFile_IndexType_get(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->IndexType);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3744,14 +3609,10 @@ static PyObject *_wrap_pkgCachePackageFile_NextFile_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::PackageFile *arg1 = (pkgCache::PackageFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePackageFile_NextFile_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePackageFile_NextFile_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextFile = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3771,11 +3632,7 @@ static PyObject *_wrap_pkgCachePackageFile_NextFile_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PackageFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextFile);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3902,14 +3759,10 @@ static PyObject *_wrap_pkgCacheVerFile_File_set(PyObject *self, PyObject *args) 
     PyObject *resultobj;
     pkgCache::VerFile *arg1 = (pkgCache::VerFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerFile_File_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFile_File_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->File = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3929,11 +3782,7 @@ static PyObject *_wrap_pkgCacheVerFile_File_get(PyObject *self, PyObject *args) 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->File);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3944,14 +3793,10 @@ static PyObject *_wrap_pkgCacheVerFile_NextFile_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     pkgCache::VerFile *arg1 = (pkgCache::VerFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerFile_NextFile_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFile_NextFile_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextFile = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -3971,11 +3816,7 @@ static PyObject *_wrap_pkgCacheVerFile_NextFile_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextFile);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -3986,14 +3827,10 @@ static PyObject *_wrap_pkgCacheVerFile_Offset_set(PyObject *self, PyObject *args
     PyObject *resultobj;
     pkgCache::VerFile *arg1 = (pkgCache::VerFile *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerFile_Offset_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFile_Offset_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Offset = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4013,11 +3850,7 @@ static PyObject *_wrap_pkgCacheVerFile_Offset_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFile,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Offset);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4102,14 +3935,10 @@ static PyObject *_wrap_pkgCacheVersion_VerStr_set(PyObject *self, PyObject *args
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_VerStr_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_VerStr_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->VerStr = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4129,11 +3958,7 @@ static PyObject *_wrap_pkgCacheVersion_VerStr_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->VerStr);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4144,14 +3969,10 @@ static PyObject *_wrap_pkgCacheVersion_Section_set(PyObject *self, PyObject *arg
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_Section_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_Section_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Section = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4171,11 +3992,7 @@ static PyObject *_wrap_pkgCacheVersion_Section_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Section);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4186,14 +4003,10 @@ static PyObject *_wrap_pkgCacheVersion_Arch_set(PyObject *self, PyObject *args) 
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_Arch_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_Arch_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Arch = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4213,11 +4026,7 @@ static PyObject *_wrap_pkgCacheVersion_Arch_get(PyObject *self, PyObject *args) 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Arch);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4228,14 +4037,10 @@ static PyObject *_wrap_pkgCacheVersion_FileList_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_FileList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_FileList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->FileList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4255,11 +4060,7 @@ static PyObject *_wrap_pkgCacheVersion_FileList_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->FileList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4270,14 +4071,10 @@ static PyObject *_wrap_pkgCacheVersion_NextVer_set(PyObject *self, PyObject *arg
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_NextVer_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_NextVer_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextVer = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4297,11 +4094,7 @@ static PyObject *_wrap_pkgCacheVersion_NextVer_get(PyObject *self, PyObject *arg
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextVer);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4312,14 +4105,10 @@ static PyObject *_wrap_pkgCacheVersion_DependsList_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_DependsList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_DependsList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->DependsList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4339,11 +4128,7 @@ static PyObject *_wrap_pkgCacheVersion_DependsList_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->DependsList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4354,14 +4139,10 @@ static PyObject *_wrap_pkgCacheVersion_ParentPkg_set(PyObject *self, PyObject *a
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_ParentPkg_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_ParentPkg_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ParentPkg = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4381,11 +4162,7 @@ static PyObject *_wrap_pkgCacheVersion_ParentPkg_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ParentPkg);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4396,14 +4173,10 @@ static PyObject *_wrap_pkgCacheVersion_ProvidesList_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_ProvidesList_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_ProvidesList_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ProvidesList = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4423,11 +4196,7 @@ static PyObject *_wrap_pkgCacheVersion_ProvidesList_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ProvidesList);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4438,14 +4207,10 @@ static PyObject *_wrap_pkgCacheVersion_Size_set(PyObject *self, PyObject *args) 
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_Size_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_Size_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Size = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4465,11 +4230,7 @@ static PyObject *_wrap_pkgCacheVersion_Size_get(PyObject *self, PyObject *args) 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Size);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4480,14 +4241,10 @@ static PyObject *_wrap_pkgCacheVersion_InstalledSize_set(PyObject *self, PyObjec
     PyObject *resultobj;
     pkgCache::Version *arg1 = (pkgCache::Version *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVersion_InstalledSize_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVersion_InstalledSize_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->InstalledSize = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4507,11 +4264,7 @@ static PyObject *_wrap_pkgCacheVersion_InstalledSize_get(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Version,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->InstalledSize);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4670,14 +4423,10 @@ static PyObject *_wrap_pkgCacheDependency_Version_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_Version_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_Version_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Version = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4697,11 +4446,7 @@ static PyObject *_wrap_pkgCacheDependency_Version_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Version);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4712,14 +4457,10 @@ static PyObject *_wrap_pkgCacheDependency_Package_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_Package_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_Package_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Package = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4739,11 +4480,7 @@ static PyObject *_wrap_pkgCacheDependency_Package_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Package);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4754,14 +4491,10 @@ static PyObject *_wrap_pkgCacheDependency_NextDepends_set(PyObject *self, PyObje
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_NextDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_NextDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4781,11 +4514,7 @@ static PyObject *_wrap_pkgCacheDependency_NextDepends_get(PyObject *self, PyObje
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4796,14 +4525,10 @@ static PyObject *_wrap_pkgCacheDependency_NextRevDepends_set(PyObject *self, PyO
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_NextRevDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_NextRevDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextRevDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4823,11 +4548,7 @@ static PyObject *_wrap_pkgCacheDependency_NextRevDepends_get(PyObject *self, PyO
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextRevDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4838,14 +4559,10 @@ static PyObject *_wrap_pkgCacheDependency_ParentVer_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_ParentVer_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_ParentVer_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ParentVer = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4865,11 +4582,7 @@ static PyObject *_wrap_pkgCacheDependency_ParentVer_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ParentVer);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -4880,14 +4593,10 @@ static PyObject *_wrap_pkgCacheDependency_ID_set(PyObject *self, PyObject *args)
     PyObject *resultobj;
     pkgCache::Dependency *arg1 = (pkgCache::Dependency *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDependency_ID_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDependency_ID_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ID = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -4907,11 +4616,7 @@ static PyObject *_wrap_pkgCacheDependency_ID_get(PyObject *self, PyObject *args)
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Dependency,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ID);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5033,14 +4738,10 @@ static PyObject *_wrap_pkgCacheProvides_ParentPkg_set(PyObject *self, PyObject *
     PyObject *resultobj;
     pkgCache::Provides *arg1 = (pkgCache::Provides *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheProvides_ParentPkg_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheProvides_ParentPkg_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ParentPkg = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5060,11 +4761,7 @@ static PyObject *_wrap_pkgCacheProvides_ParentPkg_get(PyObject *self, PyObject *
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ParentPkg);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5075,14 +4772,10 @@ static PyObject *_wrap_pkgCacheProvides_Version_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     pkgCache::Provides *arg1 = (pkgCache::Provides *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheProvides_Version_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheProvides_Version_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->Version = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5102,11 +4795,7 @@ static PyObject *_wrap_pkgCacheProvides_Version_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->Version);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5117,14 +4806,10 @@ static PyObject *_wrap_pkgCacheProvides_ProvideVersion_set(PyObject *self, PyObj
     PyObject *resultobj;
     pkgCache::Provides *arg1 = (pkgCache::Provides *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheProvides_ProvideVersion_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheProvides_ProvideVersion_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->ProvideVersion = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5144,11 +4829,7 @@ static PyObject *_wrap_pkgCacheProvides_ProvideVersion_get(PyObject *self, PyObj
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->ProvideVersion);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5159,14 +4840,10 @@ static PyObject *_wrap_pkgCacheProvides_NextProvides_set(PyObject *self, PyObjec
     PyObject *resultobj;
     pkgCache::Provides *arg1 = (pkgCache::Provides *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheProvides_NextProvides_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheProvides_NextProvides_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextProvides = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5186,11 +4863,7 @@ static PyObject *_wrap_pkgCacheProvides_NextProvides_get(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextProvides);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5201,14 +4874,10 @@ static PyObject *_wrap_pkgCacheProvides_NextPkgProv_set(PyObject *self, PyObject
     PyObject *resultobj;
     pkgCache::Provides *arg1 = (pkgCache::Provides *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheProvides_NextPkgProv_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheProvides_NextPkgProv_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextPkgProv = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5228,11 +4897,7 @@ static PyObject *_wrap_pkgCacheProvides_NextPkgProv_get(PyObject *self, PyObject
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__Provides,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextPkgProv);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5280,14 +4945,10 @@ static PyObject *_wrap_pkgCacheStringItem_String_set(PyObject *self, PyObject *a
     PyObject *resultobj;
     pkgCache::StringItem *arg1 = (pkgCache::StringItem *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheStringItem_String_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheStringItem_String_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__StringItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->String = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5307,11 +4968,7 @@ static PyObject *_wrap_pkgCacheStringItem_String_get(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__StringItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->String);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -5322,14 +4979,10 @@ static PyObject *_wrap_pkgCacheStringItem_NextItem_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::StringItem *arg1 = (pkgCache::StringItem *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheStringItem_NextItem_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheStringItem_NextItem_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__StringItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (arg1)->NextItem = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -5349,11 +5002,7 @@ static PyObject *_wrap_pkgCacheStringItem_NextItem_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__StringItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((arg1)->NextItem);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -7170,14 +6819,10 @@ static PyObject *_wrap_pkgCachePkgIterator_NextPackage_set(PyObject *self, PyObj
     PyObject *resultobj;
     pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePkgIterator_NextPackage_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePkgIterator_NextPackage_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextPackage = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -7197,11 +6842,7 @@ static PyObject *_wrap_pkgCachePkgIterator_NextPackage_get(PyObject *self, PyObj
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextPackage);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -7212,14 +6853,10 @@ static PyObject *_wrap_pkgCachePkgIterator_RevDepends_set(PyObject *self, PyObje
     PyObject *resultobj;
     pkgCache::PkgIterator *arg1 = (pkgCache::PkgIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePkgIterator_RevDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePkgIterator_RevDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->RevDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -7239,11 +6876,7 @@ static PyObject *_wrap_pkgCachePkgIterator_RevDepends_get(PyObject *self, PyObje
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->RevDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -8165,14 +7798,10 @@ static PyObject *_wrap_pkgCacheVerIterator_NextVer_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerIterator_NextVer_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerIterator_NextVer_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextVer = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -8192,11 +7821,7 @@ static PyObject *_wrap_pkgCacheVerIterator_NextVer_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextVer);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -8207,14 +7832,10 @@ static PyObject *_wrap_pkgCacheVerIterator_Size_set(PyObject *self, PyObject *ar
     PyObject *resultobj;
     pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerIterator_Size_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerIterator_Size_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->Size = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -8234,11 +7855,7 @@ static PyObject *_wrap_pkgCacheVerIterator_Size_get(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->Size);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -8249,14 +7866,10 @@ static PyObject *_wrap_pkgCacheVerIterator_InstalledSize_set(PyObject *self, PyO
     PyObject *resultobj;
     pkgCache::VerIterator *arg1 = (pkgCache::VerIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerIterator_InstalledSize_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerIterator_InstalledSize_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->InstalledSize = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -8276,11 +7889,7 @@ static PyObject *_wrap_pkgCacheVerIterator_InstalledSize_get(PyObject *self, PyO
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->InstalledSize);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9221,14 +8830,10 @@ static PyObject *_wrap_pkgCacheDepIterator_Version_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDepIterator_Version_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_Version_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->Version = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -9248,11 +8853,7 @@ static PyObject *_wrap_pkgCacheDepIterator_Version_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->Version);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9263,14 +8864,10 @@ static PyObject *_wrap_pkgCacheDepIterator_Package_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDepIterator_Package_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_Package_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->Package = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -9290,11 +8887,7 @@ static PyObject *_wrap_pkgCacheDepIterator_Package_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->Package);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9305,14 +8898,10 @@ static PyObject *_wrap_pkgCacheDepIterator_NextDepends_set(PyObject *self, PyObj
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDepIterator_NextDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_NextDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -9332,11 +8921,7 @@ static PyObject *_wrap_pkgCacheDepIterator_NextDepends_get(PyObject *self, PyObj
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9347,14 +8932,10 @@ static PyObject *_wrap_pkgCacheDepIterator_NextRevDepends_set(PyObject *self, Py
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDepIterator_NextRevDepends_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_NextRevDepends_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextRevDepends = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -9374,11 +8955,7 @@ static PyObject *_wrap_pkgCacheDepIterator_NextRevDepends_get(PyObject *self, Py
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextRevDepends);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -9389,14 +8966,10 @@ static PyObject *_wrap_pkgCacheDepIterator_ID_set(PyObject *self, PyObject *args
     PyObject *resultobj;
     pkgCache::DepIterator *arg1 = (pkgCache::DepIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheDepIterator_ID_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheDepIterator_ID_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->ID = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -9416,11 +8989,7 @@ static PyObject *_wrap_pkgCacheDepIterator_ID_get(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__DepIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->ID);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -10115,14 +9684,10 @@ static PyObject *_wrap_pkgCachePrvIterator_Version_set(PyObject *self, PyObject 
     PyObject *resultobj;
     pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePrvIterator_Version_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePrvIterator_Version_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->Version = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10142,11 +9707,7 @@ static PyObject *_wrap_pkgCachePrvIterator_Version_get(PyObject *self, PyObject 
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->Version);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -10157,14 +9718,10 @@ static PyObject *_wrap_pkgCachePrvIterator_NextProvides_set(PyObject *self, PyOb
     PyObject *resultobj;
     pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePrvIterator_NextProvides_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePrvIterator_NextProvides_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextProvides = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10184,11 +9741,7 @@ static PyObject *_wrap_pkgCachePrvIterator_NextProvides_get(PyObject *self, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextProvides);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -10199,14 +9752,10 @@ static PyObject *_wrap_pkgCachePrvIterator_NextPkgProv_set(PyObject *self, PyObj
     PyObject *resultobj;
     pkgCache::PrvIterator *arg1 = (pkgCache::PrvIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePrvIterator_NextPkgProv_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePrvIterator_NextPkgProv_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextPkgProv = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10226,11 +9775,7 @@ static PyObject *_wrap_pkgCachePrvIterator_NextPkgProv_get(PyObject *self, PyObj
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PrvIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextPkgProv);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -10927,14 +10472,10 @@ static PyObject *_wrap_pkgCachePkgFileIterator_NextFile_set(PyObject *self, PyOb
     PyObject *resultobj;
     pkgCache::PkgFileIterator *arg1 = (pkgCache::PkgFileIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCachePkgFileIterator_NextFile_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCachePkgFileIterator_NextFile_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextFile = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -10954,11 +10495,7 @@ static PyObject *_wrap_pkgCachePkgFileIterator_NextFile_get(PyObject *self, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__PkgFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextFile);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -11460,14 +10997,10 @@ static PyObject *_wrap_pkgCacheVerFileIterator_NextFile_set(PyObject *self, PyOb
     PyObject *resultobj;
     pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerFileIterator_NextFile_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFileIterator_NextFile_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->NextFile = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -11487,11 +11020,7 @@ static PyObject *_wrap_pkgCacheVerFileIterator_NextFile_get(PyObject *self, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->NextFile);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -11502,14 +11031,10 @@ static PyObject *_wrap_pkgCacheVerFileIterator_Offset_set(PyObject *self, PyObje
     PyObject *resultobj;
     pkgCache::VerFileIterator *arg1 = (pkgCache::VerFileIterator *) 0 ;
     map_ptrloc arg2 ;
-    map_ptrloc *argp2 ;
     PyObject * obj0  = 0 ;
-    PyObject * obj1  = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:pkgCacheVerFileIterator_Offset_set",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"Oi:pkgCacheVerFileIterator_Offset_set",&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_map_ptrloc,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
     if (arg1) (*arg1)->Offset = arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
@@ -11529,11 +11054,7 @@ static PyObject *_wrap_pkgCacheVerFileIterator_Offset_get(PyObject *self, PyObje
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_pkgCache__VerFileIterator,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     result =  ((*arg1)->Offset);
     
-    {
-        map_ptrloc * resultptr;
-        resultptr = new map_ptrloc((map_ptrloc &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_map_ptrloc, 1);
-    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -13983,6 +13504,23 @@ static PyObject *_wrap_Configuration_Dump(PyObject *self, PyObject *args) {
 
 static PyObject *_wrap_new_Configuration__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
+    Configuration *arg1 = 0 ;
+    Configuration *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_Configuration",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (Configuration *)new Configuration(*arg1);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Configuration, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_Configuration__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
     Item *arg1 = (Item *) 0 ;
     Configuration *result;
     PyObject * obj0  = 0 ;
@@ -13998,7 +13536,7 @@ static PyObject *_wrap_new_Configuration__SWIG_0(PyObject *self, PyObject *args)
 }
 
 
-static PyObject *_wrap_new_Configuration__SWIG_1(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_Configuration__SWIG_2(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     Configuration *result;
     
@@ -14022,13 +13560,28 @@ static PyObject *_wrap_new_Configuration(PyObject *self, PyObject *args) {
         argv[ii] = PyTuple_GetItem(args,ii);
     }
     if (argc == 0) {
-        return _wrap_new_Configuration__SWIG_1(self,args);
+        return _wrap_new_Configuration__SWIG_2(self,args);
     }
     if (argc == 1) {
         int _v;
         {
             void *ptr;
             if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_Item, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            }else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            return _wrap_new_Configuration__SWIG_1(self,args);
+        }
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], (void **) &ptr, SWIGTYPE_p_Configuration, 0) == -1) {
                 _v = 0;
                 PyErr_Clear();
             }else {
@@ -14163,6 +13716,243 @@ static PyObject *_wrap_ReadConfigDir(PyObject *self, PyObject *args) {
 }
 
 
+static PyObject *_wrap_ConfigurationItem_Tag_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    char *arg2 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Os:ConfigurationItem_Tag_set",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    Configuration_Item_Tag_set(arg1,(char const *)arg2);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Tag_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    char *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ConfigurationItem_Tag_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (char *)Configuration_Item_Tag_get(arg1);
+    
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Value_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    char *arg2 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"Os:ConfigurationItem_Value_set",&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    Configuration_Item_Value_set(arg1,(char const *)arg2);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Value_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    char *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ConfigurationItem_Value_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (char *)Configuration_Item_Value_get(arg1);
+    
+    resultobj = result ? PyString_FromString(result) : Py_BuildValue((char*)"");
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Parent_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *arg2 = (Item *) 0 ;
+    PyObject * obj0  = 0 ;
+    PyObject * obj1  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ConfigurationItem_Parent_set",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_Item,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+    if (arg1) (arg1)->Parent = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Parent_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ConfigurationItem_Parent_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (Item *) ((arg1)->Parent);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Item, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Child_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *arg2 = (Item *) 0 ;
+    PyObject * obj0  = 0 ;
+    PyObject * obj1  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ConfigurationItem_Child_set",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_Item,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+    if (arg1) (arg1)->Child = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Child_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ConfigurationItem_Child_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (Item *) ((arg1)->Child);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Item, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Next_set(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *arg2 = (Item *) 0 ;
+    PyObject * obj0  = 0 ;
+    PyObject * obj1  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ConfigurationItem_Next_set",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_Item,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
+    if (arg1) (arg1)->Next = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_Next_get(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:ConfigurationItem_Next_get",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (Item *) ((arg1)->Next);
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Item, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ConfigurationItem_FullTag(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    Item *arg2 = (Item *) 0 ;
+    string result;
+    PyObject * obj0  = 0 ;
+    PyObject * obj1  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O|O:ConfigurationItem_FullTag",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    }
+    result = ((Configuration::Item const *)arg1)->FullTag((Item const *)arg2);
+    
+    {
+        resultobj = PyString_FromString((&result)->c_str());
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_ConfigurationItem(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *result;
+    
+    if(!PyArg_ParseTuple(args,(char *)":new_ConfigurationItem")) goto fail;
+    result = (Configuration::Item *)new Configuration::Item();
+    
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_Configuration__Item, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_ConfigurationItem(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    Configuration::Item *arg1 = (Configuration::Item *) 0 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:delete_ConfigurationItem",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_Configuration__Item,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    delete arg1;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * ConfigurationItem_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_Configuration__Item, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyObject *_wrap_OpProgress_Progress(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     OpProgress *arg1 = (OpProgress *) 0 ;
@@ -17724,6 +17514,56 @@ static PyObject * pkgSourceList_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_GlobalError_PushState(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    GlobalError *arg1 = (GlobalError *) 0 ;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:GlobalError_PushState",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_GlobalError,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    (arg1)->PushState();
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GlobalError_PopState(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    GlobalError *arg1 = (GlobalError *) 0 ;
+    bool result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:GlobalError_PopState",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_GlobalError,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (bool)(arg1)->PopState();
+    
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GlobalError_PopBackState(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    GlobalError *arg1 = (GlobalError *) 0 ;
+    bool result;
+    PyObject * obj0  = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:GlobalError_PopBackState",&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_GlobalError,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    result = (bool)(arg1)->PopBackState();
+    
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_GlobalError_Errno(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     GlobalError *arg1 = (GlobalError *) 0 ;
@@ -18001,6 +17841,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"pkgCache_Hash", _wrap_pkgCache_Hash, METH_VARARGS },
 	 { (char *)"pkgCache_Priority", _wrap_pkgCache_Priority, METH_VARARGS },
 	 { (char *)"pkgCache_FindPkg", _wrap_pkgCache_FindPkg, METH_VARARGS },
+	 { (char *)"pkgCache_FindPackage", _wrap_pkgCache_FindPackage, METH_VARARGS },
 	 { (char *)"pkgCache_Head", _wrap_pkgCache_Head, METH_VARARGS },
 	 { (char *)"pkgCache_PkgBegin", _wrap_pkgCache_PkgBegin, METH_VARARGS },
 	 { (char *)"pkgCache_PkgEnd", _wrap_pkgCache_PkgEnd, METH_VARARGS },
@@ -18537,6 +18378,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Configuration_swigregister", Configuration_swigregister, METH_VARARGS },
 	 { (char *)"ReadConfigFile", _wrap_ReadConfigFile, METH_VARARGS },
 	 { (char *)"ReadConfigDir", _wrap_ReadConfigDir, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Tag_set", _wrap_ConfigurationItem_Tag_set, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Tag_get", _wrap_ConfigurationItem_Tag_get, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Value_set", _wrap_ConfigurationItem_Value_set, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Value_get", _wrap_ConfigurationItem_Value_get, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Parent_set", _wrap_ConfigurationItem_Parent_set, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Parent_get", _wrap_ConfigurationItem_Parent_get, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Child_set", _wrap_ConfigurationItem_Child_set, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Child_get", _wrap_ConfigurationItem_Child_get, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Next_set", _wrap_ConfigurationItem_Next_set, METH_VARARGS },
+	 { (char *)"ConfigurationItem_Next_get", _wrap_ConfigurationItem_Next_get, METH_VARARGS },
+	 { (char *)"ConfigurationItem_FullTag", _wrap_ConfigurationItem_FullTag, METH_VARARGS },
+	 { (char *)"new_ConfigurationItem", _wrap_new_ConfigurationItem, METH_VARARGS },
+	 { (char *)"delete_ConfigurationItem", _wrap_delete_ConfigurationItem, METH_VARARGS },
+	 { (char *)"ConfigurationItem_swigregister", ConfigurationItem_swigregister, METH_VARARGS },
 	 { (char *)"OpProgress_Progress", _wrap_OpProgress_Progress, METH_VARARGS },
 	 { (char *)"OpProgress_SubProgress", _wrap_OpProgress_SubProgress, METH_VARARGS },
 	 { (char *)"OpProgress_OverallProgress", _wrap_OpProgress_OverallProgress, METH_VARARGS },
@@ -18681,6 +18536,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_pkgSourceList", _wrap_new_pkgSourceList, METH_VARARGS },
 	 { (char *)"delete_pkgSourceList", _wrap_delete_pkgSourceList, METH_VARARGS },
 	 { (char *)"pkgSourceList_swigregister", pkgSourceList_swigregister, METH_VARARGS },
+	 { (char *)"GlobalError_PushState", _wrap_GlobalError_PushState, METH_VARARGS },
+	 { (char *)"GlobalError_PopState", _wrap_GlobalError_PopState, METH_VARARGS },
+	 { (char *)"GlobalError_PopBackState", _wrap_GlobalError_PopBackState, METH_VARARGS },
 	 { (char *)"GlobalError_Errno", _wrap_GlobalError_Errno, METH_VARARGS },
 	 { (char *)"GlobalError_WarningE", _wrap_GlobalError_WarningE, METH_VARARGS },
 	 { (char *)"GlobalError_Error", _wrap_GlobalError_Error, METH_VARARGS },
@@ -18723,7 +18581,6 @@ static void *_p_OpTextProgressTo_p_OpProgress(void *x) {
 }
 static swig_type_info _swigt__p_PackageFile[] = {{"_p_PackageFile", 0, "PackageFile *", 0},{"_p_PackageFile"},{"_p_pkgCache__PackageFile"},{0}};
 static swig_type_info _swigt__p_pkgCache__PackageFile[] = {{"_p_pkgCache__PackageFile", 0, "pkgCache::PackageFile *", 0},{"_p_pkgCache__PackageFile"},{"_p_PackageFile"},{0}};
-static swig_type_info _swigt__p_pkgSourceList__const_iterator[] = {{"_p_pkgSourceList__const_iterator", 0, "pkgSourceList::const_iterator *", 0},{"_p_pkgSourceList__const_iterator"},{0}};
 static swig_type_info _swigt__p_pkgAcquire__UriIterator[] = {{"_p_pkgAcquire__UriIterator", 0, "pkgAcquire::UriIterator *", 0},{"_p_pkgAcquire__UriIterator"},{0}};
 static swig_type_info _swigt__p_pkgCache__VerFileIterator[] = {{"_p_pkgCache__VerFileIterator", 0, "pkgCache::VerFileIterator *", 0},{"_p_pkgCache__VerFileIterator"},{"_p_VerFileIterator"},{0}};
 static swig_type_info _swigt__p_PkgFileIterator[] = {{"_p_PkgFileIterator", 0, "PkgFileIterator *", 0},{"_p_PkgFileIterator"},{"_p_pkgCache__PkgFileIterator"},{0}};
@@ -18737,6 +18594,8 @@ static swig_type_info _swigt__p_pkgCache__PkgFileIterator[] = {{"_p_pkgCache__Pk
 static swig_type_info _swigt__p_VerIterator[] = {{"_p_VerIterator", 0, "VerIterator *", 0},{"_p_VerIterator"},{"_p_pkgCache__VerIterator"},{0}};
 static swig_type_info _swigt__p_PkgIterator[] = {{"_p_PkgIterator", 0, "PkgIterator const &", 0},{"_p_PkgIterator"},{"_p_pkgCache__PkgIterator"},{0}};
 static swig_type_info _swigt__p_DepIterator[] = {{"_p_DepIterator", 0, "DepIterator *", 0},{"_p_DepIterator"},{"_p_pkgCache__DepIterator"},{0}};
+static swig_type_info _swigt__p_pkgSourceList__const_iterator[] = {{"_p_pkgSourceList__const_iterator", 0, "pkgSourceList::const_iterator *", 0},{"_p_pkgSourceList__const_iterator"},{0}};
+static swig_type_info _swigt__p_Configuration__Item[] = {{"_p_Configuration__Item", 0, "Configuration::Item *", 0},{"_p_Configuration__Item"},{"_p_Item"},{0}};
 static swig_type_info _swigt__p_pkgCache__Header[] = {{"_p_pkgCache__Header", 0, "pkgCache::Header *", 0},{"_p_pkgCache__Header"},{"_p_Header"},{0}};
 static swig_type_info _swigt__p_Header[] = {{"_p_Header", 0, "Header &", 0},{"_p_Header"},{"_p_pkgCache__Header"},{0}};
 static swig_type_info _swigt__p_pkgPolicy[] = {{"_p_pkgPolicy", 0, "pkgPolicy *", 0},{"_p_pkgPolicy"},{0}};
@@ -18751,7 +18610,7 @@ static swig_type_info _swigt__p_GlobalError[] = {{"_p_GlobalError", 0, "GlobalEr
 static swig_type_info _swigt__p_pkgAcqIndex[] = {{"_p_pkgAcqIndex", 0, "pkgAcqIndex *", 0},{"_p_pkgAcqIndex"},{0}};
 static swig_type_info _swigt__p_StateCache[] = {{"_p_StateCache", 0, "StateCache &", 0},{"_p_StateCache"},{"_p_pkgDepCache__StateCache"},{0}};
 static swig_type_info _swigt__p_pkgDepCache__StateCache[] = {{"_p_pkgDepCache__StateCache", 0, "pkgDepCache::StateCache *", 0},{"_p_pkgDepCache__StateCache"},{"_p_StateCache"},{0}};
-static swig_type_info _swigt__p_Item[] = {{"_p_Item", 0, "Item const *", 0},{"_p_Item"},{0}};
+static swig_type_info _swigt__p_Item[] = {{"_p_Item", 0, "Item const *", 0},{"_p_Configuration__Item"},{"_p_Item"},{0}};
 static swig_type_info _swigt__p_void[] = {{"_p_void", 0, "void *", 0},{"_p_void"},{0}};
 static swig_type_info _swigt__p_pkgAcquire__Item[] = {{"_p_pkgAcquire__Item", 0, "pkgAcquire::Item *", 0},{"_p_pkgAcqArchive", _p_pkgAcqArchiveTo_p_pkgAcquire__Item},{"_p_pkgAcqFile", _p_pkgAcqFileTo_p_pkgAcquire__Item},{"_p_pkgAcqIndex", _p_pkgAcqIndexTo_p_pkgAcquire__Item},{"_p_pkgAcqIndexRel", _p_pkgAcqIndexRelTo_p_pkgAcquire__Item},{"_p_pkgAcquire__Item"},{0}};
 static swig_type_info _swigt__p_MMap[] = {{"_p_MMap", 0, "MMap *", 0},{"_p_MMap"},{0}};
@@ -18800,7 +18659,6 @@ static swig_type_info _swigt__p_pkgCache__StringItem[] = {{"_p_pkgCache__StringI
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_PackageFile, 
 _swigt__p_pkgCache__PackageFile, 
-_swigt__p_pkgSourceList__const_iterator, 
 _swigt__p_pkgAcquire__UriIterator, 
 _swigt__p_pkgCache__VerFileIterator, 
 _swigt__p_PkgFileIterator, 
@@ -18814,6 +18672,8 @@ _swigt__p_pkgCache__PkgFileIterator,
 _swigt__p_VerIterator, 
 _swigt__p_PkgIterator, 
 _swigt__p_DepIterator, 
+_swigt__p_pkgSourceList__const_iterator, 
+_swigt__p_Configuration__Item, 
 _swigt__p_pkgCache__Header, 
 _swigt__p_Header, 
 _swigt__p_pkgPolicy, 

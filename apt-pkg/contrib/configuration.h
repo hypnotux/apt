@@ -113,4 +113,19 @@ bool ReadConfigFile(Configuration &Conf,string FName,bool AsSectional = false,
 bool ReadConfigDir(Configuration &Conf,string Dir,bool AsSectional = false,
 		    unsigned Depth = 0);
 
+#ifdef SWIG
+   struct Configuration::Item
+   {
+      string Value;
+      string Tag;
+      Item *Parent;
+      Item *Child;
+      Item *Next;
+      
+      string FullTag(const Item *Stop = 0) const;
+      
+      Item() : Parent(0), Child(0), Next(0) {};
+   };
+#endif
+
 #endif

@@ -103,6 +103,7 @@ inline bool pkgInit()
 %rename(pkgDepCacheStateCache) pkgDepCache::StateCache;
 %rename(pkgRecordsParser) pkgRecords::Parser;
 %rename(pkgAcquireItem) pkgAcquire::Item;
+%rename(ConfigurationItem) Configuration::Item;
 
 /* That's the best way I found to access ItemsBegin/ItemsEnd. */
 %ignore pkgAcquire::ItemsBegin;
@@ -134,6 +135,7 @@ ItemsList()
 }
 }
 
+/* Wrap string members. */
 %immutable pkgAcquire::Item::DestFile;
 %immutable pkgAcquire::Item::ErrorText;
 %extend pkgAcquire::Item {
@@ -146,6 +148,23 @@ ItemsList()
 #define pkgAcquire_Item_DestFile_get(x) ((x)->DestFile.c_str())
 #define pkgAcquire_Item_ErrorText_get(x) ((x)->ErrorText.c_str())
 %}
+
+/* Also from Configuration::Item. */
+%extend Configuration::Item {
+	const char *Tag;
+	const char *Value;
+}
+%ignore Configuration::Item::Tag;
+%ignore Configuration::Item::Value;
+%{
+#define Configuration_Item_Tag_get(x) ((x)->Tag.c_str())
+#define Configuration_Item_Value_get(x) ((x)->Value.c_str())
+#define Configuration_Item_Tag_set(x,y) ((x)->Tag = (y))
+#define Configuration_Item_Value_set(x,y) ((x)->Value = (y))
+%}
+
+/* Typemap to present map_ptrloc in a better way */
+%apply int { map_ptrloc };
 
 /* That should be enough for our usage, but _error is indeed an alias
  * for a function which returns an statically alocated GlobalError object. */
