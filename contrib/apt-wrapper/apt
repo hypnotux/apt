@@ -4,8 +4,8 @@
 # Copyright (C) 2003 R Bos
 #
 # File:           $RCSfile: apt,v $
-# Revision:       $Revision: 1.13 $
-# Last change:    $Date: 2004/02/20 19:30:15 $
+# Revision:       $Revision: 1.20 $
+# Last change:    $Date: 2004/06/24 19:48:38 $
 #
 # Send suggestions to: apt4rpm-devel@lists.sourceforge.net
 # Homepage: http://apt4rpm.sourceforge.net
@@ -55,7 +55,8 @@ while [ $# -gt 0 ]; do
 		;;
 
 	update|upgrade|install|remove|dist-upgrade|\
-	  build-dep|clean|autoclean|check|source|moo|script|reinstall)
+	  build-dep|clean|autoclean|check|source|moo|script|reinstall|\
+	  groupinstall|groupremove)
 		APTCMD=apt-get
 		break
 		;;
@@ -67,7 +68,7 @@ while [ $# -gt 0 ]; do
 
 	add|gencaches|showsrc|showpkg|stats|dump|dumpavail|\
 	  unmet|search|depends|whatdepends|dotty|show|pkgnames|policy|\
-	  rdepends|xvcg)
+	  rdepends|xvcg|showgroup|groupnames)
 		APTCMD="apt-cache"
 		break
 		;;
@@ -84,6 +85,11 @@ while [ $# -gt 0 ]; do
 
 	list-extras)
 		APTCMD=list-extras
+		break
+		;;
+
+	list-nodeps)
+		APTCMD=list-nodeps
 		break
 		;;
 
@@ -129,8 +135,9 @@ apt-get)
 	APTOPT="$APTOPT,target-release,trivial-only,version,yes"
 	
 	# Additional options, provided by this tool
-	ADDOPT="force-rpm,hold:,sourceslist:,show-rpm-command,test"
-	
+	ADDOPT="checksig,force-rpm,hold:,sourceslist:,no-checksig,no-postscript,postscript"
+	ADDOPT="$ADDOPT,show-rpm-command,test"
+
 	# Note that we use `"$@"' to let each command-line parameter expand to a
 	# separate word. The quotes around `$@' are essential!
 	# We need TEMP as the `eval set --' would nuke the return value of getopt.
@@ -149,7 +156,7 @@ apt-get)
 		--arch-only)		ARG="$ARG $1";;
 		--assume-yes)		ARG="$ARG $1";;
 		--build|-b)		ARG="$ARG $1";;
-		--checksig)		RPM_CHECKSIG=yes;;
+		--checksig)		ARG="-o RPM::GPG-Check=true $ARG";;
 		--compile)		ARG="$ARG $1";;
 		--config-file|-c)	ARG="$ARG $1 $2"; shift;;
 		 -D)			ARG="$ARG $1";;
@@ -159,7 +166,7 @@ apt-get)
 		--dry-run)		ARG="$ARG $1";;
 		--fix-broken|-f)	APT_FIXBROKEN=yes;;
 		--fix-missing|-m)	ARG="$ARG $1";;
-		--force-rpm)		RPM_FORCE=yes;;
+		--force-rpm)		ARG="-o rpm::Install-Options::=--force $ARG";;
 		--force-yes)		ARG="$ARG $1";;
 		--help|-h)		ARG="$ARG $1";;
 		--hold)			ARG="$ARG -o rpm::hold::=$2"; shift;;
@@ -168,27 +175,27 @@ apt-get)
 		--just-print)		ARG="$ARG $1";;
 		--list-cleanup)		ARG="$ARG $1";;
 		--no-act)		ARG="$ARG $1";;
-		--no-checksig)		RPM_CHECKSIG=no;;
+		--no-checksig)		ARG="-o RPM::GPG-Check=no $ARG";;
 		--no-download)		ARG="$ARG $1";;
 		--no-list-cleanup)	ARG="$ARG $1";;
 		--no-remove)		ARG="$ARG $1";;
-		--no-run-post)		ARG="-o Scripts::Exec::Post=no $ARG";;
+		--no-postscript)	ARG="-o Scripts::Options::RunPostScript=false $ARG";;
 		--only-source)		ARG="$ARG $1";;
 		--option|-o)		ARG="$ARG $1 $2"; shift;;
+		--postscript)		ARG="-o Scripts::Options::RunPostScript=true $ARG";;
 		--print-uris)		ARG="$ARG $1";;
 		--purge)		ARG="$ARG $1";;
 		--quiet|-q)		ARG="$ARG $1";;
 		--recon)		ARG="$ARG $1";;
 		--reinstall)		ARG="$ARG $1";;
 		--remove)		ARG="$ARG $1";;
-		--run-post)		ARG="-o Scripts::Exec::Post=true $ARG";;
 		--show-rpm-command)	RPM_SHOW_CMD=yes;;
 		--show-upgraded)	ARG="$ARG $1";;
 		--simulate|-s)		ARG="$ARG $1";;
 		--sourceslist)		RPM_SRC_LIST=$2; shift;;
 		--tar-only)		ARG="$ARG $1";;
 		--target-release|-t)	ARG="$ARG $1";;
-		--test)			RPM_TEST=yes ;;
+		--test)			ARG="-o rpm::options::=--test $ARG";;
 		--trivial-only)		ARG="$ARG $1";;
 		--version|-v)		ARG="$ARG $1";;
 		--yes|-y)		ARG="$ARG $1";;
@@ -198,11 +205,7 @@ apt-get)
 		shift
 	done
 	
-	[ -n "$RPM_CHECKSIG" ] && ARG="-o rpm::checksig=$RPM_CHECKSIG $ARG"
-	[ -n "$RPM_FORCE"    ] && ARG="-o rpm::Install-Options::=--force $ARG"
-	[ -n "$RPM_TEST"     ] && ARG="-o rpm::options::=--test $ARG"
-
-	if [ -n "$RPM_SHOW_CMD"   ]; then
+	if [ -n "$RPM_SHOW_CMD" ]; then
 
 		RPM_CMD=/usr/lib/apt/show_rpm_cmd
 		if [ ! -x $RPM_CMD ]; then
@@ -235,6 +238,7 @@ apt-get)
 		# performing a dist-upgrade involving the removal and installation
 		# of packages.
 		ARG="-o RPM::PM=external -o Dir::Bin::rpm=$RPM_CMD $ARG"
+		ARG="$ARG -o Scripts::Options::ShowRpmCmd=true"
 	fi
 
 	if [ -n "$RPM_SRC_LIST" ]; then
@@ -316,6 +320,10 @@ list-extras)
 	apt-cache list-extras
 	;;
 
+list-nodeps)
+	apt-cache list-nodeps
+	;;
+
 query)
 	while [ $# -gt 0 ]; do
 		case $1 in
@@ -388,7 +396,7 @@ usage)
 	usage
 	;;
 version)
-	echo "The version of this wrapper around the apt tools is: 0.21"
+	echo "The version of this wrapper around the apt tools is: 0.22"
 	echo
 	echo "The version of the apt tools is:"
 	apt-cdrom -v

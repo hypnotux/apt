@@ -3,20 +3,27 @@
   "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 
 <!ENTITY % aptent SYSTEM "apt.ent">
-%aptent;
+<!ENTITY rpm "<citerefentry>
+    <refentrytitle><command>rpm</command></refentrytitle>
+    <manvolnum>1</manvolnum>
+  </citerefentry>"
+>
 
+%aptent;
 ]>
 
 <refentry>
 
  <refentryinfo>
    <author>
-    <firstname>Richard</firstname>
-    <surname>Bos</surname>
+    <surname>Debian apt development team</surname>
+   </author>
+   <author>
+    <surname>Conectiva apt-rpm development team</surname>
    </author>
    &apt-product;
    <!-- The last update date -->
-   <date>20 February 2004</date>
+   <date>24 June 2004</date>
    <copyright>
     <year>2004</year>
     <holder>Richard Bos</holder>
@@ -64,7 +71,7 @@
  </refsect1>
 
  <refsect1><title>Actions</title>
-  <para>A full list of actions that are supported by <command>apt</command>:
+  <para>Actions supported by <command>apt</command>:
   <literal>add</literal>,
   <literal>autoclean</literal>,
   <literal>build-dep</literal>,
@@ -76,9 +83,13 @@
   <literal>dump</literal>,
   <literal>dumpavail</literal>,
   <literal>gencaches</literal>,
+  <literal>groupinstall</literal>,
+  <literal>groupnames</literal>,
+  <literal>groupremove</literal>,
   <literal>ident</literal>,
   <literal>install</literal>,
   <literal>list-extras</literal>,
+  <literal>list-nodeps</literal>,
   <literal>moo</literal>,
   <literal>pkgnames</literal>,
   <literal>policy</literal>,
@@ -90,6 +101,7 @@
   <literal>script</literal>,
   <literal>search</literal>,
   <literal>show</literal>,
+  <literal>showgroup</literal>,
   <literal>showpkg</literal>,
   <literal>showsrc</literal>,
   <literal>source</literal>,
@@ -101,6 +113,23 @@
   <literal>xvcg</literal>.</para>
 
   <variablelist>
+   <varlistentry><term><literal>groupinstall</literal></term>
+    <listitem><para>Install a group (or groups) of packages.  Most often
+     those groups are defined by the distributor.
+     Configuration item: Scripts::Groupinstall::Backend</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>groupremove</literal></term>
+    <listitem><para>Remove a group (or groups) of packages.  Most often
+     those groups are defined by the distributor.
+     Configuration item: Scripts::Groupinstall::Backend</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>list-nodeps</literal></term>
+    <listitem><para>list all installed packages that are not required by any other
+     installed package.</para></listitem>
+   </varlistentry>
+
    <varlistentry><term><literal>list-extras</literal></term>
     <listitem><para>shows packages not found in any online repositories.
      These are packages downloaded or build and installed locally. It's useful
@@ -109,6 +138,28 @@
      systems.  It's very important to be aware of all installed non-standard
      packages to avoid dependencies that cannot be satisfied from the standard
      repository.</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>list-nodeps</literal></term>
+    <listitem><para>list all installed packages that are not required by any other
+     installed package.</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>reinstall</literal></term>
+    <listitem><para>installs a package again, even if the package is already
+     installed.</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>showgroup</literal></term>
+    <listitem><para>Provide information about group (or groups).  Most often
+     those groups are defined by the distributor.
+     Configuration item: Scripts::Groupinstall::Backend</para></listitem>
+   </varlistentry>
+
+   <varlistentry><term><literal>groupnames</literal></term>
+    <listitem><para>Show available groups.  Most often those groups are defined
+     by the distributor.  Configuration item:
+     Scripts::Groupinstall::Backend</para></listitem>
    </varlistentry>
   </variablelist>
 
@@ -177,6 +228,18 @@
  <refsect1><title>Options</title>
 
    <variablelist>
+     <varlistentry><term><option>--checksig</option></term>
+     <listitem><para>checks the integrity and origin of the candidate packages to
+      be installed.  If the check fails for 1 or more packages non of the candidate
+      packages will be installed!  In case the signature check fails use the --hold
+      argument to keep back the offending package(s) or use the --no-checksig argument
+      to skip the package integrity check.  More about package checking can be
+      found in the rpm manual.
+      Configuration item: <literal>RPM::GPG-Check</literal>.
+      </para>
+     </listitem>
+     </varlistentry>
+
      <varlistentry><term><option>--hold</option></term>
      <listitem><para>puts a package on hold.  A package on hold won't be upgraded
       unless overruled with the <literal>install</literal> action.  Repeat this option
@@ -188,6 +251,34 @@
       it is better to put packages on hold with the
       <literal>rpm::hold</literal> variable in the file
       <filename>apt.conf</filename>!</para>
+     </listitem>
+     </varlistentry>
+
+     <varlistentry><term><option>--no-checksig</option></term>
+     <listitem><para>Do not check the integrity of the packages to be installed.
+      It can be used if the integrity check fails for 1 or more packages, but
+      the packages have been obtained from a save origin.
+      Configuration item: <literal>RPM::GPG-Check</literal>.
+      </para>
+     </listitem>
+     </varlistentry>
+
+     <varlistentry><term><option>--no-postscript</option></term>
+     <listitem><para>Do not run a postscript after packages have been upgraded,
+      degraded, removed or installed.
+      Configuration item: <literal>Scripts::Options::RunPostScript</literal>.
+      </para>
+     </listitem>
+     </varlistentry>
+
+     <varlistentry><term><option>--postscript</option></term>
+     <listitem><para>Run a postscript after packages have been upgraded, degraded, removed or
+      installed.  The script to use is specified with configuration item:
+      <literal>Scripts::PM::Post::</literal>.  With this option it is possible to run
+      for example <literal>ldconfig</literal> or a distribution specific configuration
+      script.
+      Configuration item: <literal>Scripts::Options::RunPostScript</literal>.
+      </para>
      </listitem>
      </varlistentry>
 
@@ -232,11 +323,21 @@
 
  </refsect1>
 
+ <refsect1><title>Files</title>
+   <variablelist>
+     <varlistentry><term><filename>/usr/lib/apt/scripts</filename></term>
+     <listitem><para>APT lua scripts.
+     Configuration item: <literal>Dir::Bin::scripts</literal>.</para></listitem>
+     </varlistentry>
+   </variablelist>
+
+ </refsect1>
+
  <refsect1><title>Environment</title>
    <variablelist>
      <varlistentry><term><option>APT_VERBOSE</option></term>
-     <listitem><para><command>apt</command> will show which application is being
-      dispatched.</para>
+     <listitem><para>If <literal>APT_VERBOSE</literal> is defined <command>apt</command>
+      will show which application is being dispatched.</para>
      </listitem>
      </varlistentry>
    </variablelist>
@@ -254,7 +355,7 @@
  </refsect1>
 
  <refsect1><title>See Also</title>
-   <para>&apt-get;, &apt-cache;, &apt-config;, &apt-cdrom;</para>
+   <para>&apt-get;, &apt-cache;, &apt-config;, &apt-cdrom;, &rpm;</para>
  </refsect1>
 
  <refsect1><title>Diagnostics</title>
@@ -264,7 +365,7 @@
 
  <refsect1><title>Bugs</title>
    <para>Report bugs to
-   <email>apt4rpm-devel@lists.sourceforge.net</email></para>
+   <email>apt-rpm@distro2.conectiva.com.br</email></para>
  </refsect1>
 
 </refentry>
