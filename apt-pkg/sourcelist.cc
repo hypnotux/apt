@@ -111,6 +111,9 @@ bool pkgSourceList::Type::ParseLine(vector<pkgIndexFile *> &List,
       return CreateItem(List,URI,Dist,Section,Vendor);
    }
    
+   // CNC:2004-05-18 
+   Dist = SubstVar(Dist,"$(ARCH)",_config->Find("APT::Architecture"));
+
    // Grab the rest of the dists
    if (ParseQuoteWord(Buffer,Section) == false)
       return _error->Error(_("Malformed line %lu in source list %s (dist parse)"),CurLine,File.c_str());
