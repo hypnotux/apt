@@ -57,6 +57,7 @@ class Lua {
 
    void SetGlobal(const char *Name);
    void SetGlobal(const char *Name, const char *Value);
+   void SetGlobal(const char *Name, bool Value);
    void SetGlobal(const char *Name, double Value);
    void SetGlobal(const char *Name, void *Value);
    void SetGlobal(const char *Name, string Value)

@@ -280,6 +280,14 @@ void Lua::SetGlobal(const char *Name, vector<pkgCache::Package*> &Value,
    Globals.push_back(Name);
 }
 
+void Lua::SetGlobal(const char *Name, bool Value)
+{
+   lua_pushstring(L, Name);
+   lua_pushboolean(L, Value);
+   lua_rawset(L, LUA_GLOBALSINDEX);
+   Globals.push_back(Name);
+}
+
 void Lua::SetGlobal(const char *Name, double Value)
 {
    lua_pushstring(L, Name);

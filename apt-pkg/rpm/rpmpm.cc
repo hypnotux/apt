@@ -338,6 +338,7 @@ bool pkgRPMPM::Go()
       _lua->SetGlobal("names_remove", uninstall);
       _lua->SetGlobal("pkgs_install", pkgs_install);
       _lua->SetGlobal("pkgs_remove", pkgs_uninstall);
+      _lua->SetGlobal("transaction_success", Ret);
       _lua->SetDepCache(&Cache);
       _lua->RunScripts("Scripts::PM::Post", false);
       _lua->ResetCaches();
