@@ -116,6 +116,10 @@ class pkgDepCache : protected pkgCache::Namespace
       
       virtual VerIterator GetCandidateVer(PkgIterator Pkg);
       virtual bool IsImportantDep(DepIterator Dep);
+      // CNC:2003-03-05 - We need access to the priority in pkgDistUpgrade
+      //		  while checking for obsoleting packages.
+      virtual signed short GetPriority(pkgCache::PkgIterator const &Pkg)
+	 { return 0; };
       
       virtual ~Policy() {};
    };
@@ -181,6 +185,8 @@ class pkgDepCache : protected pkgCache::Namespace
    inline VerIterator GetCandidateVer(PkgIterator Pkg) {return LocalPolicy->GetCandidateVer(Pkg);};
    inline bool IsImportantDep(DepIterator Dep) {return LocalPolicy->IsImportantDep(Dep);};
    inline Policy &GetPolicy() {return *LocalPolicy;};
+   // CNC:2003-03-05 - See above.
+   inline signed short GetPriority(pkgCache::PkgIterator const &Pkg) {return LocalPolicy->GetPriority(Pkg);};
    
    // Accessors
    inline StateCache &operator [](PkgIterator const &I) {return PkgState[I->ID];};
@@ -217,6 +223,8 @@ class pkgDepCache::State
 {
    protected:
 
+   pkgDepCache *Dep;
+
    StateCache *PkgState;
    unsigned char *DepState;
    double iUsrSize;
@@ -231,9 +239,9 @@ class pkgDepCache::State
       
    public:
 
-   void Save(pkgDepCache &Dep);
-   void Restore(pkgDepCache &Dep);
-   bool Changed(pkgDepCache &Dep);
+   void Save(pkgDepCache *Dep);
+   void Restore();
+   bool Changed();
 
    void Ignore(PkgIterator const &I) {PkgIgnore[I->ID] = true;};
 
@@ -249,17 +257,10 @@ class pkgDepCache::State
    inline unsigned long BadCount() {return iBadCount;};
 
    State(pkgDepCache *Dep=NULL)
-      : PkgState(0), DepState(0), PkgIgnore(0)
-   {
-      if (Dep != NULL)
-	 Save(*Dep);
-   };
+	 : Dep(0), PkgState(0), DepState(0), PkgIgnore(0)
+      { if (Dep != NULL) Save(Dep); };
    ~State()
-   {
-      delete [] PkgState;
-      delete [] DepState;
-      delete [] PkgIgnore;
-   };
+      { delete[] PkgState; delete[] DepState; delete[] PkgIgnore; };
 };
 
 
