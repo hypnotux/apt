@@ -148,6 +148,8 @@ bool pkgCache::ReMap()
    return true;
 }
 									/*}}}*/
+// CNC:2003-02-16 - Inlined in pkgcache.h and hacked for better performance.
+#if 0
 // Cache::Hash - Hash a string						/*{{{*/
 // ---------------------------------------------------------------------
 /* This is used to generate the hash entries for the HashTable. With my
@@ -168,6 +170,7 @@ unsigned long pkgCache::sHash(const char *Str) const
       Hash = 5*Hash + tolower(*I);
    return Hash % _count(HeaderP->HashTable);
 }
+#endif
 
 									/*}}}*/
 // Cache::FindPkg - Locate a package by name				/*{{{*/
@@ -177,15 +180,39 @@ pkgCache::PkgIterator pkgCache::FindPkg(string Name)
 {
    // Look at the hash bucket
    Package *Pkg = PkgP + HeaderP->HashTable[Hash(Name)];
+   const char *name = Name.c_str(); // CNC:2003-02-17
    for (; Pkg != PkgP; Pkg = PkgP + Pkg->NextPackage)
    {
-      if (Pkg->Name != 0 && StrP[Pkg->Name] == Name[0] &&
-	  stringcmp(Name,StrP + Pkg->Name) == 0) // CNC:2002-07-23
+      // CNC:2003-02-17 - We use case sensitive package names. Also,
+      //                  store Pkg->Name in a temporary variable.
+      map_ptrloc PkgName = Pkg->Name;
+      if (PkgName != 0 && StrP[PkgName] == name[0] &&
+	  strcmp(name,StrP + PkgName) == 0)
 	 return PkgIterator(*this,Pkg);
    }
    return PkgIterator(*this,0);
 }
 									/*}}}*/
+
+// CNC:2003-02-17 - A slightly changed FindPkg(), hacked for performance.
+// Cache::FindPackage - Locate a package (not an iterator) by name	/*{{{*/
+// ---------------------------------------------------------------------
+/* Returns 0 on error, pointer to the package otherwise */
+pkgCache::Package *pkgCache::FindPackage(const char *Name)
+{
+   // Look at the hash bucket
+   Package *Pkg = PkgP + HeaderP->HashTable[Hash(Name)];
+   for (; Pkg != PkgP; Pkg = PkgP + Pkg->NextPackage)
+   {
+      // CNC:2003-02-17 - We use case sensitive package names. Also,
+      //                  store Pkg->Name in a temporary variable.
+      map_ptrloc PkgName = Pkg->Name;
+      if (PkgName != 0 && StrP[PkgName] == Name[0] &&
+	  strcmp(Name,StrP + PkgName) == 0)
+	 return Pkg;
+   }
+   return NULL;
+}
 // Cache::CompTypeDeb - Return a string describing the compare type	/*{{{*/
 // ---------------------------------------------------------------------
 /* This returns a string representation of the dependency compare 
@@ -282,6 +309,8 @@ pkgCache::PkgIterator::OkState pkgCache::PkgIterator::State() const
 // ---------------------------------------------------------------------
 /* Currently critical deps are defined as depends, predepends and
    conflicts. */
+// CNC:2003-02-17 - Inlined in cacheiterators.h.
+#if 0
 bool pkgCache::DepIterator::IsCritical()
 {
    if (Dep->Type == pkgCache::Dep::Conflicts ||
@@ -291,6 +320,7 @@ bool pkgCache::DepIterator::IsCritical()
       return true;
    return false;
 }
+#endif
 									/*}}}*/
 // DepIterator::SmartTargetPkg - Resolve dep target pointers w/provides	/*{{{*/
 // ---------------------------------------------------------------------

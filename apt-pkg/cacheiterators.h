@@ -186,7 +186,20 @@ class pkgCache::DepIterator
    inline PkgIterator ParentPkg() {return PkgIterator(*Owner,Owner->PkgP + Owner->VerP[Dep->ParentVer].ParentPkg);};
    inline bool Reverse() {return Type == DepRev;};
    inline unsigned long Index() const {return Dep - Owner->DepP;};
-   bool IsCritical();
+   // CNC:2003-02-17 - This is a very used function, so it's now
+   //		       inlined here.
+   inline bool IsCritical()
+		{
+			switch (Dep->Type) {
+				case pkgCache::Dep::Conflicts:
+				case pkgCache::Dep::Obsoletes:
+				case pkgCache::Dep::Depends:
+				case pkgCache::Dep::PreDepends:
+					return true;
+				default:
+					return false;
+			}
+		}
    void GlobOr(DepIterator &Start,DepIterator &End);
    Version **AllTargets();   
    bool SmartTargetPkg(PkgIterator &Result);

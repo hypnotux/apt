@@ -537,12 +537,9 @@ bool rpmListParser::CollectFileProvides(pkgCache &Cache,
 		     NULL, (void **) &names, &count);
    while (count--) 
    {
-      pkgCache::PkgIterator Pkg = Cache.FindPkg(names[count]);
-      if (Pkg.end() == false)
-      {
-	 if (!NewProvides(Ver, string(names[count]), string()))
-	     return false;
-      }
+      pkgCache::Package *P = Cache.FindPackage(names[count]);
+      if (P != NULL && !NewProvides(Ver, string(names[count]), string()))
+	 return false;
    }
 
    return true;
