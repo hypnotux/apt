@@ -112,7 +112,7 @@ bool rpmSystem::UnLock(bool NoErrors)
 /* */
 pkgPackageManager *rpmSystem::CreatePM(pkgDepCache *Cache) const
 {
-   if (_config->Find("RPM::PM", "external") == "internal")
+   if (_config->Find("RPM::PM", "internal") == "internal")
       return new pkgRPMLibPM(Cache);
    else
       return new pkgRPMExtPM(Cache);
