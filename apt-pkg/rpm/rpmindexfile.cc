@@ -331,7 +331,11 @@ string rpmPkgListIndex::ArchiveURI(string File) const
       Dict["uri"] = URI;
       Dict["dist"] = Dist; 
       Dict["sect"] = Section;
-      Dict["file"] = File;
+      string::size_type pos = File.rfind("/");
+      if (pos != string::npos)
+	 Dict["file"] = string(File, pos+1);
+      else
+	 Dict["file"] = File;
       rpmdata->TranslateBinary(Res, Dict);
    }
 	 
