@@ -1405,7 +1405,7 @@ static int PrioComp(const void *A,const void *B)
    return -1;
    
    if (L->Priority != R->Priority)
-      return R->Priority - L->Priority;
+      return L->Priority - R->Priority;
    return strcmp(L.ParentPkg().Name(),R.ParentPkg().Name());
 }
 void pkgPrioSortList(pkgCache &Cache,pkgCache::Version **List)

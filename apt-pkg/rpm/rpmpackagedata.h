@@ -67,7 +67,11 @@ class RPMPackageData
    public:
 
    inline pkgCache::State::VerPriority VerPriority(string Package) 
-   	{return Priorities[Package];};
+   {
+      if (Priorities.find(Package) != Priorities.end())
+	 return Priorities[Package];
+      return pkgCache::State::Standard;
+   };
    inline pkgCache::Flag::PkgFlags PkgFlags(string Package) 
    	{return Flags[Package];};
 
