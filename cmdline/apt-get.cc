@@ -2450,8 +2450,38 @@ bool DoSource(CommandLine &CmdL)
    unsigned J = 0;
    for (const char **I = CmdL.FileList + 1; *I != 0; I++, J++)
    {
+      // CNC:2004-09-23 - Try to handle unknown file items.
+      unsigned int Length = strlen(*I);
+      char S[300];
+      if (Length >= sizeof(S))
+        continue;
+      strcpy(S,*I);
+
+      if (S[0] == '/')
+      {
+	 pkgRecords Recs(Cache);
+	 if (_error->PendingError() == true)
+	    return false;
+	 pkgCache::PkgIterator Pkg = (*Cache).PkgBegin();
+	 for (; Pkg.end() == false; Pkg++)
+	 {
+	    // Should we try on all versions?
+	    pkgCache::VerIterator Ver = (*Cache)[Pkg].CandidateVerIter(*Cache);
+	    if (Ver.end() == false)
+	    {
+	       pkgRecords::Parser &Parse = Recs.Lookup(Ver.FileList());
+	       if (Parse.HasFile(S)) {
+		  ioprintf(c1out,_("Selecting %s for '%s'\n"),
+			   Pkg.Name(),S);
+		  strcpy(S, Pkg.Name());
+		  break;
+	       }
+	    }
+	 }
+      }
+
       string Src;
-      pkgSrcRecords::Parser *Last = FindSrc(*I,Recs,SrcRecs,Src,*Cache);
+      pkgSrcRecords::Parser *Last = FindSrc(S,Recs,SrcRecs,Src,*Cache);
       
       if (Last == 0)
 	 return _error->Error(_("Unable to find a source package for %s"),Src.c_str());
