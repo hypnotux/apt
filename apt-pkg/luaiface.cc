@@ -373,6 +373,17 @@ inline pkgCache::Version *AptAux_ToVersion(lua_State *L, int n)
    return (pkgCache::Version*)lua_touserdata(L,n);
 }
 
+static pkgCache::VerIterator *AptAux_ToVerIterator(lua_State *L, int n)
+{
+   pkgCache::Version *Ver = AptAux_ToVersion(L, n);
+   if (Ver == NULL)
+      return NULL;
+   pkgCache *Cache = _lua->GetCache(L);
+   if (Cache == NULL)
+      return NULL;
+   return new pkgCache::VerIterator(*Cache, Ver);
+}
+
 inline int AptAux_PushPackage(lua_State *L, pkgCache::Package *Pkg)
 {
    if (Pkg != 0) {
@@ -699,6 +710,31 @@ static int AptLua_verarch(lua_State *L)
    
 }
 
+static int AptLua_verprovlist(lua_State *L)
+{
+   pkgCache::VerIterator *VerI = AptAux_ToVerIterator(L, 1);
+   if (VerI == NULL)
+      return 0;
+   pkgCache::PrvIterator PrvI = VerI->ProvidesList();
+   lua_newtable(L);
+   int i = 1;
+   for (; PrvI.end() == false; PrvI++)
+   {
+      lua_newtable(L);
+      lua_pushstring(L, "name");
+      lua_pushstring(L, PrvI.Name());
+      lua_settable(L, -3);
+      lua_pushstring(L, "version");
+      if (PrvI.ProvideVersion())
+         lua_pushstring(L, PrvI.ProvideVersion());
+      else
+         lua_pushstring(L, "");
+      lua_settable(L, -3);
+      lua_rawseti(L, -2, i++);
+   }
+   return 1;
+}
+
 static int AptLua_verstrcmp(lua_State *L)
 {
    const char *Ver1, *Ver2;
@@ -953,6 +989,7 @@ static const luaL_reg aptlib[] = {
    {"pkgverlist",	AptLua_pkgverlist},
    {"verstr",		AptLua_verstr},
    {"verarch",		AptLua_verarch},
+   {"verprovlist",   	AptLua_verprovlist},
    {"verstrcmp",	AptLua_verstrcmp},
    {"markkeep",		AptLua_markkeep},
    {"markinstall",	AptLua_markinstall},
