@@ -263,8 +263,18 @@ bool pkgCacheGenerator::MergeFileProvides(ListParser &List)
       
       pkgCache::PkgIterator Pkg = Cache.FindPkg(PackageName);
       if (Pkg.end() == true)
+#if 0
+	 // CNC:2003-03-03 - Ignore missing packages. This will happen when
+	 //		     a package is placed in Allow-Duplicated and
+	 //		     then removed, but the source cache is still
+	 //		     counting with it as Allow-Duplicated. No good
+	 //		     way to handle that right now.
 	 return _error->Error(_("Error occured while processing %s (FindPkg)"),
 				PackageName.c_str());
+#else
+	 continue;
+#endif
+
       Counter++;
       // CNC:2003-02-16
       if (Counter % 100 == 0 && Progress != 0) {
@@ -287,8 +297,15 @@ bool pkgCacheGenerator::MergeFileProvides(ListParser &List)
 	 }
       }
       
+      // CNC:2003-03-03 - Ignore missing versions. This will happen when
+      //		  a package is placed in Allow-Duplicated and
+      //		  then removed, but the source cache is still
+      //		  counting with it as Allow-Duplicated. No good
+      //		  way to handle that right now.
+#if 0
       if (Ver.end() == true)
 	 _error->Warning(_("Package %s %s was not found while processing file dependencies"),PackageName.c_str(),Version.c_str());
+#endif
    }
 
    return true;
