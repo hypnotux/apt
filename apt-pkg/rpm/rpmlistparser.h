@@ -67,6 +67,9 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    virtual bool OrderedOffset()
    	{return Handler->OrderedOffset();};
 
+   virtual bool IsDatabase()
+   	{return Handler->IsDatabase();};
+
    virtual bool CollectFileProvides(pkgCache &Cache,
 				    pkgCache::VerIterator Ver); 
    virtual bool Step();

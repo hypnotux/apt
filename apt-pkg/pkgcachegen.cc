@@ -104,6 +104,12 @@ bool pkgCacheGenerator::MergeList(ListParser &List,
 {
    List.Owner = this;
 
+   // CNC:2003-02-20 - When --reinstall is used during a cache building
+   //		       process, the algorithm is sligthly changed to
+   //		       order the "better" architectures before, even if
+   //		       they are already in the system.
+   bool ReInstall = _config->FindB("APT::Get::ReInstall", false);
+
    unsigned int Counter = 0;
    while (List.Step() == true)
    {
@@ -144,8 +150,14 @@ bool pkgCacheGenerator::MergeList(ListParser &List,
       int Res = 1;
       for (; Ver.end() == false; Last = &Ver->NextVer, Ver++)
       {
-	 // CNC:2002-07-09
-	 Res = Cache.VS->CmpVersionArch(Version,Arch,Ver.VerStr(),Ver.Arch());
+	 // 2003-02-20 - If the package is already installed, the
+	 //              architecture doesn't matter, unless
+	 //              --reinstall has been used.
+	 if (!ReInstall && List.IsDatabase())
+	    Res = Cache.VS->CmpVersion(Version, Ver.VerStr());
+	 else
+	    Res = Cache.VS->CmpVersionArch(Version,Arch,
+					   Ver.VerStr(),Ver.Arch());
 	 if (Res >= 0)
 	    break;
       }
@@ -177,6 +189,8 @@ bool pkgCacheGenerator::MergeList(ListParser &List,
       // Skip to the end of the same version set.
       if (Res == 0)
       {
+	 // CNC:2003-02-20 - Unless this package is already installed.
+	 if (!List.IsDatabase())
 	 for (; Ver.end() == false; Last = &Ver->NextVer, Ver++)
 	 {
 	    // CNC:2002-07-09
@@ -576,6 +590,15 @@ static bool CheckValidity(string CacheFile, FileIterator Start,
    if (CacheFile.empty() == true || FileExists(CacheFile) == false)
       return false;
    
+   // CNC:2003-02-20 - When --reinstall is used during a cache building
+   //		       process, the algorithm is sligthly changed to
+   //		       order the "better" architectures before, even if
+   //		       they are already in the system. Thus, we rebuild
+   //		       the cache when it's used.
+   bool ReInstall = _config->FindB("APT::Get::ReInstall", false);
+   if (ReInstall == true)
+      return false;
+
    // Map it
    FileFd CacheF(CacheFile,FileFd::ReadOnly);
    SPtr<MMap> Map = new MMap(CacheF,MMap::Public | MMap::ReadOnly);

@@ -119,6 +119,13 @@ class pkgCacheGenerator::ListParser
    // 		       provide the number of elements, since a sequential
    // 		       counter will be used to verify progress.
    virtual bool OrderedOffset() {return true;};
+
+   // CNC:2003-02-20 - This method will help on package ordering tasks,
+   // 		       ensuring that if a package with the same version
+   // 		       is installed, it won't be unexpectedly downloaded,
+   // 		       even if with a "better" architecture or different
+   // 		       dependencies.
+   virtual bool IsDatabase() {return false;};
    
    virtual bool Step() = 0;
    
