@@ -117,8 +117,6 @@ string rpmListParser::Package()
    bool DupOk = false;
    string Name = str;
    
-   if (strncmp(str,"kernel", 6)==0)
-       DupOk=true;
    for (vector<regex_t*>::iterator I = AllowedDupPackages.begin();
 	I != AllowedDupPackages.end(); I++)
    {
