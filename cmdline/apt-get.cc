@@ -1288,8 +1288,8 @@ static const char *op2str(int op)
    }
 }
 
-// CNC:2003-11-05
-bool TryToChangeVer(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
+// CNC:2003-11-11
+bool TryToChangeVer(pkgCache::PkgIterator &Pkg,pkgDepCache &Cache,
  		    int VerOp,const char *VerTag,bool IsRel)
 {
    // CNC:2003-11-05
@@ -1310,11 +1310,18 @@ bool TryToChangeVer(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
    
    if (strcmp(VerTag,Ver.VerStr()) != 0)
    {
-      ioprintf(c1out,_("Selected version %s (%s) for %s\n"),
-	       Ver.VerStr(),Ver.RelStr().c_str(),Pkg.Name());
+      // CNC:2003-11-11
+      if (IsRel == true)
+	 ioprintf(c1out,_("Selected version %s (%s) for %s\n"),
+		  Ver.VerStr(),Ver.RelStr().c_str(),Pkg.Name());
+      else
+	 ioprintf(c1out,_("Selected version %s for %s\n"),
+		  Ver.VerStr(),Pkg.Name());
    }
    
    Cache.SetCandidateVersion(Ver);
+   // CNC:2003-11-11
+   Pkg = Ver.ParentPkg();
    return true;
 }
 									/*}}}*/

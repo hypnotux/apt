@@ -170,6 +170,34 @@ pkgCache::VerIterator pkgVersionMatch::Find(pkgCache::PkgIterator Pkg)
    pkgVersioningSystem *VS = Pkg.Cache()->VS;
    pkgCache::VerIterator Ver = Pkg.VersionList();
 
+   // CNC:2003-11-11 - Virtual package handling.
+   if (Ver.end() == true)
+   {
+      pkgCache::PrvIterator Prv = Pkg.ProvidesList();
+      for (; Prv.end() == false; Prv++)
+      {
+         pkgCache::VerIterator OwnerVer = Prv.OwnerVer();
+         if (Type == Version)
+         {
+            // CNC:2003-11-05
+            if (VerPrefixMatch)
+            {
+               if (MatchVer(Prv.ProvideVersion(),VerStr,VerPrefixMatch) == true)
+                  return OwnerVer;
+            } else {
+               if (VS->CheckDep(Prv.ProvideVersion(),VerOp,VerStr.c_str()) == true)
+                  return OwnerVer;
+            }
+
+            continue;
+         }
+         
+         for (pkgCache::VerFileIterator VF = OwnerVer.FileList(); OwnerVer.end() == false; VF++)
+            if (FileMatch(VF.File()) == true)
+               return OwnerVer;
+      }
+   }
+
    for (; Ver.end() == false; Ver++)
    {
       if (Type == Version)
