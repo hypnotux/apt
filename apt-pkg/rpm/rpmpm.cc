@@ -786,7 +786,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       probFilter |= RPMPROB_FILTER_REPLACENEWFILES;
    }
 
-   if (Interactive)
+   if (Interactive == true)
        notifyFlags |= INSTALL_LABEL | INSTALL_HASH;
    else
        notifyFlags |= INSTALL_LABEL | INSTALL_PERCENT;
