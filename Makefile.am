@@ -18,7 +18,7 @@ EXTRA_DIST = \
 		test/testextract.cc \
 		test/uri.cc \
 		test/versions.lst \
-		test/versiontest.cc
+		test/versiontest.cc \
 		python/apt.i \
 		python/apt.py \
 		python/apt_wrap.cxx \

@@ -47,7 +47,6 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
-BASH = @BASH@
 BUILD_INCLUDED_LIBINTL = @BUILD_INCLUDED_LIBINTL@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -188,7 +187,12 @@ EXTRA_DIST = \
 		test/testextract.cc \
 		test/uri.cc \
 		test/versions.lst \
-		test/versiontest.cc
+		test/versiontest.cc \
+		python/apt.i \
+		python/apt.py \
+		python/apt_wrap.cxx \
+		python/Makefile \
+		python/swig-1.3.16-cxx.patch
 
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -388,7 +392,7 @@ distcleancheck_listfiles = find . -type f -print
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/./buildlib $(distdir)/intl $(distdir)/po $(distdir)/test
+	$(mkinstalldirs) $(distdir)/./buildlib $(distdir)/intl $(distdir)/po $(distdir)/python $(distdir)/test
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -599,11 +603,6 @@ uninstall-info: uninstall-info-recursive
 	tags-recursive uninstall uninstall-am uninstall-info-am \
 	uninstall-info-recursive uninstall-recursive
 
-		python/apt.i \
-		python/apt.py \
-		python/apt_wrap.cxx \
-		python/Makefile \
-		python/swig-1.3.16-cxx.patch
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
