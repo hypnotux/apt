@@ -222,6 +222,14 @@ int main(int argc, char ** argv)
 #else
    if (!flatStructure)
       srpmdir = "../"+srpmdir;
+#ifndef REMOVE_THIS_SOMEDAY
+   /* This code is here just so that code in rpmsrcrecords.cc in versions
+    * prior to 0.5.15cnc4 is able to detect if that's a "new" style SRPM
+    * directory scheme, or an old style. Someday, when 0.5.15cnc4 will be
+    * history, this code may be safely removed. */
+   else
+      srpmdir = "./"+srpmdir;
+#endif
 #endif
    
    entry_no = scandir(buf, &dirEntries, selectDirent, alphasort);
