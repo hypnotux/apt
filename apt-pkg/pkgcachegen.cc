@@ -697,14 +697,27 @@ static bool BuildCache(pkgCacheGenerator &Gen,
 	 return false;
    }   
 
+   // CNC:2003-03-03 - Code that was here has been moved to its own function.
+   
+   return true;
+}
+									/*}}}*/
+// CNC:2003-03-03
+// CollectFileProvides - Merge the file provides into the cache		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+static bool CollectFileProvides(pkgCacheGenerator &Gen,
+			        OpProgress &Progress,
+			        FileIterator Start, FileIterator End)
+{
+   FileIterator I;
    if (Gen.HasFileDeps() == true)
    {
       Progress.Done();
-      TotalSize = ComputeSize(Start, End);
-      CurrentSize = 0;
+      unsigned long TotalSize = ComputeSize(Start, End);
+      unsigned long CurrentSize = 0;
       for (I = Start; I != End; I++)
       {
-	 // CNC:2003-02-24
 	 if ((*I)->HasPackages() == false || (*I)->Exists() == false)
 	    continue;
 
@@ -714,10 +727,8 @@ static bool BuildCache(pkgCacheGenerator &Gen,
 	 if ((*I)->MergeFileProvides(Gen,Progress) == false)
 	    return false;
       }
-      // CNC:2002-07-04
       Progress.Done();
    }
-   
    return true;
 }
 									/*}}}*/
@@ -793,7 +804,6 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
    // Lets try the source cache.
    unsigned long CurrentSize = 0;
    unsigned long TotalSize = 0;
-#if DISABLED
    if (CheckValidity(SrcCacheFile,Files.begin(),
 		     Files.begin()+EndOfSource) == true)
    {
@@ -812,6 +822,13 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
       if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
 		     Files.begin()+EndOfSource,Files.end()) == false)
 	 return false;
+
+      // CNC:2003-03-03
+      // Collect file provides over *all* files (sources + database), since
+      // the cache is saved without them.
+      if (CollectFileProvides(Gen,Progress,
+			      Files.begin(),Files.end()) == false)
+	 return false;
    }
    else
    {
@@ -826,6 +843,10 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
 	 return false;
       
       // Write it back
+      // CNC:2003-03-03 - Notice that it is without the file provides. This
+      // is on purpose, since file requires introduced later on the status
+      // cache (database) must be considered when collecting file provides,
+      // even if using the sources cache (above).
       if (Writeable == true && SrcCacheFile.empty() == false)
       {
 	 FileFd SCacheF(SrcCacheFile,FileFd::WriteEmpty);
@@ -852,23 +873,14 @@ bool pkgMakeStatusCache(pkgSourceList &List,OpProgress &Progress,
       if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
 		     Files.begin()+EndOfSource,Files.end()) == false)
 	 return false;
-   }
-#else
-   // RPM can't have a separate sources cache. This happens because
-   // if a source cache is declared valid, it won't be checked for new
-   // file provides based on changes of the status cache.
-   {
-      TotalSize = ComputeSize(Files.begin(),Files.end());
-      
-      // Build the whole cache at once
-      pkgCacheGenerator Gen(Map.Get(),&Progress);
-      if (_error->PendingError() == true)
-	 return false;
-      if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
-		     Files.begin(),Files.end()) == false)
+
+      // CNC:2003-03-03
+      // Collect file provides over *all* files (sources + database), since
+      // the cache is saved without them.
+      if (CollectFileProvides(Gen,Progress,
+			      Files.begin(),Files.end()) == false)
 	 return false;
    }
-#endif
 
    if (_error->PendingError() == true)
       return false;
@@ -913,6 +925,13 @@ bool pkgMakeOnlyStatusCache(OpProgress &Progress,DynamicMMap **OutMap)
       return false;
    if (BuildCache(Gen,Progress,CurrentSize,TotalSize,
 		  Files.begin()+EndOfSource,Files.end()) == false)
+      return false;
+
+   // CNC:2003-03-03
+   // Collect file provides over *all* files (sources + database), since
+   // the cache is saved without them.
+   if (CollectFileProvides(Gen,Progress,
+			   Files.begin(),Files.end()) == false)
       return false;
    
    if (_error->PendingError() == true)

@@ -519,24 +519,9 @@ bool rpmListParser::CollectFileProvides(pkgCache &Cache,
 		     NULL, (void **) &names, &count);
    while (count--) 
    {
-      const char *FileName = names[count];
-      pkgCache::Package *P = Cache.FindPackage(FileName);
-      if (P != NULL) {
-	 // Check if it is not yet provided, since it could be a
-	 // requirement from the database, that the source cache was
-	 // already aware.
-	 for (pkgCache::PrvIterator Prv = Ver.ProvidesList();
-	      Prv.end() == false; Prv++) {
-	    const char *PrvName = Prv.Name();
-	    if (PrvName[0] == '/' && strcmp(PrvName,FileName) == 0) {
-	       // Found.
-	       FileName = NULL;
-	       break;
-	    }
-	 }
-	 if (FileName && !NewProvides(Ver, string(names[count]), string()))
-	    return false;
-      }
+      pkgCache::Package *P = Cache.FindPackage(names[count]);
+      if (P != NULL && !NewProvides(Ver, names[count], ""))
+	 return false;
    }
 
    return true;
