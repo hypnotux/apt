@@ -54,6 +54,12 @@ typedef pkgRecords::Parser Parser;
 %rename(assign) operator=;
 %rename(pkgCache) operator pkgCache *;
 %rename(pkgDepCache) operator pkgDepCache *;
+%rename(Package) operator Package *;
+%rename(Version) operator Version *;
+%rename(Dependency) operator Dependency *;
+%rename(Provides) operator Provides *;
+%rename(PackageFile) operator PackageFile *;
+%rename(VerFile) operator VerFile *;
 %rename(__getitem__) operator[];
 %ignore operator pkgCache &;
 %ignore operator pkgDepCache &;
@@ -99,6 +105,8 @@ inline bool pkgInit()
 %rename(pkgAcquireItem) pkgAcquire::Item;
 
 /* That's the best way I found to access ItemsBegin/ItemsEnd. */
+%ignore pkgAcquire::ItemsBegin;
+%ignore pkgAcquire::ItemsEnd;
 %extend pkgAcquire {
 PyObject *
 ItemsList()
@@ -123,6 +131,22 @@ ItemsList()
 		Py_DECREF(o);
 	}
 	return list;
+}
+}
+
+%ignore pkgAcquire::Item::DestFile;
+%extend pkgAcquire::Item {
+string DestFile_get(pkgAcquire::Item *item)
+{
+	return item->DestFile;
+}
+}
+
+%ignore pkgAcquire::Item::ErrorText;
+%extend pkgAcquire::Item {
+string ErrorText_get(pkgAcquire::Item *item)
+{
+	return item->ErrorText;
 }
 }
 

@@ -719,6 +719,7 @@ class pkgCachePkgIterator(_object):
     def __ne__(*args): return apply(_apt.pkgCachePkgIterator___ne__,args)
     def __deref__(*args): return apply(_apt.pkgCachePkgIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCachePkgIterator___mul__,args)
+    def Package(*args): return apply(_apt.pkgCachePkgIterator_Package,args)
     def Cache(*args): return apply(_apt.pkgCachePkgIterator_Cache,args)
     def Name(*args): return apply(_apt.pkgCachePkgIterator_Name,args)
     def Section(*args): return apply(_apt.pkgCachePkgIterator_Section,args)
@@ -780,6 +781,7 @@ class pkgCacheVerIterator(_object):
     def CompareVer(*args): return apply(_apt.pkgCacheVerIterator_CompareVer,args)
     def __deref__(*args): return apply(_apt.pkgCacheVerIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCacheVerIterator___mul__,args)
+    def Version(*args): return apply(_apt.pkgCacheVerIterator_Version,args)
     def Cache(*args): return apply(_apt.pkgCacheVerIterator_Cache,args)
     def VerStr(*args): return apply(_apt.pkgCacheVerIterator_VerStr,args)
     def Section(*args): return apply(_apt.pkgCacheVerIterator_Section,args)
@@ -840,6 +842,7 @@ class pkgCacheDepIterator(_object):
     def __ne__(*args): return apply(_apt.pkgCacheDepIterator___ne__,args)
     def __deref__(*args): return apply(_apt.pkgCacheDepIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCacheDepIterator___mul__,args)
+    def Dependency(*args): return apply(_apt.pkgCacheDepIterator_Dependency,args)
     def Cache(*args): return apply(_apt.pkgCacheDepIterator_Cache,args)
     def TargetVer(*args): return apply(_apt.pkgCacheDepIterator_TargetVer,args)
     def TargetPkg(*args): return apply(_apt.pkgCacheDepIterator_TargetPkg,args)
@@ -902,6 +905,7 @@ class pkgCachePrvIterator(_object):
     def __ne__(*args): return apply(_apt.pkgCachePrvIterator___ne__,args)
     def __deref__(*args): return apply(_apt.pkgCachePrvIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCachePrvIterator___mul__,args)
+    def Provides(*args): return apply(_apt.pkgCachePrvIterator_Provides,args)
     def Cache(*args): return apply(_apt.pkgCachePrvIterator_Cache,args)
     def Name(*args): return apply(_apt.pkgCachePrvIterator_Name,args)
     def ProvideVersion(*args): return apply(_apt.pkgCachePrvIterator_ProvideVersion,args)
@@ -946,6 +950,7 @@ class pkgCachePkgFileIterator(_object):
     def __ne__(*args): return apply(_apt.pkgCachePkgFileIterator___ne__,args)
     def __deref__(*args): return apply(_apt.pkgCachePkgFileIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCachePkgFileIterator___mul__,args)
+    def PackageFile(*args): return apply(_apt.pkgCachePkgFileIterator_PackageFile,args)
     def Cache(*args): return apply(_apt.pkgCachePkgFileIterator_Cache,args)
     def FileName(*args): return apply(_apt.pkgCachePkgFileIterator_FileName,args)
     def Archive(*args): return apply(_apt.pkgCachePkgFileIterator_Archive,args)
@@ -1002,6 +1007,7 @@ class pkgCacheVerFileIterator(_object):
     def __ne__(*args): return apply(_apt.pkgCacheVerFileIterator___ne__,args)
     def __deref__(*args): return apply(_apt.pkgCacheVerFileIterator___deref__,args)
     def __mul__(*args): return apply(_apt.pkgCacheVerFileIterator___mul__,args)
+    def VerFile(*args): return apply(_apt.pkgCacheVerFileIterator_VerFile,args)
     def Cache(*args): return apply(_apt.pkgCacheVerFileIterator_Cache,args)
     def File(*args): return apply(_apt.pkgCacheVerFileIterator_File,args)
     def Index(*args): return apply(_apt.pkgCacheVerFileIterator_Index,args)
@@ -1352,6 +1358,8 @@ class pkgAcquireItem(_object):
     __setattr__ = lambda self, name, value: _swig_setattr(self, pkgAcquireItem, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, pkgAcquireItem, name)
+    def DestFile_get(*args): return apply(_apt.pkgAcquireItem_DestFile_get,args)
+    def ErrorText_get(*args): return apply(_apt.pkgAcquireItem_ErrorText_get,args)
     StatIdle = _apt.pkgAcquireItem_StatIdle
     StatFetching = _apt.pkgAcquireItem_StatFetching
     StatDone = _apt.pkgAcquireItem_StatDone
@@ -1359,9 +1367,6 @@ class pkgAcquireItem(_object):
     __swig_setmethods__["Status"] = _apt.pkgAcquireItem_Status_set
     __swig_getmethods__["Status"] = _apt.pkgAcquireItem_Status_get
     if _newclass:Status = property(_apt.pkgAcquireItem_Status_get,_apt.pkgAcquireItem_Status_set)
-    __swig_setmethods__["ErrorText"] = _apt.pkgAcquireItem_ErrorText_set
-    __swig_getmethods__["ErrorText"] = _apt.pkgAcquireItem_ErrorText_get
-    if _newclass:ErrorText = property(_apt.pkgAcquireItem_ErrorText_get,_apt.pkgAcquireItem_ErrorText_set)
     __swig_setmethods__["FileSize"] = _apt.pkgAcquireItem_FileSize_set
     __swig_getmethods__["FileSize"] = _apt.pkgAcquireItem_FileSize_get
     if _newclass:FileSize = property(_apt.pkgAcquireItem_FileSize_get,_apt.pkgAcquireItem_FileSize_set)
@@ -1383,9 +1388,6 @@ class pkgAcquireItem(_object):
     __swig_setmethods__["QueueCounter"] = _apt.pkgAcquireItem_QueueCounter_set
     __swig_getmethods__["QueueCounter"] = _apt.pkgAcquireItem_QueueCounter_get
     if _newclass:QueueCounter = property(_apt.pkgAcquireItem_QueueCounter_get,_apt.pkgAcquireItem_QueueCounter_set)
-    __swig_setmethods__["DestFile"] = _apt.pkgAcquireItem_DestFile_set
-    __swig_getmethods__["DestFile"] = _apt.pkgAcquireItem_DestFile_get
-    if _newclass:DestFile = property(_apt.pkgAcquireItem_DestFile_get,_apt.pkgAcquireItem_DestFile_set)
     def Failed(*args): return apply(_apt.pkgAcquireItem_Failed,args)
     def Done(*args): return apply(_apt.pkgAcquireItem_Done,args)
     def Start(*args): return apply(_apt.pkgAcquireItem_Start,args)
@@ -1535,8 +1537,6 @@ class pkgAcquire(_object):
     def Shutdown(*args): return apply(_apt.pkgAcquire_Shutdown,args)
     def WorkersBegin(*args): return apply(_apt.pkgAcquire_WorkersBegin,args)
     def WorkerStep(*args): return apply(_apt.pkgAcquire_WorkerStep,args)
-    def ItemsBegin(*args): return apply(_apt.pkgAcquire_ItemsBegin,args)
-    def ItemsEnd(*args): return apply(_apt.pkgAcquire_ItemsEnd,args)
     def UriBegin(*args): return apply(_apt.pkgAcquire_UriBegin,args)
     def UriEnd(*args): return apply(_apt.pkgAcquire_UriEnd,args)
     def Clean(*args): return apply(_apt.pkgAcquire_Clean,args)
