@@ -5,6 +5,8 @@ This script must be plugged into the following APT script slots:
 
     Scripts::AptGet::Command 
     Scripts::AptCache::Command
+    Scripts::AptGet::Help::Command
+    Scripts::AptCache::Help::Command
 
 Usage:
     apt-cache showgroups - show all known groups

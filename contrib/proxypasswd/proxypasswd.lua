@@ -5,9 +5,9 @@ if http_proxy == "" and ftp_proxy == "" then
 	return
 end
 
-print("Enter proxy username:")
+print(_("Enter proxy username:"))
 username = io.read()
-print("Enter proxy password:")
+print(_("Enter proxy password:"))
 os.execute("stty -echo")
 password = io.read()
 os.execute("stty echo")

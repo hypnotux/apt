@@ -6,7 +6,13 @@
 
 helper = confget("Dir::Bin::scripts/f").."/apt-groupinstall.py"
 
-if script_slot == "Scripts::AptCache::Command" then
+if script_slot == "Scripts::AptCache::Help::Command" then
+	print(_("   showgroups - Show available groups"))
+	print(_("   showgroup <group> - Show group contents"))
+elseif script_slot == "Scripts::AptGet::Help::Command" then
+	print(_("   groupinstall <group> - Install packages in <group>"))
+	print(_("   groupremove <group> - Remove packages in <group>"))
+elseif script_slot == "Scripts::AptCache::Command" then
 	if command_args[1] == "showgroups" then
 		command_consume = 1
 		os.execute(helper.." showgroups")
@@ -14,7 +20,7 @@ if script_slot == "Scripts::AptCache::Command" then
 		command_consume=1
 		group = command_args[2]
 		if not group then
-			apterror("No groupname given.")
+			apterror(_("No groupname given."))
 			return
 		end
 		os.execute(helper.." showgroup "..group)
@@ -32,10 +38,10 @@ elseif script_slot == "Scripts::AptGet::Command" then
 	end
 		group = command_args[2]
 		if not group then
-			apterror("No groupname given.")
+			apterror(_("No groupname given."))
 			return
 		end
-    	print("Finding packages belonging to group "..group.."...")
+    	print(_("Finding packages belonging to group "..group.."..."))
     	pkgs = io.popen(helper.." grouppkgs "..group)
     	for name in pkgs:lines() do
 		pkg = pkgfind(name)
