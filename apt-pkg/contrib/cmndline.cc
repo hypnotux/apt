@@ -75,12 +75,27 @@ bool CommandLine::Parse(int argc,const char **argv)
 	 {	    
 	    // Search for the option
 	    Args *A;
+#ifdef NOT_MATCH_ALL
 	    for (A = ArgList; A->end() == false && A->ShortOpt != *Opt; A++);
 	    if (A->end() == true)
 	       return _error->Error(_("Command line option '%c' [from %s] is not known."),*Opt,argv[I]);
 
 	    if (HandleOpt(I,argc,argv,Opt,A) == false)
 	       return false;
+#else
+	    // CNC:2003-03-05 - Changed so that all options in the list
+	    // 			matching that pattern are processed.
+	    bool Found = false;
+	    for (A = ArgList; A->end() == false; A++) {
+	       if (A->ShortOpt != *Opt)
+		  continue;
+	       Found = true;
+	       if (HandleOpt(I,argc,argv,Opt,A) == false)
+		  return false;
+	    }
+	    if (Found == false)
+	       return _error->Error(_("Command line option '%c' [from %s] is not known."),*Opt,argv[I]);
+#endif
 	    if (*Opt != 0)
 	       Opt++;	       
 	 }
@@ -93,7 +108,8 @@ bool CommandLine::Parse(int argc,const char **argv)
       const char *OptEnd = Opt;
       Args *A;
       for (; *OptEnd != 0 && *OptEnd != '='; OptEnd++);
-      for (A = ArgList; A->end() == false && 
+#ifdef NOT_MATCH_ALL
+      for (A = ArgList; A->end() == false &&
 	   stringcasecmp(Opt,OptEnd,A->LongOpt) != 0; A++);
       
       // Failed, look for a word after the first - (no-foo)
@@ -132,6 +148,49 @@ bool CommandLine::Parse(int argc,const char **argv)
       OptEnd--;
       if (HandleOpt(I,argc,argv,OptEnd,A,PreceedMatch) == false)
 	 return false;
+#else
+      // CNC:2003-03-05 - Changed so that all options in the list
+      // 		  matching that pattern are processed.
+      bool Found = false;
+      for (A = ArgList; A->end() == false; A++) {
+	 if (stringcasecmp(Opt,OptEnd,A->LongOpt) != 0)
+	    continue;
+	 Found = true;
+	 const char *Tmp = OptEnd-1;
+	 if (HandleOpt(I,argc,argv,Tmp,A,false) == false)
+	    return false;
+      }
+
+      // Look for a word after the first - (no-foo)
+      for (; Opt != OptEnd && *Opt != '-'; Opt++);
+      if (Opt != OptEnd) {
+	 Opt++;
+	 for (A = ArgList; A->end() == false; A++) {
+	    if (A->IsBoolean() == false)
+	       continue;
+	    if (stringcasecmp(Opt,OptEnd,A->LongOpt) != 0) {
+	       // The option could be a single letter option prefixed by a no-
+	       if (OptEnd-Opt == 1) {
+		  for (Args *A2 = ArgList; A2->end() == false; A2++) {
+		     if (A2->IsBoolean() == false || A2->ShortOpt != *Opt)
+			continue;
+		     Found = true;
+		     const char *Tmp = OptEnd-1;
+		     if (HandleOpt(I,argc,argv,Tmp,A2,true) == false)
+			return false;
+		  }
+	       }
+	    } else {
+	       Found = true;
+	       const char *Tmp = OptEnd-1;
+	       if (HandleOpt(I,argc,argv,Tmp,A,true) == false)
+		  return false;
+	    }
+	 }
+      }
+      if (Found == false)
+	 return _error->Error(_("Command line option %s is not understood"),argv[I]);
+#endif
    }
    
    // Copy any remaining file names over
@@ -354,3 +413,4 @@ bool CommandLine::DispatchArg(Dispatch *Map,bool NoMatch)
    return false;
 }
 									/*}}}*/
+// vim:sts=3:sw=3
