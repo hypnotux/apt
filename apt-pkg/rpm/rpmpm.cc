@@ -735,6 +735,13 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
    int probFilter = 0;
    int notifyFlags = 0;
+   int tsFlags = 0;
+
+   if (uninstall.empty() == false)
+      ParseRpmOpts("RPM::Erase-Options", &tsFlags);
+   if (install.empty() == false || upgrade.empty() == false)
+      ParseRpmOpts("RPM::Install-Options", &tsFlags);
+   ParseRpmOpts("RPM::Options", &tsFlags);
 
 #ifdef HAVE_RPM41   
    rpmps probs;
@@ -758,10 +765,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       goto exit;
    }
    TS = rpmtransCreateSet(DB, Dir.c_str());
-#endif
-
-#ifdef HAVE_RPM41
-   probFilter = rpmtsFilterFlags(TS);
 #endif
 
    if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
@@ -826,12 +829,14 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    cout << _("Committing changes...") << endl << flush;
 
 #ifdef HAVE_RPM41
+   probFilter |= rpmtsFilterFlags(TS);
+   rpmtsSetFlags(TS, (rpmtransFlags)(rpmtsFlags(TS) | tsFlags));
    rc = rpmtsSetNotifyCallback(TS, rpmShowProgress, (void *)notifyFlags);
    rc = rpmtsRun(TS, NULL, (rpmprobFilterFlags)probFilter);
    probs = rpmtsProblems(TS);
 #else
    rc = rpmRunTransactions(TS, rpmShowProgress, (void *)notifyFlags, NULL,
-                           &probs, (rpmtransFlags)0,
+                           &probs, (rpmtransFlags)tsFlags,
 			   (rpmprobFilterFlags)probFilter);
 #endif
 
@@ -857,6 +862,33 @@ exit:
    return Success;
 }
 
+bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags)
+{
+   Configuration::Item const *Opts = _config->Tree(Cnf);
+   
+   if (Opts != 0)
+   {
+      Opts = Opts->Child;
+      for (; Opts != 0; Opts = Opts->Next)
+      {
+	 if (Opts->Value.empty() == true)
+	    continue;
+	 // Transaction set flags
+	 if (Opts->Value == "--noscripts")
+	    *tsFlags |= RPMTRANS_FLAG_NOSCRIPTS;
+	 else if (Opts->Value == "--notriggers")
+	    *tsFlags |= RPMTRANS_FLAG_NOTRIGGERS;
+	 else if (Opts->Value == "--excludedocs")
+	    *tsFlags |= RPMTRANS_FLAG_NODOCS;
+	 else if (Opts->Value == "--allfiles")
+	    *tsFlags |= RPMTRANS_FLAG_ALLFILES;
+	 else if (Opts->Value == "--justdb")
+	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
+	 // etc...
+      }
+   }
+   return true;
+} 
 #endif /* HAVE_RPM */
 
 // vim:sts=3:sw=3
