@@ -3430,10 +3430,13 @@ bool Search(CommandLine &CmdL)
       if (J->NameMatch == false)
       {
 	 string LongDesc = P.LongDesc();
+	 // CNC 2004-2004-04-10
+	 string ShortDesc = P.ShortDesc();
 	 Match = NumPatterns != 0;
 	 for (unsigned I = 0; I != NumPatterns; I++)
 	 {
-	    if (regexec(&Patterns[I],LongDesc.c_str(),0,0,0) == 0)
+	    if (regexec(&Patterns[I],LongDesc.c_str(),0,0,0) == 0 ||
+	        regexec(&Patterns[I],ShortDesc.c_str(),0,0,0) == 0)
 	       Match &= true;
 	    else
 	       Match = false;
