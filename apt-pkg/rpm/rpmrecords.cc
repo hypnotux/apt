@@ -277,6 +277,7 @@ void rpmRecordParser::BufCatDescr(const char *descr)
 // ---------------------------------------------------------------------
 void rpmRecordParser::GetRec(const char *&Start,const char *&Stop) 
 {
+   // FIXME: This method is leaking memory from headerGetEntry().
    int type, type2, type3, count;
    char *str;
    char **strv;
@@ -439,6 +440,7 @@ bool rpmRecordParser::HasFile(const char *File)
       if (strcmp(name, File) == 0)
 	 return true;
    }
+   free(names);
    return false;
 }
 

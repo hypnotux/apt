@@ -288,6 +288,7 @@ void rpmSrcRecordParser::BufCatDescr(char *descr)
 // -----------------------------------------------
 string rpmSrcRecordParser::AsStr() 
 {
+   // FIXME: This method is leaking memory from headerGetEntry().
    int type, type2, type3, count;
    char *str;
    char **strv;
@@ -404,6 +405,7 @@ string rpmSrcRecordParser::AsStr()
 bool rpmSrcRecordParser::BuildDepends(vector<pkgSrcRecords::Parser::BuildDepRec> &BuildDeps,
 				      bool ArchOnly)
 {
+   // FIXME: This method is leaking memory from headerGetEntry().
    int RpmTypeTag[] = {RPMTAG_REQUIRENAME,
 		       RPMTAG_REQUIREVERSION,
 		       RPMTAG_REQUIREFLAGS,

@@ -4453,8 +4453,10 @@ int main(int argc,const char *argv[])
       }
       
       line = readline(_config->Find("APT::Shell::Prompt", "apt> ").c_str());
-      if (!line || !*line)
+      if (!line || !*line) {
+	 free(line);
 	 continue;
+      }
       add_history(line);
 
       largc = 1; // CommandLine.Parse() ignores the first option.
