@@ -122,6 +122,7 @@ int rpmVersioningSystem::DoCmpVersion(const char *A,const char *AEnd,
       }
    }
    free(AE);free(AV);free(AR);;
+   free(BE);free(BV);free(BR);;
    return rc;
 }
 									/*}}}*/
