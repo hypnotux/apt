@@ -1798,6 +1798,9 @@ bool DoInstall(CommandLine &CmdL)
    bool DefRemove = false;
    if (strcasecmp(CmdL.FileList[0],"remove") == 0)
       DefRemove = true;
+   // CNC:2004-03-22
+   else if (strcasecmp(CmdL.FileList[0],"reinstall") == 0)
+      _config->Set("APT::Get::ReInstall", true);
 
    for (const char **I = CmdL.FileList + 1; *I != 0; I++)
    {
@@ -3129,6 +3132,8 @@ int main(int argc,const char *argv[])
    CommandLine::Dispatch Cmds[] = {{"update",&DoUpdate},
                                    {"upgrade",&DoUpgrade},
                                    {"install",&DoInstall},
+                                   // CNC:2004-03-22
+                                   {"reinstall",&DoInstall},
                                    {"remove",&DoInstall},
                                    {"dist-upgrade",&DoDistUpgrade},
                                    {"dselect-upgrade",&DoDSelectUpgrade},
