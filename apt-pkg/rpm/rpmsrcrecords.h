@@ -20,11 +20,11 @@
 #include <rpm/rpmlib.h>
 
   
-class RPMFileHandler;
+class RPMHandler;
 
 class rpmSrcRecordParser : public pkgSrcRecords::Parser
 {
-   RPMFileHandler *FileHandler;
+   RPMHandler *Handler;
    Header HeaderP;
 
    const char *StaticBinList[400];

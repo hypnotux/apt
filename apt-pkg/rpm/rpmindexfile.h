@@ -195,5 +195,32 @@ class rpmPkgDirIndex : public rpmPkgListIndex
       {};
 };
 
+class rpmSrcDirIndex : public rpmSrcListIndex
+{
+   protected:
+
+   virtual string MainType() const {return "srcdir";}
+   virtual string IndexPath() const;   
+
+   public:
+
+   virtual bool GetReleases(pkgAcquire *Owner) const { return true; }
+   virtual bool GetIndexes(pkgAcquire *Owner) const { return true; }
+
+   // Creates a RPMHandler suitable for usage with this object
+   virtual RPMHandler *CreateHandler() const
+	   { return new RPMDirHandler(IndexPath()); };
+
+   virtual const Type *GetType() const;
+   
+   // Interface for the Cache Generator
+   virtual unsigned long Size() const;
+
+   rpmSrcDirIndex(string URI,string Dist,string Section,
+		   pkgRepository *Repository) :
+	   rpmSrcListIndex(URI,Dist,Section,Repository)
+      {};
+};
+
 
 #endif

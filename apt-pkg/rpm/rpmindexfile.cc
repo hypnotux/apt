@@ -237,7 +237,10 @@ string rpmSrcListIndex::ArchiveURI(string File) const
    else
       Res = URI + Dist;
    
-   Res += "/" + File;
+   if (File.find("/") != string::npos)
+      Res += '/' + File;
+   else
+      Res += "/SRPMS."+Section + '/' + File;
 
    if (rpmdata->HasSourceTranslation() == true)
    {
@@ -320,7 +323,7 @@ string rpmPkgListIndex::ArchiveURI(string File) const
    if (File.find("/") != string::npos)
       Res += '/' + File;
    else
-      Res += "/RPMS."+Section + '/' + File;
+      Res += "/RPMS." + Section + '/' + File;
 
    if (rpmdata->HasBinaryTranslation() == true)
    {
@@ -474,6 +477,26 @@ unsigned long rpmPkgDirIndex::Size() const
    return Res;
 }
 									/*}}}*/
+
+// SrcDirIndex::Index* - Return the URI to the index files		/*{{{*/
+// ---------------------------------------------------------------------
+/* */
+inline string rpmSrcDirIndex::IndexPath() const
+{
+   return ::URI(ArchiveURI("")).Path;
+}
+									/*}}}*/
+// SrcDirIndex::Size - Return the size of the index			/*{{{*/
+// ---------------------------------------------------------------------
+/* This is really only used for progress reporting. */
+unsigned long rpmSrcDirIndex::Size() const
+{
+   // XXX: Must optimize this somehow.
+   RPMHandler *Handler = CreateHandler();
+   unsigned long Res = Handler->Size();
+   delete Handler;
+   return Res;
+}
 
 // DatabaseIndex::rpmDatabaseIndex - Constructor			/*{{{*/
 // ---------------------------------------------------------------------
@@ -679,9 +702,30 @@ class rpmSLTypeRpmDir : public rpmSLTypeGen
    }   
 };
 
+class rpmSLTypeSrpmDir : public rpmSLTypeGen
+{
+   public:
+
+   bool CreateItem(vector<pkgIndexFile *> &List,
+		   string URI, string Dist, string Section,
+		   pkgSourceList::Vendor const *Vendor) const 
+   {
+      pkgRepository *Rep = GetRepository(URI,Dist,Vendor);
+      List.push_back(new rpmSrcDirIndex(URI,Dist,Section,Rep));
+      return true;
+   };
+
+   rpmSLTypeSrpmDir()
+   {
+      Name = "rpm-src-dir";
+      Label = "Local SRPM directory tree";
+   }   
+};
+
 rpmSLTypeRpm _apt_rpmType;
 rpmSLTypeSrpm _apt_rpmSrcType;
 rpmSLTypeRpmDir _apt_rpmDirType;
+rpmSLTypeSrpmDir _apt_rpmSrcDirType;
 									/*}}}*/
 // Index File types for rpm						/*{{{*/
 class rpmIFTypeSrc : public pkgIndexFile::Type
@@ -721,6 +765,10 @@ const pkgIndexFile::Type *rpmSrcListIndex::GetType() const
 const pkgIndexFile::Type *rpmPkgListIndex::GetType() const
 {
    return &_apt_Pkg;
+}
+const pkgIndexFile::Type *rpmSrcDirIndex::GetType() const
+{
+   return &_apt_Src;
 }
 const pkgIndexFile::Type *rpmPkgDirIndex::GetType() const
 {

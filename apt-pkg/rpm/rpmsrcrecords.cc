@@ -37,7 +37,12 @@
 rpmSrcRecordParser::rpmSrcRecordParser(string File,pkgIndexFile const *Index)
     : Parser(Index), HeaderP(0), Buffer(0), BufSize(0), BufUsed(0)
 {
-   FileHandler = new RPMFileHandler(File);
+   struct stat Buf;
+   if (stat(File.c_str(),&Buf) == 0 && S_ISDIR(Buf.st_mode)) {
+      Handler = new RPMDirHandler(File);
+   } else {
+      Handler = new RPMFileHandler(File);
+   }
 }
 									/*}}}*/
 // SrcRecordParser::~rpmSrcRecordParser - Destructor			/*{{{*/
@@ -45,7 +50,7 @@ rpmSrcRecordParser::rpmSrcRecordParser(string File,pkgIndexFile const *Index)
 /* */
 rpmSrcRecordParser::~rpmSrcRecordParser()
 {
-   delete FileHandler;
+   delete Handler;
    free(Buffer);
 }
 									/*}}}*/
@@ -133,23 +138,23 @@ bool rpmSrcRecordParser::Files(vector<pkgSrcRecords::File> &List)
 
 bool rpmSrcRecordParser::Restart()
 {
-   FileHandler->Rewind();
+   Handler->Rewind();
    return true;
 }
 
 bool rpmSrcRecordParser::Step() 
 {
-   if (FileHandler->Skip() == false)
+   if (Handler->Skip() == false)
        return false;
-   HeaderP = FileHandler->GetHeader();
+   HeaderP = Handler->GetHeader();
    return true;
 }
 
 bool rpmSrcRecordParser::Jump(unsigned long Off)
 {
-   if (!FileHandler->Jump(Off))
+   if (!Handler->Jump(Off))
        return false;
-   HeaderP = FileHandler->GetHeader();
+   HeaderP = Handler->GetHeader();
    return true;
 }
 
@@ -223,7 +228,7 @@ string rpmSrcRecordParser::Section() const
 
 unsigned long rpmSrcRecordParser::Offset() 
 {
-    return FileHandler->Offset();
+    return Handler->Offset();
 }
 
 void rpmSrcRecordParser::BufCat(char *text)
