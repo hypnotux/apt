@@ -17,7 +17,6 @@
 
 #include <apt-pkg/packagemanager.h>
 #include <vector>
-#include <list>
 
 using namespace std;
 
@@ -47,10 +46,10 @@ class pkgRPMPM : public pkgPackageManager
    virtual bool Configure(PkgIterator Pkg);
    virtual bool Remove(PkgIterator Pkg,bool Purge = false);
     
-   bool ExecRPM(Item::RPMOps op, list<const char*> &files);
-   bool Process(list<const char*> &install,
-		list<const char*> &upgrade,
-		list<const char*> &uninstall);
+   bool ExecRPM(Item::RPMOps op, vector<const char*> &files);
+   bool Process(vector<const char*> &install,
+		vector<const char*> &upgrade,
+		vector<const char*> &uninstall);
    
    virtual bool Go();
    virtual void Reset();

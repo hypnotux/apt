@@ -221,7 +221,7 @@ bool pkgRPMPM::RunScriptsWithPkgs(const char *Cnf)
 
 									/*}}}*/
 
-bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
+bool pkgRPMPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 {
    const char *Args[10000];      
    const char *operation;
@@ -333,7 +333,7 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
    if (_config->FindB("RPM::Order",false) == false)
       Args[n++] = "--noorder";
     
-   for (list<const char*>::iterator I = files.begin(); I != files.end(); I++)
+   for (vector<const char*>::iterator I = files.begin(); I != files.end(); I++)
       Args[n++] = *I;
    
    Args[n++] = 0;
@@ -422,9 +422,9 @@ bool pkgRPMPM::ExecRPM(Item::RPMOps op, list<const char*> &files)
 }
 
 
-bool pkgRPMPM::Process(list<const char*> &install, 
-		       list<const char*> &upgrade,
-		       list<const char*> &uninstall)
+bool pkgRPMPM::Process(vector<const char*> &install, 
+		       vector<const char*> &upgrade,
+		       vector<const char*> &uninstall)
 {
    if (uninstall.empty() == false)
        ExecRPM(Item::RPMErase, uninstall);
@@ -447,11 +447,11 @@ bool pkgRPMPM::Go()
    if (RunScriptsWithPkgs("RPM::Pre-Install-Pkgs") == false)
       return false;
    
-   list<const char*> install;
-   list<const char*> upgrade;
-   list<const char*> uninstall;
+   vector<const char*> install;
+   vector<const char*> upgrade;
+   vector<const char*> uninstall;
 
-   list<char*> unalloc;
+   vector<char*> unalloc;
    
    for (vector<Item>::iterator I = List.begin(); I != List.end(); I++)
    {
@@ -461,10 +461,12 @@ bool pkgRPMPM::Go()
       case Item::Remove:
 	 if (strchr(I->Pkg.Name(), '#') != NULL)
 	 {
-	    const char *pkgname = I->Pkg.Name();
-	    string Name = string(pkgname, strchr(pkgname, '#')-pkgname)
-			  + "-" + string(I->Pkg.CurrentVer().VerStr());
-	    char *name = strdup(Name.c_str());
+	    char *name = strdup(I->Pkg.Name());
+	    char *p = strchr(name, '#');
+	    *(p++) = '-';
+	    const char *epoch = strchr(p, ':');
+	    if (epoch != NULL)
+	       memmove(p, epoch+1, strlen(epoch+1)+1);
 	    unalloc.push_back(name);
 	    uninstall.push_back(name);
 	 }
@@ -487,13 +489,18 @@ bool pkgRPMPM::Go()
       }
    }
    
-   if (Process(install, upgrade, uninstall) == false)
-      return false;
+   bool Ret = true;
    
-   for (list<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
+   if (Process(install, upgrade, uninstall) == false)
+      Ret = false;
+   
+   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
       free(*I);
    
-   return RunScripts("RPM::Post-Invoke");
+   if (Ret == true)
+      Ret = RunScripts("RPM::Post-Invoke");
+
+   return Ret;
 }
 									/*}}}*/
 // pkgRPMPM::Reset - Dump the contents of the command list		/*{{{*/
