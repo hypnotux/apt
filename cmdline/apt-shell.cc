@@ -1328,9 +1328,9 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	 }
       }
       vector<string> GoodSolutionNames;
-      for (int i = 0; i != GoodSolutionNames.size(); i++)
+      for (int i = 0; i != GoodSolutions.size(); i++)
       {
-	 pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[0]);
+	 pkgCache::PkgIterator GoodPkg(Cache, GoodSolutions[i]);
 	 GoodSolutionNames.push_back(GoodPkg.Name());
       }
 #ifdef WITH_LUA
@@ -1339,6 +1339,7 @@ bool TryToInstall(pkgCache::PkgIterator Pkg,pkgDepCache &Cache,
 	 vector<string> VS;
 	 _lua->SetDepCache(&Cache);
 	 _lua->SetDontFix();
+	 _lua->SetGlobal("virtualname", Pkg.Name());
 	 _lua->SetGlobal("packages", GoodSolutions);
 	 _lua->SetGlobal("packagenames", GoodSolutionNames);
 	 _lua->SetGlobal("selected");
