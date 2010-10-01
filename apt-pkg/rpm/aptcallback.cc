@@ -28,6 +28,15 @@ static void getPackageData(const Header h, map<string,string> &Data)
    }
 }
 
+/* TODO: test number of arguments in configure instead */
+#if RPM_VERSION >= 0x04085a
+#define FDLINK(_fd) fdLink((_fd))
+#define FDFREE(_fd) fdFree((_fd))
+#else
+#define FDLINK(_fd) fdLink((_fd), "")
+#define FDFREE(_fd) fdFree((_fd), "")
+#endif
+
 #if RPM_VERSION < 0x040000
 void * rpmCallback(const Header h,
 #else
@@ -57,12 +66,12 @@ void * rpmCallback(const void * arg,
 	 return NULL;
       fd = Fopen(filename, "r.ufdio");
       if (fd)
-	 fd = fdLink(fd, "persist (showProgress)");
+	 fd = FDLINK(fd);
       return fd;
       break;
 
    case RPMCALLBACK_INST_CLOSE_FILE:
-      fd = fdFree(fd, "persist (showProgress)");
+      fd = FDFREE(fd);
       if (fd) {
 	 (void) Fclose(fd);
 	 fd = NULL;
