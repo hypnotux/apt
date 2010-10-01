@@ -102,7 +102,21 @@ bool ShowList(ostream &out,string Title,string List,string VersionsList)
 
          out << "   " << string(List,Start,End - Start) << " (" << 
             string(VersionsList,VersionsStart,VersionsEnd - VersionsStart) << 
-            ")" << endl;
+            ")";
+
+         // simple workaround to print a replacement string if it's there
+         if (End != string::npos && End+1 < List.size() && List[End+1] == '(') {
+            Start = End;
+            End = List.find(')', Start);
+            if (End != string::npos) {
+               out << string(List,Start,End - Start + 1);
+               // Skip all spaces after a replacement string
+               while (End+1 < List.size() && List[End+1] <= ' ')
+                  End++;
+            }
+         }
+
+         out << endl;
 
 	 if (End == string::npos || End < Start)
 	    End = Start + ScreenWidth;
