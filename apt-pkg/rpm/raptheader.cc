@@ -27,7 +27,7 @@ raptHeader::raptHeader(Header h)
 
 raptHeader::~raptHeader()
 {
-   headerUnlink(Hdr);
+   headerFree(Hdr);
 }
 
 bool raptHeader::hasTag(raptTag tag)
