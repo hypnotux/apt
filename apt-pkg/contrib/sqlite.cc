@@ -79,7 +79,7 @@ bool SqliteQuery::Rewind()
 
 bool SqliteQuery::Jump(unsigned long Pos)
 {
-   if (Pos >= nrow) {
+   if (Pos > nrow) {
       return false;
    }
    cur = Pos;
