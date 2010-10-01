@@ -515,14 +515,14 @@ bool ServerState::HeaderLine(string Line)
       if (Line[4] == '/')
       {
 	 if (sscanf(Line.c_str(),"HTTP/%u.%u %u %[^\n]",&Major,&Minor,
-		    &Result,Code) != 4)
+		    &Result,Code) < 3)
 	    return _error->Error(_("The http server sent an invalid reply header"));
       }
       else
       {
 	 Major = 0;
 	 Minor = 9;
-	 if (sscanf(Line.c_str(),"HTTP %u %[^\n]",&Result,Code) != 2)
+	 if (sscanf(Line.c_str(),"HTTP %u %[^\n]",&Result,Code) < 1)
 	    return _error->Error(_("The http server sent an invalid reply header"));
       }
 
