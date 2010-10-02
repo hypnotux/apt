@@ -59,12 +59,14 @@ rpmSystem::rpmSystem()
    StatusFile = NULL;
    Label = "rpm interface";
    VS = &rpmVS;
+   rpmReadConfigFiles(NULL, NULL);
 }
 									/*}}}*/
 rpmSystem::~rpmSystem()
 {
    delete StatusFile;
    delete RpmDB;
+   rpmFreeRpmrc();
 }
 
 RPMDBHandler *rpmSystem::GetDBHandler()
@@ -194,7 +196,6 @@ signed rpmSystem::Score(Configuration const &Cnf)
 {
    signed Score = 0;
 
-   rpmReadConfigFiles(NULL, NULL);
    if (FileExists(RPMDBHandler::DataPath(false)))
       Score += 10;
    if (FileExists(Cnf.FindFile("Dir::Bin::rpm","/bin/rpm")) == true)
