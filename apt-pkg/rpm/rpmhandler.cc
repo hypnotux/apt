@@ -81,7 +81,7 @@ bool HideZeroEpoch;
 
 extern map<string,int> rpmIndexSizes;
 
-string RPMHandler::EVR()
+string RPMHandler::EVR() const
 {
    string e = Epoch();
    string v = Version();
@@ -97,7 +97,7 @@ string RPMHandler::EVR()
    return evr;
 } 
 
-unsigned int RPMHandler::DepOp(raptDepFlags rpmflags)
+unsigned int RPMHandler::DepOp(raptDepFlags rpmflags) const
 {
    unsigned int Op = 0;
    raptDepFlags flags = (raptDepFlags)(rpmflags & RPMSENSE_SENSEMASK);
@@ -123,7 +123,7 @@ unsigned int RPMHandler::DepOp(raptDepFlags rpmflags)
    return Op;
 }
 
-bool RPMHandler::HasFile(const char *File)
+bool RPMHandler::HasFile(const char *File) const
 {
    if (*File == '\0')
       return false;
@@ -134,7 +134,7 @@ bool RPMHandler::HasFile(const char *File)
    return (I != Files.end());
 }
 
-bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags flag) 
+bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags flag)  const
 {
    if (strncmp(name, "rpmlib(", strlen("rpmlib(")) == 0) {
 #if RPM_VERSION >= 0x040100
@@ -244,7 +244,7 @@ bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags fla
 }
 
 bool RPMHandler::PutDep(const char *name, const char *ver, raptDepFlags flags, 
-			unsigned int Type, vector<Dependency*> &Deps)
+			unsigned int Type, vector<Dependency*> &Deps) const
 {
    if (InternalDep(name, ver, flags) == true) {
       return true;
@@ -275,7 +275,7 @@ bool RPMHandler::PutDep(const char *name, const char *ver, raptDepFlags flags,
    return true;
 }
 
-string RPMHdrHandler::Epoch()
+string RPMHdrHandler::Epoch() const
 {
    raptInt val;
    ostringstream epoch("");
@@ -287,7 +287,7 @@ string RPMHdrHandler::Epoch()
    return epoch.str();
 }
 
-off_t RPMHdrHandler::GetITag(raptTag Tag)
+off_t RPMHdrHandler::GetITag(raptTag Tag) const
 {
    raptInt val = 0;
    raptHeader h(HeaderP);
@@ -296,7 +296,7 @@ off_t RPMHdrHandler::GetITag(raptTag Tag)
    return val;
 }
 
-string RPMHdrHandler::GetSTag(raptTag Tag)
+string RPMHdrHandler::GetSTag(raptTag Tag) const
 {
    string str = "";
    raptHeader h(HeaderP);
@@ -306,7 +306,7 @@ string RPMHdrHandler::GetSTag(raptTag Tag)
 }
 
 
-bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
+bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 #if RPM_VERSION >= 0x040100
 {
    rpmTag deptype = RPMTAG_REQUIRENAME;
@@ -397,7 +397,7 @@ bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
 }
 #endif
 
-bool RPMHdrHandler::FileList(vector<string> &FileList)
+bool RPMHdrHandler::FileList(vector<string> &FileList) const
 {
    raptHeader h(HeaderP);
    h.getTag(RAPT_FILENAMES, FileList);
@@ -405,7 +405,7 @@ bool RPMHdrHandler::FileList(vector<string> &FileList)
    return true; 
 }
 
-bool RPMHdrHandler::ChangeLog(vector<ChangeLogEntry *> &ChangeLogs)
+bool RPMHdrHandler::ChangeLog(vector<ChangeLogEntry *> &ChangeLogs) const
 {
    vector<string> names, texts;
    vector<raptInt> times;
@@ -500,22 +500,22 @@ void RPMFileHandler::Rewind()
       _error->Error(_("could not rewind RPMFileHandler"));
 }
 
-string RPMFileHandler::FileName()
+string RPMFileHandler::FileName() const
 {
    return GetSTag(CRPMTAG_FILENAME);
 }
 
-string RPMFileHandler::Directory()
+string RPMFileHandler::Directory() const
 {
    return GetSTag(CRPMTAG_DIRECTORY);
 }
 
-off_t RPMFileHandler::FileSize()
+off_t RPMFileHandler::FileSize() const
 {
    return GetITag(CRPMTAG_FILESIZE);
 }
 
-string RPMFileHandler::MD5Sum()
+string RPMFileHandler::MD5Sum() const
 {
    return GetSTag(CRPMTAG_MD5);
 }
@@ -566,7 +566,7 @@ void RPMSingleFileHandler::Rewind()
    lseek(Fileno(FD),0,SEEK_SET);
 }
 
-off_t RPMSingleFileHandler::FileSize()
+off_t RPMSingleFileHandler::FileSize() const
 {
    struct stat S;
    if (stat(sFilePath.c_str(),&S) != 0)
@@ -574,7 +574,7 @@ off_t RPMSingleFileHandler::FileSize()
    return S.st_size;
 }
 
-string RPMSingleFileHandler::MD5Sum()
+string RPMSingleFileHandler::MD5Sum() const
 {
    MD5Summation MD5;
    FileFd File(sFilePath, FileFd::ReadOnly);
@@ -583,7 +583,7 @@ string RPMSingleFileHandler::MD5Sum()
    return MD5.Result().Value();
 }
 
-bool RPMSingleFileHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)
+bool RPMSingleFileHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
    return RPMHdrHandler::ChangeLog(ChangeLogs);
 }
@@ -705,7 +705,7 @@ void RPMDirHandler::Rewind()
    iOffset = 0;
 }
 
-off_t RPMDirHandler::FileSize()
+off_t RPMDirHandler::FileSize() const
 {
    if (Dir == NULL)
       return 0;
@@ -717,7 +717,7 @@ off_t RPMDirHandler::FileSize()
    return St.st_size;
 }
 
-string RPMDirHandler::MD5Sum()
+string RPMDirHandler::MD5Sum() const
 {
    if (Dir == NULL)
       return "";
@@ -1047,56 +1047,56 @@ void RPMRepomdHandler::Rewind()
    PkgIter = Pkgs.begin();
 }
 
-string RPMRepomdHandler::Name() 
+string RPMRepomdHandler::Name() const
 {
    return XmlFindNodeContent(NodeP, "name");
 }
 
-string RPMRepomdHandler::Arch() 
+string RPMRepomdHandler::Arch() const
 {
    return XmlFindNodeContent(NodeP, "arch");
 }
 
-string RPMRepomdHandler::Packager() 
+string RPMRepomdHandler::Packager() const
 {
    return XmlFindNodeContent(NodeP, "packager");
 }
 
-string RPMRepomdHandler::Summary() 
+string RPMRepomdHandler::Summary() const
 {
    return XmlFindNodeContent(NodeP, "summary");
 }
 
-string RPMRepomdHandler::Description() 
+string RPMRepomdHandler::Description() const
 {
    return XmlFindNodeContent(NodeP, "description");
 }
 
-string RPMRepomdHandler::Group()
+string RPMRepomdHandler::Group() const
 {
    xmlNode *n = XmlFindNode(NodeP, "format");
    return XmlFindNodeContent(n, "group");
 }
 
-string RPMRepomdHandler::Vendor()
+string RPMRepomdHandler::Vendor() const
 {
    xmlNode *n = XmlFindNode(NodeP, "format");
    return XmlFindNodeContent(n, "vendor");
 }
 
-string RPMRepomdHandler::Release()
+string RPMRepomdHandler::Release() const
 {
    xmlNode *n = XmlFindNode(NodeP, "version");
    return XmlGetProp(n, "rel");
 }
 
-string RPMRepomdHandler::Version()
+string RPMRepomdHandler::Version() const
 {
    xmlNode *n = XmlFindNode(NodeP, "version");
    return XmlGetProp(n, "ver");
 }
 
-string RPMRepomdHandler::Epoch()
+string RPMRepomdHandler::Epoch() const
 {
    string epoch;
    xmlNode *n = XmlFindNode(NodeP, "version");
@@ -1108,7 +1108,7 @@ string RPMRepomdHandler::Epoch()
    return epoch;
 }
 
-string RPMRepomdHandler::FileName()
+string RPMRepomdHandler::FileName() const
 {
    xmlNode *n;
    string str = "";
@@ -1120,7 +1120,7 @@ string RPMRepomdHandler::FileName()
    return str;
 }
 
-string RPMRepomdHandler::Directory()
+string RPMRepomdHandler::Directory() const
 {
    xmlNode *n;
    string str = "";
@@ -1134,14 +1134,14 @@ string RPMRepomdHandler::Directory()
    return str;
 }
 
-string RPMRepomdHandler::MD5Sum()
+string RPMRepomdHandler::MD5Sum() const
 {
    // XXX FIXME the method should be an abstract Checksum type using
    // md5 / sha1 appropriately, for now relying on hacks elsewhere..
    return SHA1Sum();
 }
 
-string RPMRepomdHandler::SHA1Sum()
+string RPMRepomdHandler::SHA1Sum() const
 {
    xmlNode *n;
    string str = "";
@@ -1153,7 +1153,7 @@ string RPMRepomdHandler::SHA1Sum()
    return str;
 }
 
-off_t RPMRepomdHandler::FileSize()
+off_t RPMRepomdHandler::FileSize() const
 {
    xmlNode *n;
    off_t size = 0;
@@ -1165,7 +1165,7 @@ off_t RPMRepomdHandler::FileSize()
    return size;
 }
 
-off_t RPMRepomdHandler::InstalledSize()
+off_t RPMRepomdHandler::InstalledSize() const
 {
    xmlNode *n;
    off_t size = 0;
@@ -1177,13 +1177,13 @@ off_t RPMRepomdHandler::InstalledSize()
    return size;
 }
 
-string RPMRepomdHandler::SourceRpm()
+string RPMRepomdHandler::SourceRpm() const
 {
    xmlNode *n = XmlFindNode(NodeP, "format");
    return XmlFindNodeContent(n, "sourcerpm");
 }
 
-bool RPMRepomdHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
+bool RPMRepomdHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 {
    xmlNode *format = XmlFindNode(NodeP, "format");
    xmlNode *prco = NULL;
@@ -1270,7 +1270,7 @@ bool RPMRepomdHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
 // having the user manually look it up, literally. So we only support the 
 // more common files which are stored in primary.xml which supports fast
 // random access.
-bool RPMRepomdHandler::HasFile(const char *File)
+bool RPMRepomdHandler::HasFile(const char *File) const
 {
    if (*File == '\0')
       return false;
@@ -1281,7 +1281,7 @@ bool RPMRepomdHandler::HasFile(const char *File)
    return (I != Files.end());
 }
 
-bool RPMRepomdHandler::ShortFileList(vector<string> &FileList)
+bool RPMRepomdHandler::ShortFileList(vector<string> &FileList) const
 {
    xmlNode *format = XmlFindNode(NodeP, "format");
    for (xmlNode *n = format->children; n; n = n->next) {
@@ -1293,7 +1293,7 @@ bool RPMRepomdHandler::ShortFileList(vector<string> &FileList)
    return true;
 }
 
-bool RPMRepomdHandler::FileList(vector<string> &FileList)
+bool RPMRepomdHandler::FileList(vector<string> &FileList) const
 {
    RPMRepomdFLHandler *FL = new RPMRepomdFLHandler(FilelistPath);
    bool res = FL->Jump(iOffset);
@@ -1302,7 +1302,7 @@ bool RPMRepomdHandler::FileList(vector<string> &FileList)
    return res; 
 }
 
-bool RPMRepomdHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)
+bool RPMRepomdHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
    RPMRepomdOtherHandler *OL = new RPMRepomdOtherHandler(OtherPath);
    bool res = OL->Jump(iOffset);
@@ -1391,7 +1391,7 @@ bool RPMRepomdReaderHandler::Skip()
    return true;
 }
 
-string RPMRepomdReaderHandler::FindTag(const char *Tag)
+string RPMRepomdReaderHandler::FindTag(const char *Tag) const
 {
    string str = "";
    if (NodeP) {
@@ -1404,7 +1404,7 @@ string RPMRepomdReaderHandler::FindTag(const char *Tag)
    return str;
 }
 
-string RPMRepomdReaderHandler::FindVerTag(const char *Tag)
+string RPMRepomdReaderHandler::FindVerTag(const char *Tag) const
 {
    string str = "";
    for (xmlNode *n = NodeP->children; n; n = n->next) {
@@ -1423,7 +1423,7 @@ RPMRepomdReaderHandler::~RPMRepomdReaderHandler()
    xmlFreeTextReader(XmlFile);
 }
 
-bool RPMRepomdFLHandler::FileList(vector<string> &FileList)
+bool RPMRepomdFLHandler::FileList(vector<string> &FileList) const
 {
    for (xmlNode *n = NodeP->children; n; n = n->next) {
       if (xmlStrcmp(n->name, (xmlChar*)"file") != 0)  continue;
@@ -1434,7 +1434,7 @@ bool RPMRepomdFLHandler::FileList(vector<string> &FileList)
    return true;
 }
 
-bool RPMRepomdOtherHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)
+bool RPMRepomdOtherHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
    // Changelogs aren't necessarily available at all
    if (! XmlFile) {
@@ -1529,91 +1529,91 @@ void RPMSqliteHandler::Rewind()
    iOffset = 0;
 }
 
-string RPMSqliteHandler::Name()
+string RPMSqliteHandler::Name() const
 {
    return Packages->GetCol("name");
 }
 
-string RPMSqliteHandler::Version()
+string RPMSqliteHandler::Version() const
 {
    return Packages->GetCol("version");
 }
 
-string RPMSqliteHandler::Release()
+string RPMSqliteHandler::Release() const
 {
    return Packages->GetCol("release");
 }
 
-string RPMSqliteHandler::Epoch()
+string RPMSqliteHandler::Epoch() const
 {
    return Packages->GetCol("epoch");
 }
 
-string RPMSqliteHandler::Arch()
+string RPMSqliteHandler::Arch() const
 {
    return Packages->GetCol("arch");
 }
 
-string RPMSqliteHandler::Group()
+string RPMSqliteHandler::Group() const
 {
    return Packages->GetCol("rpm_group");
 }
 
-string RPMSqliteHandler::Packager()
+string RPMSqliteHandler::Packager() const
 {
    return Packages->GetCol("rpm_packager");
 }
-string RPMSqliteHandler::Vendor()
+string RPMSqliteHandler::Vendor() const
 {
    return Packages->GetCol("rpm_vendor");
 }
 
-string RPMSqliteHandler::Summary()
+string RPMSqliteHandler::Summary() const
 {
    return Packages->GetCol("summary");
 }
 
-string RPMSqliteHandler::Description()
+string RPMSqliteHandler::Description() const
 {
    return Packages->GetCol("description");
 }
 
-string RPMSqliteHandler::SourceRpm()
+string RPMSqliteHandler::SourceRpm() const
 {
    return Packages->GetCol("rpm_sourcerpm");
 }
 
-string RPMSqliteHandler::FileName()
+string RPMSqliteHandler::FileName() const
 {
    return flNotDir(Packages->GetCol("location_href"));
 }
 
-string RPMSqliteHandler::Directory()
+string RPMSqliteHandler::Directory() const
 {
    return flNotFile(Packages->GetCol("location_href"));
 }
 
-off_t RPMSqliteHandler::FileSize()
+off_t RPMSqliteHandler::FileSize() const
 {
    return Packages->GetColI("size_package");
 }
 
-off_t RPMSqliteHandler::InstalledSize()
+off_t RPMSqliteHandler::InstalledSize() const
 {
    return Packages->GetColI("size_installed");
 }
 
-string RPMSqliteHandler::MD5Sum()
+string RPMSqliteHandler::MD5Sum() const
 {
    return SHA1Sum();
 }
 
-string RPMSqliteHandler::SHA1Sum()
+string RPMSqliteHandler::SHA1Sum() const
 {
    return Packages->GetCol("pkgId");
 }
 
-bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
+bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 {
    string what = "";
    switch (Type) {
@@ -1685,7 +1685,7 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps)
    return true;
 }
 
-bool RPMSqliteHandler::FileList(vector<string> &FileList)
+bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 {
    ostringstream sql;
    unsigned long pkgKey = Packages->GetColI("pkgKey");
@@ -1715,7 +1715,7 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList)
    return true;
 }
 
-bool RPMSqliteHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)
+bool RPMSqliteHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
    ostringstream sql;
    unsigned long pkgKey = Packages->GetColI("pkgKey");

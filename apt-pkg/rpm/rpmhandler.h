@@ -63,10 +63,10 @@ class RPMHandler
    off_t iSize;
    string ID;
 
-   unsigned int DepOp(raptDepFlags rpmflags);
-   bool InternalDep(const char *name, const char *ver, raptDepFlags flag);
+   unsigned int DepOp(raptDepFlags rpmflags) const;
+   bool InternalDep(const char *name, const char *ver, raptDepFlags flag) const;
    bool PutDep(const char *name, const char *ver, raptDepFlags flags,
-               unsigned int type, vector<Dependency*> &Deps);
+               unsigned int type, vector<Dependency*> &Deps) const;
 
    public:
 
@@ -77,38 +77,38 @@ class RPMHandler
    virtual bool Skip() = 0;
    virtual bool Jump(off_t Offset) = 0;
    virtual void Rewind() = 0;
-   inline unsigned Offset() {return iOffset;}
-   virtual bool OrderedOffset() {return true;}
+   inline unsigned Offset() const {return iOffset;}
+   virtual bool OrderedOffset() const {return true;}
    inline unsigned Size() {return iSize;}
-   virtual bool IsDatabase() = 0;
+   virtual bool IsDatabase() const = 0;
 
-   virtual string FileName() = 0;
-   virtual string Directory() = 0;
-   virtual off_t FileSize() = 0;
-   virtual string MD5Sum() = 0;
-   virtual string SHA1Sum() = 0;
+   virtual string FileName() const = 0;
+   virtual string Directory() const = 0;
+   virtual off_t FileSize() const = 0;
+   virtual string MD5Sum() const = 0;
+   virtual string SHA1Sum() const = 0;
    virtual bool ProvideFileName() {return false;}
 
-   virtual string Name() = 0;
-   virtual string Arch() = 0;
-   virtual string Epoch() = 0;
-   virtual string Version() = 0;
-   virtual string Release() = 0;
-   virtual string EVR();
-   virtual string Group() = 0;
-   virtual string Packager() = 0;
-   virtual string Vendor() = 0;
-   virtual string Summary() = 0;
-   virtual string Description() = 0;
-   virtual off_t InstalledSize() = 0;
-   virtual string SourceRpm() = 0;
-   virtual bool IsSourceRpm() {return SourceRpm().empty();}
+   virtual string Name() const = 0;
+   virtual string Arch() const = 0;
+   virtual string Epoch() const = 0;
+   virtual string Version() const = 0;
+   virtual string Release() const = 0;
+   virtual string EVR() const;
+   virtual string Group()  const = 0;
+   virtual string Packager() const = 0;
+   virtual string Vendor() const = 0;
+   virtual string Summary() const = 0;
+   virtual string Description() const = 0;
+   virtual off_t InstalledSize() const = 0;
+   virtual string SourceRpm() const = 0;
+   virtual bool IsSourceRpm() const {return SourceRpm().empty();}
 
-   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) = 0;
-   virtual bool FileList(vector<string> &FileList) = 0;
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) = 0;
+   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) const = 0;
+   virtual bool FileList(vector<string> &FileList) const = 0;
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const = 0;
 
-   virtual bool HasFile(const char *File);
+   virtual bool HasFile(const char *File) const;
 
    RPMHandler() : iOffset(0), iSize(0) {}
    virtual ~RPMHandler() {}
@@ -120,35 +120,35 @@ class RPMHdrHandler : public RPMHandler
 
    Header HeaderP;
 
-   string GetSTag(raptTag Tag);
-   off_t GetITag(raptTag Tag);
+   string GetSTag(raptTag Tag) const;
+   off_t GetITag(raptTag Tag) const;
 
    public:
 
-   virtual string FileName() {return "";}
-   virtual string Directory() {return "";}
-   virtual off_t FileSize() {return 1;}
-   virtual string MD5Sum() {return "";}
-   virtual string SHA1Sum() {return "";}
-   virtual bool ProvideFileName() {return false;}
+   virtual string FileName() const {return "";}
+   virtual string Directory() const {return "";}
+   virtual off_t FileSize() const {return 1;}
+   virtual string MD5Sum() const {return "";}
+   virtual string SHA1Sum() const {return "";}
+   virtual bool ProvideFileName() const {return false;}
 
-   virtual string Name() {return GetSTag(RPMTAG_NAME);}
-   virtual string Arch() {return GetSTag(RPMTAG_ARCH);}
-   virtual string Epoch();
-   virtual string Version() {return GetSTag(RPMTAG_VERSION);}
-   virtual string Release() {return GetSTag(RPMTAG_RELEASE);}
-   virtual string Group() {return GetSTag(RPMTAG_GROUP);}
-   virtual string Packager() {return GetSTag(RPMTAG_PACKAGER);}
-   virtual string Vendor() {return GetSTag(RPMTAG_VENDOR);}
-   virtual string Summary() {return GetSTag(RPMTAG_SUMMARY);}
-   virtual string Description() {return GetSTag(RPMTAG_DESCRIPTION);}
-   virtual off_t InstalledSize() {return GetITag(RPMTAG_SIZE);}
-   virtual string SourceRpm() {return GetSTag(RPMTAG_SOURCERPM);}
-   virtual bool IsSourceRpm() {return SourceRpm().empty();}
+   virtual string Name() const {return GetSTag(RPMTAG_NAME);}
+   virtual string Arch() const {return GetSTag(RPMTAG_ARCH);}
+   virtual string Epoch() const;
+   virtual string Version() const {return GetSTag(RPMTAG_VERSION);}
+   virtual string Release() const {return GetSTag(RPMTAG_RELEASE);}
+   virtual string Group() const {return GetSTag(RPMTAG_GROUP);}
+   virtual string Packager() const {return GetSTag(RPMTAG_PACKAGER);}
+   virtual string Vendor() const {return GetSTag(RPMTAG_VENDOR);}
+   virtual string Summary() const {return GetSTag(RPMTAG_SUMMARY);}
+   virtual string Description() const {return GetSTag(RPMTAG_DESCRIPTION);}
+   virtual off_t InstalledSize() const {return GetITag(RPMTAG_SIZE);}
+   virtual string SourceRpm() const {return GetSTag(RPMTAG_SOURCERPM);}
+   virtual bool IsSourceRpm() const {return SourceRpm().empty();}
 
-   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps);
-   virtual bool FileList(vector<string> &FileList);
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs);
+   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) const;
+   virtual bool FileList(vector<string> &FileList) const ;
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
    RPMHdrHandler() : RPMHandler(), HeaderP(0) {}
    virtual ~RPMHdrHandler() {}
@@ -166,16 +166,16 @@ class RPMFileHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() {return false;}
-   virtual bool OrderedOffset() {return true;}
+   virtual inline bool IsDatabase() const {return false;}
+   virtual bool OrderedOffset() const {return true;}
 
-   virtual string FileName();
-   virtual string Directory();
-   virtual off_t FileSize();
-   virtual string MD5Sum();
+   virtual string FileName() const;
+   virtual string Directory() const;
+   virtual off_t FileSize() const;
+   virtual string MD5Sum() const;
 
    // the rpm-repotype stripped down hdrlists dont carry changelog data
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) { return false; }
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)  const{ return false; }
 
    RPMFileHandler(FileFd *File);
    RPMFileHandler(string File);
@@ -194,12 +194,12 @@ class RPMSingleFileHandler : public RPMFileHandler
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
 
-   virtual string FileName() {return sFilePath;}
-   virtual string Directory() {return "";}
-   virtual off_t FileSize();
-   virtual string MD5Sum();
-   virtual bool ProvideFileName() {return true;}
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs);
+   virtual string FileName() const {return sFilePath;}
+   virtual string Directory() const {return "";}
+   virtual off_t FileSize() const;
+   virtual string MD5Sum() const;
+   virtual bool ProvideFileName() const {return true;}
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
    RPMSingleFileHandler(string File) : RPMFileHandler(File), sFilePath(File) {}
    virtual ~RPMSingleFileHandler() {}
@@ -227,10 +227,10 @@ class RPMDBHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() {return true;}
+   virtual inline bool IsDatabase() const {return true;}
    virtual bool HasWriteLock() {return WriteLock;}
    virtual time_t Mtime() {return DbFileMtime;}
-   virtual bool OrderedOffset() {return false;}
+   virtual bool OrderedOffset() const {return false;}
 
    // used by rpmSystem::DistroVer()
    bool JumpByName(string PkgName, bool Provides=false);
@@ -259,11 +259,11 @@ class RPMDirHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() {return false;}
+   virtual inline bool IsDatabase() const {return false;}
 
-   virtual string FileName() {return (Dir == NULL)?"":sFileName;}
-   virtual off_t FileSize();
-   virtual string MD5Sum();
+   virtual string FileName()  const{return (Dir == NULL)?"":sFileName;}
+   virtual off_t FileSize() const;
+   virtual string MD5Sum() const;
 
    RPMDirHandler(string DirName);
    virtual ~RPMDirHandler();
@@ -293,34 +293,34 @@ class RPMRepomdHandler : public RPMHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() {return false;}
+   virtual inline bool IsDatabase() const {return false;}
 
-   virtual string FileName();
-   virtual string Directory();
-   virtual off_t FileSize();
-   virtual off_t InstalledSize();
-   virtual string MD5Sum();
-   virtual string SHA1Sum();
+   virtual string FileName() const;
+   virtual string Directory() const;
+   virtual off_t FileSize() const;
+   virtual off_t InstalledSize() const;
+   virtual string MD5Sum() const;
+   virtual string SHA1Sum() const;
 
-   virtual string Name();
-   virtual string Arch();
-   virtual string Epoch();
-   virtual string Version();
-   virtual string Release();
+   virtual string Name() const;
+   virtual string Arch() const;
+   virtual string Epoch() const;
+   virtual string Version() const;
+   virtual string Release() const;
 
-   virtual string Group();
-   virtual string Packager();
-   virtual string Vendor();
-   virtual string Summary();
-   virtual string Description();
-   virtual string SourceRpm();
+   virtual string Group() const;
+   virtual string Packager() const;
+   virtual string Vendor() const;
+   virtual string Summary() const;
+   virtual string Description() const;
+   virtual string SourceRpm() const;
 
-   virtual bool HasFile(const char *File);
-   virtual bool ShortFileList(vector<string> &FileList);
+   virtual bool HasFile(const char *File) const;
+   virtual bool ShortFileList(vector<string> &FileList) const;
 
-   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps);
-   virtual bool FileList(vector<string> &FileList);
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs);
+   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) const;
+   virtual bool FileList(vector<string> &FileList) const;
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
    RPMRepomdHandler(repomdXML const *repomd);
    virtual ~RPMRepomdHandler();
@@ -333,35 +333,35 @@ class RPMRepomdReaderHandler : public RPMHandler
    string XmlPath;
    xmlNode *NodeP;
 
-   string FindTag(const char *Tag);
-   string FindVerTag(const char *Tag);
+   string FindTag(const char *Tag) const;
+   string FindVerTag(const char *Tag) const;
 
    public:
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual bool IsDatabase() {return false;}
+   virtual bool IsDatabase() const {return false;}
 
-   virtual string FileName() {return XmlPath;}
-   virtual string Directory() {return "";}
-   virtual off_t FileSize() {return 0;}
-   virtual off_t InstalledSize() {return 0;}
-   virtual string MD5Sum() {return "";}
-   virtual string SHA1Sum() {return "";}
+   virtual string FileName() const {return XmlPath;}
+   virtual string Directory() const {return "";}
+   virtual off_t FileSize() const {return 0;}
+   virtual off_t InstalledSize() const {return 0;}
+   virtual string MD5Sum() const {return "";}
+   virtual string SHA1Sum() const {return "";}
 
-   virtual string Name() {return FindTag("name");}
-   virtual string Arch() {return FindTag("arch");}
-   virtual string Epoch() {return FindVerTag("epoch");}
-   virtual string Version() {return FindVerTag("ver");}
-   virtual string Release() {return FindVerTag("rel");}
+   virtual string Name() const {return FindTag("name");}
+   virtual string Arch() const {return FindTag("arch");}
+   virtual string Epoch() const {return FindVerTag("epoch");}
+   virtual string Version() const {return FindVerTag("ver");}
+   virtual string Release() const {return FindVerTag("rel");}
 
-   virtual string Group() {return "";}
-   virtual string Packager() {return "";}
-   virtual string Vendor() {return "";}
-   virtual string Summary() {return "";}
-   virtual string Description() {return "";}
-   virtual string SourceRpm() {return "";}
-   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps)
+   virtual string Group() const {return "";}
+   virtual string Packager() const {return "";}
+   virtual string Vendor() const {return "";}
+   virtual string Summary() const {return "";}
+   virtual string Description() const {return "";}
+   virtual string SourceRpm() const {return "";}
+   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) const
        {return true;};
 
    RPMRepomdReaderHandler(string File);
@@ -371,17 +371,17 @@ class RPMRepomdReaderHandler : public RPMHandler
 class RPMRepomdFLHandler : public RPMRepomdReaderHandler
 {
    public:
-   virtual bool FileList(vector<string> &FileList);
+   virtual bool FileList(vector<string> &FileList) const;
    RPMRepomdFLHandler(string File) : RPMRepomdReaderHandler(File) {}
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) {return true;}
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)  const{return true;}
    virtual ~RPMRepomdFLHandler() {}
 };
 
 class RPMRepomdOtherHandler : public RPMRepomdReaderHandler
 {
    public:
-   virtual bool FileList(vector<string> &FileList) {return true;}
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs);
+   virtual bool FileList(vector<string> &FileList)  const{return true;}
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
    RPMRepomdOtherHandler(string File) : RPMRepomdReaderHandler(File) {}
    virtual ~RPMRepomdOtherHandler() {}
@@ -409,31 +409,31 @@ class RPMSqliteHandler : public RPMHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() {return false;}
+   virtual inline bool IsDatabase() const {return false;}
 
-   virtual string FileName();
-   virtual string Directory();
-   virtual off_t FileSize();
-   virtual off_t InstalledSize();
-   virtual string MD5Sum();
-   virtual string SHA1Sum();
+   virtual string FileName() const;
+   virtual string Directory() const;
+   virtual off_t FileSize() const;
+   virtual off_t InstalledSize() const;
+   virtual string MD5Sum() const;
+   virtual string SHA1Sum() const;
 
-   virtual string Name();
-   virtual string Arch();
-   virtual string Epoch();
-   virtual string Version();
-   virtual string Release();
+   virtual string Name() const;
+   virtual string Arch() const;
+   virtual string Epoch() const;
+   virtual string Version() const;
+   virtual string Release() const;
 
-   virtual string Group();
-   virtual string Packager();
-   virtual string Vendor();
-   virtual string Summary();
-   virtual string Description();
-   virtual string SourceRpm();
+   virtual string Group() const;
+   virtual string Packager() const;
+   virtual string Vendor() const;
+   virtual string Summary() const;
+   virtual string Description() const;
+   virtual string SourceRpm() const;
 
-   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps);
-   virtual bool FileList(vector<string> &FileList);
-   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs);
+   virtual bool PRCO(unsigned int Type, vector<Dependency*> &Deps) const;
+   virtual bool FileList(vector<string> &FileList) const;
+   virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
    RPMSqliteHandler(repomdXML const *repomd);
    virtual ~RPMSqliteHandler();
