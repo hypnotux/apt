@@ -30,13 +30,13 @@ raptHeader::~raptHeader()
    headerFree(Hdr);
 }
 
-bool raptHeader::hasTag(raptTag tag)
+bool raptHeader::hasTag(raptTag tag) const
 {
    return headerIsEntry(Hdr, tag);
 }
 
 // XXX: should have a way to pass back formatting error messages
-string raptHeader::format(const string fmt)
+string raptHeader::format(const string fmt) const
 {
    string res = "";
    char *s;
@@ -52,7 +52,7 @@ string raptHeader::format(const string fmt)
    return res;
 }
 
-bool raptHeader::getTag(raptTag tag, raptInt &data)
+bool raptHeader::getTag(raptTag tag, raptInt &data) const
 {
    vector<raptInt> _data;
    bool ret = false;
@@ -64,7 +64,7 @@ bool raptHeader::getTag(raptTag tag, raptInt &data)
    return ret;
 }
 
-bool raptHeader::getTag(raptTag tag, string &data, bool raw)
+bool raptHeader::getTag(raptTag tag, string &data, bool raw) const
 {
    vector<string> _data;
    bool ret = false;
@@ -81,7 +81,7 @@ bool raptHeader::getTag(raptTag tag, string &data, bool raw)
 #define HGDFL (headerGetFlags)(HEADERGET_EXT | HEADERGET_MINMEM)
 #define HGRAW (headerGetFlags)(HGDFL | HEADERGET_RAW)
 
-bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw)
+bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw) const
 {
    struct rpmtd_s td;
    bool ret = false;
@@ -100,7 +100,7 @@ bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw)
    return ret;
 }
 
-bool raptHeader::getTag(raptTag tag, vector<raptInt> &data)
+bool raptHeader::getTag(raptTag tag, vector<raptInt> &data) const
 {
    struct rpmtd_s td;
    bool ret = false;
@@ -125,7 +125,7 @@ int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
 }
 #endif
 
-bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw)
+bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw) const
 {
    bool ret = false;
    void *val = NULL;
@@ -165,7 +165,7 @@ bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw)
    return ret;
 }
 
-bool raptHeader::getTag(raptTag tag, vector<raptInt> &data)
+bool raptHeader::getTag(raptTag tag, vector<raptInt> &data) const
 {
    bool ret = false;
    void *val = NULL;

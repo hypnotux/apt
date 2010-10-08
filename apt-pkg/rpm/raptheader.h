@@ -22,12 +22,12 @@ class raptHeader
    Header Hdr;
 
    public:
-   bool hasTag(raptTag tag);
-   bool getTag(raptTag tag, raptInt &data);
-   bool getTag(raptTag tag, string &data, bool raw = false);
-   bool getTag(raptTag tag, vector<raptInt> &data);
-   bool getTag(raptTag tag, vector<string> &data, bool raw = false);
-   string format(const string fmt);
+   bool hasTag(raptTag tag) const;
+   bool getTag(raptTag tag, raptInt &data) const;
+   bool getTag(raptTag tag, string &data, bool raw = false) const;
+   bool getTag(raptTag tag, vector<raptInt> &data) const;
+   bool getTag(raptTag tag, vector<string> &data, bool raw = false) const;
+   string format(const string fmt) const;
 
    raptHeader(Header hdr);
    ~raptHeader();
