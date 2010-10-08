@@ -10,7 +10,9 @@
 #include <vector>
 #include <regex.h>
 
-using namespace std;
+using std::map;
+using std::string;
+using std::vector;
 
 struct LessPred
 {

@@ -24,7 +24,8 @@ typedef Header rpmHeader;
 #include <apt-pkg/packagemanager.h>
 #include <vector>
 
-using namespace std;
+using std::string;
+using std::vector;
 
 class pkgRPMPM : public pkgPackageManager
 {

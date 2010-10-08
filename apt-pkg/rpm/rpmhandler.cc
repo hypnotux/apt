@@ -72,6 +72,8 @@ static int rpmsqIsCaught(int signum)
 #endif
 #endif
 
+using namespace std;
+
 // An attempt to deal with false zero epochs from repomd. With older rpm's we
 // can only blindly trust the repo admin created the repository with options
 // suitable for those versions. For rpm >= 4.2.1 this is linked with
@@ -83,9 +85,9 @@ extern map<string,int> rpmIndexSizes;
 
 string RPMHandler::EVR() const
 {
-   string e = Epoch();
-   string v = Version();
-   string r = Release();
+   const string e = Epoch();
+   const string v = Version();
+   const string r = Release();
    string evr = "";
    if (e.empty() == true) {
       evr = v + '-' + r;

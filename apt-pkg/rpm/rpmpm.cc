@@ -52,6 +52,8 @@
 #endif
 #include "aptcallback.h"
 
+using namespace std;
+
 extern int packagesTotal;
 
 // RPMPM::pkgRPMPM - Constructor					/*{{{*/

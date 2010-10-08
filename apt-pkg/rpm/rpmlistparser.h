@@ -27,7 +27,9 @@
 #include <vector>
 #include <regex.h>
 
-using namespace std;
+using std::map;
+using std::vector;
+using std::string;
 
 class RPMHandler;
 class RPMPackageData;

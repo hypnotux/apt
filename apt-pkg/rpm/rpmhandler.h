@@ -45,7 +45,8 @@
 #define CRPMTAG_UPDATE_DATE       (rpmTag)1000022
 #define CRPMTAG_UPDATE_URL        (rpmTag)1000023
 
-using namespace std;
+using std::string;
+using std::vector;
 
 struct Dependency
 {

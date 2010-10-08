@@ -9,7 +9,8 @@
 
 #include <ext/hash_map>
 
-using namespace __gnu_cxx;
+using __gnu_cxx::hash_map;
+using __gnu_cxx::hash;
 
 struct hash_string
 {

@@ -39,6 +39,8 @@ extern "C" {
 #include <sys/types.h>
 #include <assert.h>
 
+using namespace std;
+
 #define pushudata(ctype, value) \
    do { \
       ctype *_tmp = (ctype *) lua_newuserdata(L, sizeof(ctype)); \

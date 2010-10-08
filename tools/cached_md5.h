@@ -39,7 +39,8 @@
 #include <string>
 #include <map>
 
-using namespace std;
+using std::string;
+using std::map;
 
 class CachedMD5
 {

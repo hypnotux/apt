@@ -32,6 +32,8 @@
 
 #define CRPMTAG_TIMESTAMP   1012345
 
+using namespace std;
+
 int tags[] =  {
        RPMTAG_NAME, 
        RPMTAG_EPOCH,

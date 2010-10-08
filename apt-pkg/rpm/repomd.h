@@ -12,7 +12,8 @@
 #include <libxml/tree.h>
 #include "rpmhandler.h"
 
-using namespace std;
+using std::string;
+using std::map;
 
 class repomdXML
 {
