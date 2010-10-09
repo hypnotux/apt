@@ -41,7 +41,7 @@ bool SqliteDB::Exclusive(bool mode)
    return (sqlite3_exec(DB, cmd.c_str(), NULL, NULL, NULL) == SQLITE_OK);
 }
 
-bool SqliteQuery::Exec(string SQL)
+bool SqliteQuery::Exec(const string & SQL)
 {
    int rc;
    rc = sqlite3_get_table(DB, SQL.c_str(), &res, &nrow, &ncol, NULL);
@@ -87,7 +87,7 @@ bool SqliteQuery::Jump(unsigned long Pos)
    return true;
 }
 
-string SqliteQuery::GetCol(const string ColName)
+string SqliteQuery::GetCol(const string & ColName)
 {
    string val = "";
    const char *item = *(curptr + ColNames[ColName]);
@@ -96,7 +96,7 @@ string SqliteQuery::GetCol(const string ColName)
    return val;
 } 
 
-unsigned long SqliteQuery::GetColI(const string ColName)
+unsigned long SqliteQuery::GetColI(const string & ColName)
 {
    unsigned long val = 0;
    const char *item = *(curptr + ColNames[ColName]);
