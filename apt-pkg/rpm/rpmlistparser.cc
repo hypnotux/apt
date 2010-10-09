@@ -248,9 +248,9 @@ unsigned short rpmListParser::VersionHash()
 #endif
 
    unsigned long Result = INIT_FCS;
-   Result = AddCRC16(Result, Package().c_str(), Package().length());
-   Result = AddCRC16(Result, Version().c_str(), Version().length());
-   Result = AddCRC16(Result, Architecture().c_str(), Architecture().length());
+   Result = AddCRC16(Result, Package());
+   Result = AddCRC16(Result, Version());
+   Result = AddCRC16(Result, Architecture());
 
    int DepSections[] = { 
       pkgCache::Dep::Depends,
@@ -273,7 +273,7 @@ unsigned short rpmListParser::VersionHash()
 						    UniqDeps.end(), depuniq);
       vector<Dependency*>::iterator I = UniqDeps.begin();
       for (; I != DepEnd; I++) { 
-	 Result = AddCRC16(Result, (*I)->Name.c_str(), (*I)->Name.length());
+	 Result = AddCRC16(Result, (*I)->Name);
       }
       for (I = Deps.begin(); I != Deps.end(); I++) { 
 	 delete (*I);
