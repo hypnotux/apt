@@ -106,7 +106,7 @@ class pkgCache
 
    // CNC:2003-02-16 - Inlined here.
    inline unsigned long sHash(const char *S) const;
-   inline unsigned long sHash(string S) const {return sHash(S.c_str());}
+   inline unsigned long sHash(const string & S) const {return sHash(S.c_str());};
    
    public:
    
@@ -127,7 +127,7 @@ class pkgCache
    inline void *DataEnd() {return ((unsigned char *)Map.Data()) + Map.Size();}
       
    // String hashing function (512 range)
-   inline unsigned long Hash(string S) const {return sHash(S);}
+   inline unsigned long Hash(const string & S) const {return sHash(S);}
    inline unsigned long Hash(const char *S) const {return sHash(S);}
 
    // Usefull transformation things
@@ -314,7 +314,6 @@ inline unsigned long pkgCache::sHash(const char *Str) const
 {
    unsigned long Hash = 0;
    for (const char *I = Str; *I != 0; I++)
-      //Hash = 5*Hash + tolower(*I);
       Hash = 5*Hash + *I;
    return Hash % hash_count(HeaderP->HashTable);
 }
