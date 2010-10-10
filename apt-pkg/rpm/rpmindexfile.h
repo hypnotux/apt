@@ -28,6 +28,9 @@ class pkgRepository;
 
 class rpmIndexFile : public pkgIndexFile
 {
+   private:
+   mutable off_t cachedSize;
+
    protected:
    virtual string IndexPath() const = 0;
    
@@ -37,6 +40,7 @@ class rpmIndexFile : public pkgIndexFile
    virtual bool HasPackages() const {return false;}
    virtual off_t Size() const;
 
+   rpmIndexFile() : cachedSize(-1) {};
 };
 
 class rpmDatabaseIndex : public rpmIndexFile

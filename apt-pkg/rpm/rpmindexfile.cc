@@ -33,27 +33,22 @@
 #include <apti18n.h>
 
 #include <sys/stat.h>
-									/*}}}*/
+
 vector<pkgRepository *> RepList;
 
-// Hack to avoid potentially very expensive CreateHandler() calls from
-// indexfile progress reporting. It's only used for progress so it doesn't
-// really matter if it's even accurate. 
-map<string,int> rpmIndexSizes;
-
+/* 
+ * Cache results to avoid potentially very expensive CreateHandler() calls
+ * from indexfile progress reporting. It's only used for progress so it 
+ * doesn't really matter whether it's even accurate or not.
+ */
 off_t rpmIndexFile::Size() const
 {
-   off_t Res;
-   string IP = IndexPath();
-
-   if (rpmIndexSizes.find(IP) == rpmIndexSizes.end()) {
+   if (cachedSize < 0) {
       RPMHandler *Handler = CreateHandler();
-      Res = Handler->Size();
+      cachedSize = Handler->Size();
       delete Handler;
-   } else {
-      Res = rpmIndexSizes[IP];
    }
-   return Res;
+   return cachedSize;
 }
 
 // rpmListIndex::Release* - Return the URI to the release file		/*{{{*/

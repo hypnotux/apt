@@ -81,8 +81,6 @@ using namespace std;
 // not happen.
 bool HideZeroEpoch;
 
-extern map<string,int> rpmIndexSizes;
-
 string RPMHandler::EVR() const
 {
    const string e = Epoch();
@@ -447,7 +445,6 @@ RPMFileHandler::RPMFileHandler(string File)
       return;
    }
    iSize = fdSize(FD);
-   rpmIndexSizes[ID] = iSize;
 }
 
 RPMFileHandler::RPMFileHandler(FileFd *File)
@@ -462,7 +459,6 @@ RPMFileHandler::RPMFileHandler(FileFd *File)
       return;
    }
    iSize = fdSize(FD);
-   rpmIndexSizes[ID] = iSize;
 }
 
 RPMFileHandler::~RPMFileHandler()
@@ -608,7 +604,6 @@ RPMDirHandler::RPMDirHandler(string DirName)
    TS = rpmtsCreate();
    rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
 #endif
-   rpmIndexSizes[ID] = iSize;
 }
 
 const char *RPMDirHandler::nextFileName()
@@ -787,8 +782,6 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    iSize = St.st_size;
 
 #endif
-   rpmIndexSizes[ID] = iSize;
-
 
    // Restore just after opening the database, and just after closing.
    if (WriteLock) {
@@ -962,7 +955,6 @@ RPMRepomdHandler::RPMRepomdHandler(repomdXML const *repomd): RPMHandler(),
       iSize = 0;
    }
    xmlFreeTextReader(Index);
-   rpmIndexSizes[ID] = iSize;
 
 }
 
@@ -999,7 +991,6 @@ bool RPMRepomdHandler::LoadPrimary()
       _error->Warning(_("Inconsistent metadata, package count doesn't match in %s"), ID.c_str());
       iSize = pkgcount;
    }
-   rpmIndexSizes[ID] = iSize;
    HavePrimary = true;
 
    return true;
@@ -1348,7 +1339,6 @@ RPMRepomdReaderHandler::RPMRepomdReaderHandler(string File) : RPMHandler(),
         ret = xmlTextReaderRead(XmlFile);
       }
    }
-   rpmIndexSizes[ID] = iSize;
    return;
 
 error:
@@ -1496,7 +1486,6 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
 
    Packages->Exec("select * from packages");
    iSize = Packages->Size();
-   rpmIndexSizes[ID] = iSize;
 }
 
 RPMSqliteHandler::~RPMSqliteHandler()
