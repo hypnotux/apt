@@ -185,7 +185,7 @@ class RPMFileHandler : public RPMHdrHandler
 
 class RPMSingleFileHandler : public RPMFileHandler
 {   
-   protected:
+   private:
 
    string sFilePath;
 
@@ -208,7 +208,7 @@ class RPMSingleFileHandler : public RPMFileHandler
 
 class RPMDBHandler : public RPMHdrHandler
 {
-   protected:
+   private:
 
 #if RPM_VERSION >= 0x040100
    rpmts Handler;
@@ -242,7 +242,7 @@ class RPMDBHandler : public RPMHdrHandler
 
 class RPMDirHandler : public RPMHdrHandler
 {   
-   protected:
+   private:
 
    DIR *Dir;
    string sDirName;
@@ -274,7 +274,7 @@ class RPMDirHandler : public RPMHdrHandler
 class repomdXML;
 class RPMRepomdHandler : public RPMHandler
 {
-
+   private:
    xmlDocPtr Primary;
    xmlNode *Root;
    xmlNode *NodeP;
@@ -391,7 +391,7 @@ class RPMRepomdOtherHandler : public RPMRepomdReaderHandler
 #ifdef WITH_SQLITE3
 class RPMSqliteHandler : public RPMHandler
 {
-   protected:
+   private:
 
    SqliteDB *Primary;
    SqliteDB *Filelists;
