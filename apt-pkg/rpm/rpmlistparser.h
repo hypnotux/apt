@@ -83,7 +83,6 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    bool LoadReleaseInfo(pkgCache::PkgFileIterator FileI,FileFd &File);
 
    void VirtualizePackage(string Name);
-   void CompatArchPackage(string Name);
    
    rpmListParser(RPMHandler *Handler);
    ~rpmListParser();
@@ -97,8 +96,6 @@ class rpmRepomdParser : public rpmListParser
    string Primary;
    string Filelist;
    string Other;
-
-   xmlNode *FindNode(xmlNode *n, const string Name);
 
    public:
  
