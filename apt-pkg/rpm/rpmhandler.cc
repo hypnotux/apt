@@ -1484,7 +1484,8 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
       return;
    } 
 
-   Packages->Exec("select * from packages");
+   // XXX TODO: We dont need all of these on cache generation 
+   Packages->Exec("select pkgKey, pkgId, name, arch, version, epoch, release, summary, description, rpm_vendor, rpm_group, rpm_sourcerpm, rpm_packager, size_package, size_installed, location_href from packages");
    iSize = Packages->Size();
 }
 
@@ -1624,7 +1625,7 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 
    ostringstream sql;
    unsigned long pkgKey = Packages->GetColI("pkgKey");
-   sql  << "select * from " << what << " where pkgKey=" << pkgKey << endl;
+   sql  << "select name, flags, epoch, version, release from " << what << " where pkgKey=" << pkgKey << endl;
    SqliteQuery *prco = Primary->Query();
    if (!prco->Exec(sql.str())) {
       delete prco;
@@ -1680,7 +1681,7 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 {
    ostringstream sql;
    unsigned long pkgKey = Packages->GetColI("pkgKey");
-   sql  << "select * from filelist where pkgKey=" << pkgKey << endl;
+   sql  << "select dirname, filenames from filelist where pkgKey=" << pkgKey << endl;
    SqliteQuery *Files = Filelists->Query();
    if (!Files->Exec(sql.str())) {
       delete Files;
