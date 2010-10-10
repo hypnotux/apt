@@ -10,10 +10,10 @@
 
 using std::string;
 
-xmlNode *XmlFindNode(xmlNode *Node, const string Name);
-string XmlFindNodeContent(xmlNode *Node, string Name);
+xmlNode *XmlFindNode(xmlNode *Node, const string & Name);
+string XmlFindNodeContent(xmlNode *Node, const string & Name);
 string XmlGetContent(xmlNode *Node);
-string XmlGetProp(xmlNode *Node, string Prop);
+string XmlGetProp(xmlNode *Node, const string & Prop);
 #endif
 
 #endif

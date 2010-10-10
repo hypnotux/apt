@@ -3,7 +3,7 @@
 #include <string>
 
 #ifdef APT_WITH_REPOMD
-xmlNode *XmlFindNode(xmlNode *Node, const string Name)
+xmlNode *XmlFindNode(xmlNode *Node, const string & Name)
 {
    for (xmlNode *n = Node->children; n; n = n->next) {
       if (xmlStrcmp(n->name, (xmlChar*)Name.c_str()) == 0) {
@@ -13,7 +13,7 @@ xmlNode *XmlFindNode(xmlNode *Node, const string Name)
    return NULL;
 }
 
-string XmlFindNodeContent(xmlNode *Node, string Name)
+string XmlFindNodeContent(xmlNode *Node, const string & Name)
 {
    xmlNode *n = XmlFindNode(Node, Name);
    return XmlGetContent(n);
@@ -32,7 +32,7 @@ string XmlGetContent(xmlNode *Node)
    return str;
 }
 
-string XmlGetProp(xmlNode *Node, string Prop)
+string XmlGetProp(xmlNode *Node, const string & Prop)
 {
    string str = "";
    if (Node) {
