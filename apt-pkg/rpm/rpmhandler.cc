@@ -1629,10 +1629,13 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
       return false;
    }
 
+   string deptype, depver, depname;
+   string e, v, r;
+
    while (prco->Step()) {
       unsigned int RpmOp = 0;
-      string deptype, depver = "";
-      string e, v, r;
+
+      depname.clear(); deptype.clear(); depver.clear();
 
       prco->Get("flags", deptype);
       if (deptype.empty()) {
@@ -1654,20 +1657,23 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 			      deptype.c_str());
 	    continue;
 	 }
+	 e.clear(); v.clear(); r.clear();
+
 	 prco->Get("epoch", e);
 	 prco->Get("version", v);
 	 prco->Get("release", r);
 	 if (! e.empty()) {
-	    depver += e + ":";
+	    depver += e;
+	    depver += ":";
 	 }
 	 if (! v.empty()) {
 	    depver += v;
 	 }
 	 if (! r.empty()) {
-	    depver += "-" + r;
+	    depver += "-";
+	    depver += r;
 	 }
       }
-      string depname;
       prco->Get("name", depname);
       PutDep(depname.c_str(), depver.c_str(), (raptDepFlags) RpmOp, Type, Deps);
    }
