@@ -34,6 +34,9 @@ class SqliteQuery
    bool Step();
    unsigned long inline Offset() {return cur-1;}
 
+   bool Get(const string & ColName, string & Val);
+   bool Get(const string & ColName, unsigned long & Val);
+
    string GetCol(const string & ColName);
    unsigned long GetColI(const string & ColName);
 
