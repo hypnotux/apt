@@ -1693,9 +1693,10 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
       return false;
    }
 
-   string delimiters = "/";
+   const string delimiters = "/";
+   string dir, filenames, fn;
+
    while (Files->Step()) {
-      string dir, filenames;
       Files->Get("dirname", dir);
       Files->Get("filenames", filenames);
 
@@ -1704,10 +1705,14 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 
       while (string::npos != pos || string::npos != lastPos)
       {
-	 FileList.push_back(dir + "/" + filenames.substr(lastPos, pos - lastPos));
+	 fn = dir;
+	 fn += "/";
+	 fn += filenames.substr(lastPos, pos - lastPos);
+	 FileList.push_back(fn);
 	 lastPos = filenames.find_first_not_of(delimiters, pos);
 	 pos = filenames.find_first_of(delimiters, lastPos);
       } 
+      dir.clear(); filenames.clear();
    }
    delete Files;
    return true;
