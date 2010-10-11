@@ -262,7 +262,7 @@ void rpmRecordParser::GetRec(const char *&Start,const char *&Stop)
 
 
    vector<Dependency*> Deps, Provides, Obsoletes, Conflicts;
-   vector<Dependency*>::iterator I;
+   vector<Dependency*>::const_iterator I;
    bool start = true;
 
    Handler->PRCO(pkgCache::Dep::Depends, Deps);

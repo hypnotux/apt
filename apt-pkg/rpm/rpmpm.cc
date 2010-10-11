@@ -208,7 +208,7 @@ bool pkgRPMPM::RunScriptsWithPkgs(const char *Cnf)
       FileFd Fd(Pipes[1]);
 
       // Feed it the filenames.
-      for (vector<Item>::iterator I = List.begin(); I != List.end(); I++)
+      for (vector<Item>::const_iterator I = List.begin(); I != List.end(); I++)
       {
 	 // Only deal with packages to be installed from .rpm
 	 if (I->Op != Item::Install)
@@ -375,7 +375,7 @@ bool pkgRPMPM::Go()
       Ret = RunScripts("RPM::Post-Invoke");
 
 exit:
-   for (vector<char *>::iterator I = unalloc.begin(); I != unalloc.end(); I++)
+   for (vector<char *>::const_iterator I = unalloc.begin(); I != unalloc.end(); I++)
       free(*I);
 
    return Ret;
@@ -536,7 +536,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 	 int fd = mkstemp(ArgsFileName);
 	 if (fd != -1) {
 	    FileFd File(fd);
-	    for (vector<const char*>::iterator I = files.begin();
+	    for (vector<const char*>::const_iterator I = files.begin();
 		 I != files.end(); I++) {
 	       File.Write(*I, strlen(*I));
 	       File.Write("\n", 1);
@@ -550,7 +550,7 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 #endif
 
    if (FilesInArgs == true) {
-      for (vector<const char*>::iterator I = files.begin();
+      for (vector<const char*>::const_iterator I = files.begin();
 	   I != files.end(); I++)
 	 Args[n++] = *I;
    }
@@ -689,7 +689,7 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
    FD_t fd;
    rpmHeader hdr;
 
-   for (vector<const char*>::iterator I = files.begin(); I != files.end(); I++)
+   for (vector<const char*>::const_iterator I = files.begin(); I != files.end(); I++)
    {
       int upgrade = 0;
 

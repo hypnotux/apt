@@ -269,9 +269,9 @@ unsigned short rpmListParser::VersionHash()
       // Rpmdb can give out dupes for scriptlet dependencies, filter them out.
       // XXX Why is this done here instead of the handler?
       UniqDeps.assign(Deps.begin(), Deps.end());
-      vector<Dependency*>::iterator DepEnd = unique(UniqDeps.begin(), 
+      vector<Dependency*>::const_iterator DepEnd = unique(UniqDeps.begin(), 
 						    UniqDeps.end(), depuniq);
-      vector<Dependency*>::iterator I = UniqDeps.begin();
+      vector<Dependency*>::const_iterator I = UniqDeps.begin();
       for (; I != DepEnd; I++) { 
 	 Result = AddCRC16(Result, (*I)->Name);
       }
@@ -314,7 +314,8 @@ bool rpmListParser::ParseDepends(pkgCache::VerIterator Ver,
    if (Handler->PRCO(Type, Deps) == false)
       return false;
    
-   for (vector<Dependency*>::iterator I = Deps.begin(); I != Deps.end(); I++) {
+   vector<Dependency*>::const_iterator I = Deps.begin();
+   for (; I != Deps.end(); I++) {
       if (NewDepends(Ver,(*I)->Name,(*I)->Version,
 		    (*I)->Op,(*I)->Type) == false) {
 	 return false;
@@ -334,7 +335,8 @@ bool rpmListParser::CollectFileProvides(pkgCache &Cache,
    if (Handler->FileList(Files) == false) {
       return false;
    }
-   for (vector<string>::iterator I = Files.begin(); I != Files.end(); I++) {
+   vector<string>::const_iterator I = Files.begin();
+   for (; I != Files.end(); I++) {
       const char *FileName = (*I).c_str();
       pkgCache::Package *P = Cache.FindPackage(FileName);
       if (P != NULL) {
@@ -366,7 +368,8 @@ bool rpmListParser::ParseProvides(pkgCache::VerIterator Ver)
    if (Handler->PRCO(pkgCache::Dep::Provides, Provs) == false) {
       return false;
    }
-   for (vector<Dependency*>::iterator I = Provs.begin(); I != Provs.end(); I++) {
+   vector<Dependency*>::const_iterator I = Provs.begin();
+   for (; I != Provs.end(); I++) {
       if (NewProvides(Ver,(*I)->Name,(*I)->Version) == false) {
 	 return false;
       }

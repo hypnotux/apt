@@ -263,7 +263,7 @@ string rpmSrcRecordParser::AsStr()
    BufCat(Handler->EVR().c_str());
 
    vector<Dependency*> Deps, Conflicts;
-   vector<Dependency*>::iterator I;
+   vector<Dependency*>::const_iterator I;
    bool start = true;
 
    Handler->PRCO(pkgCache::Dep::Depends, Deps);
@@ -316,13 +316,14 @@ string rpmSrcRecordParser::AsStr()
 bool rpmSrcRecordParser::BuildDepends(vector<pkgSrcRecords::Parser::BuildDepRec> &BuildDeps,
 				      bool ArchOnly)
 {
+   vector<Dependency*>::const_iterator I;
    BuildDepRec rec;
    BuildDeps.clear();
 
    vector<Dependency*> Deps, Conflicts;
    Handler->PRCO(pkgCache::Dep::Depends, Deps);
 
-   for (vector<Dependency*>::iterator I = Deps.begin(); I != Deps.end(); I++) {
+   for (I = Deps.begin(); I != Deps.end(); I++) {
       rec.Package = (*I)->Name;
       rec.Version = (*I)->Version;
       rec.Op = (*I)->Op;
@@ -332,7 +333,7 @@ bool rpmSrcRecordParser::BuildDepends(vector<pkgSrcRecords::Parser::BuildDepRec>
       
    Handler->PRCO(pkgCache::Dep::Conflicts, Conflicts);
 
-   for (vector<Dependency*>::iterator I = Conflicts.begin(); I != Conflicts.end(); I++) {
+   for (I = Conflicts.begin(); I != Conflicts.end(); I++) {
       rec.Package = (*I)->Name;
       rec.Version = (*I)->Version;
       rec.Op = (*I)->Op;

@@ -126,7 +126,7 @@ bool RPMHandler::HasFile(const char *File) const
    
    vector<string> Files;
    FileList(Files);
-   vector<string>::iterator I = find(Files.begin(), Files.end(), File);
+   vector<string>::const_iterator I = find(Files.begin(), Files.end(), File);
    return (I != Files.end());
 }
 
@@ -1266,7 +1266,7 @@ bool RPMRepomdHandler::HasFile(const char *File) const
    
    vector<string> Files;
    ShortFileList(Files);
-   vector<string>::iterator I = find(Files.begin(), Files.end(), File);
+   vector<string>::const_iterator I = find(Files.begin(), Files.end(), File);
    return (I != Files.end());
 }
 
