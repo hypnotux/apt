@@ -1624,7 +1624,8 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
    }
 
    ostringstream sql;
-   unsigned long pkgKey = Packages->GetColI("pkgKey");
+   unsigned long pkgKey;
+   Packages->Get("pkgKey", pkgKey);
    sql  << "select name, flags, epoch, version, release from " << what << " where pkgKey=" << pkgKey << endl;
    SqliteQuery *prco = Primary->Query();
    if (!prco->Exec(sql.str())) {
@@ -1637,7 +1638,7 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
       string deptype, depver = "";
       string e, v, r;
 
-      deptype = prco->GetCol("flags");
+      prco->Get("flags", deptype);
       if (deptype.empty()) {
 	 RpmOp = RPMSENSE_ANY;
       } else {
@@ -1657,9 +1658,9 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 			      deptype.c_str());
 	    continue;
 	 }
-	 e = prco->GetCol("epoch");
-	 v = prco->GetCol("version");
-	 r = prco->GetCol("release");
+	 prco->Get("epoch", e);
+	 prco->Get("version", v);
+	 prco->Get("release", r);
 	 if (! e.empty()) {
 	    depver += e + ":";
 	 }
@@ -1670,7 +1671,8 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 	    depver += "-" + r;
 	 }
       }
-      string depname = prco->GetCol("name");
+      string depname;
+      prco->Get("name", depname);
       PutDep(depname.c_str(), depver.c_str(), (raptDepFlags) RpmOp, Type, Deps);
    }
    delete prco;
@@ -1680,7 +1682,8 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 {
    ostringstream sql;
-   unsigned long pkgKey = Packages->GetColI("pkgKey");
+   unsigned long pkgKey;
+   Packages->Get("pkgKey", pkgKey);
    sql  << "select dirname, filenames from filelist where pkgKey=" << pkgKey << endl;
    SqliteQuery *Files = Filelists->Query();
    if (!Files->Exec(sql.str())) {
@@ -1690,8 +1693,9 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 
    string delimiters = "/";
    while (Files->Step()) {
-      string dir = Files->GetCol("dirname");
-      string filenames = Files->GetCol("filenames");
+      string dir, filenames;
+      Files->Get("dirname", dir);
+      Files->Get("filenames", filenames);
 
       string::size_type lastPos = filenames.find_first_not_of(delimiters, 0);
       string::size_type pos     = filenames.find_first_of(delimiters, lastPos);
@@ -1710,7 +1714,8 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 bool RPMSqliteHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
    ostringstream sql;
-   unsigned long pkgKey = Packages->GetColI("pkgKey");
+   unsigned long pkgKey;
+   Packages->Get("pkgKey", pkgKey);
    sql  << "select * from changelog where pkgKey=" << pkgKey << endl;
    if (! Other) {
       return false;
