@@ -83,16 +83,12 @@ bool HideZeroEpoch;
 
 string RPMHandler::EVR() const
 {
-   const string e = Epoch();
-   const string v = Version();
-   const string r = Release();
-   string evr = "";
-   if (e.empty() == true) {
-      evr = v + '-' + r;
-   } else if (HideZeroEpoch && e == "0") {
-      evr = v + '-' + r;
-   } else {
-      evr = e + ':' + v + '-' + r;
+   string e = Epoch();
+   string evr = Version() + '-' + Release();
+
+   if (!e.empty() && !(HideZeroEpoch && e == "0")) {
+      e += ":";
+      evr.insert(0, e);
    }
    return evr;
 } 
