@@ -158,6 +158,9 @@
 /* rpmsqIsCaught */
 #undef RPM_HAVE_RPMSQISCAUGHT
 
+/* rpmTagVal */
+#undef RPM_HAVE_RPMTAGVAL
+
 /* Define to the RPM version */
 #undef RPM_VERSION
 

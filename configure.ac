@@ -131,6 +131,11 @@ AC_EGREP_HEADER(RPMTRANS_FLAG_NOFDIGESTS, rpm/rpmlib.h,
 	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_FDIGESTS, 1, [fdigests]) ],
 	[AC_MSG_RESULT(no) ])
 
+AC_MSG_CHECKING(for rpmTagVal)
+AC_EGREP_HEADER(rpmTagVal, rpm/rpmtag.h,
+	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_RPMTAGVAL, 1, [rpmTagVal]) ],
+	[AC_MSG_RESULT(no) ])
+
 dnl Can we use g++ hash_map?
 AH_TEMPLATE(APT_WITH_GNU_HASH_MAP,
 	    [Define to 1 if you want to use the g++ hash_map extension])
