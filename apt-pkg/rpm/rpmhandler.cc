@@ -81,6 +81,10 @@ using namespace std;
 // not happen.
 bool HideZeroEpoch;
 
+#if RPM_HAVE_DSRPMLIB
+static rpmds rpmlibProv = NULL;
+#endif
+
 string RPMHandler::EVR() const
 {
    string e = Epoch();
@@ -135,13 +139,13 @@ bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags fla
    if (strncmp(name, "rpmlib(", strlen("rpmlib(")) == 0) {
 #if RPM_VERSION >= 0x040100
 #if RPM_HAVE_DSRPMLIB
-     rpmds rpmlibProv = NULL;
+     if (rpmlibProv == NULL)
+         rpmdsRpmlib(&rpmlibProv, NULL);
+
      rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
 			    name, ver?ver:NULL, flag);
-     rpmdsRpmlib(&rpmlibProv, NULL);
      int res = rpmdsSearch(rpmlibProv, ds) >= 0;
      rpmdsFree(ds);
-     rpmdsFree(rpmlibProv);
 #else
       rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
 			     name, ver?ver:NULL, flag);
