@@ -1689,6 +1689,8 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 {
    ostringstream sql;
    unsigned long pkgKey;
+   string dir, filenames, fn;
+
    Packages->Get("pkgKey", pkgKey);
    sql  << "select dirname, filenames from filelist where pkgKey=" << pkgKey << endl;
    SqliteQuery *Files = Filelists->Query();
@@ -1697,26 +1699,20 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
       return false;
    }
 
-   const string delimiters = "/";
-   string dir, filenames, fn;
-
    while (Files->Step()) {
       Files->Get("dirname", dir);
       Files->Get("filenames", filenames);
+      string::size_type end, start = 0;
+      dir += "/";
 
-      string::size_type lastPos = filenames.find_first_not_of(delimiters, 0);
-      string::size_type pos     = filenames.find_first_of(delimiters, lastPos);
-
-      while (string::npos != pos || string::npos != lastPos)
-      {
+      do {
+	 end = filenames.find_first_of("/", start);
 	 fn = dir;
-	 fn += "/";
-	 fn += filenames.substr(lastPos, pos - lastPos);
+	 fn += (end == string::npos) ? filenames.substr(start) :
+				       filenames.substr(start, end - start);
 	 FileList.push_back(fn);
-	 lastPos = filenames.find_first_not_of(delimiters, pos);
-	 pos = filenames.find_first_of(delimiters, lastPos);
-      } 
-      dir.clear(); filenames.clear();
+	 start = end + 1;
+      } while (end != string::npos);
    }
    delete Files;
    return true;
