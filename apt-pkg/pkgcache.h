@@ -134,7 +134,7 @@ class pkgCache
    const char *Priority(unsigned char Priority);
    
    // Accessors
-   PkgIterator FindPkg(string Name);
+   PkgIterator FindPkg(const string & Name);
    // CNC:2003-02-17 - A slightly changed FindPkg(), hacked for performance.
    Package *FindPackage(const char *Name);
    Header &Head() {return *HeaderP;}
