@@ -171,7 +171,7 @@ struct pkgCache::Header
    unsigned long OptionsHash;
    
    // Size of structure values
-   unsigned short HeaderSz;
+   unsigned long HeaderSz;
    unsigned short PackageSz;
    unsigned short PackageFileSz;
    unsigned short VersionSz;
@@ -199,7 +199,7 @@ struct pkgCache::Header
    DynamicMMap::Pool Pools[7];
    
    // Rapid package name lookup
-   map_ptrloc HashTable[8*1048];
+   map_ptrloc HashTable[384*1048];
 
    bool CheckSizes(Header &Against) const;
    Header();
