@@ -45,10 +45,6 @@
 #define rpmpsPrint(a,b) rpmProblemSetPrint(a,b)
 #define rpmpsFree(a) rpmProblemSetFree(a)
 #define rpmReadPackageFile(a,b,c,d) rpmReadPackageHeader(b,d,0,NULL,NULL)
-#if RPM_VERSION < 0x040000
-#define rpmtransFlags int
-#define rpmprobFilterFlags int
-#endif
 #endif
 #include "aptcallback.h"
 
@@ -527,7 +523,6 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 
    bool FilesInArgs = true;
    char *ArgsFileName = NULL;
-#if RPM_VERSION >= 0x040000
    if (op != Item::RPMErase && files.size() > 50) {
       string FileName = _config->FindDir("Dir::Cache", "/tmp/") +
 			"filelist.XXXXXX";
@@ -547,7 +542,6 @@ bool pkgRPMExtPM::ExecRPM(Item::RPMOps op, vector<const char*> &files)
 	 }
       }
    }
-#endif
 
    if (FilesInArgs == true) {
       for (vector<const char*>::const_iterator I = files.begin();
@@ -720,7 +714,6 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	    break;
 
 	 case Item::RPMErase:
-#if RPM_VERSION >= 0x040000
             rpmdbMatchIterator MI;
 #if RPM_VERSION >= 0x040100
 	    MI = raptInitIterator(TS, RPMDBI_LABEL, *I, 0);
@@ -742,17 +735,6 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	       }
 	    }
 	    MI = rpmdbFreeIterator(MI);
-#else // RPM 3.X
-	    dbiIndexSet matches;
-	    rc = rpmdbFindByLabel(DB, *I, &matches);
-	    if (rc == 0) {
-	       for (int i = 0; i < dbiIndexSetCount(matches); i++) {
-		  unsigned int recOffset = dbiIndexRecordOffset(matches, i);
-		  if (recOffset)
-		     rpmtransRemovePackage(TS, recOffset);
-	       }
-	    }
-#endif
 	    break;
       }
    }
@@ -798,10 +780,8 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    TS = rpmtransCreateSet(DB, Dir.c_str());
 #endif
 
-#if RPM_VERSION >= 0x040000
    if (rpmExpandNumeric("%{?_repackage_all_erasures}"))
       tsFlags |= RPMTRANS_FLAG_REPACKAGE;
-#endif
 		     
 #if HAVE_RPM_RPMSX_H
 #ifdef WITH_SELINUX
@@ -874,11 +854,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       }
    }
 #else
-#if RPM_VERSION < 0x040000
-   rpmDependencyConflict *conflicts;
-#else
    rpmDependencyConflict conflicts;
-#endif
    if (_config->FindB("RPM::NoDeps", false) == false) {
       int numConflicts;
       if (rpmdepCheck(TS, &conflicts, &numConflicts)) {
@@ -972,10 +948,8 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
 	 else if (Opts->Value == "--test")
 	    *tsFlags |= RPMTRANS_FLAG_TEST;
-#if RPM_VERSION >= 0x040000
 	 else if (Opts->Value == "--repackage")
 	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
-#endif
 #if RPM_VERSION >= 0x040200
 	 else if (Opts->Value == "--noconfigs" ||
 	          Opts->Value == "--excludeconfigs")
@@ -1004,9 +978,7 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	 else if (Opts->Value == "--ignoresize")
 	 {
 	    *probFilter |= RPMPROB_FILTER_DISKSPACE;
-#if RPM_VERSION >= 0x040000
 	    *probFilter |= RPMPROB_FILTER_DISKNODES;
-#endif
 	 }
 	 else if (Opts->Value == "--badreloc")
 	    *probFilter |= RPMPROB_FILTER_FORCERELOCATE;

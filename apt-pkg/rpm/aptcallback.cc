@@ -37,20 +37,14 @@ static void getPackageData(const Header h, map<string,string> &Data)
 #define FDFREE(_fd) fdFree((_fd), "")
 #endif
 
-#if RPM_VERSION < 0x040000
-void * rpmCallback(const Header h,
-#else
 void * rpmCallback(const void * arg, 
-#endif
 		   const rpmCallbackType what,
                    const raptCallbackSize amount,
                    const raptCallbackSize total,
 		   const void * pkgKey, void * data)
 
 {
-#if RPM_VERSION >= 0x040000
    Header h = (Header) arg;
-#endif
 
    InstProgress *Prog = (InstProgress*)data;
    void * rc = NULL;

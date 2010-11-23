@@ -215,9 +215,7 @@ class RPMDBHandler : public RPMHdrHandler
 #else
    rpmdb Handler;
 #endif
-#if RPM_VERSION >= 0x040000
    rpmdbMatchIterator RpmIter;
-#endif
    bool WriteLock;
 
    time_t DbFileMtime;

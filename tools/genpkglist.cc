@@ -216,13 +216,11 @@ bool loadUpdateInfo(char *path, map<string,UpdateInfo> &map)
    return true;
 }
 
-#if RPM_VERSION >= 0x040000
 // No prototype from rpm after 4.0.
 extern "C" {
 int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
 		      raptTagData p, raptTagCount *c);
 }
-#endif
 
 bool copyFields(Header h, Header newHeader,
 		FILE *idxfile, const char *directory, char *filename,

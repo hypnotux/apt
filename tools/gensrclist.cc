@@ -109,13 +109,11 @@ void usage()
    cerr << " --cachedir=DIR  use a custom directory for package md5sum cache"<<endl;
 }
 
-#if RPM_VERSION >= 0x040000
 extern "C" {
 // No prototype from rpm after 4.0.
 int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
 		      raptTagData p, raptTagCount *c);
 }
-#endif
 
 int main(int argc, char ** argv) 
 {

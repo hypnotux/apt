@@ -5,11 +5,7 @@
 #include <rpm/rpmcli.h>
 #include "rapttypes.h"
 
-#if RPM_VERSION < 0x040000
-void * rpmCallback(const Header h,
-#else
 void * rpmCallback(const void * arg, 
-#endif
 			const rpmCallbackType what,
                         const raptCallbackSize amount,
                         const raptCallbackSize total,

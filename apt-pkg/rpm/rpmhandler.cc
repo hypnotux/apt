@@ -729,9 +729,7 @@ string RPMDirHandler::MD5Sum() const
 RPMDBHandler::RPMDBHandler(bool WriteLock)
    : Handler(0), WriteLock(WriteLock)
 {
-#if RPM_VERSION >= 0x040000
    RpmIter = NULL;
-#endif
    string Dir = _config->Find("RPM::RootDir", "/");
    
    rpmReadConfigFiles(NULL, NULL);
@@ -761,7 +759,6 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
       return;
    }
 #endif
-#if RPM_VERSION >= 0x040000
    RpmIter = raptInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
    if (RpmIter == NULL) {
       _error->Error(_("could not create RPM database iterator"));
@@ -778,10 +775,6 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    while (rpmdbNextIterator(countIt) != NULL)
       iSize++;
    rpmdbFreeIterator(countIt);
-#else
-   iSize = St.st_size;
-
-#endif
 
    // Restore just after opening the database, and just after closing.
    if (WriteLock) {
@@ -794,13 +787,8 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
 
 RPMDBHandler::~RPMDBHandler()
 {
-#if RPM_VERSION >= 0x040000
    if (RpmIter != NULL)
       rpmdbFreeIterator(RpmIter);
-#else
-   if (HeaderP != NULL)
-       headerFree(HeaderP);
-#endif
 
 #if RPM_VERSION >= 0x040100
    /* 
@@ -836,15 +824,11 @@ RPMDBHandler::~RPMDBHandler()
 
 string RPMDBHandler::DataPath(bool DirectoryOnly)
 {
-   string File = "packages.rpm";
+   string File = "Packages";
    char *tmp = (char *) rpmExpand("%{_dbpath}", NULL);
    string DBPath(_config->Find("RPM::RootDir")+tmp);
    free(tmp);
 
-#if RPM_VERSION >= 0x040000
-   if (rpmExpandNumeric("%{_dbapi}") >= 3)
-      File = "Packages";       
-#endif
    if (DirectoryOnly == true)
        return DBPath;
    else
@@ -853,34 +837,18 @@ string RPMDBHandler::DataPath(bool DirectoryOnly)
 
 bool RPMDBHandler::Skip()
 {
-#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
        return false;
    HeaderP = rpmdbNextIterator(RpmIter);
    iOffset = rpmdbGetIteratorOffset(RpmIter);
    if (HeaderP == NULL)
       return false;
-#else
-   if (iOffset == 0)
-      iOffset = rpmdbFirstRecNum(Handler);
-   else
-      iOffset = rpmdbNextRecNum(Handler, iOffset);
-   if (HeaderP != NULL)
-   {
-      headerFree(HeaderP);
-      HeaderP = NULL;
-   }
-   if (iOffset == 0)
-       return false;
-   HeaderP = rpmdbGetRecord(Handler, iOffset);
-#endif
    return true;
 }
 
 bool RPMDBHandler::Jump(off_t Offset)
 {
    iOffset = Offset;
-#if RPM_VERSION >= 0x040000
    // rpmdb indexes are hardcoded uint32_t, the size must match here
    raptDbOffset rpmOffset = iOffset;
    if (RpmIter == NULL)
@@ -894,9 +862,6 @@ bool RPMDBHandler::Jump(off_t Offset)
       iOffset = rpmOffset;
    }
    HeaderP = rpmdbNextIterator(RpmIter);
-#else
-   HeaderP = rpmdbGetRecord(Handler, iOffset);
-#endif
    return true;
 }
 
@@ -912,18 +877,10 @@ bool RPMDBHandler::JumpByName(string PkgName, bool Provides)
 
 void RPMDBHandler::Rewind()
 {
-#if RPM_VERSION >= 0x040000
    if (RpmIter == NULL)
       return;
    rpmdbFreeIterator(RpmIter);   
    RpmIter = raptInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
-#else
-   if (HeaderP != NULL)
-   {
-      headerFree(HeaderP);
-      HeaderP = NULL;
-   }
-#endif
    iOffset = 0;
 }
 #endif

@@ -117,13 +117,11 @@ bool raptHeader::getTag(raptTag tag, vector<raptInt> &data) const
    return ret;
 }
 #else
-#if RPM_VERSION >= 0x040000
 // No prototype from rpm after 4.0.
 extern "C" {
 int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
                       raptTagData p, raptTagCount *c);
 }
-#endif
 
 bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw) const
 {

@@ -15,9 +15,6 @@
 #if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
 #endif
-#if RPM_VERSION >= 0x040000
-#include <rpm/rpmcli.h>
-#endif
 									/*}}}*/
 typedef Header rpmHeader; 
 
