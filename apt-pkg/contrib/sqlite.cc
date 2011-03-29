@@ -13,7 +13,7 @@ using namespace std;
 
 SqliteDB::SqliteDB(string DBPath): DB(NULL), DBPath(DBPath)
 {
-   int rc = sqlite3_open(DBPath.c_str(), &DB);
+   int rc = sqlite3_open_v2(DBPath.c_str(), &DB, SQLITE_OPEN_READONLY, NULL);
    if (rc != SQLITE_OK) {
       _error->Error("opening %s db failed", DBPath.c_str());
    }
