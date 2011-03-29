@@ -13,9 +13,7 @@ using namespace std;
 
 SqliteDB::SqliteDB(string DBPath): DB(NULL), DBPath(DBPath)
 {
-   int rc;
-   //cout << __PRETTY_FUNCTION__ << " " << DBPath << endl;
-   rc = sqlite3_open(DBPath.c_str(), &DB);
+   int rc = sqlite3_open(DBPath.c_str(), &DB);
    if (rc != SQLITE_OK) {
       _error->Error("opening %s db failed", DBPath.c_str());
    }
@@ -23,7 +21,6 @@ SqliteDB::SqliteDB(string DBPath): DB(NULL), DBPath(DBPath)
 
 SqliteDB::~SqliteDB()
 {
-   //cout << __PRETTY_FUNCTION__ << endl;
    if (DB) {
       sqlite3_close(DB);
    }
@@ -41,55 +38,70 @@ bool SqliteDB::Exclusive(bool mode)
    return (sqlite3_exec(DB, cmd.c_str(), NULL, NULL, NULL) == SQLITE_OK);
 }
 
+SqliteQuery::SqliteQuery(sqlite3 *DB) : 
+   DB(DB), stmt(NULL), cur(0)
+{
+}
+
+SqliteQuery::~SqliteQuery()
+{
+   if (stmt) {
+      sqlite3_finalize(stmt);
+   }
+}
+
 bool SqliteQuery::Exec(const string & SQL)
 {
    int rc;
-   rc = sqlite3_get_table(DB, SQL.c_str(), &res, &nrow, &ncol, NULL);
-   if (rc != SQLITE_OK) {
-      sqlite3_free_table(res);
-      nrow = 0;
-      ncol = 0;
-      res = NULL;
-      curptr = NULL;
+
+   if (stmt) {
+      sqlite3_finalize(stmt);
+      stmt = NULL;
+      ColNames.clear();
    }
-   ColNames.clear();
-   for (int col = 0; col < ncol; col++) {
-      ColNames[res[col]] = col;
-   }
-   curptr = res;
+
+   rc = sqlite3_prepare_v2(DB, SQL.c_str(), SQL.size(), &stmt, NULL);
    return (rc == SQLITE_OK);
 }
 
 bool SqliteQuery::Step()
 {
-   if (cur >= nrow) {
-      return false;
+   int rc = sqlite3_step(stmt);
+   if (rc == SQLITE_ROW) {
+      /* Populate column names on first call */
+      if (ColNames.empty()) {
+	 int ncols = sqlite3_column_count(stmt);
+	 for (int i = 0; i < ncols; i++) {
+	    ColNames[sqlite3_column_name(stmt, i)] = i; 
+	 }
+      } else {
+	 cur++;
+      }
    }
-   cur ++;
-   curptr += ncol;
-   return true;
+   return (rc == SQLITE_ROW);
 }
 
 bool SqliteQuery::Rewind()
 {
+   int rc = sqlite3_reset(stmt);
    cur = 0;
-   curptr = res;
-   return true;
+   return (rc == SQLITE_OK);
 }
 
 bool SqliteQuery::Jump(unsigned long Pos)
 {
-   if (Pos > nrow) {
-      return false;
+   if (Pos > cur)
+      Rewind();
+   while (cur < Pos) {
+      if (Step() == false)
+	 break;
    }
-   cur = Pos;
-   curptr = res + (cur * ncol);
-   return true;
+   return (cur == Pos);
 }
 
 bool SqliteQuery::Get(const string & ColName, string & Val)
 {
-   const char *item = *(curptr + ColNames[ColName]);
+   const char *item = (const char *) sqlite3_column_text(stmt, ColNames[ColName]);
    if (item != NULL)
       Val = item;
    return item != NULL;
@@ -97,43 +109,25 @@ bool SqliteQuery::Get(const string & ColName, string & Val)
 
 bool SqliteQuery::Get(const string & ColName, unsigned long & Val)
 {
-   const char *item = *(curptr + ColNames[ColName]);
+   const char *item = (const char *) sqlite3_column_text(stmt, + ColNames[ColName]);
    if (item != NULL)
-      Val = atol(item);
+      Val = atol((const char *) item);
    return item != NULL;
 }
 
 string SqliteQuery::GetCol(const string & ColName)
 {
    string val = "";
-   const char *item = *(curptr + ColNames[ColName]);
-   if (item != NULL)
-      val = item;
+   Get(ColName, val);
    return val;
 } 
 
 unsigned long SqliteQuery::GetColI(const string & ColName)
 {
    unsigned long val = 0;
-   const char *item = *(curptr + ColNames[ColName]);
-   if (item != NULL)
-      val = atol(item);
+   Get(ColName, val);
    return val;
 } 
-
-SqliteQuery::SqliteQuery(sqlite3 *DB) : 
-   DB(DB), res(NULL), curptr(NULL), nrow(0), ncol(0), cur(0)
-{
-   //cout << __PRETTY_FUNCTION__ << endl;
-}
-
-SqliteQuery::~SqliteQuery()
-{
-   //cout << __PRETTY_FUNCTION__ << endl;
-   if (res) {
-      sqlite3_free_table(res);
-   }
-}
 
 #endif /* WITH_SQLITE3 */
 

@@ -1443,7 +1443,12 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
 
    // XXX TODO: We dont need all of these on cache generation 
    Packages->Exec("select pkgKey, pkgId, name, arch, version, epoch, release, summary, description, rpm_vendor, rpm_group, rpm_sourcerpm, rpm_packager, size_package, size_installed, location_href from packages");
-   iSize = Packages->Size();
+
+   SqliteQuery *tmpq = Primary->Query();
+   tmpq->Exec("select count(*) as numpkgs from packages");
+   tmpq->Step();
+   iSize = tmpq->GetColI("numpkgs");
+   delete tmpq;
 }
 
 RPMSqliteHandler::~RPMSqliteHandler()
