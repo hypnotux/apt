@@ -402,7 +402,7 @@ bool rpmListParser::Step()
 	 continue;
  
       if (Handler->IsDatabase() == true ||
-	  RpmData->ArchScore(Architecture().c_str()) > 0)
+	  RpmData->ArchScore(Architecture()) > 0)
 	 return true;
    }
    return false;
