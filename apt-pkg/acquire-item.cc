@@ -65,30 +65,15 @@ bool VerifyChecksums(string File,unsigned long Size,string MD5, string method)
 
    if (MD5.empty() == false)
    {
-      if (method == "MD5-Hash") {
-	 MD5Summation md5sum = MD5Summation();
-	 FileFd F(File, FileFd::ReadOnly);
+      raptHash hash = raptHash(method);
+      FileFd F(File, FileFd::ReadOnly);
 	 
-	 md5sum.AddFD(F.Fd(), F.Size());
-	 if (md5sum.Result() != MD5)
-	 {
-	    if (_config->FindB("Acquire::Verbose", false) == true)
-	       cout << "MD5Sum of "<<File<<" did not match what's in the checksum list and was redownloaded."<<endl;
-	    return false;
-	 }
-      } else if (method == "SHA1-Hash") {
-	 SHA1Summation sha1sum = SHA1Summation();
-	 FileFd F(File, FileFd::ReadOnly);
-	 
-	 sha1sum.AddFD(F.Fd(), F.Size());
-	 if (sha1sum.Result() != MD5)
-	 {
-	    if (_config->FindB("Acquire::Verbose", false) == true)
-	       cout << "SHASum of "<<File<<" did not match what's in the checksum list and was redownloaded."<<endl;
-	    return false;
-	 }
-      } 
-	 
+      hash.AddFD(F.Fd(), F.Size());
+      if (hash.Result() != MD5) {
+	 if (_config->FindB("Acquire::Verbose", false) == true)
+	    cout << method << " of "<<File<<" did not match what's in the checksum list and was redownloaded."<<endl;
+	 return false;
+      }
    }
    
    return true;
