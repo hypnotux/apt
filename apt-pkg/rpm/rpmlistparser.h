@@ -23,11 +23,11 @@
 #include <libxml/tree.h>
 #endif
 
-#include <map>
+#include <set>
 #include <vector>
 #include <regex.h>
 
-using std::map;
+using std::set;
 using std::vector;
 using std::string;
 
@@ -42,12 +42,7 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    string CurrentName;
    const pkgCache::VerIterator *VI;
    
-#ifdef APT_WITH_GNU_HASH_MAP
-   typedef hash_map<const char*,bool,
-   		    hash<const char*>,cstr_eq_pred> SeenPackagesType;
-#else
-   typedef map<const char*,bool,cstr_lt_pred> SeenPackagesType;
-#endif
+   typedef set<string> SeenPackagesType;
    SeenPackagesType *SeenPackages;
 
    bool Duplicated;
