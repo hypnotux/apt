@@ -21,6 +21,7 @@
 #include <libgen.h>
 #include <cstring>
 #include <sstream>
+#include <algorithm>
 
 #include <apt-pkg/error.h>
 #include <apt-pkg/configuration.h>
