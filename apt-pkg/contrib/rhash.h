@@ -16,6 +16,7 @@ using std::string;
 class raptHash
 {
    DIGEST_CTX HashCtx;
+   string Value;
    
    public:
 

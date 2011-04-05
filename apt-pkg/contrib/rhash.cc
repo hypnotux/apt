@@ -20,11 +20,11 @@ string raptHash::Result()
 {
    void *data = NULL;
    size_t dlen = 0;
-   string Value = "";
    
    rpmDigestFinal(HashCtx, &data, &dlen, 1);
    if (data) {
       Value = string((const char*)data);
+      free(data);
    }
    HashCtx = NULL;
 
