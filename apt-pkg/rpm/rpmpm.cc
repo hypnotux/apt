@@ -50,8 +50,6 @@
 
 using namespace std;
 
-extern int packagesTotal;
-
 // RPMPM::pkgRPMPM - Constructor					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
@@ -823,24 +821,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
        AddToTransaction(Item::RPMInstall, install);
    if (upgrade.empty() == false)
        AddToTransaction(Item::RPMUpgrade, upgrade);
-
-#if 0
-   // XXX temp stuff..
-   int packagesTotal = 0;
-   // Figure out exactly how many rpm operations we're going to process,
-   // repackages and all.
-   int repackage = (tsFlags & RPMTRANS_FLAG_REPACKAGE) ? 1 : 0;
-   for (pkgCache::PkgIterator I = Cache.PkgBegin(); I.end() == false; I++) {
-      if (Cache[I].NewInstall() == true) {
-	 packagesTotal++;
-      } else if (Cache[I].Upgrade() == true ||
-	         Cache[I].Downgrade() == true) {
-	 packagesTotal += 2 + repackage;
-      } else if (Cache[I].Delete() == true) {
-	 packagesTotal += 1 + repackage;
-      }
-   }
-#endif
 
 #if RPM_VERSION >= 0x040100
    if (_config->FindB("RPM::NoDeps", false) == false) {
