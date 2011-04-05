@@ -147,17 +147,22 @@ string repomdXML::GetComprMethod(string Path) const
 bool repomdRepository::ParseRelease(string File)
 {
    repomd = new repomdXML(File);
+   string htype = "";
    bool usesha = true;
 
    map<string,repomdXML::RepoFile>::const_iterator I;
    for (I = repomd->RepoFiles.begin(); I != repomd->RepoFiles.end(); I++) {
       IndexChecksums[I->second.Path].MD5 = I->second.Hash;
       IndexChecksums[I->second.Path].Size = 0;
-      if (I->second.ChecksumType != "sha") {
-	 usesha = false;
-      }
+      if (htype.empty() && I->first.find("primary") != string::npos) {
+	 if (I->second.ChecksumType == "sha")
+	    htype = "SHA1";
+	 else if (I->second.ChecksumType == "sha256")
+	    htype = "SHA256";
+	 }
    }
-   CheckMethod = usesha ? "SHA1-Hash" : "MDA5-Hash";
+   if (!htype.empty()) 
+      CheckMethod = htype + "-Hash";
       
    GotRelease = true;
 
