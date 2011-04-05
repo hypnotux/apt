@@ -22,11 +22,15 @@
 #include <libxml/tree.h>
 #endif
 
-#include <set>
 #include <vector>
 #include <regex.h>
 
-using std::set;
+#ifdef HAVE_TR1_UNORDERED_SET
+#include <tr1/unordered_set>
+#else
+#include <set>
+#endif
+
 using std::vector;
 using std::string;
 
@@ -41,7 +45,11 @@ class rpmListParser : public pkgCacheGenerator::ListParser
    string CurrentName;
    const pkgCache::VerIterator *VI;
    
-   typedef set<string> SeenPackagesType;
+#ifdef HAVE_TR1_UNORDERED_SET
+   typedef std::tr1::unordered_set<string> SeenPackagesType;
+#else
+   typedef std::set<string> SeenPackagesType;
+#endif
    SeenPackagesType *SeenPackages;
 
    bool Duplicated;

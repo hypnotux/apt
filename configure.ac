@@ -137,7 +137,7 @@ AC_EGREP_HEADER(rpmTagVal, rpm/rpmtag.h,
 	[AC_MSG_RESULT(no) ])
 
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS([tr1/unordered_map])
+AC_CHECK_HEADERS([tr1/unordered_map tr1/unordered_set])
 AC_LANG_POP([C++])
 
 dnl sqlite3
