@@ -90,7 +90,7 @@ void CachedMD5::MD5ForFile(string FileName, time_t TimeStamp, char *buf)
       MD5.AddFD(File.Fd(), File.Size());
       File.Close();
       FileData Data;
-      Data.MD5 = MD5.Result().Value();
+      Data.MD5 = MD5.Result();
       Data.TimeStamp = TimeStamp;
       MD5Table[FileName] = Data;
       strcpy(buf, Data.MD5.c_str());

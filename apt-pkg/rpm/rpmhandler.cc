@@ -579,7 +579,7 @@ string RPMSingleFileHandler::MD5Sum() const
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
-   return MD5.Result().Value();
+   return MD5.Result();
 }
 
 bool RPMSingleFileHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
@@ -723,7 +723,7 @@ string RPMDirHandler::MD5Sum() const
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
-   return MD5.Result().Value();
+   return MD5.Result();
 }
 
 

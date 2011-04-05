@@ -32,13 +32,13 @@ libapt_pkg_la_SOURCES = \
 	contrib/fileutl.h \
 	contrib/hashes.cc \
 	contrib/hashes.h \
-	contrib/md5.cc \
 	contrib/md5.h \
 	contrib/mmap.cc \
 	contrib/mmap.h \
 	contrib/progress.cc \
 	contrib/progress.h \
-	contrib/sha1.cc \
+	contrib/rhash.cc \
+	contrib/rhash.h \
 	contrib/sha1.h \
 	contrib/sptr.h \
 	contrib/sqlite.h \

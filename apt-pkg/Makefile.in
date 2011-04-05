@@ -87,19 +87,19 @@ libapt_pkg_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libapt_pkg_la_OBJECTS = contrib/cdromutl.lo contrib/cmndline.lo \
 	contrib/configuration.lo contrib/crc-16.lo contrib/error.lo \
-	contrib/fileutl.lo contrib/hashes.lo contrib/md5.lo \
-	contrib/mmap.lo contrib/progress.lo contrib/sha1.lo \
-	contrib/sqlite.lo contrib/strutl.lo rpm/raptheader.lo \
-	rpm/repomd.lo rpm/aptcallback.lo rpm/rpmhandler.lo \
-	rpm/rpmindexfile.lo rpm/rpmlistparser.lo rpm/rpmpackagedata.lo \
-	rpm/rpmpm.lo rpm/rpmrecords.lo rpm/rpmsrcrecords.lo \
-	rpm/rpmsystem.lo rpm/rpmversion.lo rpm/xmlutil.lo acquire.lo \
-	acquire-item.lo acquire-method.lo acquire-worker.lo \
-	algorithms.lo cachefile.lo clean.lo depcache.lo indexfile.lo \
-	init.lo luaiface.lo orderlist.lo packagemanager.lo pkgcache.lo \
-	pkgcachegen.lo pkgrecords.lo pkgsystem.lo policy.lo \
-	repository.lo sourcelist.lo srcrecords.lo tagfile.lo \
-	version.lo versionmatch.lo
+	contrib/fileutl.lo contrib/hashes.lo contrib/mmap.lo \
+	contrib/progress.lo contrib/rhash.lo contrib/sqlite.lo \
+	contrib/strutl.lo rpm/raptheader.lo rpm/repomd.lo \
+	rpm/aptcallback.lo rpm/rpmhandler.lo rpm/rpmindexfile.lo \
+	rpm/rpmlistparser.lo rpm/rpmpackagedata.lo rpm/rpmpm.lo \
+	rpm/rpmrecords.lo rpm/rpmsrcrecords.lo rpm/rpmsystem.lo \
+	rpm/rpmversion.lo rpm/xmlutil.lo acquire.lo acquire-item.lo \
+	acquire-method.lo acquire-worker.lo algorithms.lo cachefile.lo \
+	clean.lo depcache.lo indexfile.lo init.lo luaiface.lo \
+	orderlist.lo packagemanager.lo pkgcache.lo pkgcachegen.lo \
+	pkgrecords.lo pkgsystem.lo policy.lo repository.lo \
+	sourcelist.lo srcrecords.lo tagfile.lo version.lo \
+	versionmatch.lo
 libapt_pkg_la_OBJECTS = $(am_libapt_pkg_la_OBJECTS)
 libapt_pkg_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
@@ -299,13 +299,13 @@ libapt_pkg_la_SOURCES = \
 	contrib/fileutl.h \
 	contrib/hashes.cc \
 	contrib/hashes.h \
-	contrib/md5.cc \
 	contrib/md5.h \
 	contrib/mmap.cc \
 	contrib/mmap.h \
 	contrib/progress.cc \
 	contrib/progress.h \
-	contrib/sha1.cc \
+	contrib/rhash.cc \
+	contrib/rhash.h \
 	contrib/sha1.h \
 	contrib/sptr.h \
 	contrib/sqlite.h \
@@ -520,13 +520,11 @@ contrib/fileutl.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
 contrib/hashes.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
-contrib/md5.lo: contrib/$(am__dirstamp) \
-	contrib/$(DEPDIR)/$(am__dirstamp)
 contrib/mmap.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
 contrib/progress.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
-contrib/sha1.lo: contrib/$(am__dirstamp) \
+contrib/rhash.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
 contrib/sqlite.lo: contrib/$(am__dirstamp) \
 	contrib/$(DEPDIR)/$(am__dirstamp)
@@ -573,14 +571,12 @@ mostlyclean-compile:
 	-rm -f contrib/fileutl.lo
 	-rm -f contrib/hashes.$(OBJEXT)
 	-rm -f contrib/hashes.lo
-	-rm -f contrib/md5.$(OBJEXT)
-	-rm -f contrib/md5.lo
 	-rm -f contrib/mmap.$(OBJEXT)
 	-rm -f contrib/mmap.lo
 	-rm -f contrib/progress.$(OBJEXT)
 	-rm -f contrib/progress.lo
-	-rm -f contrib/sha1.$(OBJEXT)
-	-rm -f contrib/sha1.lo
+	-rm -f contrib/rhash.$(OBJEXT)
+	-rm -f contrib/rhash.lo
 	-rm -f contrib/sqlite.$(OBJEXT)
 	-rm -f contrib/sqlite.lo
 	-rm -f contrib/strutl.$(OBJEXT)
@@ -646,10 +642,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/error.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/fileutl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/hashes.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/md5.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/mmap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/progress.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/sha1.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/rhash.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/sqlite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@contrib/$(DEPDIR)/strutl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@rpm/$(DEPDIR)/aptcallback.Plo@am__quote@
