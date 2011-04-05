@@ -19,16 +19,12 @@ class SqliteQuery
    sqlite3_stmt *stmt;
 
    map<string,int> ColNames;
-   int cur;
 
    public:
    bool Exec(const string & SQL);
 
-   // XXX size_t'ize these..
-   bool Jump(unsigned long Pos);
    bool Rewind();
    bool Step();
-   unsigned long inline Offset() {return cur;}
 
    bool Get(const string & ColName, string & Val);
    bool Get(const string & ColName, unsigned long & Val);

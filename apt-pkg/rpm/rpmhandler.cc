@@ -1471,11 +1471,14 @@ bool RPMSqliteHandler::Skip()
 
 bool RPMSqliteHandler::Jump(off_t Offset)
 {
-   bool res = Packages->Jump(Offset);
-   if (!res)
-      return false;
-   iOffset = Packages->Offset();
-   return true;
+   Rewind();
+   while (1) {
+      if (iOffset + 1 == Offset)
+	 return Skip();
+      if (Skip() == false)
+	 break;
+   }
+   return false;
 }
 
 void RPMSqliteHandler::Rewind()

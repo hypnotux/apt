@@ -39,7 +39,7 @@ bool SqliteDB::Exclusive(bool mode)
 }
 
 SqliteQuery::SqliteQuery(sqlite3 *DB) : 
-   DB(DB), stmt(NULL), cur(0)
+   DB(DB), stmt(NULL)
 {
 }
 
@@ -67,36 +67,21 @@ bool SqliteQuery::Exec(const string & SQL)
 bool SqliteQuery::Step()
 {
    int rc = sqlite3_step(stmt);
-   if (rc == SQLITE_ROW) {
-      /* Populate column names on first call */
-      if (ColNames.empty()) {
-	 int ncols = sqlite3_column_count(stmt);
-	 for (int i = 0; i < ncols; i++) {
-	    ColNames[sqlite3_column_name(stmt, i)] = i; 
-	 }
-      } else {
-	 cur++;
+   /* Populate column names on first call */
+   if (rc == SQLITE_ROW && ColNames.empty()) {
+      int ncols = sqlite3_column_count(stmt);
+      for (int i = 0; i < ncols; i++) {
+	 ColNames[sqlite3_column_name(stmt, i)] = i; 
       }
    }
+
    return (rc == SQLITE_ROW);
 }
 
 bool SqliteQuery::Rewind()
 {
    int rc = sqlite3_reset(stmt);
-   cur = 0;
    return (rc == SQLITE_OK);
-}
-
-bool SqliteQuery::Jump(unsigned long Pos)
-{
-   if (Pos > cur)
-      Rewind();
-   while (cur < Pos) {
-      if (Step() == false)
-	 break;
-   }
-   return (cur == Pos);
 }
 
 bool SqliteQuery::Get(const string & ColName, string & Val)
