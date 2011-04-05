@@ -136,18 +136,8 @@ AC_EGREP_HEADER(rpmTagVal, rpm/rpmtag.h,
 	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_RPMTAGVAL, 1, [rpmTagVal]) ],
 	[AC_MSG_RESULT(no) ])
 
-dnl Can we use g++ hash_map?
-AH_TEMPLATE(APT_WITH_GNU_HASH_MAP,
-	    [Define to 1 if you want to use the g++ hash_map extension])
-AC_MSG_CHECKING(for g++ hash_map extension)
 AC_LANG_PUSH([C++])
-AC_TRY_LINK(
-[
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-],[hash_map<char*,hash<char*> > HashMap;
-],[AC_DEFINE_UNQUOTED(APT_WITH_GNU_HASH_MAP, 1) AC_MSG_RESULT(yes)
-],[AC_MSG_RESULT(no)])
+AC_CHECK_HEADERS([tr1/unordered_map])
 AC_LANG_POP([C++])
 
 dnl sqlite3

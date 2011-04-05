@@ -4,11 +4,15 @@
 #include <apt-pkg/aptconf.h>
 #include <apt-pkg/tagfile.h>
 #include <apt-pkg/pkgcache.h>
-#include "rpmmisc.h"
 
 #include <map>
 #include <vector>
 #include <regex.h>
+
+#ifdef HAVE_TR1_UNORDERED_MAP
+#include <tr1/unordered_map>
+using std::tr1::unordered_map;
+#endif
 
 using std::map;
 using std::string;
@@ -18,16 +22,16 @@ class RPMPackageData
 {
    protected:
 
-#ifdef APT_WITH_GNU_HASH_MAP
-   hash_map<string,pkgCache::State::VerPriority,hash_string> Priorities;
-   hash_map<string,pkgCache::Flag::PkgFlags,hash_string> Flags;
-   hash_map<string,vector<string>*,hash_string> FakeProvides;
-   hash_map<string,int,hash_string> IgnorePackages;
-   hash_map<string,int,hash_string> DuplicatedPackages;
-   hash_map<string,bool,hash_string> CompatArch;
+#ifdef HAVE_TR1_UNORDERED_MAP
+   unordered_map<string,pkgCache::State::VerPriority> Priorities;
+   unordered_map<string,pkgCache::Flag::PkgFlags> Flags;
+   unordered_map<string,vector<string>*> FakeProvides;
+   unordered_map<string,int> IgnorePackages;
+   unordered_map<string,int> DuplicatedPackages;
+   unordered_map<string,bool> CompatArch;
    typedef map<string,pkgCache::VerIterator> VerMapValueType;
-   typedef hash_map<unsigned long,VerMapValueType> VerMapType;
-   typedef hash_map<string,int,hash_string> ArchScoresType;
+   typedef unordered_map<unsigned long,VerMapValueType> VerMapType;
+   typedef unordered_map<string,int> ArchScoresType;
 #else
    map<string,pkgCache::State::VerPriority> Priorities;
    map<string,pkgCache::Flag::PkgFlags> Flags;

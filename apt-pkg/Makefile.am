@@ -59,7 +59,6 @@ libapt_pkg_la_SOURCES = \
 	rpm/rpmindexfile.h \
 	rpm/rpmlistparser.cc \
 	rpm/rpmlistparser.h \
-	rpm/rpmmisc.h \
 	rpm/rpmpackagedata.cc \
 	rpm/rpmpackagedata.h \
 	rpm/rpmpm.cc \
@@ -134,7 +133,6 @@ PRIVATEHEADERS = \
 	rpm/rpmhandler.h \
 	rpm/rpmindexfile.h \
 	rpm/rpmlistparser.h \
-	rpm/rpmmisc.h \
 	rpm/rpmpackagedata.h \
 	rpm/rpmpm.h \
 	rpm/rpmrecords.h \
