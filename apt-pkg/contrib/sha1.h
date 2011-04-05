@@ -31,12 +31,8 @@ class SHA1SumValue
    // Accessors
    bool operator ==(const SHA1SumValue &rhs) const; 
    string Value() const;
-   inline void Value(unsigned char S[20])
-         {for (int I = 0; I != sizeof(Sum); I++) S[I] = Sum[I];}
    inline operator string() const {return Value();}
    bool Set(string Str);
-   inline void Set(unsigned char S[20]) 
-         {for (int I = 0; I != sizeof(Sum); I++) Sum[I] = S[I];}
 
    SHA1SumValue(string Str);
    SHA1SumValue();

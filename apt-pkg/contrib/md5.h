@@ -40,12 +40,8 @@ class MD5SumValue
    // Accessors
    bool operator ==(const MD5SumValue &rhs) const; 
    string Value() const;
-   inline void Value(unsigned char S[16]) 
-         {for (int I = 0; I != sizeof(Sum); I++) S[I] = Sum[I];}
    inline operator string() const {return Value();}
    bool Set(string Str);
-   inline void Set(unsigned char S[16]) 
-         {for (int I = 0; I != sizeof(Sum); I++) Sum[I] = S[I];}
 
    MD5SumValue(string Str);
    MD5SumValue();
