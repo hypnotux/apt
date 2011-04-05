@@ -28,6 +28,7 @@ class raptHash
    string Result();
    
    raptHash(pgpHashAlgo HashAlgo);
+   raptHash(const string & HashName);
 };
 
 #endif

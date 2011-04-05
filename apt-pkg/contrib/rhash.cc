@@ -13,6 +13,18 @@ raptHash::raptHash(pgpHashAlgo HashAlgo)
    HashCtx = rpmDigestInit(HashAlgo, RPMDIGEST_NONE);
 }
 
+raptHash::raptHash(const string & HashName)
+{
+   pgpHashAlgo algo;
+   if (HashName == "SHA256-Hash")
+      algo = PGPHASHALGO_SHA256;
+   else if (HashName == "SHA1-Hash")
+      algo = PGPHASHALGO_SHA1;
+   else
+      algo = PGPHASHALGO_MD5;
+   HashCtx = rpmDigestInit(algo, RPMDIGEST_NONE);
+}
+
 // raptHash::Result - Return checksum value                        /*{{{*/
 // ---------------------------------------------------------------------
 /* Add() may not be called after this */
