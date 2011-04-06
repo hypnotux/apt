@@ -148,7 +148,6 @@ bool repomdRepository::ParseRelease(string File)
 {
    repomd = new repomdXML(File);
    string htype = "";
-   bool usesha = true;
 
    map<string,repomdXML::RepoFile>::const_iterator I;
    for (I = repomd->RepoFiles.begin(); I != repomd->RepoFiles.end(); I++) {
