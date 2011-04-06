@@ -22,6 +22,7 @@ class SqliteQuery
 
    public:
    bool Exec(const string & SQL);
+   bool Bind(int index, int val);
 
    bool Rewind();
    bool Step();

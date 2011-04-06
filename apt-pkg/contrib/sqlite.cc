@@ -64,6 +64,11 @@ bool SqliteQuery::Exec(const string & SQL)
    return (rc == SQLITE_OK);
 }
 
+bool SqliteQuery::Bind(int index, int val)
+{
+   return (sqlite3_bind_int(stmt, index, val) == SQLITE_OK);
+}
+
 bool SqliteQuery::Step()
 {
    int rc = sqlite3_step(stmt);
