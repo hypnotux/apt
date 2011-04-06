@@ -21,7 +21,7 @@ static void getPackageData(const Header h, map<string,string> &Data)
 {
    raptHeader hdr(h);
    Data.clear();
-   for (const char **Tag = &copyTags[0]; *Tag != NULL; *Tag++) {
+   for (const char **Tag = copyTags; *Tag != NULL; Tag++) {
       ostringstream fmt;
       fmt << "%{" << *Tag << "}";
       Data[*Tag] = hdr.format(fmt.str());
