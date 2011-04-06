@@ -46,20 +46,16 @@ rpmVersioningSystem::rpmVersioningSystem()
 // rpmVS::ParseVersion - Parse a version into it's components           /*{{{*/
 // ---------------------------------------------------------------------
 /* Code ripped from rpmlib */
-void rpmVersioningSystem::ParseVersion(const char *V, const char *VEnd,
-				       char **Epoch, 
-				       char **Version,
-				       char **Release)
+static void ParseVersion(char *evr,
+			 const char **Epoch, 
+			 const char **Version, 
+			 const char **Release)
 {
-   string tmp = string(V, VEnd);
-   char *evr = strdup(tmp.c_str());
    const char *epoch = NULL;
    const char *version = NULL;
    const char *release = NULL;
    char *s;
 
-   assert(evr != NULL);
-   
    s = strrchr(evr, '-');
    if (s) {
       *s++ = '\0';
@@ -82,12 +78,9 @@ void rpmVersioningSystem::ParseVersion(const char *V, const char *VEnd,
       version = evr;
    }
 
-#define Xstrdup(a) (a) ? strdup(a) : NULL
-   *Epoch = Xstrdup(epoch);
-   *Version = Xstrdup(version);
-   *Release = Xstrdup(release);
-#undef Xstrdup
-   free(evr);
+   *Epoch = epoch;
+   *Version = version;
+   *Release = release;
 }
 									/*}}}*/
 // rpmVS::CmpVersion - Comparison for versions				/*{{{*/
@@ -97,11 +90,19 @@ void rpmVersioningSystem::ParseVersion(const char *V, const char *VEnd,
 int rpmVersioningSystem::DoCmpVersion(const char *A,const char *AEnd,
 				      const char *B,const char *BEnd)
 {
-   char *AE, *AV, *AR;
-   char *BE, *BV, *BR;
+   size_t alen = AEnd-A;
+   size_t blen = BEnd-B;
+   char AVer[alen+1], BVer[blen+1];
+   const char *AE, *AV, *AR;
+   const char *BE, *BV, *BR;
    int rc = 0;
-   ParseVersion(A, AEnd, &AE, &AV, &AR);
-   ParseVersion(B, BEnd, &BE, &BV, &BR);
+
+   strncpy(AVer, A, alen);
+   strncpy(BVer, B, blen);
+   AVer[alen] = '\0';
+   BVer[blen] = '\0';
+   ParseVersion(AVer, &AE, &AV, &AR);
+   ParseVersion(BVer, &BE, &BV, &BR);
    if (AE && !BE)
        rc = 1;
    else if (!AE && BE)
@@ -128,8 +129,6 @@ int rpmVersioningSystem::DoCmpVersion(const char *A,const char *AEnd,
 	      rc = rpmvercmp(AR, BR);
       }
    }
-   free(AE);free(AV);free(AR);;
-   free(BE);free(BV);free(BR);;
    return rc;
 }
 									/*}}}*/
