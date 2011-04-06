@@ -1024,7 +1024,7 @@ bool DoUpdate(CommandLine &CmdL)
    }
    
    // Clean out any old list files
-   if (_config->FindB("APT::Get::List-Cleanup",true) == true)
+   if (Partial == false && _config->FindB("APT::Get::List-Cleanup",true) == true)
    {
       if (Fetcher.Clean(_config->FindDir("Dir::State::lists")) == false ||
 	  Fetcher.Clean(_config->FindDir("Dir::State::lists") + "partial/") == false)
