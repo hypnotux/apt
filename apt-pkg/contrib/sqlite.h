@@ -10,8 +10,6 @@
 using std::string;
 using std::map;
 
-typedef map<string,string> SqliteRow; 
-
 class SqliteQuery
 {
    protected:

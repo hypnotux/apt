@@ -54,15 +54,16 @@ SqliteQuery::~SqliteQuery()
 
 bool SqliteQuery::Exec(const string & SQL)
 {
-   int rc;
+   int rc = sqlite3_prepare_v2(DB, SQL.c_str(), SQL.size(), &stmt, NULL);
 
-   if (stmt) {
-      sqlite3_finalize(stmt);
-      stmt = NULL;
-      ColNames.clear();
+   /* Grab column names for convenient access */
+   if (rc == SQLITE_OK) {
+      int ncols = sqlite3_column_count(stmt);
+      for (int i = 0; i < ncols; i++) {
+	 ColNames[sqlite3_column_name(stmt, i)] = i; 
+      }
    }
 
-   rc = sqlite3_prepare_v2(DB, SQL.c_str(), SQL.size(), &stmt, NULL);
    return (rc == SQLITE_OK);
 }
 
@@ -73,22 +74,12 @@ bool SqliteQuery::Bind(int index, int val)
 
 bool SqliteQuery::Step()
 {
-   int rc = sqlite3_step(stmt);
-   /* Populate column names on first call */
-   if (rc == SQLITE_ROW && ColNames.empty()) {
-      int ncols = sqlite3_column_count(stmt);
-      for (int i = 0; i < ncols; i++) {
-	 ColNames[sqlite3_column_name(stmt, i)] = i; 
-      }
-   }
-
-   return (rc == SQLITE_ROW);
+   return (sqlite3_step(stmt) == SQLITE_ROW);
 }
 
 bool SqliteQuery::Rewind()
 {
-   int rc = sqlite3_reset(stmt);
-   return (rc == SQLITE_OK);
+   return (sqlite3_reset(stmt) == SQLITE_OK);
 }
 
 bool SqliteQuery::Get(const string & ColName, string & Val)
