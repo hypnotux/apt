@@ -1409,8 +1409,19 @@ bool RPMRepomdOtherHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) cons
 }
 
 #ifdef WITH_SQLITE3
+static string prcoQuery(const string & what)
+{
+   ostringstream sql;
+   sql << "select name, flags, epoch, version, release from " << what << " where pkgKey = ?" << endl;
+   return sql.str();
+}
+
 RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) : 
-   Primary(NULL), Filelists(NULL), Other(NULL), Packages(NULL)
+   Primary(NULL), Filelists(NULL), Other(NULL),
+   Packages(NULL), Files(NULL),
+   Provides(NULL), Requires(NULL), Conflicts(NULL), Obsoletes(NULL),
+   Changes(NULL)
+   
 {
    ID = repomd->ID();
    // Try to figure where in the world our files might be... 
@@ -1421,15 +1432,6 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
 
    Primary = new SqliteDB(DBPath);
    Primary->Exclusive(true);
-   // XXX open these only if needed? 
-   Filelists = new SqliteDB(FilesDBPath);
-   Filelists->Exclusive(true);
-   if (FileExists(OtherDBPath)) {
-      Other = new SqliteDB(OtherDBPath);
-      Other->Exclusive(true);
-   }
-
-   Packages = Primary->Query();
 
    // see if it's a db scheme we support
    SqliteQuery *DBI = Primary->Query();
@@ -1443,7 +1445,30 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
    } 
 
    // XXX TODO: We dont need all of these on cache generation 
+   Packages = Primary->Query();
    Packages->Exec("select pkgKey, pkgId, name, arch, version, epoch, release, summary, description, rpm_vendor, rpm_group, rpm_sourcerpm, rpm_packager, size_package, size_installed, location_href from packages");
+
+   Provides = Primary->Query();
+   Provides->Exec(prcoQuery("provides"));
+   Requires = Primary->Query();
+   Requires->Exec(prcoQuery("requires"));
+   Conflicts = Primary->Query();
+   Conflicts->Exec(prcoQuery("conflicts"));
+   Obsoletes = Primary->Query();
+   Obsoletes->Exec(prcoQuery("obsoletes"));
+
+   Filelists = new SqliteDB(FilesDBPath);
+   Filelists->Exclusive(true);
+   Files = Filelists->Query();
+   Files->Exec("select dirname, filenames from filelist where pkgKey=?");
+
+   // XXX open these only if needed? 
+   if (FileExists(OtherDBPath)) {
+      Other = new SqliteDB(OtherDBPath);
+      Other->Exclusive(true);
+      Changes = Other->Query();
+      Changes->Exec("select * from changelog where pkgKey=?");
+   }
 
    DBI = Primary->Query();
    DBI->Exec("select count(pkgId) as numpkgs from packages");
@@ -1454,10 +1479,16 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
 
 RPMSqliteHandler::~RPMSqliteHandler()
 {
+   if (Packages) delete Packages;
+   if (Provides) delete Provides;
+   if (Requires) delete Requires;
+   if (Conflicts) delete Conflicts;
+   if (Obsoletes) delete Obsoletes;
+   if (Files) delete Files;
+   if (Changes) delete Changes;
    if (Primary) delete Primary;
    if (Filelists) delete Filelists;
    if (Other) delete Other;
-   if (Packages) delete Packages;
 }
 
 
@@ -1573,32 +1604,27 @@ string RPMSqliteHandler::SHA1Sum() const
 
 bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 {
-   string what = "";
+   SqliteQuery *prco = NULL;
    switch (Type) {
       case pkgCache::Dep::Depends:
-	 what = "requires";
+	 prco = Requires;
          break;
       case pkgCache::Dep::Conflicts:
-	 what = "conflicts";
+	 prco = Conflicts;
          break;
       case pkgCache::Dep::Obsoletes:
-	 what = "obsoletes";
+	 prco = Obsoletes;
          break;
       case pkgCache::Dep::Provides:
-	 what = "provides";
+	 prco = Provides;
          break;
    }
 
-   ostringstream sql;
    unsigned long pkgKey;
    Packages->Get("pkgKey", pkgKey);
-   sql  << "select name, flags, epoch, version, release from " << what << " where pkgKey=" << pkgKey << endl;
-   SqliteQuery *prco = Primary->Query();
-   if (!prco->Exec(sql.str())) {
-      delete prco;
+   if (!(prco->Rewind() && prco->Bind(1, pkgKey)))
       return false;
-   }
-
+   
    string deptype, depver, depname;
    string e, v, r;
 
@@ -1647,23 +1673,18 @@ bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
       prco->Get("name", depname);
       PutDep(depname.c_str(), depver.c_str(), (raptDepFlags) RpmOp, Type, Deps);
    }
-   delete prco;
    return true;
 }
 
 bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 {
-   ostringstream sql;
    unsigned long pkgKey;
    string dir, filenames, fn;
 
    Packages->Get("pkgKey", pkgKey);
-   sql  << "select dirname, filenames from filelist where pkgKey=" << pkgKey << endl;
-   SqliteQuery *Files = Filelists->Query();
-   if (!Files->Exec(sql.str())) {
-      delete Files;
+   Files->Rewind();
+   if (!(Files->Rewind() && Files->Bind(1, pkgKey)))
       return false;
-   }
 
    while (Files->Step()) {
       Files->Get("dirname", dir);
@@ -1680,25 +1701,16 @@ bool RPMSqliteHandler::FileList(vector<string> &FileList) const
 	 start = end + 1;
       } while (end != string::npos);
    }
-   delete Files;
    return true;
 }
 
 bool RPMSqliteHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
 {
-   ostringstream sql;
    unsigned long pkgKey;
    Packages->Get("pkgKey", pkgKey);
-   sql  << "select * from changelog where pkgKey=" << pkgKey << endl;
-   if (! Other) {
-      return false;
-   }
 
-   SqliteQuery *Changes = Other->Query();
-   if (!Changes->Exec(sql.str())) {
-      delete Changes;
+   if (!(Changes && Changes->Rewind() && Changes->Bind(1, pkgKey)))
       return false;
-   }
 
    while (Changes->Step()) {
       ChangeLogEntry *Entry = new ChangeLogEntry;
@@ -1707,7 +1719,6 @@ bool RPMSqliteHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const
       Entry->Text = Changes->GetCol("changelog");
       ChangeLogs.push_back(Entry);
    }
-   delete Changes;
    return true;
 }
 #endif /* WITH_SQLITE3 */

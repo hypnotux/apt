@@ -396,6 +396,14 @@ class RPMSqliteHandler : public RPMHandler
    SqliteDB *Other;
    
    SqliteQuery *Packages;
+
+   SqliteQuery *Provides;
+   SqliteQuery *Requires;
+   SqliteQuery *Conflicts;
+   SqliteQuery *Obsoletes;
+
+   SqliteQuery *Files;
+   SqliteQuery *Changes;
   
    string DBPath;
    string FilesDBPath;
