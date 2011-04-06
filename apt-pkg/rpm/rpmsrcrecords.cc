@@ -64,25 +64,6 @@ rpmSrcRecordParser::~rpmSrcRecordParser()
 const char **rpmSrcRecordParser::Binaries()
 {
    return NULL;
-
-// WTF is this ?!? If we're looking for sources why would be interested
-// in binaries? Maybe there's an inner Zen to this all but
-// apt-cache showsrc seems to work without just fine so disabled for now...
-#if 0
-   int i = 0;
-   char **bins;
-   int type, count;
-   assert(HeaderP != NULL);
-   int rc = headerGetEntry(HeaderP, CRPMTAG_BINARY,
-			   &type, (void**)&bins, &count);
-   if (rc != 1)
-       return NULL;
-   for (i = 0; (unsigned)i < sizeof(StaticBinList)/sizeof(char*) && i < count;
-        i++)
-      StaticBinList[i] = bins[i];
-   StaticBinList[i] = 0;
-   return StaticBinList;
-#endif
 }
 									/*}}}*/
 // SrcRecordParser::Files - Return a list of files for this source	/*{{{*/
