@@ -44,7 +44,7 @@ class SqliteDB
    string DBPath;
 
    public:
-   SqliteQuery *Query();
+   SqliteQuery *Query(const string & SQL);
    bool Exclusive(bool mode);
 
    SqliteDB(string DBPath);

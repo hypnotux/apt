@@ -26,9 +26,11 @@ SqliteDB::~SqliteDB()
    }
 }
 
-SqliteQuery *SqliteDB::Query()
+SqliteQuery *SqliteDB::Query(const string & SQL)
 {
-   return new SqliteQuery(DB);
+   SqliteQuery *query = new SqliteQuery(DB);
+   query->Exec(SQL);
+   return query;
 }
 
 bool SqliteDB::Exclusive(bool mode)

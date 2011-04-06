@@ -1409,11 +1409,11 @@ bool RPMRepomdOtherHandler::ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) cons
 }
 
 #ifdef WITH_SQLITE3
-static string prcoQuery(const string & what)
+static SqliteQuery * prcoQuery(SqliteDB *db, const string & what)
 {
    ostringstream sql;
    sql << "select name, flags, epoch, version, release from " << what << " where pkgKey = ?" << endl;
-   return sql.str();
+   return db->Query(sql.str());
 }
 
 RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) : 
@@ -1434,8 +1434,7 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
    Primary->Exclusive(true);
 
    // see if it's a db scheme we support
-   SqliteQuery *DBI = Primary->Query();
-   DBI->Exec("select * from db_info");
+   SqliteQuery *DBI = Primary->Query("select * from db_info");
    DBI->Step();
    DBVersion = DBI->GetColI("dbversion");
    delete DBI;
@@ -1445,33 +1444,25 @@ RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) :
    } 
 
    // XXX TODO: We dont need all of these on cache generation 
-   Packages = Primary->Query();
-   Packages->Exec("select pkgKey, pkgId, name, arch, version, epoch, release, summary, description, rpm_vendor, rpm_group, rpm_sourcerpm, rpm_packager, size_package, size_installed, location_href from packages");
+   Packages = Primary->Query("select pkgKey, pkgId, name, arch, version, epoch, release, summary, description, rpm_vendor, rpm_group, rpm_sourcerpm, rpm_packager, size_package, size_installed, location_href from packages");
 
-   Provides = Primary->Query();
-   Provides->Exec(prcoQuery("provides"));
-   Requires = Primary->Query();
-   Requires->Exec(prcoQuery("requires"));
-   Conflicts = Primary->Query();
-   Conflicts->Exec(prcoQuery("conflicts"));
-   Obsoletes = Primary->Query();
-   Obsoletes->Exec(prcoQuery("obsoletes"));
+   Provides = prcoQuery(Primary, "provides");
+   Requires = prcoQuery(Primary, "requires");
+   Conflicts = prcoQuery(Primary, "conflicts");;
+   Obsoletes = prcoQuery(Primary, "obsoletes");
 
    Filelists = new SqliteDB(FilesDBPath);
    Filelists->Exclusive(true);
-   Files = Filelists->Query();
-   Files->Exec("select dirname, filenames from filelist where pkgKey=?");
+   Files = Filelists->Query("select dirname, filenames from filelist where pkgKey=?");
 
    // XXX open these only if needed? 
    if (FileExists(OtherDBPath)) {
       Other = new SqliteDB(OtherDBPath);
       Other->Exclusive(true);
-      Changes = Other->Query();
-      Changes->Exec("select * from changelog where pkgKey=?");
+      Changes = Other->Query("select * from changelog where pkgKey=?");
    }
 
-   DBI = Primary->Query();
-   DBI->Exec("select count(pkgId) as numpkgs from packages");
+   DBI = Primary->Query("select count(pkgId) as numpkgs from packages");
    DBI->Step();
    iSize = DBI->GetColI("numpkgs");
    delete DBI;
