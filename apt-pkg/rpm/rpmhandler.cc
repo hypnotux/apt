@@ -1418,9 +1418,8 @@ static SqliteQuery * prcoQuery(SqliteDB *db, const string & what)
 
 RPMSqliteHandler::RPMSqliteHandler(repomdXML const *repomd) : 
    Primary(NULL), Filelists(NULL), Other(NULL),
-   Packages(NULL), Files(NULL),
-   Provides(NULL), Requires(NULL), Conflicts(NULL), Obsoletes(NULL),
-   Changes(NULL)
+   Packages(NULL), Provides(NULL), Requires(NULL), Conflicts(NULL), Obsoletes(NULL),
+   Files(NULL), Changes(NULL)
    
 {
    ID = repomd->ID();
