@@ -1906,7 +1906,6 @@ bool cmdShowPackage(CommandLine &CmdL, pkgCache &Cache)
    vector<pkgCache::Version *>::iterator Ver = PkgVersions.begin();
    for (; Ver != PkgVersions.end(); Ver++) {
       pkgCache::VerIterator V(Cache, (*Ver));
-      pkgCache::PkgIterator Pkg = V.ParentPkg();
    
       if (cmdDisplayRecord(V, Cache) == false)
 	 return false;
