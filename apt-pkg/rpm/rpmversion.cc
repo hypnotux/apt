@@ -15,11 +15,6 @@
 
 #ifdef HAVE_RPM
 
-/* for rpm5.org >= 4.4.9 */
-#ifdef HAVE_RPM_RPMEVR_H
-#define _RPMEVR_INTERNAL
-#endif
-
 #include "rapttypes.h"
 #include "rpmversion.h"
 #include <apt-pkg/pkgcache.h>

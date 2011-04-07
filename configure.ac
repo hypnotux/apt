@@ -102,8 +102,8 @@ fi
 dnl Various rpm header checks..
 AC_CHECK_HEADER(rpm/rpmlib.h, [],
 	   [AC_MSG_ERROR([Can't find rpmlib.h])])
-AC_CHECK_HEADERS([rpm/rpmcallback.h rpm/rpmcb.h \
-	     rpm/rpmmessages.h rpm/rpmevr.h rpm/rpmtypes.h rpm/rpmtd.h])
+AC_CHECK_HEADERS([rpm/rpmcallback.h \
+	     rpm/rpmmessages.h rpm/rpmtypes.h rpm/rpmtd.h])
 
 dnl Various rpm variant capability checks
 AC_MSG_CHECKING(for headerFormat)
