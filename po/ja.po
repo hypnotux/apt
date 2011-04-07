@@ -1,16 +1,17 @@
 # Japanese mesasges for apt.
 # Copyright (C) 2001 Free Software Foundation, Inc.
 # Project Vine, Daisuke SUZUKI <daisuke@linux.or.jp>, 2001-2006
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: apt 0.5.15lorg3\n"
 "Report-Msgid-Bugs-To: apt-rpm@lists.laiskiainen.org\n"
-"POT-Creation-Date: 2008-01-12 11:47+0200\n"
+"POT-Creation-Date: 2011-04-07 13:04+0300\n"
 "PO-Revision-Date: 2006-05-05 00:08+0900\n"
 "Last-Translator: Daisuke SUZUKI <daisuke@linux.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,129 +65,129 @@ msgstr ""
 msgid "Password: "
 msgstr "パスワード: "
 
-#: cmdline/apt-cache.cc:94
+#: cmdline/apt-cache.cc:100
 msgid "Total Package Names : "
 msgstr "パッケージ名 : "
 
-#: cmdline/apt-cache.cc:134
+#: cmdline/apt-cache.cc:140
 msgid "  Normal Packages: "
 msgstr "  通常パッケージ: "
 
-#: cmdline/apt-cache.cc:135
+#: cmdline/apt-cache.cc:141
 msgid "  Pure Virtual Packages: "
 msgstr "  純粋バーチャルパッケージ: "
 
-#: cmdline/apt-cache.cc:136
+#: cmdline/apt-cache.cc:142
 msgid "  Single Virtual Packages: "
 msgstr "  単一バーチャルパッケージ: "
 
-#: cmdline/apt-cache.cc:137
+#: cmdline/apt-cache.cc:143
 msgid "  Mixed Virtual Packages: "
 msgstr "  複合バーチャルパッケージ: "
 
-#: cmdline/apt-cache.cc:138
+#: cmdline/apt-cache.cc:144
 msgid "  Missing: "
 msgstr "  不明: "
 
-#: cmdline/apt-cache.cc:140
+#: cmdline/apt-cache.cc:146
 msgid "Total Distinct Versions: "
 msgstr "合計バージョン: "
 
-#: cmdline/apt-cache.cc:142
+#: cmdline/apt-cache.cc:148
 msgid "Total Dependencies: "
 msgstr "合計依存数: "
 
-#: cmdline/apt-cache.cc:145
+#: cmdline/apt-cache.cc:151
 msgid "Total Ver/File relations: "
 msgstr "合計 Ver/File 関係: "
 
-#: cmdline/apt-cache.cc:147
+#: cmdline/apt-cache.cc:153
 msgid "Total Provides Mappings: "
 msgstr "合計提供マッピング: "
 
-#: cmdline/apt-cache.cc:159
+#: cmdline/apt-cache.cc:165
 msgid "Total Globbed Strings: "
 msgstr "合計 Glob 文字列: "
 
-#: cmdline/apt-cache.cc:173
+#: cmdline/apt-cache.cc:179
 msgid "Total Dependency Version space: "
 msgstr "合計依存バージョン空間: "
 
-#: cmdline/apt-cache.cc:178
+#: cmdline/apt-cache.cc:184
 msgid "Total Slack space: "
 msgstr "合計スラック空間"
 
-#: cmdline/apt-cache.cc:186
+#: cmdline/apt-cache.cc:192
 msgid "Total Space Accounted for: "
 msgstr "Total Space Accounted for: "
 
-#: cmdline/apt-cache.cc:323 cmdline/cmdline.cc:1040
+#: cmdline/apt-cache.cc:329 cmdline/cmdline.cc:1055
 #, c-format
 msgid "Package file %s is out of sync."
 msgstr "パッケージファイル %s は同期されていません"
 
-#: cmdline/apt-cache.cc:489 cmdline/apt-cache.cc:707 cmdline/apt-cache.cc:1050
-#: cmdline/cmdline.cc:963 cmdline/cmdline.cc:1076 cmdline/cmdline.cc:1170
-#: cmdline/cmdline.cc:1259 cmdline/cmdline.cc:1824
+#: cmdline/apt-cache.cc:495 cmdline/apt-cache.cc:713 cmdline/apt-cache.cc:1056
+#: cmdline/cmdline.cc:978 cmdline/cmdline.cc:1091 cmdline/cmdline.cc:1185
+#: cmdline/cmdline.cc:1274 cmdline/cmdline.cc:1839
 #, c-format
 msgid "Unable to locate package %s"
 msgstr "パッケージ %s を特定することができません"
 
-#: cmdline/apt-cache.cc:1004
+#: cmdline/apt-cache.cc:1010
 msgid "Package Files:"
 msgstr "パッケージファイル:"
 
-#: cmdline/apt-cache.cc:1011 cmdline/apt-cache.cc:1101
+#: cmdline/apt-cache.cc:1017 cmdline/apt-cache.cc:1107
 msgid "Cache is out of sync, can't x-ref a package file"
 msgstr ""
 "キャッシュは同期されていません。パッケージファイルのクロスリファレンスをたど"
 "れません"
 
-#: cmdline/apt-cache.cc:1012
+#: cmdline/apt-cache.cc:1018
 #, c-format
 msgid "%4i %s\n"
 msgstr "%4i %s\n"
 
-#: cmdline/apt-cache.cc:1024
+#: cmdline/apt-cache.cc:1030
 msgid "Pinned Packages:"
 msgstr "Pinパッケージ:"
 
-#: cmdline/apt-cache.cc:1036 cmdline/apt-cache.cc:1077
+#: cmdline/apt-cache.cc:1042 cmdline/apt-cache.cc:1083
 msgid "(not found)"
 msgstr "(見つかりません)"
 
-#: cmdline/apt-cache.cc:1057
+#: cmdline/apt-cache.cc:1063
 msgid "  Installed: "
 msgstr "  インストール済: "
 
-#: cmdline/apt-cache.cc:1059 cmdline/apt-cache.cc:1067
+#: cmdline/apt-cache.cc:1065 cmdline/apt-cache.cc:1073
 msgid "(none)"
 msgstr "(なし)"
 
-#: cmdline/apt-cache.cc:1064
+#: cmdline/apt-cache.cc:1070
 msgid "  Candidate: "
 msgstr "  候補: "
 
-#: cmdline/apt-cache.cc:1074
+#: cmdline/apt-cache.cc:1080
 msgid "  Package Pin: "
 msgstr "  パッケージ Pin: "
 
-#: cmdline/apt-cache.cc:1083
+#: cmdline/apt-cache.cc:1089
 msgid "  Version Table:"
 msgstr "  バージョンテーブル: "
 
-#: cmdline/apt-cache.cc:1102
+#: cmdline/apt-cache.cc:1108
 #, c-format
 msgid "       %4i %s\n"
 msgstr "       %4i %s\n"
 
-#: cmdline/apt-cache.cc:1130 cmdline/apt-cdrom.cc:824 cmdline/apt-config.cc:72
-#: cmdline/apt-get.cc:2128 cmdline/apt-shell.cc:1965
+#: cmdline/apt-cache.cc:1136 cmdline/apt-cdrom.cc:824 cmdline/apt-config.cc:72
+#: cmdline/apt-get.cc:2140 cmdline/apt-shell.cc:1977
 #, c-format
 msgid "%s %s for %s %s compiled on %s %s\n"
 msgstr "%s %s for %s %s compiled on %s %s\n"
 
-#: cmdline/apt-cache.cc:1137
+#: cmdline/apt-cache.cc:1143
 #, fuzzy
 msgid ""
 "Usage: apt-cache [options] command\n"
@@ -247,7 +248,7 @@ msgstr ""
 "   xvcg - xvcg 用のパッケージグラフを生成する\n"
 "   policy - ポリシー設定情報を表示する\n"
 
-#: cmdline/apt-cache.cc:1173
+#: cmdline/apt-cache.cc:1179
 msgid ""
 "\n"
 "Options:\n"
@@ -276,7 +277,7 @@ msgstr ""
 msgid "Failed to rename %s.new to %s"
 msgstr "%s.new を %s に変更できません"
 
-#: cmdline/apt-cdrom.cc:399 apt-pkg/sourcelist.cc:302
+#: cmdline/apt-cdrom.cc:399 apt-pkg/sourcelist.cc:316
 #, c-format
 msgid "Opening %s"
 msgstr "%s を開いています"
@@ -450,94 +451,94 @@ msgstr ""
 "  -c=? 指定した設定ファイルを読みこむ\n"
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 
-#: cmdline/apt-get.cc:159
+#: cmdline/apt-get.cc:166
 msgid "There are changes to be made"
 msgstr "適用すべき変更があります"
 
-#: cmdline/apt-get.cc:194 cmdline/apt-shell.cc:255
+#: cmdline/apt-get.cc:201 cmdline/apt-shell.cc:262
 msgid "Correcting dependencies..."
 msgstr "依存関係を解決しています..."
 
-#: cmdline/apt-get.cc:197 cmdline/apt-shell.cc:258
+#: cmdline/apt-get.cc:204 cmdline/apt-shell.cc:265
 msgid " failed."
 msgstr " 失敗しました。"
 
-#: cmdline/apt-get.cc:200 cmdline/apt-shell.cc:261
+#: cmdline/apt-get.cc:207 cmdline/apt-shell.cc:268
 msgid "Unable to correct dependencies"
 msgstr "依存関係を解決することができません"
 
-#: cmdline/apt-get.cc:203 cmdline/apt-shell.cc:264
+#: cmdline/apt-get.cc:210 cmdline/apt-shell.cc:271
 msgid "Unable to minimize the upgrade set"
 msgstr "アップグレードセットを最小化できません"
 
-#: cmdline/apt-get.cc:205 cmdline/apt-shell.cc:266
+#: cmdline/apt-get.cc:212 cmdline/apt-shell.cc:273
 msgid " Done"
 msgstr " 完了"
 
-#: cmdline/apt-get.cc:209
+#: cmdline/apt-get.cc:216
 msgid "You might want to run `apt-get --fix-broken install' to correct these."
 msgstr ""
 "これらを解決するためには 'apt-get --fix-broken install' を実行する必要がある"
 "かもしれません。"
 
-#: cmdline/apt-get.cc:212 cmdline/apt-shell.cc:273
+#: cmdline/apt-get.cc:219 cmdline/apt-shell.cc:280
 msgid "Unmet dependencies. Try using --fix-broken."
 msgstr "未解決の依存関係があります。--fix-broken オプションをためして下さい。"
 
-#: cmdline/apt-get.cc:269 cmdline/apt-shell.cc:330
+#: cmdline/apt-get.cc:276 cmdline/apt-shell.cc:337
 msgid "Packages need to be removed but Remove is disabled."
 msgstr "パッケージは削除される必要がありますが、削除は無効になっています。"
 
-#: cmdline/apt-get.cc:295 cmdline/apt-get.cc:1543 cmdline/apt-shell.cc:356
-#: cmdline/apt-shell.cc:1479 cmdline/cmdline.cc:721
+#: cmdline/apt-get.cc:302 cmdline/apt-get.cc:1553 cmdline/apt-shell.cc:363
+#: cmdline/apt-shell.cc:1489 cmdline/cmdline.cc:736
 msgid "Unable to lock the download directory"
 msgstr "ダウンロードディレクトリをロックできません"
 
-#: cmdline/apt-get.cc:305 cmdline/apt-get.cc:1591 cmdline/apt-get.cc:1817
-#: cmdline/apt-shell.cc:366 cmdline/apt-shell.cc:1538 apt-pkg/cachefile.cc:71
+#: cmdline/apt-get.cc:312 cmdline/apt-get.cc:1601 cmdline/apt-get.cc:1827
+#: cmdline/apt-shell.cc:373 cmdline/apt-shell.cc:1548 apt-pkg/cachefile.cc:67
 msgid "The list of sources could not be read."
 msgstr "ソースリストを読むことができません"
 
-#: cmdline/apt-get.cc:325 cmdline/apt-shell.cc:386
+#: cmdline/apt-get.cc:332 cmdline/apt-shell.cc:393
 #, c-format
 msgid "Need to get %sB/%sB of archives.\n"
 msgstr "%sB/%sB のアーカイブを取得する必要があります。\n"
 
-#: cmdline/apt-get.cc:328 cmdline/apt-shell.cc:389
+#: cmdline/apt-get.cc:335 cmdline/apt-shell.cc:396
 #, c-format
 msgid "Need to get %sB of archives.\n"
 msgstr "%sB のアーカイブを取得する必要があります。\n"
 
-#: cmdline/apt-get.cc:333 cmdline/apt-shell.cc:205 cmdline/apt-shell.cc:394
+#: cmdline/apt-get.cc:340 cmdline/apt-shell.cc:212 cmdline/apt-shell.cc:401
 #, c-format
 msgid "After unpacking %sB of additional disk space will be used.\n"
 msgstr "展開後に %sB のディスク容量が追加消費されます。\n"
 
-#: cmdline/apt-get.cc:336 cmdline/apt-shell.cc:208 cmdline/apt-shell.cc:397
+#: cmdline/apt-get.cc:343 cmdline/apt-shell.cc:215 cmdline/apt-shell.cc:404
 #, c-format
 msgid "After unpacking %sB disk space will be freed.\n"
 msgstr "展開後に %sB が解放されます。\n"
 
-#: cmdline/apt-get.cc:354 cmdline/apt-shell.cc:415
+#: cmdline/apt-get.cc:361 cmdline/apt-shell.cc:422
 #, c-format
 msgid "You don't have enough free space in %s."
 msgstr "%s に十分な空きスペースがありません"
 
-#: cmdline/apt-get.cc:363 cmdline/apt-shell.cc:424
+#: cmdline/apt-get.cc:370 cmdline/apt-shell.cc:431
 msgid "There are problems and -y was used without --force-yes"
 msgstr ""
 "問題が発生しましたが、-y オプションが --force-yes とともに指定されていません"
 
-#: cmdline/apt-get.cc:369 cmdline/apt-get.cc:389 cmdline/apt-shell.cc:430
-#: cmdline/apt-shell.cc:450
+#: cmdline/apt-get.cc:376 cmdline/apt-get.cc:396 cmdline/apt-shell.cc:437
+#: cmdline/apt-shell.cc:457
 msgid "Trivial Only specified but this is not a trivial operation."
 msgstr ""
 
-#: cmdline/apt-get.cc:371 cmdline/apt-shell.cc:432
+#: cmdline/apt-get.cc:378 cmdline/apt-shell.cc:439
 msgid "Yes, do as I say!"
 msgstr "Yes, do as I say!"
 
-#: cmdline/apt-get.cc:373 cmdline/apt-shell.cc:434
+#: cmdline/apt-get.cc:380 cmdline/apt-shell.cc:441
 #, c-format
 msgid ""
 "You are about to do something potentially harmful\n"
@@ -549,30 +550,30 @@ msgstr ""
 "'%s'\n"
 " ?] "
 
-#: cmdline/apt-get.cc:379 cmdline/apt-get.cc:398 cmdline/apt-shell.cc:223
-#: cmdline/apt-shell.cc:440 cmdline/apt-shell.cc:459
+#: cmdline/apt-get.cc:386 cmdline/apt-get.cc:405 cmdline/apt-shell.cc:230
+#: cmdline/apt-shell.cc:447 cmdline/apt-shell.cc:466
 msgid "Abort."
 msgstr "中断しました。"
 
-#: cmdline/apt-get.cc:394 cmdline/apt-shell.cc:221 cmdline/apt-shell.cc:455
+#: cmdline/apt-get.cc:401 cmdline/apt-shell.cc:228 cmdline/apt-shell.cc:462
 msgid "Do you want to continue? [Y/n] "
 msgstr "続行しますか? [Y/n]"
 
-#: cmdline/apt-get.cc:472 cmdline/apt-get.cc:577 cmdline/apt-get.cc:994
-#: cmdline/apt-get.cc:1729 cmdline/apt-shell.cc:532 cmdline/apt-shell.cc:1014
+#: cmdline/apt-get.cc:479 cmdline/apt-get.cc:584 cmdline/apt-get.cc:1001
+#: cmdline/apt-get.cc:1739 cmdline/apt-shell.cc:539 cmdline/apt-shell.cc:1021
 #, c-format
 msgid "Failed to fetch %s  %s\n"
 msgstr "以下の取得に失敗しました: %s  %s\n"
 
-#: cmdline/apt-get.cc:490 cmdline/apt-shell.cc:550
+#: cmdline/apt-get.cc:497 cmdline/apt-shell.cc:557
 msgid "Some files failed to download"
 msgstr "幾つかのファイルの取得に失敗しました"
 
-#: cmdline/apt-get.cc:491 cmdline/apt-get.cc:1738 cmdline/apt-shell.cc:551
+#: cmdline/apt-get.cc:498 cmdline/apt-get.cc:1748 cmdline/apt-shell.cc:558
 msgid "Download complete and in download only mode"
 msgstr "パッケージの取得が完了しました。(取得のみのモードです)"
 
-#: cmdline/apt-get.cc:497 cmdline/apt-shell.cc:557
+#: cmdline/apt-get.cc:504 cmdline/apt-shell.cc:564
 msgid ""
 "Unable to fetch some archives, maybe run apt-get update or try with --fix-"
 "missing?"
@@ -580,66 +581,66 @@ msgstr ""
 "幾つかのアーカイブが取得できません。'apt-get update' を実行するか、--fix-"
 "missing オプションを試して下さい。"
 
-#: cmdline/apt-get.cc:501 cmdline/apt-shell.cc:561
+#: cmdline/apt-get.cc:508 cmdline/apt-shell.cc:568
 msgid "--fix-missing and media swapping is not currently supported"
 msgstr "--fix-missing とメディア交換は現在同時にはサポートされていません"
 
-#: cmdline/apt-get.cc:506 cmdline/apt-shell.cc:566
+#: cmdline/apt-get.cc:513 cmdline/apt-shell.cc:573
 msgid "Unable to correct missing packages."
 msgstr "足りないパッケージを取得することができません。"
 
-#: cmdline/apt-get.cc:507 cmdline/apt-shell.cc:567
+#: cmdline/apt-get.cc:514 cmdline/apt-shell.cc:574
 msgid "Aborting Install."
 msgstr "インストールを中断しました。"
 
-#: cmdline/apt-get.cc:582 cmdline/apt-get.cc:1734
+#: cmdline/apt-get.cc:589 cmdline/apt-get.cc:1744
 msgid "Failed to fetch some archives."
 msgstr "幾つかのアーカイブの取得に失敗しました。"
 
-#: cmdline/apt-get.cc:676 cmdline/apt-get.cc:1189 cmdline/apt-get.cc:1252
-#: cmdline/apt-get.cc:1287 cmdline/apt-get.cc:1631 cmdline/apt-shell.cc:702
-#: cmdline/apt-shell.cc:1279 cmdline/apt-shell.cc:1314
+#: cmdline/apt-get.cc:683 cmdline/apt-get.cc:1199 cmdline/apt-get.cc:1262
+#: cmdline/apt-get.cc:1297 cmdline/apt-get.cc:1641 cmdline/apt-shell.cc:709
+#: cmdline/apt-shell.cc:1289 cmdline/apt-shell.cc:1324
 #, c-format
 msgid "Selecting %s for '%s'\n"
 msgstr "'%2$s' として %1$s を選択しました\n"
 
-#: cmdline/apt-get.cc:682 cmdline/apt-shell.cc:708
+#: cmdline/apt-get.cc:689 cmdline/apt-shell.cc:715
 #, c-format
 msgid "Package %s is a virtual package with no good providers.\n"
 msgstr "パッケージ %s は提供されていないバーチャルパッケージです。\n"
 
-#: cmdline/apt-get.cc:688 cmdline/apt-get.cc:744 cmdline/apt-shell.cc:714
-#: cmdline/apt-shell.cc:770 cmdline/cmdline.cc:1830
+#: cmdline/apt-get.cc:695 cmdline/apt-get.cc:751 cmdline/apt-shell.cc:721
+#: cmdline/apt-shell.cc:777 cmdline/cmdline.cc:1845
 #, c-format
 msgid "Package %s is a virtual package provided by:\n"
 msgstr "%s は以下のパッケージで提供されているバーチャルパッケージです。\n"
 
-#: cmdline/apt-get.cc:696 cmdline/apt-get.cc:756 cmdline/apt-shell.cc:722
-#: cmdline/apt-shell.cc:782
+#: cmdline/apt-get.cc:703 cmdline/apt-get.cc:763 cmdline/apt-shell.cc:729
+#: cmdline/apt-shell.cc:789
 msgid " [Installed]"
 msgstr " [インストール済]"
 
-#: cmdline/apt-get.cc:701 cmdline/apt-get.cc:761 cmdline/apt-shell.cc:727
-#: cmdline/apt-shell.cc:787
+#: cmdline/apt-get.cc:708 cmdline/apt-get.cc:768 cmdline/apt-shell.cc:734
+#: cmdline/apt-shell.cc:794
 msgid "You should explicitly select one to install."
 msgstr "インストールするパッケージを明示的に選択する必要があります。"
 
-#: cmdline/apt-get.cc:702 cmdline/apt-shell.cc:728
+#: cmdline/apt-get.cc:709 cmdline/apt-shell.cc:735
 #, c-format
 msgid "Package %s is a virtual package with multiple good providers.\n"
 msgstr "パッケージ %s は複数で提供されているバーチャルパッケージです。\n"
 
-#: cmdline/apt-get.cc:713 cmdline/apt-shell.cc:739
+#: cmdline/apt-get.cc:720 cmdline/apt-shell.cc:746
 #, c-format
 msgid "Skipping %s, it is already installed and upgrade is not set.\n"
 msgstr "%s はすでにインストールされているため、スキップします。\n"
 
-#: cmdline/apt-get.cc:731 cmdline/apt-shell.cc:757
+#: cmdline/apt-get.cc:738 cmdline/apt-shell.cc:764
 #, c-format
 msgid "Package %s is not installed, so not removed\n"
 msgstr "パッケージ %s はインストールされていませんので、削除は行われません\n"
 
-#: cmdline/apt-get.cc:767 cmdline/apt-shell.cc:793
+#: cmdline/apt-get.cc:774 cmdline/apt-shell.cc:800
 #, c-format
 msgid ""
 "Package %s has no available version, but exists in the database.\n"
@@ -653,65 +654,65 @@ msgstr ""
 "ジが存在するリポジトリが sources.list に書かれていなかったという状況が考\n"
 "えられます。\n"
 
-#: cmdline/apt-get.cc:789 cmdline/apt-shell.cc:815
+#: cmdline/apt-get.cc:796 cmdline/apt-shell.cc:822
 msgid "However the following packages replace it:"
 msgstr "以下のパッケージで置き換えられます:"
 
-#: cmdline/apt-get.cc:792 cmdline/apt-shell.cc:818
+#: cmdline/apt-get.cc:799 cmdline/apt-shell.cc:825
 #, c-format
 msgid "Package %s has no installation candidate"
 msgstr "パッケージ %s はインストールすることができません"
 
-#: cmdline/apt-get.cc:812 cmdline/apt-shell.cc:844
+#: cmdline/apt-get.cc:819 cmdline/apt-shell.cc:851
 #, c-format
 msgid "Reinstallation of %s is not possible, it cannot be downloaded.\n"
 msgstr ""
 "＊ %s をダウンロードすることができないため、再インストールは不可能です。\n"
 
-#: cmdline/apt-get.cc:820 cmdline/apt-shell.cc:852
+#: cmdline/apt-get.cc:827 cmdline/apt-shell.cc:859
 #, c-format
 msgid "%s is already the newest version.\n"
 msgstr "＊ %s は既に最新バージョンがインストールされています。\n"
 
-#: cmdline/apt-get.cc:849 cmdline/apt-shell.cc:881
+#: cmdline/apt-get.cc:856 cmdline/apt-shell.cc:888
 #, c-format
 msgid "Release %s'%s' for '%s' was not found"
 msgstr "パッケージ '%3$s' のリリース %1$s'%2$s' が見付かりません"
 
-#: cmdline/apt-get.cc:851 cmdline/apt-shell.cc:883
+#: cmdline/apt-get.cc:858 cmdline/apt-shell.cc:890
 #, c-format
 msgid "Version %s'%s' for '%s' was not found"
 msgstr "パッケージ '%3$s' のバージョン %1$s'%2$s' が見付かりません"
 
-#: cmdline/apt-get.cc:859 cmdline/apt-shell.cc:891
+#: cmdline/apt-get.cc:866 cmdline/apt-shell.cc:898
 #, c-format
 msgid "Selected version %s (%s) for %s\n"
 msgstr "%3$s としてバージョン %1$s (%2$s) を選択しました\n"
 
-#: cmdline/apt-get.cc:862 cmdline/apt-shell.cc:894
+#: cmdline/apt-get.cc:869 cmdline/apt-shell.cc:901
 #, c-format
 msgid "Selected version %s for %s\n"
 msgstr "%2$s のバージョン %1$s を選択しました\n"
 
-#: cmdline/apt-get.cc:895
+#: cmdline/apt-get.cc:902
 msgid "The update command takes no arguments"
 msgstr "update コマンドは引数をとりません"
 
-#: cmdline/apt-get.cc:918 cmdline/apt-shell.cc:941
+#: cmdline/apt-get.cc:925 cmdline/apt-shell.cc:948
 #, c-format
 msgid "Sources list %s could not be read"
 msgstr "ソースリスト %s を読みこむことができません"
 
-#: cmdline/apt-get.cc:921 cmdline/apt-shell.cc:944
+#: cmdline/apt-get.cc:928 cmdline/apt-shell.cc:951
 #, c-format
 msgid "Sources list %s doesn't exist"
 msgstr "ソースリスト %s が存在しません"
 
-#: cmdline/apt-get.cc:934 cmdline/apt-shell.cc:956
+#: cmdline/apt-get.cc:941 cmdline/apt-shell.cc:963
 msgid "Unable to lock the list directory"
 msgstr "listディレクトリをロックすることができません"
 
-#: cmdline/apt-get.cc:966 cmdline/apt-shell.cc:986
+#: cmdline/apt-get.cc:973 cmdline/apt-shell.cc:993
 msgid ""
 "Release files for some repositories could not be retrieved or authenticated. "
 "Such repositories are being ignored."
@@ -719,7 +720,7 @@ msgstr ""
 "いくつかのリポジトリのリリースファイルが取得できませんでした。取得できなかっ"
 "たリポジトリは無視されます。"
 
-#: cmdline/apt-get.cc:1034 cmdline/apt-shell.cc:1048
+#: cmdline/apt-get.cc:1041 cmdline/apt-shell.cc:1055
 msgid ""
 "Some index files failed to download, they have been ignored, or old ones "
 "used instead."
@@ -727,34 +728,34 @@ msgstr ""
 "いくつかのインデックスファイルのダウンロードに失敗、無視、あるいは古いものが"
 "使用されました。"
 
-#: cmdline/apt-get.cc:1053 cmdline/apt-shell.cc:1077
+#: cmdline/apt-get.cc:1060 cmdline/apt-shell.cc:1084
 msgid "Internal Error, AllUpgrade broke stuff"
 msgstr "内部エラー、AllUpgrade は何かを破壊します"
 
-#: cmdline/apt-get.cc:1150 cmdline/apt-get.cc:1167 cmdline/apt-shell.cc:1179
-#: cmdline/apt-shell.cc:1196
+#: cmdline/apt-get.cc:1157 cmdline/apt-get.cc:1174 cmdline/apt-shell.cc:1186
+#: cmdline/apt-shell.cc:1203
 #, c-format
 msgid "Couldn't parse name '%s'"
 msgstr "'%s' をパースすることができませんでした"
 
-#: cmdline/apt-get.cc:1262 cmdline/apt-get.cc:1301 cmdline/apt-shell.cc:1289
-#: cmdline/apt-shell.cc:1329
+#: cmdline/apt-get.cc:1272 cmdline/apt-get.cc:1311 cmdline/apt-shell.cc:1299
+#: cmdline/apt-shell.cc:1339
 #, c-format
 msgid "Couldn't find package %s"
 msgstr "パッケージ %s が見付かりません"
 
-#: cmdline/apt-get.cc:1276 cmdline/apt-shell.cc:1303 cmdline/cmdline.cc:48
+#: cmdline/apt-get.cc:1286 cmdline/apt-shell.cc:1313 cmdline/cmdline.cc:49
 #, c-format
 msgid "Regex compilation error - %s"
 msgstr "正規表現の展開エラー - %s"
 
-#: cmdline/apt-get.cc:1331
+#: cmdline/apt-get.cc:1341
 msgid "You might want to run `apt-get --fix-broken install' to correct these:"
 msgstr ""
 "以下の問題を解決するために 'apt-get --fix-broken install' を実行する必要があ"
 "るかもしれません:"
 
-#: cmdline/apt-get.cc:1334
+#: cmdline/apt-get.cc:1344
 msgid ""
 "Unmet dependencies. Try 'apt-get --fix-broken install' with no packages (or "
 "specify a solution)."
@@ -762,7 +763,7 @@ msgstr ""
 "未解決の依存情報です。'apt-get --fix-broken install' を実行してみてください"
 "(又は解決パッケージを明示してください)。"
 
-#: cmdline/apt-get.cc:1356 cmdline/apt-shell.cc:1392
+#: cmdline/apt-get.cc:1366 cmdline/apt-shell.cc:1402
 #, fuzzy
 msgid ""
 "Some packages could not be installed. This may mean that you have\n"
@@ -774,7 +775,7 @@ msgstr ""
 "たり、まだIncomingから移動されていない)不安定なディストリビューション\n"
 "を使用していないでしょうか。"
 
-#: cmdline/apt-get.cc:1363 cmdline/apt-shell.cc:1399
+#: cmdline/apt-get.cc:1373 cmdline/apt-shell.cc:1409
 msgid ""
 "Since you only requested a single operation it is extremely likely that\n"
 "the package is simply not installable and a bug report against\n"
@@ -783,100 +784,100 @@ msgstr ""
 "単純な操作だけを行った時に、パッケージがインストール\n"
 "できない場合は、バグリポートしてください。"
 
-#: cmdline/apt-get.cc:1368 cmdline/apt-shell.cc:1404
+#: cmdline/apt-get.cc:1378 cmdline/apt-shell.cc:1414
 msgid "The following information may help to resolve the situation:"
 msgstr "以下の情報がこの問題を解決するために役立つかもしれません:"
 
-#: cmdline/apt-get.cc:1371 cmdline/apt-shell.cc:1408
+#: cmdline/apt-get.cc:1381 cmdline/apt-shell.cc:1418
 msgid "Broken packages"
 msgstr "壊れたパッケージです"
 
-#: cmdline/apt-get.cc:1398
+#: cmdline/apt-get.cc:1408
 msgid "The following extra packages will be installed:"
 msgstr "以下の追加パッケージがインストールされます:"
 
-#: cmdline/apt-get.cc:1478
+#: cmdline/apt-get.cc:1488
 msgid "Suggested packages:"
 msgstr "推奨されたパッケージ:"
 
-#: cmdline/apt-get.cc:1479
+#: cmdline/apt-get.cc:1489
 msgid "Recommended packages:"
 msgstr "推奨されたパッケージ:"
 
-#: cmdline/apt-get.cc:1503 cmdline/apt-shell.cc:1435
+#: cmdline/apt-get.cc:1513 cmdline/apt-shell.cc:1445
 msgid "Calculating Upgrade... "
 msgstr "アップグレードパッケージを検出しています... "
 
-#: cmdline/apt-get.cc:1506 cmdline/apt-shell.cc:1438 methods/connect.cc:102
+#: cmdline/apt-get.cc:1516 cmdline/apt-shell.cc:1448 methods/connect.cc:102
 #: methods/ftp.cc:706
 msgid "Failed"
 msgstr "失敗"
 
-#: cmdline/apt-get.cc:1522 cmdline/apt-shell.cc:1450
+#: cmdline/apt-get.cc:1532 cmdline/apt-shell.cc:1460
 msgid "Done"
 msgstr "完了"
 
-#: cmdline/apt-get.cc:1586
+#: cmdline/apt-get.cc:1596
 msgid "Must specify at least one package to fetch source for"
 msgstr ""
 "ソースを取得するには少なくともひとつのパッケージ名を指定する必要があります"
 
-#: cmdline/apt-get.cc:1644 cmdline/apt-get.cc:1835 cmdline/apt-shell.cc:1556
+#: cmdline/apt-get.cc:1654 cmdline/apt-get.cc:1845 cmdline/apt-shell.cc:1566
 #, c-format
 msgid "Unable to find a source package for %s"
 msgstr "%s のソースパッケージが見付かりません"
 
-#: cmdline/apt-get.cc:1689
+#: cmdline/apt-get.cc:1699
 #, c-format
 msgid "You don't have enough free space in %s"
 msgstr "%s に十分な空きスペースがありません"
 
-#: cmdline/apt-get.cc:1694
+#: cmdline/apt-get.cc:1704
 #, c-format
 msgid "Need to get %sB/%sB of source archives.\n"
 msgstr "%sB/%sB のソースアーカイブを取得します。\n"
 
-#: cmdline/apt-get.cc:1697
+#: cmdline/apt-get.cc:1707
 #, c-format
 msgid "Need to get %sB of source archives.\n"
 msgstr "%sB のソースアーカイブを取得します。\n"
 
-#: cmdline/apt-get.cc:1703
+#: cmdline/apt-get.cc:1713
 #, c-format
 msgid "Fetch Source %s\n"
 msgstr "ソース %s を取得します\n"
 
-#: cmdline/apt-get.cc:1763
+#: cmdline/apt-get.cc:1773
 #, c-format
 msgid "Build command '%s' failed.\n"
 msgstr "ビルドコマンド '%s' が失敗しました\n"
 
-#: cmdline/apt-get.cc:1775
+#: cmdline/apt-get.cc:1785
 #, c-format
 msgid "Unpack command '%s' failed.\n"
 msgstr "展開コマンド '%s' が失敗しました\n"
 
-#: cmdline/apt-get.cc:1794
+#: cmdline/apt-get.cc:1804
 msgid "Child process failed"
 msgstr "子プロセスが失敗しました"
 
-#: cmdline/apt-get.cc:1812 cmdline/apt-shell.cc:1533
+#: cmdline/apt-get.cc:1822 cmdline/apt-shell.cc:1543
 msgid "Must specify at least one package to check builddeps for"
 msgstr ""
 "check builddeps を実行するには少なくともひとつのパッケージを指定する必要があ"
 "ります"
 
-#: cmdline/apt-get.cc:1840 cmdline/apt-shell.cc:1561
+#: cmdline/apt-get.cc:1850 cmdline/apt-shell.cc:1571
 #, c-format
 msgid "Unable to get build-dependency information for %s"
 msgstr "%s のビルド依存情報を取得することができません"
 
-#: cmdline/apt-get.cc:1860 cmdline/apt-shell.cc:1581
+#: cmdline/apt-get.cc:1870 cmdline/apt-shell.cc:1591
 #, c-format
 msgid "%s has no build depends.\n"
 msgstr "%s はビルド依存が指定されていません\n"
 
-#: cmdline/apt-get.cc:1931 cmdline/apt-shell.cc:1652
+#: cmdline/apt-get.cc:1941 cmdline/apt-shell.cc:1662
 #, c-format
 msgid ""
 "%s dependency for %s cannot be satisfied because the package %s cannot be "
@@ -885,26 +886,26 @@ msgstr ""
 "パッケージ %3$s が見つからないため、%2$s の %1$s の依存を満たすことができませ"
 "ん。"
 
-#: cmdline/apt-get.cc:1983 cmdline/apt-shell.cc:1704
+#: cmdline/apt-get.cc:1994 cmdline/apt-shell.cc:1715
 #, c-format
 msgid ""
 "%s dependency for %s cannot be satisfied because no available versions of "
 "package %s can satisfy version requirements"
 msgstr ""
-"%3$s の必要とされているパージョンのパッケージが見つからないため、%2$s の %1"
-"$s の依存を満たすことができません。"
+"%3$s の必要とされているパージョンのパッケージが見つからないため、%2$s の "
+"%1$s の依存を満たすことができません。"
 
-#: cmdline/apt-get.cc:2018 cmdline/apt-shell.cc:1738
+#: cmdline/apt-get.cc:2030 cmdline/apt-shell.cc:1750
 #, c-format
 msgid "Failed to satisfy %s dependency for %s: Installed package %s is too new"
 msgstr ""
 
-#: cmdline/apt-get.cc:2043 cmdline/apt-shell.cc:1763
+#: cmdline/apt-get.cc:2055 cmdline/apt-shell.cc:1775
 #, c-format
 msgid "Failed to satisfy %s dependency for %s: %s"
 msgstr "%2$s の %1$s 依存関係を解決することができません: %3$s"
 
-#: cmdline/apt-get.cc:2060 cmdline/apt-shell.cc:1777
+#: cmdline/apt-get.cc:2072 cmdline/apt-shell.cc:1789
 #, c-format
 msgid ""
 "Some broken packages were found while trying to process build-dependencies "
@@ -916,15 +917,15 @@ msgstr ""
 "これらを解決するためには 'apt-get --fix-broken install' を実行する必要がある"
 "かもしれません。"
 
-#: cmdline/apt-get.cc:2066
+#: cmdline/apt-get.cc:2078
 msgid "Failed to process build dependencies"
 msgstr "ビルド依存関係を解決することができません"
 
-#: cmdline/apt-get.cc:2133 cmdline/apt-shell.cc:1970
+#: cmdline/apt-get.cc:2145 cmdline/apt-shell.cc:1982
 msgid "Supported Modules:"
 msgstr "サポートモジュール:"
 
-#: cmdline/apt-get.cc:2174
+#: cmdline/apt-get.cc:2186
 msgid ""
 "Usage: apt-get [options] command\n"
 "       apt-get [options] install|remove pkg1 [pkg2 ...]\n"
@@ -969,7 +970,7 @@ msgstr ""
 "   autoclean - 古いアーカイブファイルを削除します\n"
 "   check -  壊れた依存関係がないかチェックします\n"
 
-#: cmdline/apt-get.cc:2202
+#: cmdline/apt-get.cc:2214
 msgid ""
 "\n"
 "Options:\n"
@@ -1011,73 +1012,70 @@ msgstr ""
 "apt.conf(5) を参照してください。\n"
 "                       This APT has Super Cow Powers.\n"
 
-#: cmdline/apt-shell.cc:141 cmdline/apt-shell.cc:2684
+#: cmdline/apt-shell.cc:148 cmdline/apt-shell.cc:2696
 msgid "There are broken packages. "
 msgstr "壊れたパッケージがあります"
 
-#: cmdline/apt-shell.cc:142 cmdline/apt-shell.cc:1362
-#: cmdline/apt-shell.cc:2685
+#: cmdline/apt-shell.cc:149 cmdline/apt-shell.cc:1372
+#: cmdline/apt-shell.cc:2697
 msgid "Run `check' to see them."
 msgstr "参照するには `check'を実行してください。"
 
-#: cmdline/apt-shell.cc:143
-msgid "You can try to fix them automatically with `install --fix-broken'0."
+#: cmdline/apt-shell.cc:150 cmdline/apt-shell.cc:1373
+#: cmdline/apt-shell.cc:2698
+msgid "You can try to fix them automatically with `install --fix-broken'."
 msgstr "`install --fix-broken' により自動的に修復することが可能です。"
 
-#: cmdline/apt-shell.cc:153
+#: cmdline/apt-shell.cc:160
 msgid "Excessive arguments"
 msgstr "引数が多過ぎます"
 
-#: cmdline/apt-shell.cc:183
+#: cmdline/apt-shell.cc:190
 #, c-format
 msgid "Will need more %sB of archives.\n"
 msgstr "%sB のアーカイブを取得する必要があります。\n"
 
-#: cmdline/apt-shell.cc:186
+#: cmdline/apt-shell.cc:193
 #, c-format
 msgid "Will need less %sB of archives.\n"
 msgstr "%sB のアーカイブを取得する必要があります。\n"
 
-#: cmdline/apt-shell.cc:192
+#: cmdline/apt-shell.cc:199
 #, c-format
 msgid "After unpacking will need more %sB of disk space.\n"
 msgstr "展開後に %sB の空きディスク容量が必要になります。\n"
 
-#: cmdline/apt-shell.cc:195
+#: cmdline/apt-shell.cc:202
 #, c-format
 msgid "After unpacking will need less %sB of disk space.\n"
 msgstr "展開後に %sB の空きディスク容量が必要になります。\n"
 
-#: cmdline/apt-shell.cc:200
+#: cmdline/apt-shell.cc:207
 #, c-format
 msgid "Will need %sB of archives.\n"
 msgstr "%sB のアーカイブを取得する必要があります。\n"
 
-#: cmdline/apt-shell.cc:218
+#: cmdline/apt-shell.cc:225
 msgid "Unrequested changes are needed to execute this operation."
 msgstr "この操作を実行するには要求されていない変更が必要になります。"
 
-#: cmdline/apt-shell.cc:270
+#: cmdline/apt-shell.cc:277
 msgid "You might want to run `install --fix-broken' to correct these."
 msgstr ""
 "これらを解決するためには 'install --fix-broken' を実行する必要があるかもしれ"
 "ません。"
 
-#: cmdline/apt-shell.cc:1064 cmdline/apt-shell.cc:1102
-#: cmdline/apt-shell.cc:1426 cmdline/apt-shell.cc:1523
-#: cmdline/apt-shell.cc:2286
+#: cmdline/apt-shell.cc:1071 cmdline/apt-shell.cc:1109
+#: cmdline/apt-shell.cc:1436 cmdline/apt-shell.cc:1533
+#: cmdline/apt-shell.cc:2298
 msgid "You have no permissions for that"
 msgstr "この操作を実行する権利がありません"
 
-#: cmdline/apt-shell.cc:1361
+#: cmdline/apt-shell.cc:1371
 msgid "There are still broken packages. "
 msgstr "壊れたパッケージがあります。"
 
-#: cmdline/apt-shell.cc:1363 cmdline/apt-shell.cc:2686
-msgid "You can try to fix them automatically with `install --fix-broken'."
-msgstr "`install --fix-broken' により自動的に修復することが可能です。"
-
-#: cmdline/apt-shell.cc:2011
+#: cmdline/apt-shell.cc:2023
 #, fuzzy
 msgid ""
 "\n"
@@ -1144,7 +1142,7 @@ msgstr ""
 "\n"
 "                       This APT has Super Cow Powers.\n"
 
-#: cmdline/apt-shell.cc:2057
+#: cmdline/apt-shell.cc:2069
 msgid ""
 "Usage: install [options] pkg1[=ver] [pkg2 ...]\n"
 "\n"
@@ -1175,7 +1173,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2075
+#: cmdline/apt-shell.cc:2087
 msgid ""
 "Usage: remove [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1205,7 +1203,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2093
+#: cmdline/apt-shell.cc:2105
 msgid ""
 "Usage: keep [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1236,7 +1234,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2112
+#: cmdline/apt-shell.cc:2124
 msgid ""
 "Usage: upgrade [options]\n"
 "\n"
@@ -1264,7 +1262,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2128
+#: cmdline/apt-shell.cc:2140
 msgid ""
 "Usage: dist-upgrade [options]\n"
 "\n"
@@ -1292,7 +1290,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2144
+#: cmdline/apt-shell.cc:2156
 msgid ""
 "Usage: showpkg [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1312,7 +1310,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2157
+#: cmdline/apt-shell.cc:2169
 msgid ""
 "Usage: show [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1333,7 +1331,7 @@ msgstr ""
 "  -a   全てのバージョンの情報を表示する\n"
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 
-#: cmdline/apt-shell.cc:2171
+#: cmdline/apt-shell.cc:2183
 msgid ""
 "Usage: depends [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1353,7 +1351,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2184
+#: cmdline/apt-shell.cc:2196
 msgid ""
 "Usage: whatdepends [options] pkg1 [pkg2 ...]\n"
 "\n"
@@ -1373,7 +1371,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2197
+#: cmdline/apt-shell.cc:2209
 msgid ""
 "Usage: unmet [options]\n"
 "\n"
@@ -1393,7 +1391,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2210
+#: cmdline/apt-shell.cc:2222
 msgid ""
 "Usage: search [options] <regex>\n"
 "\n"
@@ -1418,7 +1416,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを使用する。例) -o dir::cache=/tmp\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2227
+#: cmdline/apt-shell.cc:2239
 msgid ""
 "Usage: list/ls [options] [pattern ...]\n"
 "\n"
@@ -1448,7 +1446,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを使用する。例) -o dir::cache=/tmp\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2245
+#: cmdline/apt-shell.cc:2257
 msgid ""
 "Usage: commit [options]\n"
 "\n"
@@ -1468,7 +1466,7 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2258
+#: cmdline/apt-shell.cc:2270
 msgid ""
 "Usage: script [options] script1 [script2]\n"
 "\n"
@@ -1488,90 +1486,90 @@ msgstr ""
 "  -o=? 指定した設定オプションを適用する (例: -o dir::cache=/tmp)\n"
 "\n"
 
-#: cmdline/apt-shell.cc:2269
+#: cmdline/apt-shell.cc:2281
 msgid "No help for that"
 msgstr "そのコマンドのヘルプはありません"
 
-#: cmdline/apt-shell.cc:2694
+#: cmdline/apt-shell.cc:2706
 msgid "Welcome to the APT shell. Type \"help\" for more information."
 msgstr "APT シェルへようこそ。詳細は \"help\" を実行してください。"
 
-#: cmdline/apt-shell.cc:2734
+#: cmdline/apt-shell.cc:2754
 msgid "Exceeded maximum number of command arguments"
 msgstr "コマンドの引数の上限を越えました"
 
-#: cmdline/cmdline.cc:26
+#: cmdline/cmdline.cc:27
 msgid "Y"
 msgstr "Y"
 
-#: cmdline/cmdline.cc:209
+#: cmdline/cmdline.cc:224
 msgid "The following packages have unmet dependencies:"
 msgstr "以下のパッケージは解決できない依存関係を持っています:"
 
-#: cmdline/cmdline.cc:307
+#: cmdline/cmdline.cc:322
 #, c-format
 msgid "but %s is installed"
 msgstr "しかし、%s がすでにインストールされています"
 
-#: cmdline/cmdline.cc:309
+#: cmdline/cmdline.cc:324
 #, c-format
 msgid "but %s is to be installed"
 msgstr "しかし、%s がインストールされています"
 
-#: cmdline/cmdline.cc:316
+#: cmdline/cmdline.cc:331
 msgid "but it is not installable"
 msgstr "それをインストールすることができません"
 
-#: cmdline/cmdline.cc:318
+#: cmdline/cmdline.cc:333
 msgid "but it is a virtual package"
 msgstr "それは仮想パッケージです"
 
-#: cmdline/cmdline.cc:321
+#: cmdline/cmdline.cc:336
 msgid "but it is not installed"
 msgstr "それはインストールされていません"
 
-#: cmdline/cmdline.cc:321
+#: cmdline/cmdline.cc:336
 msgid "but it is not going to be installed"
 msgstr "それはインストールされません"
 
-#: cmdline/cmdline.cc:326
+#: cmdline/cmdline.cc:341
 msgid " or"
 msgstr " または"
 
-#: cmdline/cmdline.cc:356
+#: cmdline/cmdline.cc:371
 msgid "The following NEW packages will be installed:"
 msgstr "以下のパッケージが新たにインストールされます:"
 
-#: cmdline/cmdline.cc:409
+#: cmdline/cmdline.cc:424
 msgid "The following packages will be REPLACED:"
 msgstr "以下のパッケージがリプレースされます:"
 
-#: cmdline/cmdline.cc:410
+#: cmdline/cmdline.cc:425
 msgid "The following packages will be REMOVED:"
 msgstr "以下のパッケージが削除されます:"
 
-#: cmdline/cmdline.cc:439
+#: cmdline/cmdline.cc:454
 msgid "The following packages have been kept back"
 msgstr "以下のパッケージは保留されます:"
 
-#: cmdline/cmdline.cc:467
+#: cmdline/cmdline.cc:482
 msgid "The following packages will be upgraded"
 msgstr "以下のパッケージがアップグレードされます:"
 
-#: cmdline/cmdline.cc:495
+#: cmdline/cmdline.cc:510
 msgid "The following packages will be DOWNGRADED"
 msgstr "以下のパッケージがダウングレードされます:"
 
-#: cmdline/cmdline.cc:517
+#: cmdline/cmdline.cc:532
 msgid "The following held packages will be changed:"
 msgstr "以下の保留パッケージが変更されます"
 
-#: cmdline/cmdline.cc:608
+#: cmdline/cmdline.cc:623
 #, c-format
 msgid "%s (due to %s) "
 msgstr "%s (%s が依存) "
 
-#: cmdline/cmdline.cc:616
+#: cmdline/cmdline.cc:631
 msgid ""
 "WARNING: The following essential packages will be removed\n"
 "This should NOT be done unless you know exactly what you are doing!"
@@ -1579,429 +1577,434 @@ msgstr ""
 "＊注意＊ 以下の重要なパッケージが削除されます\n"
 "何をしようとしているか分からない場合は、＊絶対に＊実行してはいけません"
 
-#: cmdline/cmdline.cc:682
+#: cmdline/cmdline.cc:697
 #, c-format
 msgid "%lu upgraded, %lu newly installed, "
 msgstr "アップグレード: %lu 個, 新規インストール: %lu 個, "
 
-#: cmdline/cmdline.cc:686
+#: cmdline/cmdline.cc:701
 #, c-format
 msgid "%lu reinstalled, "
 msgstr "再インストール: %lu 個, "
 
-#: cmdline/cmdline.cc:688
+#: cmdline/cmdline.cc:703
 #, c-format
 msgid "%lu downgraded, "
 msgstr "ダウングレード: %lu 個, "
 
-#: cmdline/cmdline.cc:691
+#: cmdline/cmdline.cc:706
 #, c-format
 msgid "%lu replaced, "
 msgstr "リプレース: %lu 個, "
 
-#: cmdline/cmdline.cc:695
+#: cmdline/cmdline.cc:710
 #, c-format
 msgid "%lu removed and %lu not upgraded.\n"
 msgstr "削除: %lu 個, 保留: %lu 個\n"
 
-#: cmdline/cmdline.cc:698
+#: cmdline/cmdline.cc:713
 #, c-format
 msgid "%lu removed and %lu kept.\n"
 msgstr "削除: %lu 個, 保留: %lu 個\n"
 
-#: cmdline/cmdline.cc:702
+#: cmdline/cmdline.cc:717
 #, c-format
 msgid "%lu not fully installed or removed.\n"
 msgstr "%lu 個のパッケージが完全にインストールまたは削除されていません。\n"
 
-#: cmdline/cmdline.cc:924
+#: cmdline/cmdline.cc:939
 #, c-format
 msgid "Package %s version %s has an unmet dep:\n"
 msgstr "パッケージ %s のバージョン %s は解決不可能な依存情報を持っています:\n"
 
-#: cmdline/cmdline.cc:1556
+#: cmdline/cmdline.cc:1571
 msgid "Name"
 msgstr "名前"
 
-#: cmdline/cmdline.cc:1557
+#: cmdline/cmdline.cc:1572
 msgid "Installed"
 msgstr "インストール済"
 
-#: cmdline/cmdline.cc:1558
+#: cmdline/cmdline.cc:1573
 msgid "Candidate"
 msgstr "候補"
 
-#: cmdline/cmdline.cc:1669
+#: cmdline/cmdline.cc:1684
 msgid "You must give exactly one pattern"
 msgstr "パターンは1つだけ指定して下さい"
 
-#: cmdline/cmdline.cc:1841
+#: cmdline/cmdline.cc:1856
 msgid "You should explicitly select one to show."
 msgstr "表示するパッケージを明示的に選択する必要があります。"
 
-#: cmdline/cmdline.cc:1842
+#: cmdline/cmdline.cc:1857
 #, c-format
 msgid "Package %s is a virtual package with multiple providers."
 msgstr ""
 "パッケージ %s は複数のパッケージで提供されているバーチャルパッケージです。"
 
-#: cmdline/cmdline.cc:1902
+#: cmdline/cmdline.cc:1916
 msgid "No packages found"
 msgstr "パッケージがみつかりません"
 
-#: cmdline/cmdline.cc:1920
+#: cmdline/cmdline.cc:1934
 msgid "Changelog data not available for the repository."
 msgstr ""
 
-#: apt-pkg/contrib/cdromutl.cc:61
+#: apt-pkg/contrib/cdromutl.cc:57
 #, c-format
 msgid "Unable to stat the mount point %s"
 msgstr "マウントポイント '%s' の情報を取得できません"
 
-#: apt-pkg/contrib/cdromutl.cc:175 apt-pkg/acquire.cc:418 apt-pkg/clean.cc:45
+#: apt-pkg/contrib/cdromutl.cc:171 apt-pkg/acquire.cc:415 apt-pkg/clean.cc:41
 #, c-format
 msgid "Unable to change to %s"
 msgstr "%s へ変更することができません"
 
-#: apt-pkg/contrib/cdromutl.cc:179 apt-pkg/contrib/configuration.cc:737
-#: apt-pkg/acquire.cc:412 apt-pkg/clean.cc:39 apt-pkg/sourcelist.cc:429
+#: apt-pkg/contrib/cdromutl.cc:175 apt-pkg/contrib/configuration.cc:734
+#: apt-pkg/acquire.cc:409 apt-pkg/clean.cc:35 apt-pkg/sourcelist.cc:443
 #, c-format
 msgid "Unable to read %s"
 msgstr "%s を読み込むことができません"
 
-#: apt-pkg/contrib/cdromutl.cc:217
+#: apt-pkg/contrib/cdromutl.cc:213
 msgid "Failed to stat the cdrom"
 msgstr "CDROM の検出に失敗しました"
 
-#: apt-pkg/contrib/cmndline.cc:82
+#: apt-pkg/contrib/cmndline.cc:79
 #, c-format
 msgid "Command line option '%c' [from %s] is not known."
 msgstr "コマンドラインオプション '%c' [%s から] は不明なオプションです。"
 
-#: apt-pkg/contrib/cmndline.cc:108 apt-pkg/contrib/cmndline.cc:116
-#: apt-pkg/contrib/cmndline.cc:124
+#: apt-pkg/contrib/cmndline.cc:105 apt-pkg/contrib/cmndline.cc:113
+#: apt-pkg/contrib/cmndline.cc:121
 #, c-format
 msgid "Command line option %s is not understood"
 msgstr "コマンドラインオプション %s を解釈することができません"
 
-#: apt-pkg/contrib/cmndline.cc:129
+#: apt-pkg/contrib/cmndline.cc:126
 #, c-format
 msgid "Command line option %s is not boolean"
 msgstr "コマンドラインオプション %s は boolean ではありません"
 
-#: apt-pkg/contrib/cmndline.cc:168 apt-pkg/contrib/cmndline.cc:189
+#: apt-pkg/contrib/cmndline.cc:165 apt-pkg/contrib/cmndline.cc:186
 #, c-format
 msgid "Option %s requires an argument."
 msgstr "オプション %s には引数が必要です"
 
-#: apt-pkg/contrib/cmndline.cc:203 apt-pkg/contrib/cmndline.cc:209
+#: apt-pkg/contrib/cmndline.cc:200 apt-pkg/contrib/cmndline.cc:206
 #, c-format
 msgid "Option %s: Configuration item specification must have an =<val>."
 msgstr "オプション %s: 設定オプションには =<値> を指定する必要があります。"
 
-#: apt-pkg/contrib/cmndline.cc:239
+#: apt-pkg/contrib/cmndline.cc:236
 #, c-format
 msgid "Option %s requires an integer argument, not '%s'"
 msgstr "オプション %s は '%s' ではなく整数の引数が必要です"
 
-#: apt-pkg/contrib/cmndline.cc:270
+#: apt-pkg/contrib/cmndline.cc:267
 #, c-format
 msgid "Option '%s' is too long"
 msgstr "オプション '%s' は長すぎます"
 
-#: apt-pkg/contrib/cmndline.cc:303
+#: apt-pkg/contrib/cmndline.cc:300
 #, c-format
 msgid "Sense %s is not understood, try true or false."
 msgstr "%s を解釈することができません。true か false を試してください。"
 
-#: apt-pkg/contrib/cmndline.cc:353
+#: apt-pkg/contrib/cmndline.cc:337 apt-pkg/contrib/cmndline.cc:357
 #, c-format
 msgid "Invalid operation %s"
 msgstr "不正な操作: %s"
 
-#: apt-pkg/contrib/configuration.cc:426
+#: apt-pkg/contrib/configuration.cc:423
 #, c-format
 msgid "Unrecognized type abbreviation: '%c'"
 msgstr ""
 
-#: apt-pkg/contrib/configuration.cc:485
+#: apt-pkg/contrib/configuration.cc:482
 #, c-format
 msgid "Opening configuration file %s"
 msgstr "設定ファイル %s を開いています"
 
-#: apt-pkg/contrib/configuration.cc:595
+#: apt-pkg/contrib/configuration.cc:592
 #, c-format
 msgid "Syntax error %s:%u: Block starts with no name."
 msgstr "文法エラー %s:%u: ブロックが名前なしで始まっています"
 
-#: apt-pkg/contrib/configuration.cc:614
+#: apt-pkg/contrib/configuration.cc:611
 #, c-format
 msgid "Syntax error %s:%u: Malformed Tag"
 msgstr "文法エラー %s:%u: 不正なタグです"
 
-#: apt-pkg/contrib/configuration.cc:631
+#: apt-pkg/contrib/configuration.cc:628
 #, c-format
 msgid "Syntax error %s:%u: Extra junk after value"
 msgstr "文法エラー %s:%u: 値の後ろの不要なバイトがはいっています"
 
-#: apt-pkg/contrib/configuration.cc:671
+#: apt-pkg/contrib/configuration.cc:668
 #, c-format
 msgid "Syntax error %s:%u: Directives can only be done at the top level"
 msgstr "文法エラー %s:%u: ディレクティブはトップレベルでのみ使用できます"
 
-#: apt-pkg/contrib/configuration.cc:678
+#: apt-pkg/contrib/configuration.cc:675
 #, c-format
 msgid "Syntax error %s:%u: Too many nested includes"
 msgstr "文法エラー %s:%u: インクルードのネストが許容範囲を越えています"
 
-#: apt-pkg/contrib/configuration.cc:682 apt-pkg/contrib/configuration.cc:687
+#: apt-pkg/contrib/configuration.cc:679 apt-pkg/contrib/configuration.cc:684
 #, c-format
 msgid "Syntax error %s:%u: Included from here"
 msgstr "文法エラー %s:%u: ここからインクルードされています"
 
-#: apt-pkg/contrib/configuration.cc:691
+#: apt-pkg/contrib/configuration.cc:688
 #, c-format
 msgid "Syntax error %s:%u: Unsupported directive '%s'"
 msgstr "文法エラー %s:%u: 未対応のディレクティブ '%s' です"
 
-#: apt-pkg/contrib/configuration.cc:725
+#: apt-pkg/contrib/configuration.cc:722
 #, c-format
 msgid "Syntax error %s:%u: Extra junk at end of file"
 msgstr "文法エラー %s:%u: 不要なバイトがファイルの広報にはいっています"
 
-#: apt-pkg/contrib/fileutl.cc:85
+#: apt-pkg/contrib/fileutl.cc:82
 #, c-format
 msgid "Not using locking for read only lock file %s"
 msgstr "読み込み専用のロックファイル %s にたいしてロックは行われません"
 
-#: apt-pkg/contrib/fileutl.cc:90
+#: apt-pkg/contrib/fileutl.cc:87
 #, c-format
 msgid "Could not open lock file %s"
 msgstr "ロックファイル %s をオープンできません。"
 
-#: apt-pkg/contrib/fileutl.cc:108
+#: apt-pkg/contrib/fileutl.cc:105
 #, c-format
 msgid "Not using locking for nfs mounted lock file %s"
 msgstr "NFSマウントされたロックファイル %s に対してはロックを行いません"
 
-#: apt-pkg/contrib/fileutl.cc:112
+#: apt-pkg/contrib/fileutl.cc:109
 #, c-format
 msgid "Could not get lock %s"
 msgstr "ロック '%s' を取得できません"
 
-#: apt-pkg/contrib/fileutl.cc:382
+#: apt-pkg/contrib/fileutl.cc:379
 #, c-format
 msgid "Waited, for %s but it wasn't there"
 msgstr "%s を待っていますが、存在しません"
 
-#: apt-pkg/contrib/fileutl.cc:392
+#: apt-pkg/contrib/fileutl.cc:389
 #, c-format
 msgid "Sub-process %s received a segmentation fault."
 msgstr "サブプロセス %s からセグメンテーションフォルトを受け取りました。"
 
-#: apt-pkg/contrib/fileutl.cc:395 apt-pkg/rpm/rpmpm.cc:640
+#: apt-pkg/contrib/fileutl.cc:392 apt-pkg/rpm/rpmpm.cc:638
 #, c-format
 msgid "Sub-process %s returned an error code (%u)"
 msgstr "サブプロセス %s がエラーコード (%u) を返しました"
 
-#: apt-pkg/contrib/fileutl.cc:397 apt-pkg/rpm/rpmpm.cc:643
+#: apt-pkg/contrib/fileutl.cc:394 apt-pkg/rpm/rpmpm.cc:641
 #, c-format
 msgid "Sub-process %s exited unexpectedly"
 msgstr "サブプロセス %s が予期しない終了をしました"
 
-#: apt-pkg/contrib/fileutl.cc:441
+#: apt-pkg/contrib/fileutl.cc:438
 #, c-format
 msgid "Could not open file %s"
 msgstr "'%s' をオープンできません"
 
-#: apt-pkg/contrib/fileutl.cc:476 methods/ftp.cc:342 methods/rsh.cc:193
+#: apt-pkg/contrib/fileutl.cc:473 methods/ftp.cc:342 methods/rsh.cc:193
 msgid "Read error"
 msgstr "読み込みエラー"
 
-#: apt-pkg/contrib/fileutl.cc:497
+#: apt-pkg/contrib/fileutl.cc:494
 #, c-format
 msgid "read, still have %lu to read but none left"
 msgstr "読み込み中、あと %lu 読み込む必要がありますが、残りがありません"
 
-#: apt-pkg/contrib/fileutl.cc:515
+#: apt-pkg/contrib/fileutl.cc:512
 msgid "Write error"
 msgstr "書きこみエラー"
 
-#: apt-pkg/contrib/fileutl.cc:527
+#: apt-pkg/contrib/fileutl.cc:524
 #, c-format
 msgid "write, still have %lu to write but couldn't"
 msgstr ""
 "書き込み中、あと %lu 書き込む必要がありますが、書き込むことができません"
 
-#: apt-pkg/contrib/fileutl.cc:602
+#: apt-pkg/contrib/fileutl.cc:599
 msgid "Problem closing the file"
 msgstr "ファイルを閉じる時に問題が発生しました"
 
-#: apt-pkg/contrib/fileutl.cc:608
+#: apt-pkg/contrib/fileutl.cc:605
 msgid "Problem unlinking the file"
 msgstr "ファイル削除時に問題が発生しました"
 
-#: apt-pkg/contrib/fileutl.cc:619
+#: apt-pkg/contrib/fileutl.cc:616
 msgid "Problem syncing the file"
 msgstr "ファイルのsync時に問題が発生しました"
 
-#: apt-pkg/contrib/mmap.cc:82
+#: apt-pkg/contrib/mmap.cc:78
 msgid "Can't mmap an empty file"
 msgstr "空のファイルをmmapできません"
 
-#: apt-pkg/contrib/mmap.cc:87
+#: apt-pkg/contrib/mmap.cc:83
 #, c-format
 msgid "Couldn't make mmap of %lu bytes"
 msgstr "%lu バイトを mmap できませんでした"
 
-#: apt-pkg/contrib/mmap.cc:199
+#: apt-pkg/contrib/mmap.cc:195
 #, fuzzy
 msgid "Failed to ftruncate"
 msgstr "stat に失敗しました"
 
-#: apt-pkg/contrib/progress.cc:158
+#: apt-pkg/contrib/progress.cc:156
 #, c-format
 msgid "%c%s... Error!"
 msgstr "%c%s... エラー!"
 
-#: apt-pkg/contrib/progress.cc:160
+#: apt-pkg/contrib/progress.cc:158
 #, c-format
 msgid "%c%s... Done"
 msgstr "%c%s... 完了"
 
-#: apt-pkg/contrib/strutl.cc:941
+#: apt-pkg/contrib/strutl.cc:937
 #, c-format
 msgid "Selection %s not found"
 msgstr "選択された %s が見つかりません"
 
-#: apt-pkg/rpm/repomd.cc:41
+#: apt-pkg/rpm/repomd.cc:39
 #, fuzzy, c-format
 msgid "Could not open metadata file '%s'"
 msgstr "'%s' をオープンできません"
 
-#: apt-pkg/rpm/rpmhandler.cc:120
+#: apt-pkg/rpm/rpmhandler.cc:121
 #, c-format
 msgid "Impossible flags %d in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:555
+#: apt-pkg/rpm/rpmhandler.cc:499
 msgid "could not rewind RPMFileHandler"
 msgstr "RPMFileHandler を巻戻すことができません"
 
-#: apt-pkg/rpm/rpmhandler.cc:592 apt-pkg/rpm/rpmhandler.cc:599
-#: apt-pkg/rpm/rpmpm.cc:701 apt-pkg/rpm/rpmpm.cc:706
+#: apt-pkg/rpm/rpmhandler.cc:536 apt-pkg/rpm/rpmhandler.cc:543
+#: apt-pkg/rpm/rpmpm.cc:699 apt-pkg/rpm/rpmpm.cc:704
 #, c-format
 msgid "Failed reading file %s"
 msgstr "ファイル %s の読み込みに失敗しました"
 
-#: apt-pkg/rpm/rpmhandler.cc:769
+#: apt-pkg/rpm/rpmhandler.cc:712
 msgid "Unable to determine the file size"
 msgstr "ファイルサイズをを特定することが出来ません"
 
-#: apt-pkg/rpm/rpmhandler.cc:818
+#: apt-pkg/rpm/rpmhandler.cc:759
 msgid "could not open RPM database"
 msgstr "RPMデータベースがオープンできません。"
 
-#: apt-pkg/rpm/rpmhandler.cc:825
+#: apt-pkg/rpm/rpmhandler.cc:765
 msgid "could not create RPM database iterator"
 msgstr "RPMデータベースイテレータを作成できません。"
 
-#: apt-pkg/rpm/rpmhandler.cc:1009 apt-pkg/rpm/rpmhandler.cc:1032
+#: apt-pkg/rpm/rpmhandler.cc:904 apt-pkg/rpm/rpmhandler.cc:926
 #, fuzzy, c-format
 msgid "Failed to open package index %s"
 msgstr "パッケージファイル %s をパースすることができません(1)"
 
-#: apt-pkg/rpm/rpmhandler.cc:1036
+#: apt-pkg/rpm/rpmhandler.cc:930
 #, fuzzy, c-format
 msgid "Corrupted package index %s"
 msgstr "パッケージ %s が見付かりません"
 
-#: apt-pkg/rpm/rpmhandler.cc:1055
+#: apt-pkg/rpm/rpmhandler.cc:949
 #, c-format
 msgid "Inconsistent metadata, package count doesn't match in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1306 apt-pkg/rpm/rpmhandler.cc:1726
+#: apt-pkg/rpm/rpmhandler.cc:1199 apt-pkg/rpm/rpmhandler.cc:1642
 #, c-format
 msgid "Ignoring unknown dependency type %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1392
+#: apt-pkg/rpm/rpmhandler.cc:1281
 #, fuzzy, c-format
 msgid "Failed to open filelist index %s"
 msgstr "%s.new を開くことができません"
 
-#: apt-pkg/rpm/rpmhandler.cc:1438
+#: apt-pkg/rpm/rpmhandler.cc:1326
 msgid "Internal error: xmlReader cannot rewind"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1553
+#: apt-pkg/rpm/rpmhandler.cc:1441
 #, c-format
 msgid "Unsupported database scheme (%d)"
 msgstr ""
 
-#: apt-pkg/rpm/rpmindexfile.cc:387 apt-pkg/rpm/rpmindexfile.cc:755
+#: apt-pkg/rpm/rpmindexfile.cc:377 apt-pkg/rpm/rpmindexfile.cc:744
 #, c-format
 msgid "Problem with SelectFile %s"
 msgstr "SelectFile %s で問題が発生しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:396 apt-pkg/rpm/rpmindexfile.cc:764
-#: apt-pkg/rpm/rpmindexfile.cc:903
+#: apt-pkg/rpm/rpmindexfile.cc:386 apt-pkg/rpm/rpmindexfile.cc:753
+#: apt-pkg/rpm/rpmindexfile.cc:893
 #, c-format
 msgid "Failed to stat %s"
 msgstr "%s の stat に失敗しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:405 apt-pkg/rpm/rpmindexfile.cc:441
-#: apt-pkg/rpm/rpmindexfile.cc:773 apt-pkg/rpm/rpmindexfile.cc:807
+#: apt-pkg/rpm/rpmindexfile.cc:395 apt-pkg/rpm/rpmindexfile.cc:431
+#: apt-pkg/rpm/rpmindexfile.cc:762 apt-pkg/rpm/rpmindexfile.cc:796
 #, c-format
 msgid "Problem opening %s"
 msgstr "%s を開くことができません"
 
-#: apt-pkg/rpm/rpmindexfile.cc:411 apt-pkg/rpm/rpmindexfile.cc:779
-#: apt-pkg/rpm/rpmindexfile.cc:908
+#: apt-pkg/rpm/rpmindexfile.cc:401 apt-pkg/rpm/rpmindexfile.cc:768
+#: apt-pkg/rpm/rpmindexfile.cc:898
 #, c-format
 msgid "Problem with MergeList %s"
 msgstr "MergeList %s で問題が発生しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:446 apt-pkg/rpm/rpmindexfile.cc:812
-#: apt-pkg/rpm/rpmindexfile.cc:926
+#: apt-pkg/rpm/rpmindexfile.cc:436 apt-pkg/rpm/rpmindexfile.cc:801
+#: apt-pkg/rpm/rpmindexfile.cc:916
 #, c-format
 msgid "Problem with MergeFileProvides %s"
 msgstr "MergeFileProvides %s で問題が発生しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:674
+#: apt-pkg/rpm/rpmindexfile.cc:665
+#, c-format
+msgid "Repository model not found for %s %s"
+msgstr ""
+
+#: apt-pkg/rpm/rpmindexfile.cc:669
 #, c-format
 msgid "Primary metadata not found in repository %s %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmindexfile.cc:893 apt-pkg/rpm/rpmindexfile.cc:922
+#: apt-pkg/rpm/rpmindexfile.cc:883 apt-pkg/rpm/rpmindexfile.cc:912
 msgid "Problem opening RPM database"
 msgstr "RPMデータベースのオープンで問題が発生しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:897
+#: apt-pkg/rpm/rpmindexfile.cc:887
 msgid "Problem with SelectFile RPM Database"
 msgstr "RPM データベースの SelectFile で問題が発生しました"
 
-#: apt-pkg/rpm/rpmindexfile.cc:1130 apt-pkg/sourcelist.cc:98
+#: apt-pkg/rpm/rpmindexfile.cc:1120 apt-pkg/sourcelist.cc:94
 #, c-format
 msgid "Malformed line %lu in source list %s (URI)"
 msgstr "不正なライン %lu がソースリスト %s にあります (URI)"
 
-#: apt-pkg/rpm/rpmindexfile.cc:1132 apt-pkg/sourcelist.cc:100
+#: apt-pkg/rpm/rpmindexfile.cc:1122 apt-pkg/sourcelist.cc:96
 #, c-format
 msgid "Malformed line %lu in source list %s (dist)"
 msgstr "不正なライン %lu がソースリスト %s にあります (dist)"
 
-#: apt-pkg/rpm/rpmindexfile.cc:1135 apt-pkg/sourcelist.cc:103
+#: apt-pkg/rpm/rpmindexfile.cc:1125 apt-pkg/sourcelist.cc:99
 #, c-format
 msgid "Malformed line %lu in source list %s (URI parse)"
 msgstr "不正なライン %lu がソースリスト %s にあります (URI parse)"
 
-#: apt-pkg/rpm/rpmlistparser.cc:88
+#: apt-pkg/rpm/rpmlistparser.cc:85
 msgid "Corrupt pkglist: no RPMTAG_NAME in header entry"
 msgstr ""
 
-#: apt-pkg/rpm/rpmlistparser.cc:112
+#: apt-pkg/rpm/rpmlistparser.cc:109
 #, c-format
 msgid ""
 "There are multiple versions of \"%s\" in your system.\n"
@@ -2035,7 +2038,7 @@ msgstr ""
 msgid "Bad NotAutomatic flag"
 msgstr ""
 
-#: apt-pkg/rpm/rpmlistparser.cc:564 apt-pkg/repository.cc:40
+#: apt-pkg/rpm/rpmlistparser.cc:554 apt-pkg/repository.cc:36
 #, c-format
 msgid "could not open Release file '%s'"
 msgstr "リリースファイル '%s' をオープンできません。"
@@ -2070,146 +2073,146 @@ msgstr "RPM::FakeProvides オプションに不適切なエントリ '%s' があ
 msgid "Bad regular expression '%s' in URI translation"
 msgstr "URI 変換に不適切な正規表現 '%s' があります"
 
-#: apt-pkg/rpm/rpmpm.cc:81
+#: apt-pkg/rpm/rpmpm.cc:73
 #, c-format
 msgid "Internal Error, No file name for %s"
 msgstr "内部エラー、%s にファイル名がありません"
 
-#: apt-pkg/rpm/rpmpm.cc:150
+#: apt-pkg/rpm/rpmpm.cc:142
 #, c-format
 msgid "Problem executing scripts %s '%s'"
 msgstr "スクリプト %s の実行に問題が発生しました '%s'"
 
-#: apt-pkg/rpm/rpmpm.cc:161
+#: apt-pkg/rpm/rpmpm.cc:153
 msgid "Sub-process returned an error code"
 msgstr "サブプロセスがエラーコードを返しました"
 
-#: apt-pkg/rpm/rpmpm.cc:187 methods/rsh.cc:94
+#: apt-pkg/rpm/rpmpm.cc:179 methods/rsh.cc:94
 msgid "Failed to create IPC pipe to subprocess"
 msgstr "サブプロセスへのIPCパイプの作成に失敗しました"
 
-#: apt-pkg/rpm/rpmpm.cc:231 apt-pkg/rpm/rpmpm.cc:238
+#: apt-pkg/rpm/rpmpm.cc:223 apt-pkg/rpm/rpmpm.cc:230
 #, c-format
 msgid "Failure running script %s"
 msgstr "%s スクリプトの実行に失敗しました"
 
-#: apt-pkg/rpm/rpmpm.cc:329
+#: apt-pkg/rpm/rpmpm.cc:321
 msgid "Unknown pkgRPMPM operation."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:566
+#: apt-pkg/rpm/rpmpm.cc:564
 msgid "Executing RPM ("
 msgstr "RPM コマンドを実行しています ("
 
-#: apt-pkg/rpm/rpmpm.cc:606
+#: apt-pkg/rpm/rpmpm.cc:604
 msgid "Could not exec "
 msgstr "実行できません: "
 
-#: apt-pkg/rpm/rpmpm.cc:621
+#: apt-pkg/rpm/rpmpm.cc:619
 msgid "Couldn't wait for subprocess"
 msgstr "サブプロセスを待機できません"
 
-#: apt-pkg/rpm/rpmpm.cc:637
+#: apt-pkg/rpm/rpmpm.cc:635
 #, c-format
 msgid "Sub-process %s recieved a segmentation fault."
 msgstr "サブプロセス %s がセグメンテーションフォルトを起こしました"
 
-#: apt-pkg/rpm/rpmpm.cc:647
+#: apt-pkg/rpm/rpmpm.cc:645
 msgid "Done."
 msgstr "完了"
 
-#: apt-pkg/rpm/rpmpm.cc:697
+#: apt-pkg/rpm/rpmpm.cc:695
 #, c-format
 msgid "Failed opening %s"
 msgstr "%s を開くことができませんでした"
 
-#: apt-pkg/rpm/rpmpm.cc:710 apt-pkg/rpm/rpmpm.cc:734
+#: apt-pkg/rpm/rpmpm.cc:708 apt-pkg/rpm/rpmpm.cc:731
 #, c-format
 msgid "Failed adding %s to transaction %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:790
+#: apt-pkg/rpm/rpmpm.cc:775
 msgid "Could not open RPM database"
 msgstr "RPMデータベースがオープンできません。"
 
-#: apt-pkg/rpm/rpmpm.cc:865 apt-pkg/rpm/rpmpm.cc:878
+#: apt-pkg/rpm/rpmpm.cc:832 apt-pkg/rpm/rpmpm.cc:841
 msgid "Transaction set check failed"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:898
+#: apt-pkg/rpm/rpmpm.cc:861
 #, c-format
 msgid "Ordering failed for %d packages"
 msgstr "%d 個のパッケージの並べ替えに失敗しました"
 
-#: apt-pkg/rpm/rpmpm.cc:917
+#: apt-pkg/rpm/rpmpm.cc:880
 msgid "Error while running transaction"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:928
+#: apt-pkg/rpm/rpmpm.cc:891
 msgid "Some errors occurred while running transaction"
 msgstr "トランザクション処理中にエラーが発生しました"
 
-#: apt-pkg/rpm/rpmrecords.cc:181 apt-pkg/rpm/rpmsrcrecords.cc:184
+#: apt-pkg/rpm/rpmrecords.cc:173 apt-pkg/rpm/rpmsrcrecords.cc:158
 msgid "Could not allocate buffer for record text"
 msgstr "レコードテキストにバッファを割り当てることができません"
 
-#: apt-pkg/rpm/rpmsystem.cc:220
+#: apt-pkg/rpm/rpmsystem.cc:217
 #, fuzzy, c-format
 msgid "Unable to determine version for package %s"
 msgstr "ファイルサイズをを特定することが出来ません"
 
-#: apt-pkg/acquire.cc:61
+#: apt-pkg/acquire.cc:58
 #, c-format
 msgid "Lists directory %spartial is missing."
 msgstr "リストディレクトリ %spartial が見つかりません。"
 
-#: apt-pkg/acquire.cc:65
+#: apt-pkg/acquire.cc:62
 #, c-format
 msgid "Archive directory %spartial is missing."
 msgstr "アーカイブディレクトリ %spartial が見つかりません。"
 
-#: apt-pkg/acquire-item.cc:187
+#: apt-pkg/acquire-item.cc:169
 #, c-format
 msgid "rename failed, %s (%s -> %s)."
 msgstr "リネームに失敗しました: %s (%s -> %s)"
 
-#: apt-pkg/acquire-item.cc:230 apt-pkg/acquire-item.cc:438
+#: apt-pkg/acquire-item.cc:212 apt-pkg/acquire-item.cc:420
 #, c-format
 msgid "%s is not listed in the checksum list for its repository"
 msgstr "%s はリポジトリのチェックサムにリストされていません"
 
-#: apt-pkg/acquire-item.cc:250 apt-pkg/acquire-item.cc:458
+#: apt-pkg/acquire-item.cc:232 apt-pkg/acquire-item.cc:440
 #, c-format
 msgid "Release information not available for %s"
 msgstr "%s のリリース情報が用意されていません"
 
-#: apt-pkg/acquire-item.cc:308 apt-pkg/acquire-item.cc:591
-#: apt-pkg/acquire-item.cc:864
+#: apt-pkg/acquire-item.cc:290 apt-pkg/acquire-item.cc:587
+#: apt-pkg/acquire-item.cc:860
 msgid "Size mismatch"
 msgstr "サイズが適合しません"
 
-#: apt-pkg/acquire-item.cc:319 apt-pkg/acquire-item.cc:601
-#: apt-pkg/acquire-item.cc:874
+#: apt-pkg/acquire-item.cc:301 apt-pkg/acquire-item.cc:597
+#: apt-pkg/acquire-item.cc:870
 msgid "MD5Sum mismatch"
 msgstr "MD5SUM が適合しません"
 
-#: apt-pkg/acquire-item.cc:507
+#: apt-pkg/acquire-item.cc:489
 msgid "No valid signatures found in Release file"
 msgstr "リリースファイルに適正なsignatureが存在しません"
 
-#: apt-pkg/acquire-item.cc:515
+#: apt-pkg/acquire-item.cc:508
 msgid "Signature fingerprint of Release file does not match (expected "
 msgstr "リリースファイルの Signature fingerprint が適合しません (予期しない "
 
-#: apt-pkg/acquire-item.cc:516
+#: apt-pkg/acquire-item.cc:512
 msgid ", got "
 msgstr ", "
 
-#: apt-pkg/acquire-item.cc:541
+#: apt-pkg/acquire-item.cc:537
 msgid "Could not read checksum list from Release file"
 msgstr "リリースファイルからチェックサムリストを読み込むことができませんでした"
 
-#: apt-pkg/acquire-item.cc:677
+#: apt-pkg/acquire-item.cc:673
 #, c-format
 msgid ""
 "I wasn't able to locate a file for the %s package. This might mean you need "
@@ -2218,7 +2221,7 @@ msgstr ""
 "パッケージ %s のファイルの位置を決められません。おそらくこの問題を手動で修正"
 "する必要があります。(アーキテクチャが不足しているなど)"
 
-#: apt-pkg/acquire-item.cc:716
+#: apt-pkg/acquire-item.cc:712
 #, c-format
 msgid ""
 "I wasn't able to locate file for the %s package. This might mean you need to "
@@ -2227,7 +2230,7 @@ msgstr ""
 "パッケージ %s のファイルの位置を決められません。おそらくこの問題を手動で修正"
 "する必要があります。"
 
-#: apt-pkg/acquire-item.cc:755
+#: apt-pkg/acquire-item.cc:751
 #, c-format
 msgid ""
 "The package index files are corrupted. No Filename: field for package %s."
@@ -2235,17 +2238,17 @@ msgstr ""
 "パッケージインデックスファイルが壊れています。パッケージ %s に Filename: \n"
 "フィールドがありません。"
 
-#: apt-pkg/acquire-worker.cc:112
+#: apt-pkg/acquire-worker.cc:109
 #, c-format
 msgid "The method driver %s could not be found."
 msgstr "メソッドドライバ %s が見つかりません"
 
-#: apt-pkg/acquire-worker.cc:161
+#: apt-pkg/acquire-worker.cc:158
 #, c-format
 msgid "Method %s did not start correctly"
 msgstr "メソッド %s が正常に開始しませんでhした"
 
-#: apt-pkg/algorithms.cc:252
+#: apt-pkg/algorithms.cc:249
 #, c-format
 msgid ""
 "The package %s needs to be reinstalled, but I can't find an archive for it."
@@ -2253,7 +2256,7 @@ msgstr ""
 "パッケージ %s を再インストールする必要がありますが、アーカイブから見つける\n"
 "ことはできませんでした。"
 
-#: apt-pkg/algorithms.cc:1154
+#: apt-pkg/algorithms.cc:1151
 msgid ""
 "Error, pkgProblemResolver::Resolve generated breaks, this may be caused by "
 "held packages."
@@ -2261,40 +2264,40 @@ msgstr ""
 "＊エラー＊ pkgProblemResolver::Resolve は停止しました。おそらくホールドされた"
 "パッケージが原因でしょう。"
 
-#: apt-pkg/algorithms.cc:1156
+#: apt-pkg/algorithms.cc:1153
 msgid "Unable to correct problems, you have held broken packages."
 msgstr "問題を解決することができません。こわれたパッケージがあるようです。"
 
-#: apt-pkg/cachefile.cc:77
+#: apt-pkg/cachefile.cc:73
 msgid "The package lists or status file could not be parsed or opened."
 msgstr ""
 "パッケージリストまたはステータスファイルをパースまたは開くことができません"
 
-#: apt-pkg/cachefile.cc:81
+#: apt-pkg/cachefile.cc:77
 msgid "You may want to run apt-get update to correct these problems"
 msgstr ""
 "この問題を解決するためには 'apt-get update' を実行する必要があるかもしれませ"
 "ん。"
 
-#: apt-pkg/clean.cc:61
+#: apt-pkg/clean.cc:57
 #, fuzzy, c-format
 msgid "Failed to chdir to %s"
 msgstr "%s の stat に失敗しました"
 
-#: apt-pkg/clean.cc:63
+#: apt-pkg/clean.cc:59
 #, c-format
 msgid "Unable to stat %s."
 msgstr "'%s' をstatできません"
 
-#: apt-pkg/depcache.cc:67 apt-pkg/depcache.cc:96
+#: apt-pkg/depcache.cc:64 apt-pkg/depcache.cc:93
 msgid "Building Dependency Tree"
 msgstr "依存情報ツリーを作成しています"
 
-#: apt-pkg/depcache.cc:68
+#: apt-pkg/depcache.cc:65
 msgid "Candidate Versions"
 msgstr "バージョン決定"
 
-#: apt-pkg/depcache.cc:97
+#: apt-pkg/depcache.cc:94
 msgid "Dependency Generation"
 msgstr "依存情報の生成"
 
@@ -2312,7 +2315,7 @@ msgstr "パッケージシステム '%s' はサポートされていません"
 msgid "Unable to determine a suitable system type"
 msgstr "システムタイプをを特定することが出来ません"
 
-#: apt-pkg/packagemanager.cc:402
+#: apt-pkg/packagemanager.cc:398
 #, c-format
 msgid ""
 "This installation run will require temporarily removing the essential "
@@ -2324,242 +2327,242 @@ msgstr ""
 "本当にこれを行う必要があるなら、apt.conf においてAPT::Force-LoopBreak を有効"
 "にしてください。"
 
-#: apt-pkg/pkgcache.cc:133
+#: apt-pkg/pkgcache.cc:128
 msgid "Empty package cache"
 msgstr "空のパッケージキャッシュ"
 
-#: apt-pkg/pkgcache.cc:139
+#: apt-pkg/pkgcache.cc:134
 msgid "The package cache file is corrupted"
 msgstr "パッケージキャッシュファイルに問題があります"
 
-#: apt-pkg/pkgcache.cc:144
+#: apt-pkg/pkgcache.cc:139
 msgid "The package cache file is an incompatible version"
 msgstr "このパッケージキャッシュファイルは非互換のバージョンです"
 
-#: apt-pkg/pkgcache.cc:149
+#: apt-pkg/pkgcache.cc:144
 #, c-format
 msgid "This APT does not support the Versioning System '%s'"
 msgstr "この APT はバージョニングシステム '%s' をサポートしていません"
 
-#: apt-pkg/pkgcache.cc:154
+#: apt-pkg/pkgcache.cc:149
 msgid "The package cache was built for a different architecture"
 msgstr "パッケージキャッシュが他のアーキテクチャ用に構築されています"
 
-#: apt-pkg/pkgcache.cc:252
+#: apt-pkg/pkgcache.cc:247
 msgid "Depends"
 msgstr "依存"
 
-#: apt-pkg/pkgcache.cc:252
+#: apt-pkg/pkgcache.cc:247
 msgid "PreDepends"
 msgstr "先行依存"
 
-#: apt-pkg/pkgcache.cc:252
+#: apt-pkg/pkgcache.cc:247
 msgid "Suggests"
 msgstr "提案"
 
-#: apt-pkg/pkgcache.cc:253
+#: apt-pkg/pkgcache.cc:248
 msgid "Recommends"
 msgstr "推奨"
 
-#: apt-pkg/pkgcache.cc:253
+#: apt-pkg/pkgcache.cc:248
 msgid "Conflicts"
 msgstr "衝突"
 
-#: apt-pkg/pkgcache.cc:253
+#: apt-pkg/pkgcache.cc:248
 msgid "Replaces"
 msgstr "置換"
 
-#: apt-pkg/pkgcache.cc:254
+#: apt-pkg/pkgcache.cc:249
 msgid "Obsoletes"
 msgstr "廃止"
 
-#: apt-pkg/pkgcache.cc:265
+#: apt-pkg/pkgcache.cc:260
 msgid "important"
 msgstr "重要"
 
-#: apt-pkg/pkgcache.cc:265
+#: apt-pkg/pkgcache.cc:260
 msgid "required"
 msgstr "必須"
 
-#: apt-pkg/pkgcache.cc:265
+#: apt-pkg/pkgcache.cc:260
 msgid "standard"
 msgstr "標準"
 
-#: apt-pkg/pkgcache.cc:266
+#: apt-pkg/pkgcache.cc:261
 msgid "optional"
 msgstr "任意"
 
-#: apt-pkg/pkgcache.cc:266
+#: apt-pkg/pkgcache.cc:261
 msgid "extra"
 msgstr "エキストラ"
 
-#: apt-pkg/pkgcachegen.cc:74
+#: apt-pkg/pkgcachegen.cc:70
 msgid "Cache has an incompatible versioning system"
 msgstr "キャッシュは非コンパチブルなバージョンシステムを使っています"
 
-#: apt-pkg/pkgcachegen.cc:123
+#: apt-pkg/pkgcachegen.cc:119
 #, c-format
 msgid "Error occured while processing %s (NewPackage)"
 msgstr "%s を処理中にエラーが発生しました (NewPackage)"
 
-#: apt-pkg/pkgcachegen.cc:140
+#: apt-pkg/pkgcachegen.cc:136
 #, c-format
 msgid "Error occured while processing %s (UsePackage1)"
 msgstr "%s を処理中にエラーが発生しました (UsePackage1)"
 
-#: apt-pkg/pkgcachegen.cc:171
+#: apt-pkg/pkgcachegen.cc:167
 #, c-format
 msgid "Error occured while processing %s (UsePackage2)"
 msgstr "%s を処理中にエラーが発生しました (UsePackage2)"
 
-#: apt-pkg/pkgcachegen.cc:175
+#: apt-pkg/pkgcachegen.cc:171
 #, c-format
 msgid "Error occured while processing %s (NewFileVer1)"
 msgstr "%s を処理中にエラーが発生しました (NewFileVer1)"
 
-#: apt-pkg/pkgcachegen.cc:209
+#: apt-pkg/pkgcachegen.cc:205
 #, c-format
 msgid "Error occured while processing %s (NewVersion1)"
 msgstr "%s を処理中にエラーが発生しました (NewVersion1)"
 
-#: apt-pkg/pkgcachegen.cc:213
+#: apt-pkg/pkgcachegen.cc:209
 #, c-format
 msgid "Error occured while processing %s (UsePackage3)"
 msgstr "%s を処理中にエラーが発生しました (UsePackage3)"
 
-#: apt-pkg/pkgcachegen.cc:217
+#: apt-pkg/pkgcachegen.cc:213
 #, c-format
 msgid "Error occured while processing %s (NewVersion2)"
 msgstr "%s を処理中にエラーが発生しました (NewVersion2)"
 
-#: apt-pkg/pkgcachegen.cc:232
+#: apt-pkg/pkgcachegen.cc:228
 msgid "Wow, you exceeded the number of package names this APT is capable of."
 msgstr "！この APT が対応している以上の数のパッケージが指定されました"
 
-#: apt-pkg/pkgcachegen.cc:235
+#: apt-pkg/pkgcachegen.cc:231
 msgid "Wow, you exceeded the number of versions this APT is capable of."
 msgstr "！この APT が対応している以上のバージョンが要求されました"
 
-#: apt-pkg/pkgcachegen.cc:238
+#: apt-pkg/pkgcachegen.cc:234
 msgid "Wow, you exceeded the number of dependencies this APT is capable of."
 msgstr "！この APT が対応している以上の依存関係が発生しました"
 
-#: apt-pkg/pkgcachegen.cc:272
+#: apt-pkg/pkgcachegen.cc:268
 #, c-format
 msgid "Error occured while processing %s (FindPkg)"
 msgstr "%s を処理中にエラーが発生しました (FindPkg)"
 
-#: apt-pkg/pkgcachegen.cc:297
+#: apt-pkg/pkgcachegen.cc:293
 #, c-format
 msgid "Error occured while processing %s (CollectFileProvides)"
 msgstr "%s を処理中にエラーが発生しました (CollectFileProvides)"
 
-#: apt-pkg/pkgcachegen.cc:309
+#: apt-pkg/pkgcachegen.cc:305
 #, c-format
 msgid "Package %s %s was not found while processing file dependencies"
 msgstr "パッケージ %s %s がファイル依存の処理中に見つかりませんでした"
 
-#: apt-pkg/pkgcachegen.cc:721 apt-pkg/pkgcachegen.cc:748
-#: apt-pkg/pkgcachegen.cc:790 apt-pkg/pkgcachegen.cc:795
-#: apt-pkg/pkgcachegen.cc:999
+#: apt-pkg/pkgcachegen.cc:718 apt-pkg/pkgcachegen.cc:745
+#: apt-pkg/pkgcachegen.cc:787 apt-pkg/pkgcachegen.cc:792
+#: apt-pkg/pkgcachegen.cc:996
 msgid "Reading Package Lists"
 msgstr "パッケージリストを読みこんでいます"
 
-#: apt-pkg/pkgcachegen.cc:788
+#: apt-pkg/pkgcachegen.cc:785
 #, c-format
 msgid "Unable to write to %s"
 msgstr "'%s' に書き込むことができません"
 
-#: apt-pkg/pkgcachegen.cc:803
+#: apt-pkg/pkgcachegen.cc:800
 msgid "Error pre-processing package lists"
 msgstr "パッケージリストの前処理中にエラーが発生しました"
 
-#: apt-pkg/pkgcachegen.cc:920 apt-pkg/pkgcachegen.cc:927
+#: apt-pkg/pkgcachegen.cc:917 apt-pkg/pkgcachegen.cc:924
 msgid "IO Error saving source cache"
 msgstr "ソースキャッシュの保存中に IO エラーが発生しました"
 
-#: apt-pkg/pkgrecords.cc:39
+#: apt-pkg/pkgrecords.cc:36
 #, c-format
 msgid "Index file type '%s' is not supported"
 msgstr "インデックスファイルのタイプ '%s' はサポートされていません"
 
-#: apt-pkg/policy.cc:333
+#: apt-pkg/policy.cc:330
 msgid "Invalid record in the preferences file, no Package header"
 msgstr ""
 "不正なレコードがpreferencesファイルに存在します。(パッケージヘッダがありませ"
 "ん)"
 
-#: apt-pkg/policy.cc:355
+#: apt-pkg/policy.cc:352
 #, c-format
 msgid "Did not understand pin type %s"
 msgstr "Pinタイプ %s は理解できません"
 
-#: apt-pkg/policy.cc:363
+#: apt-pkg/policy.cc:360
 msgid "No priority (or zero) specified for pin"
 msgstr "Pin にプライオリティが指定されていません(もしくは0が指定されています)"
 
-#: apt-pkg/repository.cc:55
+#: apt-pkg/repository.cc:51
 #, c-format
 msgid "No MD5Sum data in Release file '%s'"
 msgstr "リリースファイル '%s' の MD5SUM データがありません"
 
-#: apt-pkg/repository.cc:72
+#: apt-pkg/repository.cc:68
 #, c-format
 msgid "Error parsing MD5Sum hash record on Release file '%s'"
 msgstr ""
 "リリースファイル '%s' の MD5SUM ハッシュレコードのパース中にエラーが発生しま"
 "した"
 
-#: apt-pkg/sourcelist.cc:109
+#: apt-pkg/sourcelist.cc:105
 #, c-format
 msgid "Malformed line %lu in source list %s (Absolute dist)"
 msgstr "不正なライン %lu がソースリスト %s にあります (Absolute dist)"
 
-#: apt-pkg/sourcelist.cc:121
+#: apt-pkg/sourcelist.cc:117
 #, c-format
 msgid "Malformed line %lu in source list %s (dist parse)"
 msgstr "不正なライン %lu がソースリスト %s にあります (dist parse)"
 
-#: apt-pkg/sourcelist.cc:211 apt-pkg/sourcelist.cc:235
+#: apt-pkg/sourcelist.cc:209 apt-pkg/sourcelist.cc:249
 #, c-format
 msgid "Vendor block %s is invalid"
 msgstr "ベンダブロック %s が不正です"
 
-#: apt-pkg/sourcelist.cc:319
+#: apt-pkg/sourcelist.cc:333
 #, c-format
 msgid "Line %u too long in source list %s."
 msgstr "sources.list %2$s の %1$u 行目が長すぎます"
 
-#: apt-pkg/sourcelist.cc:339
+#: apt-pkg/sourcelist.cc:353
 #, c-format
 msgid "Malformed line %u in source list %s (type)"
 msgstr "不正なライン %u がソースリスト %s にあります (type)"
 
-#: apt-pkg/sourcelist.cc:343
+#: apt-pkg/sourcelist.cc:357
 #, c-format
 msgid "Type '%s' is not known in on line %u in source list %s"
 msgstr "ソースリスト %3$s の %2$u 行にあるタイプ '%1$s' は不明です。"
 
-#: apt-pkg/sourcelist.cc:352 apt-pkg/sourcelist.cc:355
+#: apt-pkg/sourcelist.cc:366 apt-pkg/sourcelist.cc:369
 #, c-format
 msgid "Malformed line %u in source list %s (vendor id)"
 msgstr "不正なライン %u がソースリスト %s にあります (vendor id)"
 
-#: apt-pkg/sourcelist.cc:369
+#: apt-pkg/sourcelist.cc:383
 #, c-format
 msgid "Unknown vendor ID '%s' in line %u of source list %s"
 msgstr "ソースリスト %s の %u 行に不明な vendor ID '%s' が指定されています"
 
-#: apt-pkg/srcrecords.cc:46
+#: apt-pkg/srcrecords.cc:42
 msgid "You must put some 'source' URIs in your sources.list"
 msgstr "sources.list にすくなくとも１つのソースURIを指定する必要があります"
 
-#: apt-pkg/tagfile.cc:71
+#: apt-pkg/tagfile.cc:67
 #, c-format
 msgid "Unable to parse package file %s (1)"
 msgstr "パッケージファイル %s をパースすることができません(1)"
 
-#: apt-pkg/tagfile.cc:158
+#: apt-pkg/tagfile.cc:154
 #, c-format
 msgid "Unable to parse package file %s (2)"
 msgstr "パッケージファイル %s をパースすることができません(2)"
@@ -2767,7 +2770,7 @@ msgstr ""
 msgid "Unable to accept connection"
 msgstr ""
 
-#: methods/ftp.cc:868 methods/http.cc:1059 methods/rsh.cc:306
+#: methods/ftp.cc:868 methods/http.cc:1060 methods/rsh.cc:306
 msgid "Problem hashing file"
 msgstr ""
 
@@ -2811,76 +2814,76 @@ msgstr "パイプ %s をオープンできません"
 msgid "Read error from %s process"
 msgstr ""
 
-#: methods/http.cc:345
+#: methods/http.cc:346
 msgid "Waiting for headers"
 msgstr "ヘッダの待機中"
 
-#: methods/http.cc:491
+#: methods/http.cc:492
 #, c-format
 msgid "Got a single header line over %u chars"
 msgstr ""
 
-#: methods/http.cc:499
+#: methods/http.cc:500
 msgid "Bad header line"
 msgstr "不正なヘッダーラインです"
 
-#: methods/http.cc:518 methods/http.cc:525
+#: methods/http.cc:519 methods/http.cc:526
 msgid "The http server sent an invalid reply header"
 msgstr ""
 
-#: methods/http.cc:554
+#: methods/http.cc:555
 msgid "The http server sent an invalid Content-Length header"
 msgstr ""
 
-#: methods/http.cc:569
+#: methods/http.cc:570
 msgid "The http server sent an invalid Content-Range header"
 msgstr ""
 
-#: methods/http.cc:571
+#: methods/http.cc:572
 msgid "This http server has broken range support"
 msgstr ""
 
-#: methods/http.cc:595
+#: methods/http.cc:596
 msgid "Unknown date format"
 msgstr "不明なデータ形式です"
 
-#: methods/http.cc:767
+#: methods/http.cc:768
 msgid "Select failed"
 msgstr "Select 失敗"
 
-#: methods/http.cc:772
+#: methods/http.cc:773
 msgid "Connection timed out"
 msgstr "接続タイムアウト"
 
-#: methods/http.cc:795
+#: methods/http.cc:796
 msgid "Error writing to output file"
 msgstr ""
 
-#: methods/http.cc:823
+#: methods/http.cc:824
 msgid "Error writing to file"
 msgstr ""
 
-#: methods/http.cc:848
+#: methods/http.cc:849
 msgid "Error writing to the file"
 msgstr ""
 
-#: methods/http.cc:862
+#: methods/http.cc:863
 msgid "Error reading from server Remote end closed connection"
 msgstr ""
 
-#: methods/http.cc:864
+#: methods/http.cc:865
 msgid "Error reading from server"
 msgstr "サーバからの読み込みエラー"
 
-#: methods/http.cc:1224
+#: methods/http.cc:1225
 msgid "Bad header Data"
 msgstr "不正なヘッダーです"
 
-#: methods/http.cc:1241
+#: methods/http.cc:1242
 msgid "Connection failed"
 msgstr "接続失敗"
 
-#: methods/http.cc:1372
+#: methods/http.cc:1373
 msgid "Internal error"
 msgstr "内部エラー"
 
@@ -2891,6 +2894,9 @@ msgstr "ファイルがみつかりません"
 #: methods/rsh.cc:333
 msgid "Connection closed prematurely"
 msgstr ""
+
+#~ msgid "You can try to fix them automatically with `install --fix-broken'0."
+#~ msgstr "`install --fix-broken' により自動的に修復することが可能です。"
 
 #~ msgid "Committing changes..."
 #~ msgstr "変更を適用しています..."
