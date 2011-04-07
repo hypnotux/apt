@@ -774,9 +774,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    TS = rpmtransCreateSet(DB, Dir.c_str());
 #endif
 
-   if (rpmExpandNumeric("%{?_repackage_all_erasures}"))
-      tsFlags |= RPMTRANS_FLAG_REPACKAGE;
-		     
    if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
       probFilter |= RPMPROB_FILTER_OLDPACKAGE;
    }
@@ -906,8 +903,6 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
 	 else if (Opts->Value == "--test")
 	    *tsFlags |= RPMTRANS_FLAG_TEST;
-	 else if (Opts->Value == "--repackage")
-	    *tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 #if RPM_VERSION >= 0x040200
 	 else if (Opts->Value == "--noconfigs" ||
 	          Opts->Value == "--excludeconfigs")

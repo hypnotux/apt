@@ -51,7 +51,6 @@ void * rpmCallback(const void * arg,
    const char * filename = (const char *) pkgKey;
    static FD_t fd = NULL;
    static rpmCallbackType state;
-   static bool repackage;
    static map<string,string> Data;
 
    switch (what) {
@@ -73,7 +72,7 @@ void * rpmCallback(const void * arg,
       break;
 
    case RPMCALLBACK_INST_START:
-      if (state != what && repackage == false) {
+      if (state != what) {
 	 state = what;
 	 Prog->OverallProgress(0,1,1, "Updating / installing");
 	 Prog->SetState(InstProgress::Installing);
@@ -91,7 +90,6 @@ void * rpmCallback(const void * arg,
 
    case RPMCALLBACK_TRANS_START:
       state = what;
-      repackage = false;
       Prog->SetState(InstProgress::Preparing);
       Prog->SubProgress(total, "Preparing");
       Prog->Progress(0);
@@ -101,22 +99,6 @@ void * rpmCallback(const void * arg,
    case RPMCALLBACK_TRANS_STOP:
       Prog->Progress(total);
       break;
-
-#if RPM_VERSION >= 0x040100
-   case RPMCALLBACK_REPACKAGE_START:
-      repackage = true;
-      Prog->OverallProgress(0,1,1, "Repackaging");
-      Prog->SetState(InstProgress::Repackaging);
-      break;
-
-   case RPMCALLBACK_REPACKAGE_PROGRESS:
-      Prog->Progress(amount);
-      break;
-
-   case RPMCALLBACK_REPACKAGE_STOP:
-      repackage = false;
-      break;
-#endif
 
    case RPMCALLBACK_UNINST_PROGRESS:
       break;
