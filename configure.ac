@@ -45,20 +45,12 @@ AC_CHECK_LIB(bz2,BZ2_bzopen, [],
 AC_CHECK_LIB(z,gzopen, [],
 	[AC_MSG_ERROR([Can't find libz library])])
 
-dnl See if we have pkgconfig for rpm, resort to old behavior if not
+dnl See if we have pkgconfig for rpm
 PKG_CHECK_MODULES([RPM], [rpm], [
       RPM_VERSION_RAW=`pkg-config --modversion rpm` 
       AC_DEFINE_UNQUOTED([HAVE_RPM],1,[Define if RPM backend is available])
       CPPFLAGS="$RPM_CFLAGS $CPPFLAGS"
       LDFLAGS="$RPM_LIBS $LDFLAGS"
-   ], [
-      AC_PATH_PROG(RPM_PATH,rpm,none)
-      if test "$RPM_PATH" = "none"; then
-         AC_MSG_ERROR([RPM executable was not found in your system])
-      else
-         AC_DEFINE_UNQUOTED([HAVE_RPM],1,[Define if RPM backend is available])
-         RPM_VERSION_RAW=`LANG= LC_ALL= $RPM_PATH --version | sed 's/^RPM version //'`
-      fi
    ]
 )
 
@@ -80,24 +72,6 @@ AC_DEFINE_UNQUOTED([RPM_VERSION],
       [Define to the RPM version])
 AC_DEFINE_UNQUOTED([RPM_VERSION_RAW],"$RPM_VERSION_RAW",[RPM raw version])
 AC_MSG_RESULT($RPM_VERSION_RAW)
-
-dnl No pkgconfig, manually check for RPM libraries and headers
-if test -z "$RPM_LIBS"; then
-   AC_CHECK_HEADERS(db1/db.h)
-
-   if test $RPM_VERSION_MAJOR -lt 4; then
-      RPM_LIBS="-lrpm -lz -lbz2 -lpopt"
-   else
-      AC_CHECK_LIB(rpmdb,rpmdbOpen,
-         [RPMDBLIBS="-lrpmdb"],
-         [RPMDBLIBS="-ldb-3.1"],
-         [-lrpm -lrpmio -lz -lbz2 -lpopt])
-      RPM_LIBS="-lrpm $RPMDBLIBS -lrpmio -lz -lbz2 -lpopt"
-   fi
-   AC_MSG_CHECKING(for RPM libraries)
-   AC_MSG_RESULT($RPM_LIBS)
-   AC_SUBST(RPM_LIBS)
-fi
 
 dnl Various rpm header checks..
 AC_CHECK_HEADER(rpm/rpmlib.h, [],
