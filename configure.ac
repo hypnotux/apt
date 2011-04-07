@@ -102,7 +102,7 @@ fi
 dnl Various rpm header checks..
 AC_CHECK_HEADER(rpm/rpmlib.h, [],
 	   [AC_MSG_ERROR([Can't find rpmlib.h])])
-AC_CHECK_HEADERS([rpm/rpmsx.h rpm/rpmcallback.h rpm/rpmcb.h \
+AC_CHECK_HEADERS([rpm/rpmcallback.h rpm/rpmcb.h \
 	     rpm/rpmmessages.h rpm/rpmevr.h rpm/rpmtypes.h rpm/rpmtd.h])
 
 dnl Various rpm variant capability checks
@@ -168,22 +168,6 @@ fi
 # local extensions always built if lua enabled.
 AM_CONDITIONAL(WITH_LUA, test "$enable_scripts" != "no")
 AM_CONDITIONAL(WITH_LUAEXT, test "$enable_scripts" != "no")
-
-dnl SELinux support
-AC_MSG_CHECKING(for --disable-selinux)
-AC_ARG_ENABLE([selinux],
-	      AS_HELP_STRING([--disable-selinux],
-			     [disable SELinux support]),
-	      [enable_selinux="$enableval"],[enable_selinux="yes"])
-if test "$enable_selinux" != "no"; then
-  AC_MSG_RESULT(no)
-  AC_DEFINE(WITH_SELINUX, 1, 
-	    [Define if you want to enable SELinux support]) 
-else
-  AC_MSG_RESULT(yes)
-fi
-AM_CONDITIONAL(WITH_SELINUX, test "$enable_selinux" != "no")
-
 
 dnl Repomd support
 AC_MSG_CHECKING(for --disable-repomd)

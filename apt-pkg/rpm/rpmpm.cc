@@ -31,10 +31,6 @@
 #include <iostream>
 #include <cstring>
 
-#if HAVE_RPM_RPMSX_H
-#include <rpm/rpmsx.h>
-#endif
-
 #if !HAVE_RPM_RPMMESSAGES_H
 #include <rpm/rpmlog.h>
 #endif
@@ -781,24 +777,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    if (rpmExpandNumeric("%{?_repackage_all_erasures}"))
       tsFlags |= RPMTRANS_FLAG_REPACKAGE;
 		     
-#if HAVE_RPM_RPMSX_H
-#ifdef WITH_SELINUX
-   /* Initialize security context patterns for SELinux */
-   if (!(tsFlags & RPMTRANS_FLAG_NOCONTEXTS)) {
-      rpmsx sx = rpmtsREContext(TS);
-      if (sx == NULL) {
-         const char *fn = rpmGetPath("%{?_install_file_context_path}", NULL);
-         if (fn != NULL && *fn != '\0') {
-            sx = rpmsxNew(fn);
-            (void) rpmtsSetREContext(TS, sx);
-         }
-         fn = (const char *) _free(fn);
-      }
-      sx = rpmsxFree(sx);
-   }
-#endif
-#endif
-
    if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
       probFilter |= RPMPROB_FILTER_OLDPACKAGE;
    }
