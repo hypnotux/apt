@@ -67,16 +67,6 @@ int tags[] =  {
 };
 int numTags = sizeof(tags) / sizeof(int);
 
-
-
-typedef struct {
-   string importance;
-   string date;
-   string summary;
-   string url;
-} UpdateInfo;
-
-
 static
 int usefulFile(const char *d, const char *b)
 {
@@ -184,36 +174,6 @@ static void copyStrippedFileList(Header header, Header newHeader)
    FREE(dindexes);
 }
 
-
-
-
-
-bool loadUpdateInfo(char *path, map<string,UpdateInfo> &map)
-{
-   FileFd F(path, FileFd::ReadOnly);
-   if (_error->PendingError()) 
-   {
-      return false;
-   }
-   
-   pkgTagFile Tags(&F);
-   pkgTagSection Section;
-   
-   while (Tags.Step(Section)) 
-   {
-      string file = Section.FindS("File");
-      UpdateInfo info;
-
-      info.importance = Section.FindS("Importance");
-      info.date = Section.FindS("Date");
-      info.summary = Section.FindS("Summary");
-      info.url = Section.FindS("URL");
-
-      map[file] = info;
-   }
-   return true;
-}
-
 // No prototype from rpm after 4.0.
 extern "C" {
 int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
@@ -222,8 +182,7 @@ int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
 
 bool copyFields(Header h, Header newHeader,
 		FILE *idxfile, const char *directory, char *filename,
-		unsigned filesize, map<string,UpdateInfo> &updateInfo,
-		bool fullFileList)
+		unsigned filesize, bool fullFileList)
 {
    int i;
    raptInt size[1];
@@ -298,29 +257,6 @@ bool copyFields(Header h, Header newHeader,
 		  filename, 1);
    headerAddEntry(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE,
 		  size, 1);
-      
-   // update description tags
-   if (updateInfo.find(string(filename)) != updateInfo.end()) {
-      const char *tmp;
-      string name = string(filename);
-      
-      tmp = updateInfo[name].summary.c_str();
-      headerAddEntry(newHeader, CRPMTAG_UPDATE_SUMMARY,
-		     RPM_STRING_TYPE,
-		     tmp, 1);
-      tmp = updateInfo[name].url.c_str();
-      headerAddEntry(newHeader, CRPMTAG_UPDATE_URL,
-		     RPM_STRING_TYPE,
-		     tmp, 1);
-      tmp = updateInfo[name].date.c_str();
-      headerAddEntry(newHeader, CRPMTAG_UPDATE_DATE,
-		     RPM_STRING_TYPE,
-		     tmp, 1);
-      tmp = updateInfo[name].importance.c_str();
-      headerAddEntry(newHeader, CRPMTAG_UPDATE_IMPORTANCE,
-		     RPM_STRING_TYPE,
-		     tmp, 1);
-   }
    
    return true;
 }
@@ -332,7 +268,6 @@ void usage()
    cerr << "usage: genpkglist [<options>] <dir> <suffix>" << endl;
    cerr << "options:" << endl;
    cerr << " --index <file>  file to write srpm index data to" << endl;
-   cerr << " --info <file>   file to read update info from" << endl;
    cerr << " --meta <suffix> create package file list with given suffix" << endl;
    cerr << " --bloat         do not strip the package file list. Needed for some" << endl;
    cerr << "                 distributions that use non-automatically generated" << endl;
@@ -350,12 +285,10 @@ int main(int argc, char ** argv)
    FD_t outfd, fd;
    struct dirent **dirEntries;
    int entry_no, entry_cur;
-   map<string,UpdateInfo> updateInfo;
    CachedMD5 *md5cache;
    char *op_dir;
    char *op_suf;
    char *op_index = NULL;
-   char *op_update = NULL;
    FILE *idxfile;
    int i;
    bool fullFileList = false;
@@ -371,14 +304,6 @@ int main(int argc, char ** argv)
 	    op_index = argv[i];
 	 } else {
 	    cout << "genpkglist: filename missing for option --index"<<endl;
-	    exit(1);
-	 }
-      } else if (strcmp(argv[i], "--info") == 0) {
-	 i++;
-	 if (i < argc) {
-	    op_update = argv[i];
-	 } else {
-	    cout << "genpkglist: filename missing for option --info"<<endl;
 	    exit(1);
 	 }
       } else if (strcmp(argv[i], "--bloat") == 0) {
@@ -423,13 +348,6 @@ int main(int argc, char ** argv)
       usage();
    }
    
-   if (op_update) {
-      if (!loadUpdateInfo(op_update, updateInfo)) {
-	 cerr << "genpkglist: error reading update info from file " << op_update << endl;
-	 _error->DumpErrors();
-	 exit(1);
-      }
-   }
    if (op_index) {
       idxfile = fopen(op_index, "w+");
       if (!idxfile) {
@@ -534,7 +452,7 @@ int main(int argc, char ** argv)
 	    
 	    copyFields(h, newHeader, idxfile, dirtag.c_str(),
 		       dirEntries[entry_cur]->d_name,
-		       sb.st_size, updateInfo, fullFileList);
+		       sb.st_size, fullFileList);
 
 	    md5cache->MD5ForFile(string(dirEntries[entry_cur]->d_name), 
 				 sb.st_mtime, md5);

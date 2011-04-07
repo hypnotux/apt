@@ -40,11 +40,6 @@
 #define CRPMTAG_DIRECTORY         (rpmTag)1000010
 #define CRPMTAG_BINARY            (rpmTag)1000011
 
-#define CRPMTAG_UPDATE_SUMMARY    (rpmTag)1000020
-#define CRPMTAG_UPDATE_IMPORTANCE (rpmTag)1000021
-#define CRPMTAG_UPDATE_DATE       (rpmTag)1000022
-#define CRPMTAG_UPDATE_URL        (rpmTag)1000023
-
 using std::string;
 using std::vector;
 
