@@ -31,17 +31,9 @@
 #include <iostream>
 #include <cstring>
 
-#if !HAVE_RPM_RPMMESSAGES_H
 #include <rpm/rpmlog.h>
-#endif
-
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmdb.h>
-#else
-#define rpmpsPrint(a,b) rpmProblemSetPrint(a,b)
-#define rpmpsFree(a) rpmProblemSetFree(a)
-#define rpmReadPackageFile(a,b,c,d) rpmReadPackageHeader(b,d,0,NULL,NULL)
-#endif
+
 #include "aptcallback.h"
 
 using namespace std;
@@ -271,11 +263,9 @@ bool pkgRPMPM::Go()
 	 } else if ((loc = Name.rfind("#", Name.length())) != string::npos) {
 	    RealName = Name.substr(0,loc) + "-" + I->Pkg.CurrentVer().VerStr();
 	 }
-#if RPM_VERSION >= 0x040202
 	 // This is needed for removal to work on multilib packages, but old
 	 // rpm versions don't support name.arch in RPMDBI_LABEL, oh well...
 	 RealName = RealName + "." + I->Pkg.CurrentVer().Arch();
-#endif
 	 uninstall.push_back(strdup(RealName.c_str()));
 	 unalloc.push_back(strdup(RealName.c_str()));
 	 pkgs_uninstall.push_back(I->Pkg);
@@ -689,17 +679,10 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 	    fd = Fopen(*I, "r.ufdio");
 	    if (fd == NULL)
 	       _error->Error(_("Failed opening %s"), *I);
-#if RPM_VERSION >= 0x040100
             rc = rpmReadPackageFile(TS, fd, *I, &hdr);
 	    if (rc != RPMRC_OK && rc != RPMRC_NOTTRUSTED && rc != RPMRC_NOKEY)
 	       _error->Error(_("Failed reading file %s"), *I);
 	    rc = rpmtsAddInstallElement(TS, hdr, *I, upgrade, 0);
-#else
-	    rc = rpmReadPackageHeader(fd, &hdr, 0, NULL, NULL);
-	    if (rc)
-	       _error->Error(_("Failed reading file %s"), *I);
-	    rc = rpmtransAddPackage(TS, hdr, NULL, *I, upgrade, 0);
-#endif
 	    if (rc)
 	       _error->Error(_("Failed adding %s to transaction %s"),
 			     *I, "(install)");
@@ -709,20 +692,12 @@ bool pkgRPMLibPM::AddToTransaction(Item::RPMOps op, vector<const char*> &files)
 
 	 case Item::RPMErase:
             rpmdbMatchIterator MI;
-#if RPM_VERSION >= 0x040100
 	    MI = raptInitIterator(TS, RPMDBI_LABEL, *I, 0);
-#else
-	    MI = raptInitIterator(DB, RPMDBI_LABEL, *I, 0);
-#endif
 	    while ((hdr = rpmdbNextIterator(MI)) != NULL) 
 	    {
 	       unsigned int recOffset = rpmdbGetIteratorOffset(MI);
 	       if (recOffset) {
-#if RPM_VERSION >= 0x040100
 		  rc = rpmtsAddEraseElement(TS, hdr, recOffset);
-#else
-		  rc = rpmtransRemovePackage(TS, recOffset);
-#endif
 		  if (rc)
 		     _error->Error(_("Failed adding %s to transaction %s"),
 				   *I, "(erase)");
@@ -754,25 +729,12 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
       ParseRpmOpts("RPM::Install-Options", &tsFlags, &probFilter);
    ParseRpmOpts("RPM::Options", &tsFlags, &probFilter);
 
-#if RPM_VERSION >= 0x040100
    rpmps probs;
    TS = rpmtsCreate();
    rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
    // 4.1 needs this always set even if NULL,
    // otherwise all scriptlets fail
    rpmtsSetRootDir(TS, Dir.c_str());
-#else
-   rpmProblemSet probs;
-   const char *RootDir = NULL;
-   if (!Dir.empty())
-      RootDir = Dir.c_str();
-   if (rpmdbOpen(RootDir, &DB, O_RDWR, 0644) != 0)
-   {
-      _error->Error(_("Could not open RPM database"));
-      goto exit;
-   }
-   TS = rpmtransCreateSet(DB, Dir.c_str());
-#endif
 
    if (_config->FindB("RPM::OldPackage", true) || !upgrade.empty()) {
       probFilter |= RPMPROB_FILTER_OLDPACKAGE;
@@ -797,7 +759,6 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    if (upgrade.empty() == false)
        AddToTransaction(Item::RPMUpgrade, upgrade);
 
-#if RPM_VERSION >= 0x040100
    if (_config->FindB("RPM::NoDeps", false) == false) {
       rc = rpmtsCheck(TS);
       probs = rpmtsProblems(TS);
@@ -808,29 +769,10 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 	 goto exit;
       }
    }
-#else
-   rpmDependencyConflict conflicts;
-   if (_config->FindB("RPM::NoDeps", false) == false) {
-      int numConflicts;
-      if (rpmdepCheck(TS, &conflicts, &numConflicts)) {
-	 _error->Error(_("Transaction set check failed"));
-	 if (conflicts) {
-	    printDepProblems(stderr, conflicts, numConflicts);
-	    rpmdepFreeConflicts(conflicts, numConflicts);
-	 }
-	 goto exit;
-      }
-   }
-#endif
 
    rc = 0;
-#if RPM_VERSION >= 0x040100
    if (_config->FindB("RPM::Order", true) == true)
       rc = rpmtsOrder(TS);
-#else
-   if (_config->FindB("RPM::Order", true) == true)
-      rc = rpmdepOrder(TS);
-#endif
 
    if (rc > 0) {
       _error->Error(_("Ordering failed for %d packages"), rc);
@@ -838,26 +780,17 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
    }
 
    Progress->OverallProgress(0, 1, 1, "Committing changes...");
-#if RPM_VERSION >= 0x040100
+
    probFilter |= rpmtsFilterFlags(TS);
    rpmtsSetFlags(TS, (rpmtransFlags)(rpmtsFlags(TS) | tsFlags));
    rpmtsClean(TS);
    rc = rpmtsSetNotifyCallback(TS, rpmCallback, Progress);
    rc = rpmtsRun(TS, NULL, (rpmprobFilterFlags)probFilter);
    probs = rpmtsProblems(TS);
-#else
-   rc = rpmRunTransactions(TS, rpmCallback, Progress, NULL,
-                           &probs, (rpmtransFlags)tsFlags,
-			   (rpmprobFilterFlags)probFilter);
-#endif
 
    if (rc > 0) {
       _error->Error(_("Error while running transaction"));
-#if RPM_VERSION >= 0x040100
       if (rpmpsNumProblems(probs) > 0)
-#else
-      if (probs->numProblems > 0)
-#endif
 	 rpmpsPrint(stderr, probs);
    } else {
       Success = true;
@@ -869,11 +802,7 @@ bool pkgRPMLibPM::Process(vector<const char*> &install,
 
 exit:
 
-#if RPM_VERSION >= 0x040100
    rpmtsFree(TS);
-#else
-   rpmdbClose(DB);
-#endif
 
    return Success;
 }
@@ -903,22 +832,14 @@ bool pkgRPMLibPM::ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter)
 	    *tsFlags |= RPMTRANS_FLAG_JUSTDB;
 	 else if (Opts->Value == "--test")
 	    *tsFlags |= RPMTRANS_FLAG_TEST;
-#if RPM_VERSION >= 0x040200
 	 else if (Opts->Value == "--noconfigs" ||
 	          Opts->Value == "--excludeconfigs")
 	    *tsFlags |= RPMTRANS_FLAG_NOCONFIGS;
-#endif
-#if RPM_VERSION >= 0x040300
 	 else if (Opts->Value == "--nocontexts")
             *tsFlags |= RPMTRANS_FLAG_NOCONTEXTS;
-#endif
-#if RPM_HAVE_FDIGESTS
-         else if (Opts->Value == "--nofdigests")
-            *tsFlags |= RPMTRANS_FLAG_NOFDIGESTS;
-#else
-	 else if (Opts->Value == "--nomd5")
-	    *tsFlags |= RPMTRANS_FLAG_NOMD5;
-#endif
+         else if (Opts->Value == "--nofiledigest" ||
+		  Opts->Value == "--nomd5")
+            *tsFlags |= RPMTRANS_FLAG_NOFILEDIGEST;
 
 	 // Problem filter flags
 	 else if (Opts->Value == "--replacefiles")

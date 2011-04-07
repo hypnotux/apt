@@ -24,9 +24,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmds.h>
-#endif
 
 rpmVersioningSystem rpmVS;
 
@@ -67,9 +65,7 @@ static void ParseVersion(char *evr,
    }
    else
    {
-#if RPM_VERSION >= 0x040100
       epoch = "0";
-#endif
       version = evr;
    }
 
@@ -193,19 +189,13 @@ bool rpmVersioningSystem::CheckDep(const char *PkgVer,
       break;
    }
 
-#if RPM_VERSION >= 0x040100
    rpmds pds = rpmdsSingle(RPMTAG_PROVIDENAME, "", PkgVer, (raptDepFlags) PkgFlags);
    rpmds dds = rpmdsSingle(RPMTAG_REQUIRENAME, "", DepVer, (raptDepFlags) DepFlags);
-#if RPM_VERSION >= 0x040201
    rpmdsSetNoPromote(pds, _rpmds_nopromote);
    rpmdsSetNoPromote(dds, _rpmds_nopromote);
-#endif
    rc = rpmdsCompare(pds, dds);
    rpmdsFree(pds);
    rpmdsFree(dds);
-#else 
-   rc = rpmRangesOverlap("", PkgVer, PkgFlags, "", DepVer, DepFlags);
-#endif
     
    return (!invert && rc) || (invert && !rc);
 }

@@ -39,12 +39,7 @@ bool raptHeader::hasTag(raptTag tag) const
 string raptHeader::format(const string fmt) const
 {
    string res = "";
-   char *s;
-#ifdef RPM_HAVE_HEADERFORMAT
-   s = headerFormat(Hdr, fmt.c_str(), NULL);
-#else
-   s = headerSprintf(Hdr, fmt.c_str(), rpmTagTable, rpmHeaderFormats, NULL);
-#endif
+   char *s = headerFormat(Hdr, fmt.c_str(), NULL);
    if (s) {
       res = string(s);
       free(s);
@@ -75,7 +70,6 @@ bool raptHeader::getTag(raptTag tag, string &data, bool raw) const
    }
    return ret;
 }
-#ifdef HAVE_RPM_RPMTD_H
 
 // use MINMEM to avoid extra copy from header if possible
 #define HGDFL (headerGetFlags)(HEADERGET_EXT | HEADERGET_MINMEM)
@@ -116,70 +110,5 @@ bool raptHeader::getTag(raptTag tag, vector<raptInt> &data) const
    }
    return ret;
 }
-#else
-// No prototype from rpm after 4.0.
-extern "C" {
-int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
-                      raptTagData p, raptTagCount *c);
-}
-
-bool raptHeader::getTag(raptTag tag, vector<string> &data, bool raw) const
-{
-   bool ret = false;
-   void *val = NULL;
-   int rc = 0;
-   raptTagCount count = 0;
-   raptTagType type = RPM_NULL_TYPE;
-   if (tag == RPMTAG_OLDFILENAMES) {
-      rc = rpmHeaderGetEntry(Hdr, tag, &type, (void **) &val, &count);
-   } else if (raw) {
-      rc = headerGetRawEntry(Hdr, tag, &type, (void **) &val, &count);
-   } else {
-      rc = headerGetEntry(Hdr, tag, &type, (void **) &val, &count);
-   }
-
-   if (rc) {
-      switch (type) {
-	 case RPM_STRING_TYPE: {
-	    char *hdata = (char *)val;
-	    data.push_back(hdata);
-	    ret = true;
-	    break;
-	 }
-	 case RPM_STRING_ARRAY_TYPE:
-	 case RPM_I18NSTRING_TYPE: {
-	    char **hdata = (char **)val;
-	    for (int i = 0; i < count; i++) {
-	       data.push_back(hdata[i]);
-	    }
-	    free(hdata);
-	    ret = true;
-	    break;
-	 }
-	 default: 
-	    break;
-      }
-   }
-   return ret;
-}
-
-bool raptHeader::getTag(raptTag tag, vector<raptInt> &data) const
-{
-   bool ret = false;
-   void *val = NULL;
-   raptTagCount count = 0;
-   raptTagType type = RPM_NULL_TYPE;
-   if (headerGetEntry(Hdr, tag, &type, (void **) &val, &count)) {
-      if (type == RPM_INT32_TYPE) {
-	 raptInt *hdata = (raptInt *)val;
-	 for (int i = 0; i < count; i++) {
-	    data.push_back(hdata[i]);
-	 }
-	 ret = true;
-      }
-   }
-   return ret;
-}
-#endif
 
 // vim:sts=3:sw=3

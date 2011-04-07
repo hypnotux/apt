@@ -74,32 +74,9 @@ AC_DEFINE_UNQUOTED([RPM_VERSION_RAW],"$RPM_VERSION_RAW",[RPM raw version])
 AC_MSG_RESULT($RPM_VERSION_RAW)
 
 dnl Various rpm header checks..
-AC_CHECK_HEADER(rpm/rpmlib.h, [],
-	   [AC_MSG_ERROR([Can't find rpmlib.h])])
-AC_CHECK_HEADERS([rpm/rpmcallback.h \
-	     rpm/rpmmessages.h rpm/rpmtypes.h rpm/rpmtd.h])
-
-dnl Various rpm variant capability checks
-AC_MSG_CHECKING(for headerFormat)
-AC_EGREP_HEADER(headerFormat, rpm/header.h,
-	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_HEADERFORMAT, 1, [headerFormat]) ],
-	[AC_MSG_RESULT(no) ])
-
-AC_MSG_CHECKING(for rpmsqIsCaught)
-AC_EGREP_HEADER(rpmsqIsCaught, rpm/rpmsq.h,
-	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_RPMSQISCAUGHT, 1, [rpmsqIsCaught]) ],
-	[AC_MSG_RESULT(no) ])
-
-AC_MSG_CHECKING(for rpmdsRpmlib)
-AC_EGREP_HEADER(rpmdsRpmlib, rpm/rpmds.h,
-	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_DSRPMLIB, 1, [rpmdsRpmlib]) ],
-	[AC_MSG_RESULT(no) ])
+AC_CHECK_HEADERS([rpm/rpmcallback.h rpm/rpmtypes.h rpm/rpmtd.h], [],
+   [AC_MSG_ERROR([Required rpm headers missing (rpm too old?)])])
 	
-AC_MSG_CHECKING(for fdigests)
-AC_EGREP_HEADER(RPMTRANS_FLAG_NOFDIGESTS, rpm/rpmlib.h,
-	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_FDIGESTS, 1, [fdigests]) ],
-	[AC_MSG_RESULT(no) ])
-
 AC_MSG_CHECKING(for rpmTagVal)
 AC_EGREP_HEADER(rpmTagVal, rpm/rpmtag.h,
 	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_RPMTAGVAL, 1, [rpmTagVal]) ],

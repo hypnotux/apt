@@ -38,14 +38,7 @@
 #include <assert.h>
 #include <time.h>
 									/*}}}*/
-// for distrover
-#if RPM_VERSION >= 0x040101
-#include <rpm/rpmdb.h>
-#endif
-
-#if RPM_VERSION >= 0x040201
 extern int _rpmds_nopromote;
-#endif
 
 rpmSystem rpmSys;
 
@@ -145,7 +138,6 @@ bool rpmSystem::Initialize(Configuration &Cnf)
    Cnf.CndSet("Acquire::CDROM::Mount", "/media/cdrom");
    Cnf.CndSet("Acquire::CDROM::Copy-All", "true");
 
-#if RPM_VERSION >= 0x040201
    const char *RPMOptions[] =
    {
       "RPM::Options",
@@ -171,9 +163,6 @@ bool rpmSystem::Initialize(Configuration &Cnf)
    }
    _rpmds_nopromote = NoPromote;
    HideZeroEpoch = (NoPromote == 1);
-#else
-   HideZeroEpoch = false;
-#endif
 
    return true;
 }

@@ -26,9 +26,7 @@
 #include "cached_md5.h"
 #include "genutil.h"
 
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
-#endif
 
 #define CRPMTAG_TIMESTAMP   1012345
 
@@ -495,13 +493,9 @@ int main(int argc, char ** argv)
 
    md5cache = new CachedMD5(string(op_dir) + string(op_suf), "genpkglist");
 
-#if RPM_VERSION >= 0x040100
    rpmReadConfigFiles(NULL, NULL);
    rpmts ts = rpmtsCreate();
    rpmtsSetVSFlags(ts, (rpmVSFlags_e)-1);
-#else
-   int isSource;
-#endif   
 
    for (entry_cur = 0; entry_cur < entry_no; entry_cur++) {
       struct stat sb;
@@ -531,13 +525,8 @@ int main(int argc, char ** argv)
 	    continue;
 	 }
 	 
-#if RPM_VERSION >= 0x040100
 	 rc = rpmReadPackageFile(ts, fd, dirEntries[entry_cur]->d_name, &h);
 	 if (rc == RPMRC_OK || rc == RPMRC_NOTTRUSTED || rc == RPMRC_NOKEY) {
-#else
-	 rc = rpmReadPackageHeader(fd, &h, &isSource, NULL, NULL);
-	 if (rc == 0) {
-#endif
 	    Header newHeader;
 	    char md5[34];
 	    
@@ -565,9 +554,7 @@ int main(int argc, char ** argv)
 
    Fclose(outfd);
 
-#if RPM_VERSION >= 0x040100
    ts = rpmtsFree(ts);
-#endif
    
    delete md5cache;
 

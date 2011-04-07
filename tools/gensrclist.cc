@@ -27,9 +27,7 @@
 #include "cached_md5.h"
 #include "genutil.h"
 
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
-#endif
  
 using namespace std;
 
@@ -256,13 +254,9 @@ int main(int argc, char ** argv)
       return 1;
    }
 
-#if RPM_VERSION >= 0x040100
    rpmReadConfigFiles(NULL, NULL);
    rpmts ts = rpmtsCreate();
    rpmtsSetVSFlags(ts, (rpmVSFlags_e)-1);
-#else
-   Header sigs;
-#endif   
   
    for (entry_cur = 0; entry_cur < entry_no; entry_cur++) {
       struct stat sb;
@@ -290,13 +284,8 @@ int main(int argc, char ** argv)
 
       size[0] = sb.st_size;
 	 
-#if RPM_VERSION >= 0x040100
       rc = rpmReadPackageFile(ts, fd, dirEntries[entry_cur]->d_name, &h);
       if (rc == RPMRC_OK || rc == RPMRC_NOTTRUSTED || rc == RPMRC_NOKEY) {
-#else
-      rc = rpmReadPackageInfo(fd, &sigs, &h);
-      if (rc == 0) {
-#endif
 	    Header newHeader;
 	    int i;
 	    bool foundInIndex;
@@ -365,9 +354,6 @@ int main(int argc, char ** argv)
 	    
 	    headerFree(newHeader);
 	    headerFree(h);
-#if RPM_VERSION < 0x040100
-	    rpmFreeSignature(sigs);
-#endif
       } else {
 	 cerr << "\nWarning: Skipping malformed RPM: " <<
 	         dirEntries[entry_cur]->d_name << endl;
@@ -377,9 +363,7 @@ int main(int argc, char ** argv)
    
    Fclose(outfd);
 
-#if RPM_VERSION >= 0x040100
    ts = rpmtsFree(ts);
-#endif   
    
    delete md5cache;
    

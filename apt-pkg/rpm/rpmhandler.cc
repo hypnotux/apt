@@ -46,27 +46,10 @@
 
 #include <apti18n.h>
 
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
 #include <rpm/rpmdb.h>
 #include <rpm/rpmds.h>
-#include <rpm/rpmfi.h>
-
-// Newer rpm.org has rpmsqIsCaught() which suits out purposes just fine,
-// for other versions define our own version of it. We'd want to include 
-// rpmsq.h here but it's not valid C++ in many existing rpm versions so 
-// just declare rpmsqCaught extern.. sigh.
-#ifdef RPM_HAVE_RPMSQISCAUGHT
 #include <rpm/rpmsq.h>
-#else
-extern sigset_t rpmsqCaught;
-
-static int rpmsqIsCaught(int signum) 
-{
-   return sigismember(&rpmsqCaught, signum);
-}
-#endif
-#endif
 
 using namespace std;
 
@@ -77,9 +60,7 @@ using namespace std;
 // not happen.
 bool HideZeroEpoch;
 
-#if RPM_HAVE_DSRPMLIB
 static rpmds rpmlibProv = NULL;
-#endif
 
 string RPMHandler::EVR() const
 {
@@ -133,8 +114,6 @@ bool RPMHandler::HasFile(const char *File) const
 bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags flag)  const
 {
    if (strncmp(name, "rpmlib(", strlen("rpmlib(")) == 0) {
-#if RPM_VERSION >= 0x040100
-#if RPM_HAVE_DSRPMLIB
      if (rpmlibProv == NULL)
          rpmdsRpmlib(&rpmlibProv, NULL);
 
@@ -142,17 +121,7 @@ bool RPMHandler::InternalDep(const char *name, const char *ver, raptDepFlags fla
 			    name, ver?ver:NULL, flag);
      int res = rpmdsSearch(rpmlibProv, ds) >= 0;
      rpmdsFree(ds);
-#else
-      rpmds ds = rpmdsSingle(RPMTAG_PROVIDENAME,
-			     name, ver?ver:NULL, flag);
-      int res = rpmCheckRpmlibProvides(ds);
-      rpmdsFree(ds);
-#endif
-#else
-      int res = rpmCheckRpmlibProvides(name, ver?ver:NULL,
-				       flag);
-#endif
-      if (res) 
+     if (res) 
 	 return true;
    }
 
@@ -169,10 +138,8 @@ bool RPMHandler::PutDep(const char *name, const char *ver, raptDepFlags flags,
    if (Type == pkgCache::Dep::Depends) {
       if (flags & RPMSENSE_PREREQ)
 	 Type = pkgCache::Dep::PreDepends;
-#if RPM_VERSION >= 0x040403
       else if (flags & RPMSENSE_MISSINGOK)
 	 Type = pkgCache::Dep::Suggests;
-#endif
       else
 	 Type = pkgCache::Dep::Depends;
    }
@@ -223,7 +190,6 @@ string RPMHdrHandler::GetSTag(raptTag Tag) const
 
 
 bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
-#if RPM_VERSION >= 0x040100
 {
    rpmTag deptype = RPMTAG_REQUIRENAME;
    switch (Type) {
@@ -239,7 +205,6 @@ bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
       case pkgCache::Dep::Provides:
 	 deptype = RPMTAG_PROVIDENAME;
 	 break;
-#if RPM_VERSION >= 0x040403
       case pkgCache::Dep::Suggests:
 	 deptype = RPMTAG_SUGGESTSNAME;
 	 break;
@@ -247,7 +212,6 @@ bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
       case pkgCache::Dep::Enhances:
 	 deptype = RPMTAG_ENHANCES;
 	 break;
-#endif
 #endif
       default:
 	 /* can't happen... right? */
@@ -264,54 +228,6 @@ bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
    rpmdsFree(ds);
    return true;
 }
-#else
-{
-   vector<string> names, versions;
-   vector<raptInt> flags;
-   raptTag deptag, depver, depflags;
-   raptHeader h(HeaderP);
-
-   switch (Type) {
-      case pkgCache::Dep::Depends:
-	 deptag = RPMTAG_REQUIRENAME;
-	 depver = RPMTAG_REQUIREVERSION;
-	 depflags = RPMTAG_REQUIREFLAGS;
-	 break;
-      case pkgCache::Dep::Obsoletes:
-	 deptag = RPMTAG_OBSOLETENAME;
-	 depver = RPMTAG_OBSOLETEVERSION;
-	 depflags = RPMTAG_OBSOLETEFLAGS;
-	 break;
-      case pkgCache::Dep::Conflicts:
-	 deptag = RPMTAG_CONFLICTNAME;
-	 depver = RPMTAG_CONFLICTVERSION;
-	 depflags = RPMTAG_CONFLICTFLAGS;
-	 break;
-      case pkgCache::Dep::Provides:
-	 deptag = RPMTAG_PROVIDENAME;
-	 depver = RPMTAG_PROVIDEVERSION;
-	 depflags = RPMTAG_PROVIDEFLAGS;
-	 break;
-      default:
-	 /* can't happen... right? */
-	 return false;
-	 break;
-   }
-   if (h.getTag(deptag, names)) {
-      h.getTag(depver, versions);
-      h.getTag(depflags, flags);
-
-      vector<string>::const_iterator ni = names.begin();
-      vector<string>::const_iterator vi = versions.begin();
-      vector<raptInt>::const_iterator fi = flags.begin();
-      while (ni != names.end() && vi != versions.end() && fi != flags.end()) {
-	 PutDep(ni->c_str(), vi->c_str(), (raptDepFlags)*fi, Type, Deps);
-	 ni++; vi++; fi++;
-      }
-   }
-   return true;
-}
-#endif
 
 bool RPMHdrHandler::FileList(vector<string> &FileList) const
 {
@@ -443,7 +359,6 @@ bool RPMSingleFileHandler::Skip()
       HeaderP = NULL;
       return false;
    }
-#if RPM_VERSION >= 0x040100
    rpmts TS = rpmtsCreate();
    rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
    int rc = rpmReadPackageFile(TS, FD, sFilePath.c_str(), &HeaderP);
@@ -452,13 +367,6 @@ bool RPMSingleFileHandler::Skip()
       HeaderP = NULL;
    }
    rpmtsFree(TS);
-#else
-   int rc = rpmReadPackageHeader(FD, &HeaderP, 0, NULL, NULL);
-   if (rc) {
-      _error->Error(_("Failed reading file %s"), sFilePath.c_str());
-      HeaderP = NULL;
-   }
-#endif
    return (HeaderP != NULL);
 }
 
@@ -506,9 +414,7 @@ RPMDirHandler::RPMDirHandler(string DirName)
    : sDirName(DirName)
 {
    ID = DirName;
-#if RPM_VERSION >= 0x040100
    TS = NULL;
-#endif
    Dir = opendir(sDirName.c_str());
    if (Dir == NULL)
       return;
@@ -516,10 +422,8 @@ RPMDirHandler::RPMDirHandler(string DirName)
    while (nextFileName() != NULL)
       iSize += 1;
    rewinddir(Dir);
-#if RPM_VERSION >= 0x040100
    TS = rpmtsCreate();
    rpmtsSetVSFlags(TS, (rpmVSFlags_e)-1);
-#endif
 }
 
 const char *RPMDirHandler::nextFileName()
@@ -551,10 +455,8 @@ RPMDirHandler::~RPMDirHandler()
 {
    if (HeaderP != NULL)
       headerFree(HeaderP);
-#if RPM_VERSION >= 0x040100
    if (TS != NULL)
       rpmtsFree(TS);
-#endif
    if (Dir != NULL)
       closedir(Dir);
 }
@@ -576,20 +478,12 @@ bool RPMDirHandler::Skip()
       FD_t FD = Fopen(sFilePath.c_str(), "r");
       if (FD == NULL)
 	 continue;
-#if RPM_VERSION >= 0x040100
       int rc = rpmReadPackageFile(TS, FD, fname, &HeaderP);
       Fclose(FD);
       if (rc != RPMRC_OK
 	  && rc != RPMRC_NOTTRUSTED
 	  && rc != RPMRC_NOKEY)
 	 continue;
-#else
-      int isSource;
-      int rc = rpmReadPackageHeader(FD, &HeaderP, &isSource, NULL, NULL);
-      Fclose(FD);
-      if (rc != 0)
-	 continue;
-#endif
       Res = true;
       break;
    }
@@ -661,20 +555,10 @@ RPMDBHandler::RPMDBHandler(bool WriteLock)
    stat(DataPath(false).c_str(), &St);
    DbFileMtime = St.st_mtime;
 
-#if RPM_VERSION >= 0x040100
    Handler = rpmtsCreate();
    rpmtsSetVSFlags(Handler, (rpmVSFlags_e)-1);
    rpmtsSetRootDir(Handler, Dir.c_str());
-#else
-   const char *RootDir = NULL;
-   if (!Dir.empty())
-      RootDir = Dir.c_str();
-   if (rpmdbOpen(RootDir, &Handler, O_RDONLY, 0644) != 0)
-   {
-      _error->Error(_("could not open RPM database"));
-      return;
-   }
-#endif
+
    RpmIter = raptInitIterator(Handler, RPMDBI_PACKAGES, NULL, 0);
    if (RpmIter == NULL) {
       _error->Error(_("could not create RPM database iterator"));
@@ -706,7 +590,6 @@ RPMDBHandler::~RPMDBHandler()
    if (RpmIter != NULL)
       rpmdbFreeIterator(RpmIter);
 
-#if RPM_VERSION >= 0x040100
    /* 
     * If termination signal, do nothing as rpmdb has already freed
     * our ts set behind our back and rpmtsFree() will crash and burn with a 
@@ -723,11 +606,6 @@ RPMDBHandler::~RPMDBHandler()
    } else if (Handler != NULL) {
       rpmtsFree(Handler);
    }
-#else
-   if (Handler != NULL) {
-      rpmdbClose(Handler);
-   }
-#endif
 
    // Restore just after opening the database, and just after closing.
    if (WriteLock) {

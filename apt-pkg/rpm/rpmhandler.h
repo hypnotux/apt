@@ -210,11 +210,7 @@ class RPMDBHandler : public RPMHdrHandler
 {
    private:
 
-#if RPM_VERSION >= 0x040100
    rpmts Handler;
-#else
-   rpmdb Handler;
-#endif
    rpmdbMatchIterator RpmIter;
    bool WriteLock;
 
@@ -247,9 +243,7 @@ class RPMDirHandler : public RPMHdrHandler
    string sFileName;
    string sFilePath;
 
-#if RPM_VERSION >= 0x040100
    rpmts TS;
-#endif
 
    const char *nextFileName();
 

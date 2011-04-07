@@ -12,9 +12,7 @@
 #define PKGLIB_rpmPM_H
 
 #include <rpm/rpmlib.h>
-#if RPM_VERSION >= 0x040100
 #include <rpm/rpmts.h>
-#endif
 									/*}}}*/
 typedef Header rpmHeader; 
 
@@ -79,12 +77,7 @@ class pkgRPMExtPM : public pkgRPMPM
 class pkgRPMLibPM : public pkgRPMPM
 {
    protected:
-#if RPM_VERSION >= 0x040100
    rpmts TS;
-#else
-   rpmTransactionSet TS;
-   rpmdb DB;
-#endif
 
    bool ParseRpmOpts(const char *Cnf, int *tsFlags, int *probFilter);
    bool AddToTransaction(Item::RPMOps op, vector<const char*> &files);
