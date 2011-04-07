@@ -15,10 +15,9 @@ apt-pkg/contrib/crc-16.cc
 apt-pkg/contrib/error.cc
 apt-pkg/contrib/fileutl.cc
 apt-pkg/contrib/hashes.cc
-apt-pkg/contrib/md5.cc
 apt-pkg/contrib/mmap.cc
 apt-pkg/contrib/progress.cc
-apt-pkg/contrib/sha1.cc
+apt-pkg/contrib/rhash.cc
 apt-pkg/contrib/strutl.cc
 apt-pkg/contrib/sqlite.cc
 
