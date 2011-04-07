@@ -356,13 +356,6 @@ static void HashOptionFile(unsigned long &Hash, const char *Name)
    Hash += st.st_mtime;
 }
 
-#if RPM_HAVE_DSGETCONF
-static void HashTime(unsigned long &Hash)
-{
-   Hash += time(NULL);
-}
-#endif
-
 unsigned long rpmSystem::OptionsHash() const
 {
    unsigned long Hash = 0;
@@ -376,13 +369,6 @@ unsigned long rpmSystem::OptionsHash() const
    HashEnv(Hash, "LANG");
    HashEnv(Hash, "LC_ALL");
    HashEnv(Hash, "LC_MESSAGES");
-#if RPM_HAVE_DSGETCONF
-   // This is really draconian but until apt can made somehow deal with
-   // runtime dependencies the cache has to be rebuilt for each run for
-   // accuracy. Allow turning it off via configuration if not needed.
-   if (_config->FindB("RPM::RuntimeDeps", true) == true)
-      HashTime(Hash);
-#endif
    return Hash;
 }
 									/*}}}*/

@@ -115,10 +115,6 @@ AC_MSG_CHECKING(for rpmsqIsCaught)
 AC_EGREP_HEADER(rpmsqIsCaught, rpm/rpmsq.h,
 	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_RPMSQISCAUGHT, 1, [rpmsqIsCaught]) ],
 	[AC_MSG_RESULT(no) ])
-AC_MSG_CHECKING(for rpmdsGetconf)
-AC_EGREP_HEADER(rpmdsGetconf, rpm/rpmds.h,
-	[AC_MSG_RESULT(yes) AC_DEFINE(RPM_HAVE_DSGETCONF, 1, [rpmdsGetconf]) ],
-	[AC_MSG_RESULT(no) ])
 
 AC_MSG_CHECKING(for rpmdsRpmlib)
 AC_EGREP_HEADER(rpmdsRpmlib, rpm/rpmds.h,
