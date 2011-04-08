@@ -31,7 +31,7 @@
  
 using namespace std;
 
-int tags[] =  {
+raptTag tags[] =  {
        RPMTAG_NAME,
        RPMTAG_EPOCH,
        RPMTAG_VERSION,
@@ -46,13 +46,20 @@ int tags[] =  {
        
        RPMTAG_DESCRIPTION, 
        RPMTAG_SUMMARY, 
-       /*RPMTAG_HEADERI18NTABLE*/ HEADER_I18NTABLE,
+       RPMTAG_HEADERI18NTABLE,
        
        RPMTAG_REQUIREFLAGS, 
        RPMTAG_REQUIRENAME,
        RPMTAG_REQUIREVERSION
 };
-int numTags = sizeof(tags) / sizeof(int);
+int numTags = sizeof(tags) / sizeof(raptTag);
+
+/* Can't use headerPutFoo() helpers for custom tags */
+static int hdrPut(Header h, raptTag tag, raptTagType type, const void * data)
+{
+    struct rpmtd_s td = { tag, type, 1, (void *) data, RPMTD_NONE, 0 };
+    return headerPut(h, &td, HEADERPUT_DEFAULT);
+}
 
 bool readRPMTable(char *file, map<string, list<char*>* > &table)
 {
@@ -105,12 +112,6 @@ void usage()
    cerr << " --append        append to the source package file list, don't overwrite" << endl;
    cerr << " --progress      show a progress bar" << endl;
    cerr << " --cachedir=DIR  use a custom directory for package md5sum cache"<<endl;
-}
-
-extern "C" {
-// No prototype from rpm after 4.0.
-int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
-		      raptTagData p, raptTagCount *c);
 }
 
 int main(int argc, char ** argv) 
@@ -294,36 +295,28 @@ int main(int argc, char ** argv)
 	    
 	    // the std tags
 	    for (i = 0; i < numTags; i++) {
-	       raptTagType type;
-	       raptTagCount count;
-	       raptTagData data;
-	       int res;
-	       
-	       // Copy raw entry, so that internationalized strings
-	       // will get copied correctly.
-	       res = headerGetRawEntry(h, (raptTag) tags[i], &type, &data, &count);
-	       if (res != 1)
-		  continue;
-	       headerAddEntry(newHeader, (raptTag) tags[i], type, data, count);
+               struct rpmtd_s td;
+               if (headerGet(h, tags[i], &td, HEADERGET_RAW)) {
+                   headerPut(newHeader, &td, HEADERPUT_DEFAULT);
+                   rpmtdFreeData(&td);
+               }
 	    }
 	    
 	    
 	    // our additional tags
-	    headerAddEntry(newHeader, CRPMTAG_DIRECTORY, RPM_STRING_TYPE,
-			   srpmdir.c_str(), 1);
+	    hdrPut(newHeader, CRPMTAG_DIRECTORY, RPM_STRING_TYPE,
+			   srpmdir.c_str());
 	    
-	    headerAddEntry(newHeader, CRPMTAG_FILENAME, RPM_STRING_TYPE, 
-			   dirEntries[entry_cur]->d_name, 1);
-	    headerAddEntry(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE,
-			   size, 1);
+	    hdrPut(newHeader, CRPMTAG_FILENAME, RPM_STRING_TYPE, 
+			   dirEntries[entry_cur]->d_name);
+	    hdrPut(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE, size);
 	    
 	    {
 	       char md5[34];
 	       
 	       md5cache->MD5ForFile(dirEntries[entry_cur]->d_name, sb.st_mtime, md5);
 	       
-	       headerAddEntry(newHeader, CRPMTAG_MD5, RPM_STRING_TYPE,
-			      md5, 1);
+	       hdrPut(newHeader, CRPMTAG_MD5, RPM_STRING_TYPE, md5);
 	    }
 	    
 	    foundInIndex = false;
@@ -345,8 +338,9 @@ int main(int argc, char ** argv)
 	       }
 	       
 	       if (count) {
-		  headerAddEntry(newHeader, CRPMTAG_BINARY,
-				 RPM_STRING_ARRAY_TYPE, l, count);
+                  struct rpmtd_s td = { CRPMTAG_BINARY, RPM_STRING_ARRAY_TYPE,
+                                        count, l, RPMTD_NONE, 0 };
+                  headerPut(newHeader, &td, HEADERPUT_DEFAULT);
 	       }
 	    }
 	    if (foundInIndex || !mapi)

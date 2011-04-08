@@ -32,7 +32,7 @@
 
 using namespace std;
 
-int tags[] =  {
+raptTag tags[] =  {
        RPMTAG_NAME, 
        RPMTAG_EPOCH,
        RPMTAG_VERSION,
@@ -47,7 +47,7 @@ int tags[] =  {
        
        RPMTAG_DESCRIPTION, 
        RPMTAG_SUMMARY, 
-       /*RPMTAG_HEADERI18NTABLE*/ HEADER_I18NTABLE,
+       RPMTAG_HEADERI18NTABLE,
        
        RPMTAG_REQUIREFLAGS, 
        RPMTAG_REQUIRENAME,
@@ -65,125 +65,48 @@ int tags[] =  {
        RPMTAG_OBSOLETEFLAGS,
        RPMTAG_OBSOLETEVERSION
 };
-int numTags = sizeof(tags) / sizeof(int);
+int numTags = sizeof(tags) / sizeof(raptTag);
+
+/* Can't use headerPutFoo() helpers for custom tags */
+static int hdrPut(Header h, raptTag tag, raptTagType type, const void * data)
+{
+    struct rpmtd_s td = { tag, type, 1, (void *) data, RPMTD_NONE, 0 };
+    return headerPut(h, &td, HEADERPUT_DEFAULT);
+}
 
 static
-int usefulFile(const char *d, const char *b)
+int usefulFile(const char *fn)
 {
    // PATH-like directories
-   if (endswith(d, "/bin/") || endswith(d, "/sbin/"))
+   if (strstr(fn, "/bin/") || strstr(fn, "/sbin/"))
       return 1;
 
    // shared libraries
-   if (strncmp(b, "lib", 3) == 0 && strstr(b + 3, ".so"))
+   const char *bn = basename(fn);
+   if (bn && strncmp(bn, "lib", 3) == 0 && strstr(bn + 3, ".so"))
       return 1;
 
    return 0;
 }
 
-
 static void copyStrippedFileList(Header header, Header newHeader)
 {
-   raptTagCount i, i1, i2;
-   
-   raptTagType type1, type2, type3;
-   raptTagCount count1, count2, count3;
-   char **dirnames = NULL, **basenames = NULL;
-   raptInt *dirindexes = NULL;
-   raptTagData dirnameval = NULL, basenameval = NULL, dirindexval = NULL;
-   char **dnames, **bnames;
-   raptInt *dindexes;
-   int res1, res2, res3;
-   
-#define FREE(a) if (a) free(a);
-   
-   res1 = headerGetEntry(header, RPMTAG_DIRNAMES, &type1, 
-			 &dirnameval, &count1);
-   res2 = headerGetEntry(header, RPMTAG_BASENAMES, &type2, 
-			 &basenameval, &count2);
-   res3 = headerGetEntry(header, RPMTAG_DIRINDEXES, &type3, 
-			 &dirindexval, &count3);
-   dirnames = (char **)dirnameval;
-   basenames = (char **)basenameval;
-   dirindexes = (raptInt *)dirindexval;
-   
-   if (res1 != 1 || res2 != 1 || res3 != 1) {
-      FREE(dirnames);
-      FREE(basenames);
-      return;
-   }
-
-   dnames = dirnames;
-   bnames = basenames;
-   dindexes = (raptInt*)malloc(sizeof(raptInt)*count3);
-   
-   i1 = 0;
-   i2 = 0;
-   for (i = 0; i < count2 ; i++) 
-   {
-      int ok = usefulFile(dirnames[dirindexes[i]], basenames[i]);
-      
-      if (!ok) {
-	 int k = i;
-	 while (dirindexes[i] == dirindexes[k] && i < count2)
-	     i++;
-	 i--;
-	 continue;
+   struct rpmtd_s files;
+   if (headerGet(header, RPMTAG_FILENAMES, &files, HEADERGET_EXT)) {
+      const char *fn;
+      while ((fn = rpmtdNextString(&files)) != NULL) {
+          if (usefulFile(fn))
+              headerPutString(newHeader, RPMTAG_FILENAMES, fn);
       }
-      
-      
-      if (ok)
-      {
-	 raptTagCount j;
-	 
-	 bnames[i1] = basenames[i];
-	 for (j = 0; j < i2; j++)
-	 {
-	    if (dnames[j] == dirnames[dirindexes[i]])
-	    {
-	       dindexes[i1] = j;
-	       break;
-	    }
-	 }
-	 if (j == i2) 
-	 {
-	    dnames[i2] = dirnames[dirindexes[i]];
-	    dindexes[i1] = i2;
-	    i2++;
-	 }
-	 assert(i2 <= count1);
-	 i1++;
-      } 
+      headerConvert(newHeader, HEADERCONV_COMPRESSFILELIST);
    }
-   
-   if (i1 == 0) {
-      FREE(dirnames);
-      FREE(basenames);
-      FREE(dindexes);
-      return;
-   }
-   
-   headerAddEntry(newHeader, RPMTAG_DIRNAMES, type1, dnames, i2);
-   
-   headerAddEntry(newHeader, RPMTAG_BASENAMES, type2, bnames, i1);
-   
-   headerAddEntry(newHeader, RPMTAG_DIRINDEXES, type3, dindexes, i1);
-   
-   FREE(dirnames);
-   FREE(basenames);
-   FREE(dindexes);
-}
-
-// No prototype from rpm after 4.0.
-extern "C" {
-int headerGetRawEntry(Header h, raptTag tag, raptTagType * type,
-		      raptTagData p, raptTagCount *c);
 }
 
 bool copyFields(Header h, Header newHeader,
 		FILE *idxfile, const char *directory, char *filename,
 		unsigned filesize, bool fullFileList)
 {
+   struct rpmtd_s td;
    int i;
    raptInt size[1];
 
@@ -191,41 +114,21 @@ bool copyFields(Header h, Header newHeader,
    
    // the std tags
    for (i = 0; i < numTags; i++) {
-      raptTagType type;
-      raptTagCount count;
-      raptTagData data;
-      int res;
-      
-      // Copy raw entry, so that internationalized strings
-      // will get copied correctly.
-      res = headerGetRawEntry(h, (raptTag) tags[i], &type, &data, &count);
-      if (res != 1)
-	 continue;
-      headerAddEntry(newHeader, (raptTag) tags[i], type, data, count);
+      if (headerGet(h, tags[i], &td, HEADERGET_RAW)) {
+         headerPut(newHeader, &td, HEADERPUT_DEFAULT);
+         rpmtdFreeData(&td);
+      }
    }
  
    if (fullFileList) {
-      raptTagType type1, type2, type3;
-      raptTagCount count1, count2, count3;
-      char **dnames, **bnames, **dindexes;
-      raptTagData dnameval, bnameval, dindexval;
-      int res;
-   
-      res = headerGetEntry(h, RPMTAG_DIRNAMES, &type1, 
-			   &dnameval, &count1);
-      res = headerGetEntry(h, RPMTAG_BASENAMES, &type2, 
-			   &bnameval, &count2);
-      res = headerGetEntry(h, RPMTAG_DIRINDEXES, &type3, 
-			   &dindexval, &count3);
+      struct rpmtd_s dn, bn, di;
 
-      dnames = (char **)dnameval;
-      bnames = (char **)bnameval;
-      dindexes = (char **)dindexval;
-
-      if (res == 1) {
-	 headerAddEntry(newHeader, RPMTAG_DIRNAMES, type1, dnames, count1);
-	 headerAddEntry(newHeader, RPMTAG_BASENAMES, type2, bnames, count2);
-	 headerAddEntry(newHeader, RPMTAG_DIRINDEXES, type3, dindexes, count3);
+      if (headerGet(h, RPMTAG_DIRNAMES, &dn, HEADERGET_MINMEM) &&
+            headerGet(h, RPMTAG_BASENAMES, &bn, HEADERGET_MINMEM) &&
+            headerGet(h, RPMTAG_DIRINDEXES, &di, HEADERGET_MINMEM)) {
+         headerPut(newHeader, &dn, HEADERPUT_DEFAULT);
+         headerPut(newHeader, &bn, HEADERPUT_DEFAULT);
+         headerPut(newHeader, &di, HEADERPUT_DEFAULT);
       }
    } else {
        copyStrippedFileList(h, newHeader);
@@ -233,30 +136,17 @@ bool copyFields(Header h, Header newHeader,
    
    // update index of srpms
    if (idxfile) {
-      raptTagType type;
-      raptTagCount count;
-      raptTagData srpmval, nameval;
-      char *srpm, *name;
-      int res;
-      
-      res = headerGetEntry(h, RPMTAG_NAME, &type, 
-			   &nameval, &count);
-      res = headerGetEntry(h, RPMTAG_SOURCERPM, &type, 
-			   &srpmval, &count);
-      name = (char *)nameval;
-      srpm = (char *)srpmval;
+      const char *name = headerGetString(h, RPMTAG_NAME);
+      const char *srpm = headerGetString(h, RPMTAG_SOURCERPM);
 
-      if (res == 1) {
+      if (name && srpm) {
 	 fprintf(idxfile, "%s %s\n", srpm, name);
       }
    }
    // our additional tags
-   headerAddEntry(newHeader, CRPMTAG_DIRECTORY, RPM_STRING_TYPE,
-		  directory, 1);
-   headerAddEntry(newHeader, CRPMTAG_FILENAME, RPM_STRING_TYPE, 
-		  filename, 1);
-   headerAddEntry(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE,
-		  size, 1);
+   hdrPut(newHeader, CRPMTAG_DIRECTORY, RPM_STRING_TYPE, directory);
+   hdrPut(newHeader, CRPMTAG_FILENAME, RPM_STRING_TYPE, filename);
+   hdrPut(newHeader, CRPMTAG_FILESIZE, RPM_INT32_TYPE, size);
    
    return true;
 }
@@ -456,7 +346,7 @@ int main(int argc, char ** argv)
 
 	    md5cache->MD5ForFile(string(dirEntries[entry_cur]->d_name), 
 				 sb.st_mtime, md5);
-	    headerAddEntry(newHeader, CRPMTAG_MD5, RPM_STRING_TYPE, md5, 1);
+	    hdrPut(newHeader, CRPMTAG_MD5, RPM_STRING_TYPE, md5);
 
 	    headerWrite(outfd, newHeader, HEADER_MAGIC_YES);
 	    
