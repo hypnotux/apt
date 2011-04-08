@@ -232,7 +232,7 @@ bool RPMHdrHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const
 bool RPMHdrHandler::FileList(vector<string> &FileList) const
 {
    raptHeader h(HeaderP);
-   h.getTag(RAPT_FILENAMES, FileList);
+   h.getTag(RPMTAG_FILENAMES, FileList);
    // it's ok for a package not have files 
    return true; 
 }

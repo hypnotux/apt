@@ -38,9 +38,8 @@ static void getPackageData(const Header h, map<string,string> &Data)
 #endif
 
 void * rpmCallback(const void * arg, 
-		   const rpmCallbackType what,
-                   const raptCallbackSize amount,
-                   const raptCallbackSize total,
+		   rpmCallbackType what,
+		   rpm_loff_t amount, rpm_loff_t total,
 		   const void * pkgKey, void * data)
 
 {
