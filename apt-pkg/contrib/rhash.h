@@ -27,7 +27,6 @@ class raptHash
                   {return Add(Beg,End-Beg);}
    string Result();
    
-   raptHash(pgpHashAlgo HashAlgo);
    raptHash(const string & HashName);
 };
 

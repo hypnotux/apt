@@ -8,11 +8,6 @@
 #include <config.h>
 #include <system.h>
 
-raptHash::raptHash(pgpHashAlgo HashAlgo)
-{
-   HashCtx = rpmDigestInit(HashAlgo, RPMDIGEST_NONE);
-}
-
 raptHash::raptHash(const string & HashName)
 {
    pgpHashAlgo algo;
