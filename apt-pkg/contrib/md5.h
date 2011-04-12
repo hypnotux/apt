@@ -21,7 +21,7 @@ typedef string MD5SumValue;
 class MD5Summation : public raptHash
 {
    public:
-   MD5Summation() : raptHash(PGPHASHALGO_MD5) {};
+   MD5Summation() : raptHash("MD5-Hash") {};
 };
 
 
