@@ -22,9 +22,8 @@
 
 // CNC:2002-07-03
 #include <apt-pkg/repository.h>
-#include <apt-pkg/md5.h>
-#include <apt-pkg/sha1.h>
 #include <config.h>
+#include <apt-pkg/rhash.h>
 #include <apt-pkg/luaiface.h>
 #include <iostream>
 #include <assert.h>

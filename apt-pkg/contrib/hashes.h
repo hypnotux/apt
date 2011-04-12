@@ -13,15 +13,14 @@
 #ifndef APTPKG_HASHES_H
 #define APTPKG_HASHES_H
 
-#include <apt-pkg/md5.h>
-#include <apt-pkg/sha1.h>
+#include <apt-pkg/rhash.h>
 
 class Hashes
 {
    public:
 
-   MD5Summation MD5;
-   SHA1Summation SHA1;
+   raptHash MD5;
+   raptHash SHA1;
    
    inline bool Add(const unsigned char *Data,unsigned long Size)
    {
@@ -31,6 +30,8 @@ class Hashes
    bool AddFD(int Fd,unsigned long Size);
    inline bool Add(const unsigned char *Beg,const unsigned char *End) 
                   {return Add(Beg,End-Beg);}
+
+   Hashes() : MD5("MD5-Hash"), SHA1("SHA1-Hash") {};
 };
 
 #endif
