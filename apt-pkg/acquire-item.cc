@@ -953,7 +953,8 @@ void pkgAcqArchive::Finished()
 // AcqFile::pkgAcqFile - Constructor					/*{{{*/
 // ---------------------------------------------------------------------
 /* The file is added to the queue */
-pkgAcqFile::pkgAcqFile(pkgAcquire *Owner,string URI, string ExpectHash,
+pkgAcqFile::pkgAcqFile(pkgAcquire *Owner,string URI,
+		       string ExpectHash,string ExpectHashType,
 		       unsigned long Size,string Dsc,string ShortDesc) :
                        Item(Owner)
 {
@@ -961,7 +962,7 @@ pkgAcqFile::pkgAcqFile(pkgAcquire *Owner,string URI, string ExpectHash,
    
    DestFile = flNotDir(URI);
    Hash = ExpectHash;
-   HashType = "MD5-Hash"; /* XXX this is bogus */
+   HashType = ExpectHashType;
    
    // Create the item
    Desc.URI = URI;

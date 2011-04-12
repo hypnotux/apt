@@ -181,7 +181,7 @@ class pkgAcqFile : public pkgAcquire::Item
    virtual string DescURI() {return Desc.URI;}
    
    pkgAcqFile(pkgAcquire *Owner,string URI,
-	      string ExpectHash,unsigned long Size,
+	      string ExpectHash,string ExpectHashType, unsigned long Size,
 	      string Desc,string ShortDesc);
 };
 

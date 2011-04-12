@@ -28,7 +28,8 @@ class pkgSrcRecords
    // Describes a single file
    struct File
    {
-      string MD5Hash;
+      string Hash;
+      string HashType;
       off_t Size;
       string Path;
       string Type;

@@ -567,7 +567,7 @@ bool DownloadPackages(vector<string> &URLLst)
    // Load the requestd sources into the fetcher
    vector<string>::const_iterator I = URLLst.begin();
    for (; I != URLLst.end(); I++)
-      new pkgAcqFile(&Fetcher,*I,"",0,*I,flNotDir(*I));
+      new pkgAcqFile(&Fetcher,*I,"","",0,*I,flNotDir(*I));
    
    // Run it
    if (Fetcher.Run() == pkgAcquire::Failed)
@@ -1678,7 +1678,7 @@ bool DoSource(CommandLine &CmdL)
 	 queued.insert(Last->Index().ArchiveURI(I->Path));
 	    
 	 new pkgAcqFile(&Fetcher,Last->Index().ArchiveURI(I->Path),
-			I->MD5Hash, I->Size,
+			I->Hash, I->HashType, I->Size,
 			Last->Index().SourceInfo(*Last,*I),Src);
       }
    }
