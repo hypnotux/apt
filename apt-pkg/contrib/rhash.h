@@ -17,6 +17,7 @@ class raptHash
 {
    DIGEST_CTX HashCtx;
    string Value;
+   string HashType;
    
    public:
 
@@ -26,8 +27,12 @@ class raptHash
    inline bool Add(const unsigned char *Beg,const unsigned char *End) 
                   {return Add(Beg,End-Beg);}
    string Result();
+   string Type() {return HashType;};
    
    raptHash(const string & HashName);
+   raptHash(const raptHash & Hash);
+   raptHash & operator= (const raptHash & Hash);
+   ~raptHash();
 };
 
 #endif

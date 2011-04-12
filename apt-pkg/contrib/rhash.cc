@@ -8,16 +8,35 @@
 #include <config.h>
 #include <system.h>
 
-raptHash::raptHash(const string & HashName)
+raptHash::raptHash(const string & HashName) : HashCtx(NULL), HashType(HashName)
 {
-   pgpHashAlgo algo;
-   if (HashName == "SHA256-Hash")
-      algo = PGPHASHALGO_SHA256;
-   else if (HashName == "SHA1-Hash")
-      algo = PGPHASHALGO_SHA1;
-   else
-      algo = PGPHASHALGO_MD5;
-   HashCtx = rpmDigestInit(algo, RPMDIGEST_NONE);
+}
+
+raptHash::raptHash(const raptHash & Hash)
+{
+   HashCtx = rpmDigestDup(Hash.HashCtx);
+   Value = Hash.Value;
+   HashType = Hash.HashType;
+}
+
+raptHash::~raptHash()
+{
+   if (HashCtx)
+      rpmDigestFinal(HashCtx, NULL, NULL, 0);
+}
+
+raptHash & raptHash::operator= (const raptHash & Hash)
+{
+   if (this == &Hash)
+      return *this;
+
+   if (HashCtx)
+      rpmDigestFinal(HashCtx, NULL, NULL, 0);
+   
+   HashCtx = rpmDigestDup(Hash.HashCtx);
+   Value = Hash.Value;
+   HashType = Hash.HashType;
+   return *this;
 }
 
 // raptHash::Result - Return checksum value                        /*{{{*/
@@ -44,8 +63,23 @@ string raptHash::Result()
 bool raptHash::Add(const unsigned char *data,unsigned long len)
 {
    int rc;
-   if (HashCtx == NULL)
-      return false;
+   if (HashCtx == NULL) {
+      pgpHashAlgo algo;
+      if (HashType == "SHA512-Hash")
+         algo = PGPHASHALGO_SHA512;
+      else if (HashType == "SHA384-Hash")
+         algo = PGPHASHALGO_SHA384;
+      else if (HashType == "SHA256-Hash")
+         algo = PGPHASHALGO_SHA256;
+      else if (HashType == "SHA1-Hash")
+         algo = PGPHASHALGO_SHA1;
+      else if (HashType == "MD5-Hash")
+         algo = PGPHASHALGO_MD5;
+      else
+         return false;
+
+      HashCtx = rpmDigestInit(algo, RPMDIGEST_NONE);
+   }
 
    rc = rpmDigestUpdate(HashCtx, data, len);
    
