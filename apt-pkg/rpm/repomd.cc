@@ -104,7 +104,7 @@ repomdXML::repomdXML(const string File) : Path(File)
       RepoFiles[DataType].RealPath = RealPath;
       RepoFiles[DataType].TimeStamp = TimeStamp;
       RepoFiles[DataType].Hash = Hash;
-      RepoFiles[DataType].HashType = HashType;
+      RepoFiles[DataType].HashType = chk2hash(HashType);
       RepoFiles[DataType].Size = 0;
    }
 
