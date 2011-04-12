@@ -415,7 +415,7 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       pkgAcquire::UriIterator I = Fetcher.UriBegin();
       for (; I != Fetcher.UriEnd(); I++)
 	 cout << '\'' << I->URI << "' " << flNotDir(I->Owner->DestFile) << ' ' << 
-	       I->Owner->FileSize << ' ' << I->Owner->MD5Sum() << endl;
+	       I->Owner->FileSize << ' ' << I->Owner->Checksum() << endl;
       return true;
    }
 
@@ -983,7 +983,7 @@ bool DoUpdate(CommandLine &CmdL)
       pkgAcquire::UriIterator I = Fetcher.UriBegin();
       for (; I != Fetcher.UriEnd(); I++)
 	 cout << '\'' << I->URI << "' " << flNotDir(I->Owner->DestFile) << ' ' << 
-	       I->Owner->FileSize << ' ' << I->Owner->MD5Sum() << endl;
+	       I->Owner->FileSize << ' ' << I->Owner->Checksum() << endl;
       return true;
    }
    
@@ -1678,7 +1678,7 @@ bool DoSource(CommandLine &CmdL)
 	 queued.insert(Last->Index().ArchiveURI(I->Path));
 	    
 	 new pkgAcqFile(&Fetcher,Last->Index().ArchiveURI(I->Path),
-			I->MD5Hash,I->Size,
+			I->MD5Hash, I->Size,
 			Last->Index().SourceInfo(*Last,*I),Src);
       }
    }
@@ -1720,7 +1720,7 @@ bool DoSource(CommandLine &CmdL)
       pkgAcquire::UriIterator I = Fetcher.UriBegin();
       for (; I != Fetcher.UriEnd(); I++)
 	 cout << '\'' << I->URI << "' " << flNotDir(I->Owner->DestFile) << ' ' << 
-	       I->Owner->FileSize << ' ' << I->Owner->MD5Sum() << endl;
+	       I->Owner->FileSize << ' ' << I->Owner->Checksum() << endl;
       return true;
    }
    

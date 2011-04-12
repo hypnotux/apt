@@ -28,6 +28,8 @@
 class pkgAcquire::Item
 {  
    protected:
+   string Hash;
+   string HashType;
    
    // Some private helper methods for registering URIs
    pkgAcquire *Owner;
@@ -67,11 +69,9 @@ class pkgAcquire::Item
    virtual string DescURI() = 0;
    virtual void Finished() {}
 
-   // LORG:2006-03-16
-   virtual string ChecksumType() {return "MD5-Hash";}
-   
    // Inquire functions
-   virtual string MD5Sum() {return string();}
+   virtual string Checksum() {return Hash;}
+   virtual string ChecksumType() {return HashType;}
    pkgAcquire *GetOwner() {return Owner;}
    
    Item(pkgAcquire *Owner);
@@ -101,9 +101,6 @@ class pkgAcqIndex : public pkgAcquire::Item
 		     pkgAcquire::MethodConfig *Cnf);
    virtual string Custom600Headers();
    virtual string DescURI() {return RealURI;} // CNC:2003-02-14
-
-   // LORG:2006-03-16
-   virtual string ChecksumType();
 
    // CNC:2002-07-03
    pkgAcqIndex(pkgAcquire *Owner,pkgRepository *Repository,string URI,
@@ -148,8 +145,6 @@ class pkgAcqArchive : public pkgAcquire::Item
    pkgAcquire::ItemDesc Desc;
    pkgSourceList *Sources;
    pkgRecords *Recs;
-   string MD5;
-   string ChkType;
    string &StoreFilename;
    pkgCache::VerFileIterator Vf;
    unsigned int Retries;
@@ -163,12 +158,8 @@ class pkgAcqArchive : public pkgAcquire::Item
    virtual void Failed(string Message,pkgAcquire::MethodConfig *Cnf);
    virtual void Done(string Message,off_t Size,string AcqHash,
 		     pkgAcquire::MethodConfig *Cnf);
-   virtual string MD5Sum() {return MD5;}
    virtual string DescURI() {return Desc.URI;}
    virtual void Finished();
-   
-   // LORG:2006-03-16
-   virtual string ChecksumType() {return ChkType;}
 
    pkgAcqArchive(pkgAcquire *Owner,pkgSourceList *Sources,
 		 pkgRecords *Recs,pkgCache::VerIterator const &Version,
@@ -179,7 +170,6 @@ class pkgAcqArchive : public pkgAcquire::Item
 class pkgAcqFile : public pkgAcquire::Item
 {
    pkgAcquire::ItemDesc Desc;
-   string Md5Hash;
    unsigned int Retries;
    
    public:
@@ -188,11 +178,11 @@ class pkgAcqFile : public pkgAcquire::Item
    virtual void Failed(string Message,pkgAcquire::MethodConfig *Cnf);
    virtual void Done(string Message,off_t Size,string AcqHash,
 		     pkgAcquire::MethodConfig *Cnf);
-   virtual string MD5Sum() {return Md5Hash;}
    virtual string DescURI() {return Desc.URI;}
    
-   pkgAcqFile(pkgAcquire *Owner,string URI,string MD5,unsigned long Size,
-		  string Desc,string ShortDesc);
+   pkgAcqFile(pkgAcquire *Owner,string URI,
+	      string ExpectHash,unsigned long Size,
+	      string Desc,string ShortDesc);
 };
 
 #endif

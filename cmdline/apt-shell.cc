@@ -476,7 +476,7 @@ bool InstallPackages(CacheFile &Cache,bool ShwKept,bool Ask = true,
       pkgAcquire::UriIterator I = Fetcher.UriBegin();
       for (; I != Fetcher.UriEnd(); I++)
 	 cout << '\'' << I->URI << "' " << flNotDir(I->Owner->DestFile) << ' ' << 
-	       I->Owner->FileSize << ' ' << I->Owner->MD5Sum() << endl;
+	       I->Owner->FileSize << ' ' << I->Owner->Checksum() << endl;
       return true;
    }
 
@@ -1003,7 +1003,7 @@ bool DoUpdate(CommandLine &CmdL)
       pkgAcquire::UriIterator I = Fetcher.UriBegin();
       for (; I != Fetcher.UriEnd(); I++)
 	 cout << '\'' << I->URI << "' " << flNotDir(I->Owner->DestFile) << ' ' << 
-	       I->Owner->FileSize << ' ' << I->Owner->MD5Sum() << endl;
+	       I->Owner->FileSize << ' ' << I->Owner->Checksum() << endl;
       return true;
    }
    
