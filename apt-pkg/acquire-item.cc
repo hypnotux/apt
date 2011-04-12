@@ -737,10 +737,8 @@ bool pkgAcqArchive::QueueNext()
 	 return false;
       
       string PkgFile = Parse.FileName();
-      // LORG:2006-03-16 
-      // Repomd uses SHA checksums for packages wheras others use MD5..
-      ChkType = Index->ChecksumType();
       MD5 = Parse.Hash();
+      ChkType = Parse.HashType();
 
       if (PkgFile.empty() == true)
 	 return _error->Error(_("The package index files are corrupted. No Filename: "

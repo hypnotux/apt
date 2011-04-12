@@ -15,6 +15,20 @@
 using std::string;
 using std::map;
 
+inline string chk2hash(const string & ht)
+{
+   if (ht == "sha")
+      return "SHA1-Hash";
+   else if (ht == "sha256")
+      return "SHA256-Hash";
+   else if (ht == "sha512")
+      return "SHA512-Hash";
+   else if (ht == "md5")
+      return "MD5-Hash";
+   else
+      return "Unknown-Hash"; /* XXX W2DO? */
+}
+
 class repomdXML
 {
    protected:

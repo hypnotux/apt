@@ -96,6 +96,11 @@ string rpmRecordParser::Hash()
    return Handler->Hash();
 }
 
+string rpmRecordParser::HashType()
+{
+   return Handler->HashType();
+}
+
 // RecordParser::Maintainer - Return the maintainer email		/*{{{*/
 // ---------------------------------------------------------------------
 /* */

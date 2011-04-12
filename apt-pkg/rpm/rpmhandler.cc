@@ -350,6 +350,11 @@ string RPMFileHandler::Hash() const
    return GetSTag(CRPMTAG_MD5);
 }
 
+string RPMFileHandler::HashType() const
+{
+   return "MD5-Hash";
+}
+
 bool RPMSingleFileHandler::Skip()
 {
    if (FD == NULL)
@@ -398,7 +403,7 @@ off_t RPMSingleFileHandler::FileSize() const
 
 string RPMSingleFileHandler::Hash() const
 {
-   raptHash MD5("MD5-Hash");;
+   raptHash MD5(HashType());;
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
@@ -528,13 +533,17 @@ string RPMDirHandler::Hash() const
 {
    if (Dir == NULL)
       return "";
-   raptHash MD5("MD5-Hash");
+   raptHash MD5(HashType());
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
    return MD5.Result();
 }
 
+string RPMDirHandler::HashType() const
+{
+   return "MD5-Hash";
+}
 
 RPMDBHandler::RPMDBHandler(bool WriteLock)
    : Handler(0), WriteLock(WriteLock)
@@ -888,6 +897,18 @@ string RPMRepomdHandler::Hash() const
       xmlFree(content);
    }
    return str;
+}
+
+string RPMRepomdHandler::HashType() const
+{
+   xmlNode *n;
+   string str = "";
+   if ((n = XmlFindNode(NodeP, "checksum"))) {
+      xmlChar *prop = xmlGetProp(n, (xmlChar*)"type");
+      str = (char*)prop;
+      xmlFree(prop);
+   }
+   return chk2hash(str);
 }
 
 off_t RPMRepomdHandler::FileSize() const
@@ -1371,6 +1392,11 @@ off_t RPMSqliteHandler::InstalledSize() const
 string RPMSqliteHandler::Hash() const
 {
    return Packages->GetCol("pkgId");
+}
+
+string RPMSqliteHandler::HashType() const
+{
+   return chk2hash(Packages->GetCol("checksum_type"));
 }
 
 bool RPMSqliteHandler::PRCO(unsigned int Type, vector<Dependency*> &Deps) const

@@ -154,14 +154,11 @@ bool repomdRepository::ParseRelease(string File)
       IndexChecksums[I->second.Path].MD5 = I->second.Hash;
       IndexChecksums[I->second.Path].Size = 0;
       if (htype.empty() && I->first.find("primary") != string::npos) {
-	 if (I->second.ChecksumType == "sha")
-	    htype = "SHA1";
-	 else if (I->second.ChecksumType == "sha256")
-	    htype = "SHA256";
-	 }
+	 htype = chk2hash(I->second.ChecksumType);
+      }
    }
    if (!htype.empty()) 
-      CheckMethod = htype + "-Hash";
+      CheckMethod = htype;
       
    GotRelease = true;
 

@@ -45,6 +45,7 @@ class rpmRecordParser : public pkgRecords::Parser
    // These refer to the archive file for the Version
    virtual string FileName();
    virtual string Hash();
+   virtual string HashType();
    virtual string SourcePkg();
    
    // These are some general stats about the package
