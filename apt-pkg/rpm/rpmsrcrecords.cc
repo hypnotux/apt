@@ -278,7 +278,7 @@ string rpmSrcRecordParser::AsStr()
    snprintf(buf, sizeof(buf), "%lu", Handler->FileSize());
    BufCatTag("\nSize: ", buf);
 
-   BufCatTag("\nMD5Sum: ", Handler->MD5Sum().c_str());
+   BufCatTag("\nHash: ", Handler->Hash().c_str());
 
    BufCatTag("\nFilename: ", Handler->FileName().c_str());
 

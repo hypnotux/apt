@@ -345,7 +345,7 @@ off_t RPMFileHandler::FileSize() const
    return GetITag(CRPMTAG_FILESIZE);
 }
 
-string RPMFileHandler::MD5Sum() const
+string RPMFileHandler::Hash() const
 {
    return GetSTag(CRPMTAG_MD5);
 }
@@ -396,9 +396,9 @@ off_t RPMSingleFileHandler::FileSize() const
    return S.st_size;
 }
 
-string RPMSingleFileHandler::MD5Sum() const
+string RPMSingleFileHandler::Hash() const
 {
-   MD5Summation MD5;
+   raptHash MD5("MD5-Hash");;
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
@@ -524,11 +524,11 @@ off_t RPMDirHandler::FileSize() const
    return St.st_size;
 }
 
-string RPMDirHandler::MD5Sum() const
+string RPMDirHandler::Hash() const
 {
    if (Dir == NULL)
       return "";
-   MD5Summation MD5;
+   raptHash MD5("MD5-Hash");
    FileFd File(sFilePath, FileFd::ReadOnly);
    MD5.AddFD(File.Fd(), File.Size());
    File.Close();
@@ -878,14 +878,7 @@ string RPMRepomdHandler::Directory() const
    return str;
 }
 
-string RPMRepomdHandler::MD5Sum() const
-{
-   // XXX FIXME the method should be an abstract Checksum type using
-   // md5 / sha1 appropriately, for now relying on hacks elsewhere..
-   return SHA1Sum();
-}
-
-string RPMRepomdHandler::SHA1Sum() const
+string RPMRepomdHandler::Hash() const
 {
    xmlNode *n;
    string str = "";
@@ -1375,12 +1368,7 @@ off_t RPMSqliteHandler::InstalledSize() const
    return Packages->GetColI("size_installed");
 }
 
-string RPMSqliteHandler::MD5Sum() const
-{
-   return SHA1Sum();
-}
-
-string RPMSqliteHandler::SHA1Sum() const
+string RPMSqliteHandler::Hash() const
 {
    return Packages->GetCol("pkgId");
 }

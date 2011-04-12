@@ -740,11 +740,7 @@ bool pkgAcqArchive::QueueNext()
       // LORG:2006-03-16 
       // Repomd uses SHA checksums for packages wheras others use MD5..
       ChkType = Index->ChecksumType();
-      if (Index->ChecksumType() == "SHA1-Hash") {
-	 MD5 = Parse.SHA1Hash();
-      } else {
-	 MD5 = Parse.MD5Hash();
-      }
+      MD5 = Parse.Hash();
 
       if (PkgFile.empty() == true)
 	 return _error->Error(_("The package index files are corrupted. No Filename: "

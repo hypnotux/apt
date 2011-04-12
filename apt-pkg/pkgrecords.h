@@ -60,8 +60,7 @@ class pkgRecords::Parser
    
    // These refer to the archive file for the Version
    virtual string FileName() {return string();}
-   virtual string MD5Hash() {return string();}
-   virtual string SHA1Hash() {return string();}
+   virtual string Hash() {return string();}
    virtual string SourcePkg() {return string();}
 
    // These are some general stats about the package

@@ -88,17 +88,12 @@ string rpmRecordParser::Name()
    return Handler->Name();
 }
 									/*}}}*/
-// RecordParser::MD5Hash - Return the archive hash			/*{{{*/
+// RecordParser::Hash - Return the archive hash			  	/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-string rpmRecordParser::MD5Hash()
+string rpmRecordParser::Hash()
 {
-   return Handler->MD5Sum();
-}
-									/*}}}*/
-string rpmRecordParser::SHA1Hash()
-{
-   return Handler->SHA1Sum();
+   return Handler->Hash();
 }
 
 // RecordParser::Maintainer - Return the maintainer email		/*{{{*/
@@ -332,7 +327,7 @@ void rpmRecordParser::GetRec(const char *&Start,const char *&Stop)
    snprintf(buf, sizeof(buf), "%lu", Handler->FileSize());
    BufCatTag("\nSize: ", buf);
 
-   BufCatTag("\nMD5Sum: ", Handler->MD5Sum().c_str());
+   BufCatTag("\nHash: ", Handler->Hash().c_str());
 
    BufCatTag("\nFilename: ", Handler->FileName().c_str());
 

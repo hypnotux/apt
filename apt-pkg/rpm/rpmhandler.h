@@ -81,8 +81,7 @@ class RPMHandler
    virtual string FileName() const = 0;
    virtual string Directory() const = 0;
    virtual off_t FileSize() const = 0;
-   virtual string MD5Sum() const = 0;
-   virtual string SHA1Sum() const = 0;
+   virtual string Hash() const = 0;
    virtual bool ProvideFileName() {return false;}
 
    virtual string Name() const = 0;
@@ -124,8 +123,7 @@ class RPMHdrHandler : public RPMHandler
    virtual string FileName() const {return "";}
    virtual string Directory() const {return "";}
    virtual off_t FileSize() const {return 1;}
-   virtual string MD5Sum() const {return "";}
-   virtual string SHA1Sum() const {return "";}
+   virtual string Hash() const {return "";};
    virtual bool ProvideFileName() const {return false;}
 
    virtual string Name() const {return GetSTag(RPMTAG_NAME);}
@@ -168,7 +166,7 @@ class RPMFileHandler : public RPMHdrHandler
    virtual string FileName() const;
    virtual string Directory() const;
    virtual off_t FileSize() const;
-   virtual string MD5Sum() const;
+   virtual string Hash() const;
 
    // the rpm-repotype stripped down hdrlists dont carry changelog data
    virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs)  const{ return false; }
@@ -193,7 +191,7 @@ class RPMSingleFileHandler : public RPMFileHandler
    virtual string FileName() const {return sFilePath;}
    virtual string Directory() const {return "";}
    virtual off_t FileSize() const;
-   virtual string MD5Sum() const;
+   virtual string Hash() const;
    virtual bool ProvideFileName() const {return true;}
    virtual bool ChangeLog(vector<ChangeLogEntry* > &ChangeLogs) const;
 
@@ -251,7 +249,7 @@ class RPMDirHandler : public RPMHdrHandler
 
    virtual string FileName()  const{return (Dir == NULL)?"":sFileName;}
    virtual off_t FileSize() const;
-   virtual string MD5Sum() const;
+   virtual string Hash() const;
 
    RPMDirHandler(string DirName);
    virtual ~RPMDirHandler();
@@ -287,8 +285,7 @@ class RPMRepomdHandler : public RPMHandler
    virtual string Directory() const;
    virtual off_t FileSize() const;
    virtual off_t InstalledSize() const;
-   virtual string MD5Sum() const;
-   virtual string SHA1Sum() const;
+   virtual string Hash() const;
 
    virtual string Name() const;
    virtual string Arch() const;
@@ -334,8 +331,7 @@ class RPMRepomdReaderHandler : public RPMHandler
    virtual string Directory() const {return "";}
    virtual off_t FileSize() const {return 0;}
    virtual off_t InstalledSize() const {return 0;}
-   virtual string MD5Sum() const {return "";}
-   virtual string SHA1Sum() const {return "";}
+   virtual string Hash() const {return "";}
 
    virtual string Name() const {return FindTag("name");}
    virtual string Arch() const {return FindTag("arch");}
@@ -411,8 +407,7 @@ class RPMSqliteHandler : public RPMHandler
    virtual string Directory() const;
    virtual off_t FileSize() const;
    virtual off_t InstalledSize() const;
-   virtual string MD5Sum() const;
-   virtual string SHA1Sum() const;
+   virtual string Hash() const;
 
    virtual string Name() const;
    virtual string Arch() const;
