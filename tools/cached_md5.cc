@@ -18,7 +18,7 @@
 #include <apt-pkg/error.h>
 #include <apt-pkg/tagfile.h>
 #include <apt-pkg/configuration.h>
-#include <apt-pkg/md5.h>
+#include <apt-pkg/rhash.h>
 #include "rpmhandler.h"
 
 #include <config.h>
@@ -85,7 +85,7 @@ void CachedMD5::MD5ForFile(string FileName, time_t TimeStamp, char *buf)
    }
    else
    {
-      MD5Summation MD5;
+      raptHash MD5("MD5-Hash");
       FileFd File(FileName, FileFd::ReadOnly);
       MD5.AddFD(File.Fd(), File.Size());
       File.Close();

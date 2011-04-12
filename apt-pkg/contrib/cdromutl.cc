@@ -16,7 +16,7 @@
 
 #include <apt-pkg/cdromutl.h>
 #include <apt-pkg/error.h>
-#include <apt-pkg/md5.h>
+#include <apt-pkg/rhash.h>
 #include <apt-pkg/fileutl.h>
 #include <apt-pkg/configuration.h>
 
@@ -164,7 +164,7 @@ bool MountCdrom(string Path)
    from effecting the outcome. */
 bool IdentCdrom(string CD,string &Res,unsigned int Version)
 {
-   MD5Summation Hash;
+   raptHash Hash("MD5-Hash");
 
    string StartDir = SafeGetCWD();
    if (chdir(CD.c_str()) != 0)
