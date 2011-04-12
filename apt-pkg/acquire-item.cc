@@ -204,7 +204,7 @@ pkgAcqIndex::pkgAcqIndex(pkgAcquire *Owner,pkgRepository *Repository,
    {
       if (Repository->HasRelease() == true)
       {
-	 if (Repository->FindChecksums(RealURI,Size,Hash) == false)
+	 if (Repository->FindChecksums(RealURI,Size,Hash,HashType) == false)
 	 {
 	    if (Repository->IsAuthenticated() == true)
 	    {
@@ -219,7 +219,6 @@ pkgAcqIndex::pkgAcqIndex(pkgAcquire *Owner,pkgRepository *Repository,
 
 	 string FinalFile = _config->FindDir("Dir::State::lists");
 	 FinalFile += URItoFileName(RealURI);
-         HashType = Repository->GetCheckMethod();
 
 	 if (VerifyChecksums(FinalFile,Size,Hash,HashType) == false)
 	 {
@@ -271,7 +270,7 @@ void pkgAcqIndex::Done(string Message,off_t Size,string AcqHash,
       off_t FSize;
 
       if (Repository != NULL && Repository->HasRelease() == true &&
-	  Repository->FindChecksums(RealURI,FSize,Hash) == true)
+	  Repository->FindChecksums(RealURI,FSize,Hash,HashType) == true)
       {
 	 // We must always get here if the repository is authenticated
 	 
@@ -406,7 +405,7 @@ pkgAcqIndexRel::pkgAcqIndexRel(pkgAcquire *Owner,pkgRepository *Repository,
    {
       if (Repository->HasRelease() == true)
       {
-	 if (Repository->FindChecksums(RealURI,Size,Hash) == false)
+	 if (Repository->FindChecksums(RealURI,Size,Hash,HashType) == false)
 	 {
 	    if (Repository->IsAuthenticated() == true)
 	    {
@@ -421,7 +420,6 @@ pkgAcqIndexRel::pkgAcqIndexRel(pkgAcquire *Owner,pkgRepository *Repository,
 
 	 string FinalFile = _config->FindDir("Dir::State::lists");
 	 FinalFile += URItoFileName(RealURI);
-         HashType = Repository->GetCheckMethod();
 
 	 if (VerifyChecksums(FinalFile,Size,Hash,HashType) == false)
 	 {
@@ -572,7 +570,7 @@ void pkgAcqIndexRel::Done(string Message,off_t Size,string AcqHash,
    off_t FSize;
    if (Master == false && Repository != NULL
        && Repository->HasRelease() == true
-       && Repository->FindChecksums(RealURI,FSize,Hash) == true)
+       && Repository->FindChecksums(RealURI,FSize,Hash,HashType) == true)
    {
       if (FSize != Size)
       {

@@ -46,9 +46,9 @@ repomdXML::repomdXML(const string File) : Path(File)
 	 continue;
 
       string Hash = "";
+      string HashType = "";
       string RealPath = "";
       string Path = "";
-      string ChecksumType = "";
       string DataType = "";
       string TimeStamp = "";
       xmlNode *n = NULL;
@@ -95,7 +95,7 @@ repomdXML::repomdXML(const string File) : Path(File)
 	 xmlChar *hash = xmlNodeGetContent(n);
 	 xmlChar *type = xmlGetProp(n, (xmlChar*)"type");
 	 Hash = (char*)hash;
-	 ChecksumType = (char*)type;
+	 HashType = (char*)type;
 	 xmlFree(hash);
 	 xmlFree(type);
       }
@@ -104,8 +104,8 @@ repomdXML::repomdXML(const string File) : Path(File)
       RepoFiles[DataType].RealPath = RealPath;
       RepoFiles[DataType].TimeStamp = TimeStamp;
       RepoFiles[DataType].Hash = Hash;
+      RepoFiles[DataType].HashType = HashType;
       RepoFiles[DataType].Size = 0;
-      RepoFiles[DataType].ChecksumType = ChecksumType;
    }
 
    xmlFreeDoc(RepoMD);
@@ -151,15 +151,11 @@ bool repomdRepository::ParseRelease(string File)
 
    map<string,repomdXML::RepoFile>::const_iterator I;
    for (I = repomd->RepoFiles.begin(); I != repomd->RepoFiles.end(); I++) {
-      IndexChecksums[I->second.Path].MD5 = I->second.Hash;
+      IndexChecksums[I->second.Path].Hash = I->second.Hash;
+      IndexChecksums[I->second.Path].HashType = I->second.HashType;
       IndexChecksums[I->second.Path].Size = 0;
-      if (htype.empty() && I->first.find("primary") != string::npos) {
-	 htype = chk2hash(I->second.ChecksumType);
-      }
    }
-   if (!htype.empty()) 
-      CheckMethod = htype;
-      
+
    GotRelease = true;
 
    return true;

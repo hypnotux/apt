@@ -40,6 +40,7 @@ class repomdXML
       string TimeStamp;
       string ChecksumType;
       string Hash;
+      string HashType;
       off_t Size;
    };
 

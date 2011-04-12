@@ -70,7 +70,8 @@ bool pkgRepository::ParseRelease(string File)
       
       // Parse the size and append the directory      
       IndexChecksums[Path].Size = atoi(Size.c_str());
-      IndexChecksums[Path].MD5 = Hash;
+      IndexChecksums[Path].Hash = Hash;
+      IndexChecksums[Path].HashType = "MD5-Hash";
    }
    
    return true;
@@ -79,13 +80,14 @@ bool pkgRepository::ParseRelease(string File)
 // Repository::FindChecksums - Get checksum info for file		/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-bool pkgRepository::FindChecksums(string URI,off_t &Size, string &MD5)
+bool pkgRepository::FindChecksums(string URI,off_t &Size, string &Hash, string &HashType)
 {
    string Path = string(URI,RootURI.size());
    if (IndexChecksums.find(Path) == IndexChecksums.end())
       return false;
    Size = IndexChecksums[Path].Size;
-   MD5 = IndexChecksums[Path].MD5;
+   Hash = IndexChecksums[Path].Hash;
+   HashType = IndexChecksums[Path].HashType;
    return true;
 }
 

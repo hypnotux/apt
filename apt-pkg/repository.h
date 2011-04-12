@@ -17,14 +17,13 @@ class pkgRepository
 
    struct Checksum {
       unsigned long Size;
-      string MD5;
-      string SHA1;
+      string Hash;
+      string HashType;
    };
    
    map<string,Checksum> IndexChecksums; // path -> checksum data   
 
    bool GotRelease;
-   string CheckMethod;
 
    public:   
 
@@ -40,11 +39,9 @@ class pkgRepository
    virtual bool HasRelease() const { return GotRelease; }
 
    virtual bool IsAuthenticated() const { return !FingerPrintList.empty(); }
-   virtual bool FindChecksums(string URI,off_t &Size, string &MD5);
+   virtual bool FindChecksums(string URI,off_t &Size, string &Hash, string &HashType);
    // Only used in repomd atm
    virtual string FindURI(string DataType) {return "";}
-   // LORG:2006-02-23 
-   virtual string GetCheckMethod() {return CheckMethod;}
    virtual string GetComprMethod(string URI) {return "bz2";}
    
    pkgRepository(string URI,string Dist, const pkgSourceList::Vendor *Vendor,
@@ -53,7 +50,6 @@ class pkgRepository
    	Acquire(1)
    {
       if (Vendor) FingerPrintList = Vendor->FingerPrintList;
-      CheckMethod = "MD5-Hash";
    }
 
    virtual ~pkgRepository() {}

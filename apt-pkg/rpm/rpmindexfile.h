@@ -317,7 +317,6 @@ class rpmRepomdIndex : public rpmIndexFile
    // Interface for acquire
    virtual string Describe(bool Short) const;
    virtual bool GetIndexes(pkgAcquire *Owner) const;
-   virtual string ChecksumType() {return Repository->GetCheckMethod();}
 
    virtual string ArchiveInfo(pkgCache::VerIterator Ver) const;
    virtual string ArchiveURI(string File) const;
