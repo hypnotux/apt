@@ -264,10 +264,10 @@ string pkgAcqIndex::Custom600Headers()
    to the uncompressed version of the file. If this is so the file
    is copied into the partial directory. In all other cases the file
    is decompressed with a gzip uri. */
-void pkgAcqIndex::Done(string Message,off_t Size,string MD5,
+void pkgAcqIndex::Done(string Message,off_t Size,string AcqHash,
 		       pkgAcquire::MethodConfig *Cfg)
 {
-   Item::Done(Message,Size,MD5,Cfg);
+   Item::Done(Message,Size,AcqHash,Cfg);
 
    if (Decompression == true)
    {
@@ -294,14 +294,14 @@ void pkgAcqIndex::Done(string Message,off_t Size,string MD5,
 	    return;
 	 }
 	    
-	 if (MD5.empty() == false && MD5Hash != MD5)
+	 if (AcqHash.empty() == false && MD5Hash != AcqHash)
 	 {
 	    Status = StatError;
 	    ErrorText = _("MD5Sum mismatch");
 	    Rename(DestFile,DestFile + ".FAILED");
 	    if (_config->FindB("Acquire::Verbose",false) == true) 
 	       _error->Warning("MD5Sum mismatch of index file %s: %s was supposed to be %s",
-			       RealURI.c_str(), MD5.c_str(), MD5Hash.c_str());
+			       RealURI.c_str(), AcqHash.c_str(), MD5Hash.c_str());
 	    return;
 	 }
       }
@@ -469,10 +469,10 @@ string pkgAcqIndexRel::Custom600Headers()
 /* The release file was not placed into the download directory then
    a copy URI is generated and it is copied there otherwise the file
    in the partial directory is moved into .. and the URI is finished. */
-void pkgAcqIndexRel::Done(string Message,off_t Size,string MD5,
+void pkgAcqIndexRel::Done(string Message,off_t Size,string AcqHash,
 			  pkgAcquire::MethodConfig *Cfg)
 {
-   Item::Done(Message,Size,MD5,Cfg);
+   Item::Done(Message,Size,AcqHash,Cfg);
 
    // CNC:2002-07-03
    if (Authentication == true) 
@@ -590,14 +590,14 @@ void pkgAcqIndexRel::Done(string Message,off_t Size,string MD5,
 			    RealURI.c_str(), Size, FSize);
 	 return;
       }
-      if (MD5.empty() == false && MD5Hash != MD5)
+      if (AcqHash.empty() == false && MD5Hash != AcqHash)
       {
 	 Status = StatError;
 	 ErrorText = _("MD5Sum mismatch");
 	 Rename(DestFile,DestFile + ".FAILED");
 	 if (_config->FindB("Acquire::Verbose",false) == true) 
 	    _error->Warning("MD5Sum mismatch of index file %s: %s was supposed to be %s",
-			    RealURI.c_str(), MD5.c_str(), MD5Hash.c_str());
+			    RealURI.c_str(), AcqHash.c_str(), MD5Hash.c_str());
 	 return;
       }
    }
@@ -841,10 +841,10 @@ static void ScriptsAcquireDone(const char *ConfKey,
 // AcqArchive::Done - Finished fetching					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-void pkgAcqArchive::Done(string Message,off_t Size,string Md5Hash,
+void pkgAcqArchive::Done(string Message,off_t Size,string AcqHash,
 			 pkgAcquire::MethodConfig *Cfg)
 {
-   Item::Done(Message,Size,Md5Hash,Cfg);
+   Item::Done(Message,Size,AcqHash,Cfg);
    
    // Check the size
    if (Size != Version->Size)
@@ -855,9 +855,9 @@ void pkgAcqArchive::Done(string Message,off_t Size,string Md5Hash,
    }
    
    // Check the md5
-   if (Md5Hash.empty() == false && MD5.empty() == false)
+   if (AcqHash.empty() == false && MD5.empty() == false)
    {
-      if (Md5Hash != MD5)
+      if (AcqHash != MD5)
       {
 	 Status = StatError;
 	 ErrorText = _("MD5Sum mismatch");
@@ -995,22 +995,22 @@ pkgAcqFile::pkgAcqFile(pkgAcquire *Owner,string URI,string MD5,
 // AcqFile::Done - Item downloaded OK					/*{{{*/
 // ---------------------------------------------------------------------
 /* */
-void pkgAcqFile::Done(string Message,off_t Size,string MD5,
+void pkgAcqFile::Done(string Message,off_t Size,string AcqHash,
 		      pkgAcquire::MethodConfig *Cnf)
 {
    // Check the md5
-   if (Md5Hash.empty() == false && MD5.empty() == false)
+   if (Md5Hash.empty() == false && AcqHash.empty() == false)
    {
-      if (Md5Hash != MD5)
+      if (Md5Hash != AcqHash)
       {
 	 Status = StatError;
-	 ErrorText = "MD5Sum mismatch";
+	 ErrorText = "Checksum mismatch";
 	 Rename(DestFile,DestFile + ".FAILED");
 	 return;
       }
    }
    
-   Item::Done(Message,Size,MD5,Cnf);
+   Item::Done(Message,Size,AcqHash,Cnf);
 
    string FileName = LookupTag(Message,"Filename");
    if (FileName.empty() == true)
