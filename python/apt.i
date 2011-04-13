@@ -1,4 +1,9 @@
 %module apt
+%{
+/* XXX Hack around SWIG brokenness on gcc 4.6 */
+#include <cstddef>
+%}
+
 %include std_string.i
 %include std_vector.i
 
@@ -15,8 +20,8 @@
 #include <apt-pkg/contrib/progress.h>
 #include <apt-pkg/version.h>
 #include <apt-pkg/pkgrecords.h>
-#include <apt-pkg/acquire-item.h>
 #include <apt-pkg/acquire.h>
+#include <apt-pkg/acquire-item.h>
 #include <apt-pkg/packagemanager.h>
 #include <apt-pkg/sourcelist.h>
 #include <apt-pkg/contrib/error.h>
@@ -179,6 +184,10 @@ ItemsIter()
 }
 }
 
+/* SWIG 2.0.2 chokes on these, ignore for now... */
+%ignore pkgAcquire::UriBegin;
+%ignore pkgAcquire::UriEnd;
+
 /* Wrap string members. */
 %immutable pkgAcquire::Item::DestFile;
 %immutable pkgAcquire::Item::ErrorText;
@@ -245,8 +254,8 @@ Py_END_ALLOW_THREADS
 %include <apt-pkg/contrib/progress.h>
 %include <apt-pkg/version.h>
 %include <apt-pkg/pkgrecords.h>
-%include <apt-pkg/acquire-item.h>
 %include <apt-pkg/acquire.h>
+%include <apt-pkg/acquire-item.h>
 %include <apt-pkg/packagemanager.h>
 %include <apt-pkg/sourcelist.h>
 %include <apt-pkg/contrib/error.h>
