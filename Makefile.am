@@ -13,10 +13,7 @@ EXTRA_DIST = \
 		ChangeLog \
 		etc/rpmpriorities \
 		python/apt.i \
-		python/apt.py \
-		python/apt_wrap.cxx \
-		python/Makefile \
-		python/swig-1.3.16-cxx.patch
+		python/Makefile
 
 EXTRA_DIST += contrib/gpg-check/README
 EXTRA_DIST += contrib/gpg-check/gpg-check.conf
