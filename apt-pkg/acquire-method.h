@@ -13,8 +13,11 @@
 #ifndef PKGLIB_ACQUIRE_METHOD_H
 #define PKGLIB_ACQUIRE_METHOD_H
 
+#include <map>
 #include <apt-pkg/configuration.h>
 #include <apt-pkg/strutl.h>
+
+typedef std::map<string,string> HashResults;
 
 class Hashes;
 class pkgAcqMethod
@@ -36,8 +39,7 @@ class pkgAcqMethod
    
    struct FetchResult
    {
-      string MD5Sum;
-      string SHA1Sum;
+      HashResults HashMap;
       // CNC:2002-07-03
       string SignatureFP;
       time_t LastModified;

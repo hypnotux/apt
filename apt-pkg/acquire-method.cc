@@ -176,10 +176,10 @@ void pkgAcqMethod::URIDone(FetchResult &Res, FetchResult *Alt)
    if (Res.LastModified != 0)
       s << "Last-Modified: " << TimeRFC1123(Res.LastModified) << "\n";
 
-   if (Res.MD5Sum.empty() == false)
-      s << "MD5-Hash: " << Res.MD5Sum << "\n";
-   if (Res.SHA1Sum.empty() == false)
-      s << "SHA1-Hash: " << Res.SHA1Sum << "\n";
+   HashResults::const_iterator I;
+   for (I = Res.HashMap.begin(); I != Res.HashMap.end(); I++) {
+      s << I->first << ": " << I->second << "\n";
+   }
 
    // CNC:2002-07-04
    if (Res.SignatureFP.empty() == false)
@@ -202,10 +202,8 @@ void pkgAcqMethod::URIDone(FetchResult &Res, FetchResult *Alt)
       if (Alt->LastModified != 0)
 	 s << "Alt-Last-Modified: " << TimeRFC1123(Alt->LastModified) << "\n";
       
-      if (Alt->MD5Sum.empty() == false)
-	 s << "Alt-MD5-Hash: " << Alt->MD5Sum << "\n";
-      if (Alt->SHA1Sum.empty() == false)
-	 s << "Alt-SHA1-Hash: " << Alt->SHA1Sum << "\n";
+      for (I = Alt->HashMap.begin(); I != Alt->HashMap.end(); I++)
+	 s << "Alt-" << I->first << ": " << I->second << "\n";
       
       if (Alt->IMSHit == true)
 	 s << "Alt-IMS-Hit: true\n";
@@ -559,8 +557,13 @@ pkgAcqMethod::FetchResult::FetchResult() : LastModified(0),
    It just deals with the hash class. */
 void pkgAcqMethod::FetchResult::TakeHashes(Hashes &Hash)
 {
-   MD5Sum = Hash.MD5.Result();
-   SHA1Sum = Hash.SHA1.Result();
+   HashContainer::iterator I;
+   for (I = Hash.HashSet.begin(); I != Hash.HashSet.end(); I++) {
+      string res = (*I).Result();
+      if (res.empty() == false) {
+	 HashMap[(*I).Type()] = res;
+      }
+   }
 }
 									/*}}}*/
 // vim:sts=3:sw=3

@@ -17,6 +17,15 @@
 #include <system.h>
 #include <algorithm>
 									/*}}}*/
+bool Hashes::Add(const unsigned char *Data,unsigned long Size)
+{
+   HashContainer::iterator I;
+   for (I = HashSet.begin(); I != HashSet.end(); I++) {
+      if (I->Add(Data,Size) == false)
+         break;
+   }
+   return (I == HashSet.end());
+}
 
 // Hashes::AddFD - Add the contents of the FD				/*{{{*/
 // ---------------------------------------------------------------------
@@ -31,10 +40,15 @@ bool Hashes::AddFD(int Fd,unsigned long Size)
       if (Res < 0 || (unsigned)Res != std::min(Size,(unsigned long)sizeof(Buf)))
 	 return false;
       Size -= Res;
-      MD5.Add(Buf,Res);
-      SHA1.Add(Buf,Res);
+      Add(Buf,Res);
    }
    return true;
 }
 									/*}}}*/
+Hashes::Hashes()
+{
+   const char *htypes[] = { "MD5-Hash", "SHA1-Hash", NULL };
 
+   for (const char **name = htypes; *name != NULL; name++)
+       HashSet.push_back(raptHash(*name));
+}
