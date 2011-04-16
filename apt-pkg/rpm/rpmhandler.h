@@ -76,7 +76,7 @@ class RPMHandler
    inline unsigned Offset() const {return iOffset;}
    virtual bool OrderedOffset() const {return true;}
    inline unsigned Size() {return iSize;}
-   virtual bool IsDatabase() const = 0;
+   virtual bool IsDatabase() const {return false;};
 
    virtual string FileName() const = 0;
    virtual string Directory() const = 0;
@@ -162,7 +162,6 @@ class RPMFileHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() const {return false;}
    virtual bool OrderedOffset() const {return true;}
 
    virtual string FileName() const;
@@ -218,7 +217,7 @@ class RPMDBHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() const {return true;}
+   virtual bool IsDatabase() const {return true;}
    virtual bool HasWriteLock() {return WriteLock;}
    virtual time_t Mtime() {return DbFileMtime;}
    virtual bool OrderedOffset() const {return false;}
@@ -248,7 +247,6 @@ class RPMDirHandler : public RPMHdrHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() const {return false;}
 
    virtual string FileName()  const{return (Dir == NULL)?"":sFileName;}
    virtual off_t FileSize() const;
@@ -283,7 +281,6 @@ class RPMRepomdHandler : public RPMHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() const {return false;}
 
    virtual string FileName() const;
    virtual string Directory() const;
@@ -330,7 +327,6 @@ class RPMRepomdReaderHandler : public RPMHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual bool IsDatabase() const {return false;}
 
    virtual string FileName() const {return XmlPath;}
    virtual string Directory() const {return "";}
@@ -407,7 +403,6 @@ class RPMSqliteHandler : public RPMHandler
    virtual bool Skip();
    virtual bool Jump(off_t Offset);
    virtual void Rewind();
-   virtual inline bool IsDatabase() const {return false;}
 
    virtual string FileName() const;
    virtual string Directory() const;
