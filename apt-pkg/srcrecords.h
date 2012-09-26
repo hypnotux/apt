@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>    
+#include <sys/types.h>
 
 using std::string;
 using std::vector;
