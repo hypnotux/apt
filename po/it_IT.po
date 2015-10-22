@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apt\n"
 "Report-Msgid-Bugs-To: apt-rpm@lists.laiskiainen.org\n"
-"POT-Creation-Date: 2011-04-07 13:04+0300\n"
+"POT-Creation-Date: 2017-09-06 22:26+0300\n"
 "PO-Revision-Date: 2001-01-11 15:40-02:00\n"
 "Last-Translator: Stefano Corsi <ippo@madeinlinux.com>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -897,13 +897,11 @@ msgstr ""
 msgid "There are broken packages. "
 msgstr "Spiacente, pacchetti danneggiati"
 
-#: cmdline/apt-shell.cc:149 cmdline/apt-shell.cc:1372
-#: cmdline/apt-shell.cc:2697
+#: cmdline/apt-shell.cc:149 cmdline/apt-shell.cc:1372 cmdline/apt-shell.cc:2697
 msgid "Run `check' to see them."
 msgstr ""
 
-#: cmdline/apt-shell.cc:150 cmdline/apt-shell.cc:1373
-#: cmdline/apt-shell.cc:2698
+#: cmdline/apt-shell.cc:150 cmdline/apt-shell.cc:1373 cmdline/apt-shell.cc:2698
 msgid "You can try to fix them automatically with `install --fix-broken'."
 msgstr ""
 
@@ -1517,12 +1515,12 @@ msgstr ""
 msgid "Sub-process %s received a segmentation fault."
 msgstr ""
 
-#: apt-pkg/contrib/fileutl.cc:392 apt-pkg/rpm/rpmpm.cc:638
+#: apt-pkg/contrib/fileutl.cc:392 apt-pkg/rpm/rpmpm.cc:624
 #, c-format
 msgid "Sub-process %s returned an error code (%u)"
 msgstr ""
 
-#: apt-pkg/contrib/fileutl.cc:394 apt-pkg/rpm/rpmpm.cc:641
+#: apt-pkg/contrib/fileutl.cc:394 apt-pkg/rpm/rpmpm.cc:627
 #, fuzzy, c-format
 msgid "Sub-process %s exited unexpectedly"
 msgstr "Il metodo %s è terminato inaspettatamente!"
@@ -1601,66 +1599,60 @@ msgstr ""
 msgid "Could not open metadata file '%s'"
 msgstr "Impossibile aprire l'indice hash"
 
-#: apt-pkg/rpm/rpmhandler.cc:121
+#: apt-pkg/rpm/rpmhandler.cc:97
 #, c-format
 msgid "Impossible flags %d in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:499
+#: apt-pkg/rpm/rpmhandler.cc:330
 #, fuzzy
 msgid "could not rewind RPMFileHandler"
 msgstr "Impossibile aprire l'indice hash"
 
-#: apt-pkg/rpm/rpmhandler.cc:536 apt-pkg/rpm/rpmhandler.cc:543
-#: apt-pkg/rpm/rpmpm.cc:699 apt-pkg/rpm/rpmpm.cc:704
+#: apt-pkg/rpm/rpmhandler.cc:371 apt-pkg/rpm/rpmpm.cc:684
 #, fuzzy, c-format
 msgid "Failed reading file %s"
 msgstr "Recupero dell' archivio hash fallito:"
 
-#: apt-pkg/rpm/rpmhandler.cc:712
+#: apt-pkg/rpm/rpmhandler.cc:526
 #, fuzzy
 msgid "Unable to determine the file size"
 msgstr "Impossibile ridurre il gruppo da aggiornare"
 
-#: apt-pkg/rpm/rpmhandler.cc:759
-#, fuzzy
-msgid "could not open RPM database"
-msgstr "Impossibile aprire l'indice hash"
-
-#: apt-pkg/rpm/rpmhandler.cc:765
+#: apt-pkg/rpm/rpmhandler.cc:573
 msgid "could not create RPM database iterator"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:904 apt-pkg/rpm/rpmhandler.cc:926
+#: apt-pkg/rpm/rpmhandler.cc:706 apt-pkg/rpm/rpmhandler.cc:728
 #, fuzzy, c-format
 msgid "Failed to open package index %s"
 msgstr "Impossibile analizzare il pacchetto %s (1)"
 
-#: apt-pkg/rpm/rpmhandler.cc:930
+#: apt-pkg/rpm/rpmhandler.cc:732
 #, fuzzy, c-format
 msgid "Corrupted package index %s"
 msgstr "Il pacchetto %s non è stato trovato"
 
-#: apt-pkg/rpm/rpmhandler.cc:949
+#: apt-pkg/rpm/rpmhandler.cc:751
 #, c-format
 msgid "Inconsistent metadata, package count doesn't match in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1199 apt-pkg/rpm/rpmhandler.cc:1642
+#: apt-pkg/rpm/rpmhandler.cc:1006 apt-pkg/rpm/rpmhandler.cc:1449
 #, c-format
 msgid "Ignoring unknown dependency type %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1281
+#: apt-pkg/rpm/rpmhandler.cc:1088
 #, fuzzy, c-format
 msgid "Failed to open filelist index %s"
 msgstr "Impossibile aprire %s.new"
 
-#: apt-pkg/rpm/rpmhandler.cc:1326
+#: apt-pkg/rpm/rpmhandler.cc:1133
 msgid "Internal error: xmlReader cannot rewind"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1441
+#: apt-pkg/rpm/rpmhandler.cc:1248
 #, c-format
 msgid "Unsupported database scheme (%d)"
 msgstr ""
@@ -1774,111 +1766,106 @@ msgstr ""
 msgid "Bad regular expression '%s' in option RPM::Hold."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpackagedata.cc:138
+#: apt-pkg/rpm/rpmpackagedata.cc:136
 #, c-format
 msgid "Bad regular expression '%s' in option RPM::Allow-Duplicated."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpackagedata.cc:155
+#: apt-pkg/rpm/rpmpackagedata.cc:153
 #, c-format
 msgid "Bad entry '%s' in option RPM::FakeProvides."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpackagedata.cc:209
+#: apt-pkg/rpm/rpmpackagedata.cc:207
 #, c-format
 msgid "Bad regular expression '%s' in URI translation"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:73
+#: apt-pkg/rpm/rpmpm.cc:61
 #, fuzzy, c-format
 msgid "Internal Error, No file name for %s"
 msgstr "Errore interno, il problem solver si e' rotto"
 
-#: apt-pkg/rpm/rpmpm.cc:142
+#: apt-pkg/rpm/rpmpm.cc:130
 #, c-format
 msgid "Problem executing scripts %s '%s'"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:153
+#: apt-pkg/rpm/rpmpm.cc:141
 msgid "Sub-process returned an error code"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:179 methods/rsh.cc:94
+#: apt-pkg/rpm/rpmpm.cc:167 methods/rsh.cc:94
 msgid "Failed to create IPC pipe to subprocess"
 msgstr "Impossibile creare una pipe IPC per il subprocesso"
 
-#: apt-pkg/rpm/rpmpm.cc:223 apt-pkg/rpm/rpmpm.cc:230
+#: apt-pkg/rpm/rpmpm.cc:211 apt-pkg/rpm/rpmpm.cc:218
 #, c-format
 msgid "Failure running script %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:321
+#: apt-pkg/rpm/rpmpm.cc:307
 msgid "Unknown pkgRPMPM operation."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:564
+#: apt-pkg/rpm/rpmpm.cc:550
 msgid "Executing RPM ("
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:604
+#: apt-pkg/rpm/rpmpm.cc:590
 #, fuzzy
 msgid "Could not exec "
 msgstr "Il pacchetto %s non è stato trovato"
 
-#: apt-pkg/rpm/rpmpm.cc:619
+#: apt-pkg/rpm/rpmpm.cc:605
 #, fuzzy
 msgid "Couldn't wait for subprocess"
 msgstr "Il pacchetto %s non è stato trovato"
 
-#: apt-pkg/rpm/rpmpm.cc:635
+#: apt-pkg/rpm/rpmpm.cc:621
 #, c-format
 msgid "Sub-process %s recieved a segmentation fault."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:645
+#: apt-pkg/rpm/rpmpm.cc:631
 #, fuzzy
 msgid "Done."
 msgstr "Fatto"
 
-#: apt-pkg/rpm/rpmpm.cc:695
+#: apt-pkg/rpm/rpmpm.cc:681
 #, fuzzy, c-format
 msgid "Failed opening %s"
 msgstr "Problema nell'apertura di %s"
 
-#: apt-pkg/rpm/rpmpm.cc:708 apt-pkg/rpm/rpmpm.cc:731
+#: apt-pkg/rpm/rpmpm.cc:687 apt-pkg/rpm/rpmpm.cc:702
 #, fuzzy, c-format
 msgid "Failed adding %s to transaction %s"
 msgstr "Impossibile rinominare %s in %s"
 
-#: apt-pkg/rpm/rpmpm.cc:775
-#, fuzzy
-msgid "Could not open RPM database"
-msgstr "Impossibile aprire l'indice hash"
-
-#: apt-pkg/rpm/rpmpm.cc:832 apt-pkg/rpm/rpmpm.cc:841
+#: apt-pkg/rpm/rpmpm.cc:768
 msgid "Transaction set check failed"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:861
+#: apt-pkg/rpm/rpmpm.cc:778
 #, c-format
 msgid "Ordering failed for %d packages"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:880
+#: apt-pkg/rpm/rpmpm.cc:792
 msgid "Error while running transaction"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:891
+#: apt-pkg/rpm/rpmpm.cc:799
 #, fuzzy
 msgid "Some errors occurred while running transaction"
 msgstr "Errore nel processare %s (NewVersion1)"
 
-#: apt-pkg/rpm/rpmrecords.cc:173 apt-pkg/rpm/rpmsrcrecords.cc:158
+#: apt-pkg/rpm/rpmrecords.cc:173 apt-pkg/rpm/rpmsrcrecords.cc:157
 #, fuzzy
 msgid "Could not allocate buffer for record text"
 msgstr "Impossibile attendere il sottoprocesso"
 
-#: apt-pkg/rpm/rpmsystem.cc:217
+#: apt-pkg/rpm/rpmsystem.cc:206
 #, fuzzy, c-format
 msgid "Unable to determine version for package %s"
 msgstr "Impossibile ridurre il gruppo da aggiornare"
@@ -1898,57 +1885,57 @@ msgstr "La lista di file %spartial &egrave mancante."
 msgid "rename failed, %s (%s -> %s)."
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:212 apt-pkg/acquire-item.cc:420
+#: apt-pkg/acquire-item.cc:211 apt-pkg/acquire-item.cc:412
 #, c-format
 msgid "%s is not listed in the checksum list for its repository"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:232 apt-pkg/acquire-item.cc:440
+#: apt-pkg/acquire-item.cc:231 apt-pkg/acquire-item.cc:432
 #, c-format
 msgid "Release information not available for %s"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:290 apt-pkg/acquire-item.cc:587
-#: apt-pkg/acquire-item.cc:860
+#: apt-pkg/acquire-item.cc:283 apt-pkg/acquire-item.cc:578
+#: apt-pkg/acquire-item.cc:843
 msgid "Size mismatch"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:301 apt-pkg/acquire-item.cc:597
-#: apt-pkg/acquire-item.cc:870
-msgid "MD5Sum mismatch"
+#: apt-pkg/acquire-item.cc:294 apt-pkg/acquire-item.cc:588
+#: apt-pkg/acquire-item.cc:853
+msgid "Checksum mismatch"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:489
+#: apt-pkg/acquire-item.cc:481
 msgid "No valid signatures found in Release file"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:508
+#: apt-pkg/acquire-item.cc:500
 msgid "Signature fingerprint of Release file does not match (expected "
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:512
+#: apt-pkg/acquire-item.cc:504
 msgid ", got "
 msgstr ", ottenuto "
 
-#: apt-pkg/acquire-item.cc:537
+#: apt-pkg/acquire-item.cc:529
 msgid "Could not read checksum list from Release file"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:673
+#: apt-pkg/acquire-item.cc:662
 #, c-format
 msgid ""
 "I wasn't able to locate a file for the %s package. This might mean you need "
 "to manually fix this package. (due to missing arch)"
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:712
+#: apt-pkg/acquire-item.cc:701
 #, c-format
 msgid ""
 "I wasn't able to locate file for the %s package. This might mean you need to "
 "manually fix this package."
 msgstr ""
 
-#: apt-pkg/acquire-item.cc:751
+#: apt-pkg/acquire-item.cc:734
 #, c-format
 msgid ""
 "The package index files are corrupted. No Filename: field for package %s."
@@ -2622,6 +2609,14 @@ msgstr ""
 #: methods/rsh.cc:333
 msgid "Connection closed prematurely"
 msgstr ""
+
+#, fuzzy
+#~ msgid "could not open RPM database"
+#~ msgstr "Impossibile aprire l'indice hash"
+
+#, fuzzy
+#~ msgid "Could not open RPM database"
+#~ msgstr "Impossibile aprire l'indice hash"
 
 #, fuzzy
 #~ msgid "Skipping unpack of already unpacked source in %s\n"

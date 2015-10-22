@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: apt\n"
 "Report-Msgid-Bugs-To: apt-rpm@lists.laiskiainen.org\n"
-"POT-Creation-Date: 2011-04-07 13:04+0300\n"
+"POT-Creation-Date: 2017-09-06 22:26+0300\n"
 "PO-Revision-Date: 2002-08-20 14:00+0200\n"
 "Last-Translator: Ralf Corsepius <corsepiu@users.sourceforge.net>\n"
 "Language-Team: German <de@li.org>\n"
@@ -909,13 +909,11 @@ msgstr ""
 msgid "There are broken packages. "
 msgstr "Es gibt zerbrochene Pakete. "
 
-#: cmdline/apt-shell.cc:149 cmdline/apt-shell.cc:1372
-#: cmdline/apt-shell.cc:2697
+#: cmdline/apt-shell.cc:149 cmdline/apt-shell.cc:1372 cmdline/apt-shell.cc:2697
 msgid "Run `check' to see them."
 msgstr ""
 
-#: cmdline/apt-shell.cc:150 cmdline/apt-shell.cc:1373
-#: cmdline/apt-shell.cc:2698
+#: cmdline/apt-shell.cc:150 cmdline/apt-shell.cc:1373 cmdline/apt-shell.cc:2698
 msgid "You can try to fix them automatically with `install --fix-broken'."
 msgstr ""
 
@@ -1521,12 +1519,12 @@ msgstr "Auf %s gewartet, aber es war nicht da"
 msgid "Sub-process %s received a segmentation fault."
 msgstr "Unterprozess %s empfing Segmentationfault"
 
-#: apt-pkg/contrib/fileutl.cc:392 apt-pkg/rpm/rpmpm.cc:638
+#: apt-pkg/contrib/fileutl.cc:392 apt-pkg/rpm/rpmpm.cc:624
 #, c-format
 msgid "Sub-process %s returned an error code (%u)"
 msgstr "Unterprozesss %s gab Fehlercode zurück (%u)"
 
-#: apt-pkg/contrib/fileutl.cc:394 apt-pkg/rpm/rpmpm.cc:641
+#: apt-pkg/contrib/fileutl.cc:394 apt-pkg/rpm/rpmpm.cc:627
 #, c-format
 msgid "Sub-process %s exited unexpectedly"
 msgstr "Unter-Prozess %s stieg unerwartet aus"
@@ -1600,63 +1598,58 @@ msgstr "Auswahl %s nicht gefunden"
 msgid "Could not open metadata file '%s'"
 msgstr "Konnte Datei %s nicht öffnen"
 
-#: apt-pkg/rpm/rpmhandler.cc:121
+#: apt-pkg/rpm/rpmhandler.cc:97
 #, c-format
 msgid "Impossible flags %d in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:499
+#: apt-pkg/rpm/rpmhandler.cc:330
 msgid "could not rewind RPMFileHandler"
 msgstr "konnte RPMFileHandler nicht zurückspulen"
 
-#: apt-pkg/rpm/rpmhandler.cc:536 apt-pkg/rpm/rpmhandler.cc:543
-#: apt-pkg/rpm/rpmpm.cc:699 apt-pkg/rpm/rpmpm.cc:704
+#: apt-pkg/rpm/rpmhandler.cc:371 apt-pkg/rpm/rpmpm.cc:684
 #, c-format
 msgid "Failed reading file %s"
 msgstr "Fehler beim Lesen von Datei %s"
 
-#: apt-pkg/rpm/rpmhandler.cc:712
+#: apt-pkg/rpm/rpmhandler.cc:526
 msgid "Unable to determine the file size"
 msgstr "Ausserstande, die Dateigröße zu bestimmen"
 
-#: apt-pkg/rpm/rpmhandler.cc:759
-msgid "could not open RPM database"
-msgstr "konnte RPM-Datenbank nicht öffnen"
-
-#: apt-pkg/rpm/rpmhandler.cc:765
+#: apt-pkg/rpm/rpmhandler.cc:573
 msgid "could not create RPM database iterator"
 msgstr "konnte RPM-Datenbank-Iterator nicht erzeugen"
 
-#: apt-pkg/rpm/rpmhandler.cc:904 apt-pkg/rpm/rpmhandler.cc:926
+#: apt-pkg/rpm/rpmhandler.cc:706 apt-pkg/rpm/rpmhandler.cc:728
 #, c-format
 msgid "Failed to open package index %s"
 msgstr "Ausserstande Paketindex %s zu öffnen"
 
-#: apt-pkg/rpm/rpmhandler.cc:930
+#: apt-pkg/rpm/rpmhandler.cc:732
 #, c-format
 msgid "Corrupted package index %s"
 msgstr "Korrupter Paketindex %s"
 
-#: apt-pkg/rpm/rpmhandler.cc:949
+#: apt-pkg/rpm/rpmhandler.cc:751
 #, c-format
 msgid "Inconsistent metadata, package count doesn't match in %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1199 apt-pkg/rpm/rpmhandler.cc:1642
+#: apt-pkg/rpm/rpmhandler.cc:1006 apt-pkg/rpm/rpmhandler.cc:1449
 #, c-format
 msgid "Ignoring unknown dependency type %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1281
+#: apt-pkg/rpm/rpmhandler.cc:1088
 #, c-format
 msgid "Failed to open filelist index %s"
 msgstr "Gescheitert Dateilistenindex %s zu öffnen"
 
-#: apt-pkg/rpm/rpmhandler.cc:1326
+#: apt-pkg/rpm/rpmhandler.cc:1133
 msgid "Internal error: xmlReader cannot rewind"
 msgstr ""
 
-#: apt-pkg/rpm/rpmhandler.cc:1441
+#: apt-pkg/rpm/rpmhandler.cc:1248
 #, c-format
 msgid "Unsupported database scheme (%d)"
 msgstr ""
@@ -1768,105 +1761,101 @@ msgstr "keine Daten in %s"
 msgid "Bad regular expression '%s' in option RPM::Hold."
 msgstr "Fehlerhafter regulärer Ausdruck '%s' in Option RPM::Hold."
 
-#: apt-pkg/rpm/rpmpackagedata.cc:138
+#: apt-pkg/rpm/rpmpackagedata.cc:136
 #, c-format
 msgid "Bad regular expression '%s' in option RPM::Allow-Duplicated."
 msgstr "Fehlerhafter regulärer Ausdruck '%s' in Option RPM::AllowedDuplicated."
 
-#: apt-pkg/rpm/rpmpackagedata.cc:155
+#: apt-pkg/rpm/rpmpackagedata.cc:153
 #, c-format
 msgid "Bad entry '%s' in option RPM::FakeProvides."
 msgstr "Fehlerhafter Eintrag '%s' in Option RPM::FakeProvides."
 
-#: apt-pkg/rpm/rpmpackagedata.cc:209
+#: apt-pkg/rpm/rpmpackagedata.cc:207
 #, c-format
 msgid "Bad regular expression '%s' in URI translation"
 msgstr "Fehlerhafter regulärer Ausdruck '%s' in URI-Übersetzung"
 
-#: apt-pkg/rpm/rpmpm.cc:73
+#: apt-pkg/rpm/rpmpm.cc:61
 #, c-format
 msgid "Internal Error, No file name for %s"
 msgstr "Interner Fehler, kein Dateiname für %s"
 
-#: apt-pkg/rpm/rpmpm.cc:142
+#: apt-pkg/rpm/rpmpm.cc:130
 #, c-format
 msgid "Problem executing scripts %s '%s'"
 msgstr "Problem beim Ausführen der Scripte %s '%s'"
 
-#: apt-pkg/rpm/rpmpm.cc:153
+#: apt-pkg/rpm/rpmpm.cc:141
 msgid "Sub-process returned an error code"
 msgstr "Unterprozess gab Fehlercode zurück"
 
-#: apt-pkg/rpm/rpmpm.cc:179 methods/rsh.cc:94
+#: apt-pkg/rpm/rpmpm.cc:167 methods/rsh.cc:94
 msgid "Failed to create IPC pipe to subprocess"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:223 apt-pkg/rpm/rpmpm.cc:230
+#: apt-pkg/rpm/rpmpm.cc:211 apt-pkg/rpm/rpmpm.cc:218
 #, c-format
 msgid "Failure running script %s"
 msgstr "Fehler beim Ausführen von Script %s"
 
-#: apt-pkg/rpm/rpmpm.cc:321
+#: apt-pkg/rpm/rpmpm.cc:307
 msgid "Unknown pkgRPMPM operation."
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:564
+#: apt-pkg/rpm/rpmpm.cc:550
 msgid "Executing RPM ("
 msgstr "Führe RPM aus ("
 
-#: apt-pkg/rpm/rpmpm.cc:604
+#: apt-pkg/rpm/rpmpm.cc:590
 msgid "Could not exec "
 msgstr "Konnte nicht exec "
 
-#: apt-pkg/rpm/rpmpm.cc:619
+#: apt-pkg/rpm/rpmpm.cc:605
 msgid "Couldn't wait for subprocess"
 msgstr "Konnte nicht auf Unterprozess warten"
 
-#: apt-pkg/rpm/rpmpm.cc:635
+#: apt-pkg/rpm/rpmpm.cc:621
 #, c-format
 msgid "Sub-process %s recieved a segmentation fault."
 msgstr "Unterprozess %s empfing Segmentation-Fault."
 
-#: apt-pkg/rpm/rpmpm.cc:645
+#: apt-pkg/rpm/rpmpm.cc:631
 msgid "Done."
 msgstr "Fertig."
 
-#: apt-pkg/rpm/rpmpm.cc:695
+#: apt-pkg/rpm/rpmpm.cc:681
 #, c-format
 msgid "Failed opening %s"
 msgstr "Gescheitert %s zu öffnen"
 
-#: apt-pkg/rpm/rpmpm.cc:708 apt-pkg/rpm/rpmpm.cc:731
+#: apt-pkg/rpm/rpmpm.cc:687 apt-pkg/rpm/rpmpm.cc:702
 #, c-format
 msgid "Failed adding %s to transaction %s"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:775
-msgid "Could not open RPM database"
-msgstr "Konnte RPM-Datenbank nicht öffnen"
-
-#: apt-pkg/rpm/rpmpm.cc:832 apt-pkg/rpm/rpmpm.cc:841
+#: apt-pkg/rpm/rpmpm.cc:768
 msgid "Transaction set check failed"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:861
+#: apt-pkg/rpm/rpmpm.cc:778
 #, c-format
 msgid "Ordering failed for %d packages"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:880
+#: apt-pkg/rpm/rpmpm.cc:792
 msgid "Error while running transaction"
 msgstr ""
 
-#: apt-pkg/rpm/rpmpm.cc:891
+#: apt-pkg/rpm/rpmpm.cc:799
 msgid "Some errors occurred while running transaction"
 msgstr "Fehler während der Ausführung der Transaktion aufgetreten"
 
-#: apt-pkg/rpm/rpmrecords.cc:173 apt-pkg/rpm/rpmsrcrecords.cc:158
+#: apt-pkg/rpm/rpmrecords.cc:173 apt-pkg/rpm/rpmsrcrecords.cc:157
 msgid "Could not allocate buffer for record text"
 msgstr ""
 
-#: apt-pkg/rpm/rpmsystem.cc:217
+#: apt-pkg/rpm/rpmsystem.cc:206
 #, c-format
 msgid "Unable to determine version for package %s"
 msgstr ""
@@ -1886,43 +1875,44 @@ msgstr "Archiv-Verzeichnis %spartial fehlt"
 msgid "rename failed, %s (%s -> %s)."
 msgstr "Umbenennen gescheitert, %s (%s -> %s)."
 
-#: apt-pkg/acquire-item.cc:212 apt-pkg/acquire-item.cc:420
+#: apt-pkg/acquire-item.cc:211 apt-pkg/acquire-item.cc:412
 #, c-format
 msgid "%s is not listed in the checksum list for its repository"
 msgstr "%s ist nicht in der Checksummenliste für sein Repository aufgeführt"
 
-#: apt-pkg/acquire-item.cc:232 apt-pkg/acquire-item.cc:440
+#: apt-pkg/acquire-item.cc:231 apt-pkg/acquire-item.cc:432
 #, c-format
 msgid "Release information not available for %s"
 msgstr "Release-Information nicht verfügbar für %s"
 
-#: apt-pkg/acquire-item.cc:290 apt-pkg/acquire-item.cc:587
-#: apt-pkg/acquire-item.cc:860
+#: apt-pkg/acquire-item.cc:283 apt-pkg/acquire-item.cc:578
+#: apt-pkg/acquire-item.cc:843
 msgid "Size mismatch"
 msgstr "Grösse passt nicht"
 
-#: apt-pkg/acquire-item.cc:301 apt-pkg/acquire-item.cc:597
-#: apt-pkg/acquire-item.cc:870
-msgid "MD5Sum mismatch"
+#: apt-pkg/acquire-item.cc:294 apt-pkg/acquire-item.cc:588
+#: apt-pkg/acquire-item.cc:853
+#, fuzzy
+msgid "Checksum mismatch"
 msgstr "MD5Sum passt nicht"
 
-#: apt-pkg/acquire-item.cc:489
+#: apt-pkg/acquire-item.cc:481
 msgid "No valid signatures found in Release file"
 msgstr "Keine gültigen Signaturen in Release-Datei gefunden"
 
-#: apt-pkg/acquire-item.cc:508
+#: apt-pkg/acquire-item.cc:500
 msgid "Signature fingerprint of Release file does not match (expected "
 msgstr "Signaturfingerabdruck der Release-Datei passt nicht (erwartet "
 
-#: apt-pkg/acquire-item.cc:512
+#: apt-pkg/acquire-item.cc:504
 msgid ", got "
 msgstr ", erhalten "
 
-#: apt-pkg/acquire-item.cc:537
+#: apt-pkg/acquire-item.cc:529
 msgid "Could not read checksum list from Release file"
 msgstr "Konnte Check-Summe nicht aus Release-Datei lesen"
 
-#: apt-pkg/acquire-item.cc:673
+#: apt-pkg/acquire-item.cc:662
 #, c-format
 msgid ""
 "I wasn't able to locate a file for the %s package. This might mean you need "
@@ -1932,7 +1922,7 @@ msgstr ""
 "könnte bedeuten, dass Sie dieses Paket manuell reparieren müssen. (Infolge "
 "fehlender arch)"
 
-#: apt-pkg/acquire-item.cc:712
+#: apt-pkg/acquire-item.cc:701
 #, c-format
 msgid ""
 "I wasn't able to locate file for the %s package. This might mean you need to "
@@ -1941,7 +1931,7 @@ msgstr ""
 "Ich war nicht in der Lage eine Datei für Paket %s zu lokalisieren. Dies "
 "könnte bedeuten, dass Sie dieses Paket manuell reparieren müssen."
 
-#: apt-pkg/acquire-item.cc:751
+#: apt-pkg/acquire-item.cc:734
 #, c-format
 msgid ""
 "The package index files are corrupted. No Filename: field for package %s."
@@ -2607,6 +2597,12 @@ msgstr "Datei nicht gefunden"
 #: methods/rsh.cc:333
 msgid "Connection closed prematurely"
 msgstr "Verbindung vorzeitig geschlossen"
+
+#~ msgid "could not open RPM database"
+#~ msgstr "konnte RPM-Datenbank nicht öffnen"
+
+#~ msgid "Could not open RPM database"
+#~ msgstr "Konnte RPM-Datenbank nicht öffnen"
 
 #~ msgid "Skipping unpack of already unpacked source in %s\n"
 #~ msgstr "Überspringe Auspacken von bereits ausgepackten Quellen in %s\n"
