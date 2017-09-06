@@ -670,7 +670,7 @@ bool RPMDBHandler::Jump(off_t Offset)
 
 bool RPMDBHandler::JumpByName(string PkgName, bool Provides)
 {
-   raptTag tag = (raptTag)(Provides ? RPMTAG_PROVIDES : RPMDBI_LABEL);
+   raptTag tag = Provides ? RPMDBI_PROVIDENAME : RPMDBI_LABEL;
    if (RpmIter == NULL) return false;
    rpmdbFreeIterator(RpmIter);
    RpmIter = raptInitIterator(Handler, tag, PkgName.c_str(), 0);
