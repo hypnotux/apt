@@ -321,7 +321,7 @@ int main(int argc, char ** argv)
 	    
 	    foundInIndex = false;
 	    {
-	       int count = 0;
+	       unsigned int count = 0;
 	       char **l = NULL;
 	       list<char*> *rpmlist = rpmTable[string(dirEntries[entry_cur]->d_name)];
 	       
