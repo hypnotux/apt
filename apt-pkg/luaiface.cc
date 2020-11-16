@@ -1564,7 +1564,11 @@ static int AptLua_pkgcomp(lua_State *L)
 static int luaopen_apt(lua_State *L)
 {
    lua_pushglobaltable(L);
-   luaL_openlib(L, NULL, aptlib, 0);
+   luaL_newmetatable(L, "aptlib");
+   lua_pushvalue(L, -1);
+   lua_setfield(L, -2, "__index");
+   luaL_setfuncs(L, aptlib, 0);
+   luaL_newlib(L, aptlib);
    return 0;
 }
 

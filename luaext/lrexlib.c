@@ -318,15 +318,25 @@ static void createmeta(lua_State *L, const char *name)
 LUALIB_API int luaopen_rex(lua_State *L)
 {
 #ifdef WITH_POSIX
-  createmeta(L, "regex_t");
-  luaL_openlib(L, NULL, posixmeta, 0);
+  luaL_newmetatable(L, "regex_t");
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+  luaL_setfuncs(L, posixmeta, 0);
+  luaL_newlib(L, posixmeta);
   lua_pop(L, 1);
 #endif
 #ifdef WITH_PCRE
-  createmeta(L, "pcre");
-  luaL_openlib(L, NULL, pcremeta, 0);
+  luaL_newmetatable(L, "pcre");
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+  luaL_setfuncs(L, pcremeta, 0);
+  luaL_newlib(L, pcremeta);
   lua_pop(L, 1);
 #endif
-  luaL_openlib(L, "rex", rexlib, 0);
+  luaL_newmetatable(L, "rex");
+  lua_pushvalue(L, -1);
+  lua_setfield(L, -2, "__index");
+  luaL_setfuncs(L, rexlib, 0);
+  luaL_newlib(L, rexlib);
   return 1;
 }
